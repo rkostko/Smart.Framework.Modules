@@ -1,0 +1,39 @@
+
+#CHANGELOG / MIGRATION NOTES - SMART.FRAMEWORK.MODULES#
+
+Feb, 05, 2016 :: Version 2.2
+	* INFO: this is a bug-fix release for the version 2.1 branch, you are encouraged to use this version as soon as possbile
+	* security:
+		* the MySQL database driver is now using automate fix for UTF-8 charset using SmartUnicode::utf8_fix_charset() embedded in the Escaping functions to make it 100% safe ...
+
+Jan 19, 2016 :: Version 2.1
+	* The Twig templating constructor have been changed, modules adapted to work with Smart.Framework v.2.1 and later
+
+#####
+
+Dec 15, 2015 :: Version 1.5
+	* backward incompatible changes:
+		* in the MySQLi driver, the functions read_adata() and read_asdata() have been rotated each other,
+			thus the new read_adata() since version 1.5 is now behaving like the old read_asdata() in versions prior to 1.5 ;
+			and the new read_asdata() since version 1.5 is now behaving like the old read_adata() in versions prior to 1.5;
+			- the new read_adata() since version 1.5: Read Associative Multiple Rows :: returns array(0 => array('column1', 'column2', ... 'column-n'), 1 => array('column1', 'column2', ... 'column-n'), ..., m => array('column1', 'column2', ... 'column-n'))
+			- the new read_asdata() since version 1.5: Read Associative Single (one) Rows :: Throws Error if more records are returned by SQL :: returns a single row as array('column1', 'column2', ... 'column-n')
+			(this come as a result from many users of these framework to make this function names more easy to remember)
+			thus, this will remain finally as it is now since version 1.5
+	* optimizations:
+		* more than 100 lines of code changed, to speed-up or optimize some areas
+		* database drivers: MySQLi, Mongo and Solr are now re-using the connections for the same server:port@db#user
+
+Nov 30, 2015 :: Version 1.3
+	* backward incompatible changes:
+		* renamed the class: SmartMysqliObjDb to SmartMysqliExtDb
+	* optimizations:
+		* code optimizations in many classes, execution time is better with ~10%
+	* documentation:
+		* the documentation is available here: http://demo.unix-world.org/smart-framework.docs/
+
+June 5, 2015 :: Version 1.2
+
+March 07, 2015 :: Version 1.1
+
+#END#

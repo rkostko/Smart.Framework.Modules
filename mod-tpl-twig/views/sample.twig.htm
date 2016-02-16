@@ -1,0 +1,10 @@
+<!-- start twig template -->
+<div align="center">
+<br>
+<div><a href="http://twig.sensiolabs.org/documentation" target="_blank"><img src="modules/mod-tpl-twig/views/img/twig.png"></a><br>Twig Templating for Smart.Framework</div>
+{{ hello|raw }}
+{% for item in navigation %}
+	<li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+{% endfor %}
+</div>
+<!-- end twig template -->

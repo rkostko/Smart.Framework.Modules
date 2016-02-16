@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>jQuery integration</title>
+	<script src="../../jquery.js.prev.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="../dhtmlxgantt.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../skins/dhtmlxgantt_terrace.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	<script type="text/javascript" src="testdata.js"></script>
+
+	<style type="text/css">
+		.weekend {
+			background: #f4f7f4;
+		}
+		.gantt_selected .weekend {
+			background: #f7eb91;
+		}
+	</style>
+
+</head>
+<body>
+<br>
+<div align="center">
+	<div id="mygantt" style="text-align:left; width:96%; height:400px;"></div>
+	<script type="text/javascript">
+
+		var gantt = $("#mygantt").dhx_gantt({
+			data: demo_tasks,
+			//grid_width: 0, // disable right grid
+			//scale_unit: "week",
+			//step:1,
+			//date_scale: "%d"
+		}); // .load("data.json")
+
+/*
+gantt.attachEvent("onTaskClick", function(id, e) {
+	alert("You've just clicked an item with id="+id);
+});
+gantt.attachEvent("onTaskDblClick", function(id, e) {
+	alert("You've just double clicked an item with id="+id);
+});
+*/
+
+/*
+gantt.config.grid_width = 0;
+gantt.config.lightbox.sections = [
+		{name: "description", height: 38, map_to: "text", type: "textarea", focus: true},
+		{name: "parent", type:"parent", allow_root:"true", root_label:"No parent", filter: function(id, task){
+		//	if(task.$level > 1){
+		//		return false;
+		//	}else{
+		//		return true;
+		//	}
+			return true;
+		}},
+
+		{name: "time", height: 72, type: "time", map_to: "auto", time_format:["%d", "%m", "%Y", "%H:%i"]}
+	];
+gantt.init("mygantt");
+//gantt.load("../common/data.json", "json");
+gantt.parse(demo_tasks);
+*/
+
+	</script>
+</div>
+</body>

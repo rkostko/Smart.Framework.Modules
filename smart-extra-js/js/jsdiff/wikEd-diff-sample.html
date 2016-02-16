@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head>
+		<title>wikEd diff Online Tool - Cacycle</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script src="wikEd-diff.js"></script>
+		<script>
+		var wikEdDiffConfig = {
+			'blockMinLength': 3,
+			'unlinkMax': 10,
+			'recursionMax': 5,
+			'coloredBlocks': false,
+			'showBlockMoves': true,
+			'fullDiff': false
+		};
+		function RunDiff() {
+			// calculate the diff
+			var oldString = document.getElementById('old').value;
+			var newString = document.getElementById('new').value;
+			var wikEdDiff = new WikEdDiff();
+			var diffHtml = wikEdDiff.diff(oldString, newString);
+			document.getElementById('diff').innerHTML = diffHtml;
+			document.getElementById('legend').style.visibility = 'visible';
+			return false;
+		} //END FUNCTION
+		</script>
+	</head>
+	<body>
+		<div class="main">
+
+			<div class="header">
+				<h1>WikEd Diff</h1>
+			</div>
+			<div class="content">
+
+				<div class="contentLeft">
+					<div class="contentLeftTop">
+						<div class="contentItemTitle">Old version
+						</div>
+						<textarea class="contentItemText version" id="old" placeholder="Old Text" style="width:550px; height:100px;">
+block: moved,
+string: old,
+test: one,
+changed: true,
+deleted: yes
+						</textarea>
+					</div>
+					<div class="contentLeftBottom">
+						<div class="contentItemTitle">New version
+						</div>
+						<textarea class="contentItemText version" id="new" placeholder="New Text" style="width:550px; height:100px;">
+string: new,
+block: moved,
+test: two,
+extra: line
+						</textarea>
+					</div>
+				</div>
+
+				<div class="contentRight">
+					<div class="contentItemTitle">Comparison (diff)
+					</div>
+					<div class="contentItemText">
+						<div class="diff" id="diff"><div class="wikEdDiffContainer" id="wikEdDiffContainer"><pre class="wikEdDiffFragment" style="white-space: pre-wrap;"></pre></div></div>
+					</div>
+				</div>
+
+			</div>
+			<div class="footer">
+
+				<div class="footerLeft">
+				</div>
+
+				<div class="footerCenter">
+					<div class="footerItemText">
+						<div class="compare">
+							<button class="button" onclick="RunDiff();">Compare</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="footerRight" id="legend" style="visibility:hidden;">
+					<div class="footerItemTitle"><h3>Legend</h3></div>
+					<div class="footerItemText">
+						<div class="legend" style="line-height:32px;">
+							<ul>
+								<li><span class="wikEdDiffMarkRight" title="Moved block" id="wikEdDiffMark999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');"></span> Original block position</li>
+								<li><span title="+" class="wikEdDiffInsert">Inserted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
+								<li><span title="−" class="wikEdDiffDelete">Deleted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
+								<li><span class="wikEdDiffBlockLeft" title="◀" id="wikEdDiffBlock999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');" style="background-color: #E8E8E8;">Moved<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>block<span class="wikEdDiffNewline"> </span></span></li>
+								<li><span class="newlineSymbol">¶</span> Newline <span class="spaceSymbol">·</span> Space <span class="tabSymbol">→</span> Tab</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
+
+</body></html>

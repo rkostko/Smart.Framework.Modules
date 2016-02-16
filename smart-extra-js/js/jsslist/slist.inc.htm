@@ -1,0 +1,23 @@
+<!-- JSList :: r.2015.02.15 -->
+<div style="width: 450px; border:1px solid #CCCCCC;">
+<table border="0" width="100%" bgcolor="#E5EECC">
+<tr align="center" valign="top">
+<td colspan="2">
+<input type="button" onclick="SelList_DIV_Class.form_Select('[####VARIABLE_NAME####]', '[####SLIST_SRC####]', '[####SLIST_SEL####]', '[####SLIST_VAL####]')" value="[####TXT_SELECT####]">
+<select size="1" id="[####SLIST_SEL####]" disabled style="width: 1px; height: 1px; visibility:hidden;"></select>
+<input type="button" onclick="SelList_DIV_Class.form_Reset('[####SLIST_SRC####]', '[####SLIST_SEL####]', '[####SLIST_VAL####]')" value="[####TXT_RESET####]">
+</td>
+</tr>
+<tr align="center" valign="top">
+<td>
+<select multiple size="[####SIZE####]" id="[####SLIST_SRC####]" style="width: 200px;">
+[####OPTIONS####]
+</select>
+</td>
+<td>
+<div id="[####SLIST_VAL####]" style="width: 200px; padding:2px; background-color: #FFFFFF; border:1px solid #CCCCCC; font: 11px Tahoma,Arial;"></div>
+</td>
+</tr>
+</table>
+</div>
+<!-- END :: JSList -->

@@ -1,0 +1,52 @@
+
+/* ajax_suggest.css :: v.2015.02.15 */
+
+#AJX_suggest_container {
+	width: 100%;
+}
+#AJX_suggest_container tr {
+	color: #000000;
+	background-color: #FFFFFF;
+	border: 1px solid #ECECEC;
+}
+#AJX_suggest_container tr:hover {
+	color: #FFFFFF;
+	background-color: #778899;
+	cursor: pointer;
+}
+.AJX_suggest_load {
+	text-align: center;
+	color: #000000;
+	font-weight: bold;
+	background-color: #DDDDDD;
+	border: 1px solid #DDDDDD;
+	padding: 4px 6px 4px 6px;
+}
+.AJX_suggest_ParentDIV {
+	position: relative;
+	padding: 2px 2px 2px 2px;
+}
+.AJX_suggest_DIV {
+	z-index: 9000;
+	position: absolute;
+	top: 25px;
+	left: 0px;
+	width: 600px;
+	height: auto;
+	max-height: 200px; /* sync with JS */
+	overflow: auto;
+	text-align: left;
+	background-color: #DDDDDD;
+	color: #000000;
+	font-weight: bold;
+	border: 1px solid #CCCCCC;
+	padding: 2px 4px 2px 4px;
+	border-radius: 4px;
+}
+.AJX_suggest_DIV hr {
+	border: none 0px;
+	border-top: 1px solid #DDDDDD;
+	height: 1px;
+}
+
+/* END */
