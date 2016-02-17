@@ -1,4 +1,4 @@
-﻿// French Translation by Nicolas M. et Pierre-Luc Auclair
+// French Translation by Nicolas M. et Pierre-Luc Auclair
 
 CKEDITOR.plugins.setLang('wordcount', 'fr', {
     WordCount: 'Mots:',

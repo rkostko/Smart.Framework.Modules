@@ -1,5 +1,7 @@
 <?php
 
+die('Uncomment this line to enable this test ...');
+
 ini_set( 'date.timezone', 'UTC' );
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 

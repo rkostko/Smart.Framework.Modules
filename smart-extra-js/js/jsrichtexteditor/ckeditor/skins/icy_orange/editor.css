@@ -64,3 +64,26 @@ legend.cke_voice_label
 {
 	display: none;
 }
+
+/* Fix by unixman */
+.cke_notifications_area {
+	background: #778899;
+	color: #FFFFFF;
+	pointer-events:none;
+}
+.cke_notification {
+	pointer-events:auto;
+	position:relative;
+	margin:10px;
+	width:300px;
+	color:FFFFFF;
+	border-radius:3px;
+	text-align:center;
+	opacity:.95;
+	box-shadow:2px 2px 3px 0 rgba(50,50,50,0.3);
+}
+.cke_notification_message a, .cke_notification_message a:link  {
+	color: #FFFFFF;
+}
+
+/* END */

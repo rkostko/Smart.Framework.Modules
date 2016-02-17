@@ -1,4 +1,4 @@
-﻿// Norwegian translation by Vegard S.
+// Norwegian translation by Vegard S.
 CKEDITOR.plugins.setLang('wordcount', 'no', {
     WordCount: 'Ord:',
     CharCount: 'Tegn:',

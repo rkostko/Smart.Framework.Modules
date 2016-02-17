@@ -2,6 +2,9 @@
 (c) 2009 - 2016 unix-world.org
 License: BSD
 
+## Extra Js:
+	* a collection of javascript components
+
 ## Extra Libs:
 	* MySQLi (connector for MySQL: 5.0, 5.1, 5.5, 5.6) / MariaDB: 5.x, 10.x / Percona Server: 5.1 / 5.5 / 5.6)
 	* MongoDB (connector for MongoDB 2.x / 3.x)
