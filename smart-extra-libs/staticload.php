@@ -21,7 +21,8 @@ require_once('modules/smart-extra-libs/lib_db_solr.php'); 				// solr db connect
 //--
 require_once('modules/smart-extra-libs/lib_templating_twig.php'); 		// twig templating
 //--
-
+require_once('modules/smart-extra-libs/lib_export_pdf.php'); 			// pdf export
+//--
 
 // end of php code
 ?>

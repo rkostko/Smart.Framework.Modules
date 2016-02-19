@@ -46,6 +46,10 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 		case 'SmartTwigTemplating':
 			require_once('modules/smart-extra-libs/lib_templating_twig.php'); // twig templating
 			break;
+		//-- pdf export
+		case 'SmartPdfExport':
+			require_once('modules/smart-extra-libs/lib_export_pdf.php'); // pdf export
+			break;
 		//--
 		default:
 			return; // other classes are not managed here ...
