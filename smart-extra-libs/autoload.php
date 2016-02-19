@@ -13,7 +13,7 @@ require_once('modules/smart-extra-libs/version.php'); // extra libs version
 //--
 
 /**
- * Function AutoLoad Extra Libs from (Smart.Framework.Modules) r.160215
+ * Function AutoLoad Extra Libs from (Smart.Framework.Modules) r.160219
  * they are loaded via Dependency Injection
  *
  * @access 		private
@@ -45,10 +45,6 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 		//--
 		case 'SmartTwigTemplating':
 			require_once('modules/smart-extra-libs/lib_templating_twig.php'); // twig templating
-			break;
-		//--
-		case 'SmartExtraJsComponents':
-			require_once('modules/smart-extra-libs/lib_extra_js_components.php'); // extra js components
 			break;
 		//--
 		default:

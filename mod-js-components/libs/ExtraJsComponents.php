@@ -1,30 +1,27 @@
 <?php
-// [LIB - SmartFramework / ExtraJS / Components]
+// Class: \SmartModExtLib\JsComponents\ExtraJsComponents
 // (c) 2006-2016 unix-world.org - all rights reserved
 
-//----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.2')) {
-	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
-} //end if
-//-----------------------------------------------------
+namespace SmartModExtLib\JsComponents;
 
-//-----------------------------------------------------
-if(!SmartAppInfo::TestIfModuleExists('smart-extra-js')) {
-	die('ERROR: SmartExtraJsComponents :: The module smart-extra-js cannot be found ...');
+
+//----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
+	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
 
 
 /**
- * Class: Smart Extra JS Components
+ * Class: Extra JS Components
  *
- * @version 	v.160215
+ * @version 	v.160219
  *
  * @access 		private
  * @internal
  *
  */
-class SmartExtraJsComponents {
+class ExtraJsComponents {
 
 	// ::
 
@@ -37,12 +34,12 @@ public static function js_init_suggest_ajx_selector() {
 //--
 $js = <<<'JS'
 <!-- AjaxSuggest -->
-<link rel="stylesheet" type="text/css" href="modules/smart-extra-js/jsjssuggest/ajax_suggest.css">
-<script type="text/javascript" src="modules/smart-extra-js/jsjssuggest/ajax_suggest.js"></script>
+<link rel="stylesheet" type="text/css" href="modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.css">
+<script type="text/javascript" src="modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.js"></script>
 <!-- END AjaxSuggest -->
 JS;
 //--
-return $js;
+return (string) $js;
 //--
 } //END FUNCTION
 //================================================================
@@ -58,29 +55,29 @@ public static function js_draw_suggest_ajx_selector($y_width, $y_prefix, $y_suff
 	$ajx_div = $y_id_prefix.'_AJXSelector_DIV';
 	$ajx_txt = $y_id_prefix.'_AJXSelector_TXT';
 	//--
-	return SmartMarkersTemplating::render_file_template(
-		'modules/smart-extra-js/jsjssuggest/ajax_suggest.inc.htm',
+	return (string) \SmartMarkersTemplating::render_file_template(
+		'modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.inc.htm',
 		array(
 			//-- passed as html
-			'WIDTH' => Smart::escape_html($y_width),
-			'DIV-HTML-ID' => Smart::escape_html($ajx_div),
-			'TXT-HTML-ID' => Smart::escape_html($ajx_txt),
-			'TXT-TITLE' => Smart::escape_html($y_form_hint),
-			'TXT-FORM-VAR' => Smart::escape_html($y_form_var),
-			'TXT-VALUE' => Smart::escape_html($y_form_value),
+			'WIDTH' 		=> \Smart::escape_html((string)$y_width),
+			'DIV-HTML-ID' 	=> \Smart::escape_html((string)$ajx_div),
+			'TXT-HTML-ID' 	=> \Smart::escape_html((string)$ajx_txt),
+			'TXT-TITLE' 	=> \Smart::escape_html((string)$y_form_hint),
+			'TXT-FORM-VAR' 	=> \Smart::escape_html((string)$y_form_var),
+			'TXT-VALUE' 	=> \Smart::escape_html((string)$y_form_value),
 			//-- passed to js
-			'DIV-JS-ID' => Smart::escape_js($ajx_div),
-			'TXT-JS-ID' => Smart::escape_js($ajx_txt),
-			'AJAX-METHOD' => Smart::escape_js($y_ajx_method),
-			'AJAX-URL' => Smart::escape_js($y_ajx_url),
+			'DIV-JS-ID' 	=> \Smart::escape_js((string)$ajx_div),
+			'TXT-JS-ID' 	=> \Smart::escape_js((string)$ajx_txt),
+			'AJAX-METHOD' 	=> \Smart::escape_js((string)$y_ajx_method),
+			'AJAX-URL' 		=> \Smart::escape_js((string)$y_ajx_url),
 			//-- passed raw
-			'PREFIX' => $y_prefix, // this is preformatted HTML
-			'SUFFIX' => $y_suffix // this is preformatted HTML
+			'PREFIX' 		=> (string) $y_prefix, // this is preformatted HTML
+			'SUFFIX' 		=> (string) $y_suffix // this is preformatted HTML
 			//--
 		),
 		'yes' // export to cache
 	);
-//--
+	//--
 } //END FUNCTION
 //================================================================
 
@@ -91,7 +88,9 @@ public static function js_draw_suggest_ajx_selector($y_width, $y_prefix, $y_suff
  *
  */
 public static function js_init_sel_list() {
-	return '<script type="text/javascript" src="modules/smart-extra-js/jsjsslist/slist.js"></script>';
+	//--
+	return '<script type="text/javascript" src="modules/mod-js-components/views/js/jsjsslist/slist.js"></script>';
+	//--
 } //END FUNCTION
 //================================================================
 
@@ -112,18 +111,18 @@ public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8'
 	if(is_array($y_options_arr)) {
 		foreach($y_options_arr as $key => $val) { // warehouses as arr[]=id
 			if((strlen($key) > 0) AND (strlen($val) > 0)) {
-				$options_html .= '<option value="'.Smart::escape_html($key).'">'.Smart::escape_html($val).'</option>';
+				$options_html .= '<option value="'.\Smart::escape_html((string)$key).'">'.\Smart::escape_html((string)$val).'</option>';
 			} //end if
 		} //end foreach
 	} //end if
 	//--
-	$translator_core_js_messages = SmartTextTranslations::getTranslator('@core', 'js_messages');
+	$translator_core_js_messages = \SmartTextTranslations::getTranslator('@core', 'js_messages');
 	//--
-	$tmp_slist = SmartMarkersTemplating::render_file_template(
-		'modules/smart-extra-js/jsjsslist/slist.inc.htm',
+	$tmp_slist = \SmartMarkersTemplating::render_file_template(
+		'modules/mod-js-components/views/js/jsjsslist/slist.inc.htm',
 		array(
-			'SIZE' 			=> $y_size,
-			'VARIABLE_NAME'	=> $y_var_name,
+			'SIZE' 			=> (int) $y_size,
+			'VARIABLE_NAME'	=> \Smart::escape_html((string)$y_var_name),
 			'TXT_SELECT'	=> $translator_core_js_messages->text('btn_select'),
 			'TXT_RESET'		=> $translator_core_js_messages->text('btn_reset'),
 			'SLIST_SRC'		=> 'smartframeworkComponents_SList_SRC'.$tmp_suffix,
@@ -134,7 +133,7 @@ public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8'
 		'yes' // export to cache
 	);
 	//--
-	return $tmp_init_slist.$tmp_slist;
+	return (string) $tmp_init_slist.$tmp_slist;
 	//--
 } //END FUNCTION
 //================================================================

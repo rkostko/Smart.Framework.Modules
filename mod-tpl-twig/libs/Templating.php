@@ -6,9 +6,9 @@
 
 namespace SmartModExtLib\TplTwig;
 
-//----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
-if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
-	die('Invalid Runtime Status in PHP Script: '.@basename(__FILE__).' ...');
+//----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
+	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
 

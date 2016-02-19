@@ -3,14 +3,8 @@
 // (c) 2006-2016 unix-world.org - all rights reserved
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.2')) {
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
-} //end if
-//-----------------------------------------------------
-
-//-----------------------------------------------------
-if(!SmartAppInfo::TestIfModuleExists('mod-tpl-twig')) {
-	die('ERROR: SmartTwigTemplating :: The module mod-tpl-twig cannot be found ...');
 } //end if
 //-----------------------------------------------------
 
@@ -48,6 +42,10 @@ class SmartTwigTemplating {
 	public static $twig = null;
 
 	public static function render_file_template($file, $arr_vars=array()) {
+		//--
+		if(!SmartAppInfo::TestIfModuleExists('mod-tpl-twig')) {
+			return '{# ERROR: SmartTwigTemplating :: The module mod-tpl-twig cannot be found ... #}';
+		} //end if
 		//--
 		if(self::$twig === null) {
 			self::$twig = new \SmartModExtLib\TplTwig\Templating();

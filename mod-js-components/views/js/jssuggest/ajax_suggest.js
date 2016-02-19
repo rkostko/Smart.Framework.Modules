@@ -7,7 +7,7 @@
 
 //==================
 
-var AJX_Suggest_LoaderImg = 'modules/smart-extra-js/js/jssuggest/img/ajax_loader.gif';
+var AJX_Suggest_LoaderImg = 'modules/mod-js-components/views/js/jssuggest/img/ajax_loader.gif';
 
 var AJX_Suggest_Class = new function() {
 

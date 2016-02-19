@@ -19,6 +19,14 @@ CKEDITOR.config.startupOutlineBlocks = true; // enable show blocks by default
 CKEDITOR.on('instanceReady', function(ev) {
 	ev.editor.dataProcessor.writer.selfClosingEnd = '>'; // fix tag ends
 });
+CKEDITOR.on('instanceCreated', function(ev) {
+		ev.editor.on('contentDom', function() {
+			ev.editor.document.on('drop', function(ev) {
+				ev.data.preventDefault(true);
+			}
+		);
+	});
+});
 //CKEDITOR.config.allowedContent = true; // to allow all tags includding <script>
 CKEDITOR.config.extraAllowedContent = [ 'section[id]', 'script', 'span[*]', 'a[data-*]' ];
 CKEDITOR.config.disallowedContent = [ 'table{width,height}', 'tbody[*]' ];
@@ -28,6 +36,20 @@ CKEDITOR.config.disallowedContent = [ 'table{width,height}', 'tbody[*]' ];
 CKEDITOR.config.plugins='dialogui,dialog,a11yhelp,about,basicstyles,bidi,blockquote,clipboard,button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu,contextmenu,dialogadvtab,div,elementspath,enterkey,entities,popup,filebrowser,find,fakeobjects,floatingspace,listblock,richcombo,font,format,forms,horizontalrule,htmlwriter,iframe,image,indent,indentlist,indentblock,justify,link,list,liststyle,magicline,maximize,newpage,pagebreak,pastefromword,pastetext,preview,print,removeformat,resize,save,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tableresize,tabletools,templates,toolbar,undo,wysiwygarea,audio,video,base64image,wordcount,notification';
 //--
 
+var MyEditor;
+
+function initSample() {
+	//--
+	MyEditor = CKEDITOR.replace('editor');
+	//--
+	MyEditor.on('change', function(evt) {
+		//console.log(evt.editor.getData());
+		document.getElementById('editor').value = evt.editor.getData(); // sync text area
+	});
+	//--
+} //END FUNCTION
+
+/*
 var initSample = ( function() {
 	var wysiwygareaAvailable = isWysiwygareaAvailable(),
 		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
@@ -65,4 +87,4 @@ var initSample = ( function() {
 		return !!CKEDITOR.plugins.get( 'wysiwygarea' );
 	}
 } )();
-
+*/

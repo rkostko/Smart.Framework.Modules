@@ -1,8 +1,8 @@
 
-#CHANGELOG / MIGRATION NOTES - SMART.FRAMEWORK.MODULES#
+# CHANGELOG / MIGRATION NOTES - SMART.FRAMEWORK.MODULES #
 
-Feb, 17, 2016 :: Version 2.3
-	* Pre-Release / Stable (switch to SVN ; keep GIT just for public ...)
+Feb, 19, 2016 :: Version 2.3
+	* Release / Stable (switch to SVN ; keep GIT just for public ...)
 
 Feb, 05, 2016 :: Version 2.2
 	* INFO: this is a bug-fix release for the version 2.1 branch, you are encouraged to use this version as soon as possbile
