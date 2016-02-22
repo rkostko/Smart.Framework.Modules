@@ -1,0 +1,14 @@
+[%%%%COMMENT%%%%]
+	!!! Do NOT add JS or HTML comments. This will be used for inline Javascript into a HTML on*="" and will break it !!!
+[%%%%/COMMENT%%%%]
+if([####IS_POPUP####]) {
+	if(window.opener) {
+		window.opener.CKEDITOR.tools.callFunction(window.opener.fileBrowserSmartCkEditorCallExchange(), '[####URL####]');
+	} else {
+		parent.CKEDITOR.tools.callFunction(parent.fileBrowserSmartCkEditorCallExchange(), '[####URL####]');
+	}
+	SmartJS_BrowserUtils.CloseModalPopUp();
+	return false;
+} else {
+	return CKEDITOR.tools.callFunction(fileBrowserSmartCkEditorCallExchange(), '[####URL####]');
+}

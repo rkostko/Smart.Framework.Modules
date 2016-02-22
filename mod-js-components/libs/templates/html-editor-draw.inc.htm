@@ -1,0 +1,11 @@
+<!-- Partial Template: ExtraJS.DrawHTMLEditor -->
+<span id="TheSpan__[####TXT-AREA-ID####]__HTMLCkArea">
+<textarea id="[####TXT-AREA-ID####]" name="[####TXT-AREA-VAR-NAME####]" cols="[####TXT-AREA-COLS####]" rows="[####TXT-AREA-ROWS####]" wrap="OFF" onKeyDown="SmartJS_BrowserUtils.catch_TABKey(event);">[####TXT-AREA-CONTENT####]</textarea>
+</span>
+<script type="text/javascript">
+var Smart__CKEDITOR__[####TXT-AREA-ID####];
+$(function(){
+	Smart__CKEDITOR__[####TXT-AREA-ID####] = initSmartSetupCkEditor('[####TXT-AREA-ID####]');
+});
+</script>
+<!-- #END :: Partial Template: ExtraJS.DrawHTMLEditor -->

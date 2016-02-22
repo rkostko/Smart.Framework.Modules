@@ -15,7 +15,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 /**
  * Class: Extra JS Components
  *
- * @version 	v.160219
+ * @version 	v.160222
  *
  * @access 		private
  * @internal
@@ -24,62 +24,6 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 class ExtraJsComponents {
 
 	// ::
-
-//================================================================
-/**
- * Function: JS Init Ajax Suggest Selector
- *
- */
-public static function js_init_suggest_ajx_selector() {
-//--
-$js = <<<'JS'
-<!-- AjaxSuggest -->
-<link rel="stylesheet" type="text/css" href="modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.css">
-<script type="text/javascript" src="modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.js"></script>
-<!-- END AjaxSuggest -->
-JS;
-//--
-return (string) $js;
-//--
-} //END FUNCTION
-//================================================================
-
-
-//================================================================
-/**
- * Function: JS Draw Ajax Suggest Selector
- *
- */
-public static function js_draw_suggest_ajx_selector($y_width, $y_prefix, $y_suffix, $y_ajx_method, $y_ajx_url, $y_id_prefix, $y_form_hint, $y_form_var, $y_form_value='') {
-	//--
-	$ajx_div = $y_id_prefix.'_AJXSelector_DIV';
-	$ajx_txt = $y_id_prefix.'_AJXSelector_TXT';
-	//--
-	return (string) \SmartMarkersTemplating::render_file_template(
-		'modules/mod-js-components/views/js/jsjssuggest/ajax_suggest.inc.htm',
-		array(
-			//-- passed as html
-			'WIDTH' 		=> \Smart::escape_html((string)$y_width),
-			'DIV-HTML-ID' 	=> \Smart::escape_html((string)$ajx_div),
-			'TXT-HTML-ID' 	=> \Smart::escape_html((string)$ajx_txt),
-			'TXT-TITLE' 	=> \Smart::escape_html((string)$y_form_hint),
-			'TXT-FORM-VAR' 	=> \Smart::escape_html((string)$y_form_var),
-			'TXT-VALUE' 	=> \Smart::escape_html((string)$y_form_value),
-			//-- passed to js
-			'DIV-JS-ID' 	=> \Smart::escape_js((string)$ajx_div),
-			'TXT-JS-ID' 	=> \Smart::escape_js((string)$ajx_txt),
-			'AJAX-METHOD' 	=> \Smart::escape_js((string)$y_ajx_method),
-			'AJAX-URL' 		=> \Smart::escape_js((string)$y_ajx_url),
-			//-- passed raw
-			'PREFIX' 		=> (string) $y_prefix, // this is preformatted HTML
-			'SUFFIX' 		=> (string) $y_suffix // this is preformatted HTML
-			//--
-		),
-		'yes' // export to cache
-	);
-	//--
-} //END FUNCTION
-//================================================================
 
 
 //================================================================
@@ -135,6 +79,76 @@ public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8'
 	//--
 	return (string) $tmp_init_slist.$tmp_slist;
 	//--
+} //END FUNCTION
+//================================================================
+
+
+//================================================================
+/**
+ * Outputs the JS Code to init the HTML CkEditor
+ *
+ * @param $y_filebrowser_link STRING 		:: Example: script.php?op=fileman&modal=yes&typ=
+ * @return STRING							[JS HTML Code]
+ */
+public static function js_init_html_area($y_filebrowser_link='') {
+//--
+return \SmartMarkersTemplating::render_file_template(
+	'modules/mod-js-components/libs/templates/html-editor-init.inc.htm',
+	array(
+		'FILE-BROWSER-CALLBACK-URL' => \Smart::escape_js($y_filebrowser_link)
+	),
+	'yes' // export to cache
+);
+//--
+} //END FUNCTION
+//================================================================
+
+
+//================================================================
+/**
+ * Draw a TextArea with a built-in javascript HTML CkEditor
+ *
+ * @param STRING $y_text		[Text for Toggle Area]
+ * @param STRING $yvarname		[HTML Form Variable Name]
+ * @param STRING $yid			[Unique HTML Page Element ID]
+ * @param INTEGER+ $ywidth		[Area Width: (Example) 96]
+ * @param INTEGER+ $yheight		[Area Height (Example) 28]
+ * @param ENUM	$y_toolbars		[Toolbar Mode: normal, complete, maxi]
+ *
+ * @return STRING				[HTML Code]
+ *
+ */
+public static function js_draw_html_area($yid, $yvarname, $ywidth='96', $yheight='28', $yvalue='', $y_toggle_text='', $y_toolbars='') {
+//--
+return \SmartMarkersTemplating::render_file_template(
+	'modules/mod-js-components/libs/templates/html-editor-draw.inc.htm',
+	array(
+		'TXT-AREA-ID' => \Smart::escape_js($yid), // HTML or JS ID
+		'TXT-AREA-VAR-NAME' => \Smart::escape_html($yvarname), // HTML variable name
+		'TXT-AREA-COLS' => (int)$ywidth,
+		'TXT-AREA-ROWS' => (int)$yheight,
+		'TXT-AREA-CONTENT' => \Smart::escape_html($yvalue)
+	),
+	'yes' // export to cache
+);
+//--
+} //END FUNCTION
+//================================================================
+
+
+//================================================================
+// CallBack Mapping for HTML CkEditor
+public static function js_callback_html_area($yurl, $is_popup=false) {
+//--
+return str_replace(array("\r\n", "\r", "\n", "\t"), array(' ', ' ', ' ', ' '), (string)\SmartMarkersTemplating::render_file_template(
+	'modules/mod-js-components/libs/templates/html-editor-callback.inc.htm',
+	array(
+		'IS_POPUP' => (int) $is_popup,
+		'URL' => \Smart::escape_js($yurl)
+	),
+	'yes' // export to cache
+));
+//--
 } //END FUNCTION
 //================================================================
 

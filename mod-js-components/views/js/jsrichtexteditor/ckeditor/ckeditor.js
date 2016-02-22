@@ -2,6 +2,21 @@
 Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
+
+// Contains fixes by unixman (c) 2016 unix-world.org
+// r.2016.02.22.12.32
+
+var SmartCkEditCfg__allowedTagAttrs = [
+	// "script", ["src"]
+];
+var SmartCkEditCfg__removeTags = [
+	"?xml", "!doctype", "html", "head", "body", "meta", "style", "link",
+	"base", "basefont", "dir", "isindex", "menu", "command", "keygen",
+	"frame", "frameset", "noframes", "iframe",
+	"embed", "object", "param",
+	"noscript"
+];
+
 (function(){if(window.CKEDITOR&&window.CKEDITOR.dom)return;/**
  * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
@@ -19491,6 +19506,14 @@ CKEDITOR.htmlParser.fragment = function() {
 				data = evtData.dataValue,
 				fixBodyTag;
 
+			//-- unixman fix (clean HTML before protecting) ... the CKEditor does a bad task here ...
+			data = $.htmlClean(data, {
+				format: true,
+				allowedAttributes: SmartCkEditCfg__allowedTagAttrs,
+				removeTags: SmartCkEditCfg__removeTags,
+			});
+			//--
+
 			// The source data is already HTML, but we need to clean
 			// it up and apply the filter.
 			data = protectSource( data, editor );
@@ -20311,6 +20334,7 @@ CKEDITOR.htmlParser.fragment = function() {
 			store = editor._.dataStore || ( editor._.dataStore = { id: 1 } ),
 			tempRegex = /<\!--\{cke_temp(comment)?\}(\d*?)-->/g;
 
+		// unixman: this is protected content ...
 		var regexes = [
 			// Script tags will also be forced to be protected, otherwise
 			// IE will execute them.
@@ -20331,7 +20355,7 @@ CKEDITOR.htmlParser.fragment = function() {
 			return '<!--{cke_tempcomment}' + ( protectedHtml.push( match ) - 1 ) + '-->';
 		} );
 
-		for ( var i = 0; i < regexes.length; i++ ) {
+		for( var i = 0; i < regexes.length; i++ ) {
 			data = data.replace( regexes[ i ], function( match ) {
 				match = match.replace( tempRegex, // There could be protected source inside another one. (#3869).
 				function( $, isComment, id ) {
