@@ -12,10 +12,14 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 //-----------------------------------------------------
 
 
+//=====================================================================================
+//===================================================================================== CLASS START
+//=====================================================================================
+
 /**
  * Class: Extra JS Components
  *
- * @version 	v.160222
+ * @version 	v.160224
  *
  * @access 		private
  * @internal
@@ -85,17 +89,18 @@ public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8'
 
 //================================================================
 /**
- * Outputs the JS Code to init the HTML CkEditor
+ * Outputs the HTML Code to init the HTML (wysiwyg) Editor
  *
- * @param $y_filebrowser_link STRING 		:: Example: script.php?op=fileman&modal=yes&typ=
- * @return STRING							[JS HTML Code]
+ * @param $y_filebrowser_link STRING 		URL to Image Browser (Example: script.php?op=image-gallery&type=images)
+ *
+ * @return STRING							[HTML Code]
  */
 public static function js_init_html_area($y_filebrowser_link='') {
 //--
 return \SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-init.inc.htm',
 	array(
-		'FILE-BROWSER-CALLBACK-URL' => \Smart::escape_js($y_filebrowser_link)
+		'FILE-BROWSER-CALLBACK-URL' => (string) $y_filebrowser_link
 	),
 	'yes' // export to cache
 );
@@ -106,28 +111,37 @@ return \SmartMarkersTemplating::render_file_template(
 
 //================================================================
 /**
- * Draw a TextArea with a built-in javascript HTML CkEditor
+ * Draw a TextArea with a built-in javascript HTML (wysiwyg) Editor
  *
- * @param STRING $y_text		[Text for Toggle Area]
- * @param STRING $yvarname		[HTML Form Variable Name]
- * @param STRING $yid			[Unique HTML Page Element ID]
- * @param INTEGER+ $ywidth		[Area Width: (Example) 96]
- * @param INTEGER+ $yheight		[Area Height (Example) 28]
- * @param ENUM	$y_toolbars		[Toolbar Mode: normal, complete, maxi]
+ * @param STRING $yid					[Unique HTML Page Element ID]
+ * @param STRING $yvarname				[HTML Form Variable Name]
+ * @param STRING $yvalue				[HTML Data]
+ * @param INTEGER+ $ywidth				[Area Width: (Example) 720px or 75%]
+ * @param INTEGER+ $yheight				[Area Height (Example) 480px or 50%]
+ * @param BOOLEAN $y_allow_scripts		[Allow JavaScripts]
+ * @param BOOLEAN $y_allow_script_src	[Allow JavaScript SRC attribute]
+ * @param MIXED $y_cleaner_deftags 		['' or array of HTML Tags to be allowed / dissalowed by the cleaner ... see HTML Cleaner Documentation]
+ * @param ENUM $y_cleaner_mode 			[HTML Cleaner mode for defined tags: ALLOW / DISALLOW]
+ * @param STRING $y_toolbar_ctrls		[Toolbar Controls: ... see CKEditor Documentation]
  *
- * @return STRING				[HTML Code]
+ * @return STRING						[HTML Code]
  *
  */
-public static function js_draw_html_area($yid, $yvarname, $ywidth='96', $yheight='28', $yvalue='', $y_toggle_text='', $y_toolbars='') {
+public static function js_draw_html_area($yid, $yvarname, $yvalue='', $ywidth='720px', $yheight='480px', $y_allow_scripts=false, $y_allow_script_src=false, $y_cleaner_deftags='', $y_cleaner_mode='', $y_toolbar_ctrls='') {
 //--
 return \SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-draw.inc.htm',
 	array(
-		'TXT-AREA-ID' => \Smart::escape_js($yid), // HTML or JS ID
-		'TXT-AREA-VAR-NAME' => \Smart::escape_html($yvarname), // HTML variable name
-		'TXT-AREA-COLS' => (int)$ywidth,
-		'TXT-AREA-ROWS' => (int)$yheight,
-		'TXT-AREA-CONTENT' => \Smart::escape_html($yvalue)
+		'TXT-AREA-ID' 					=> (string) $yid, // HTML or JS ID
+		'TXT-AREA-VAR-NAME' 			=> (string) $yvarname, // HTML variable name
+		'TXT-AREA-WIDTH' 				=> (string) $ywidth, // 100px or 100%
+		'TXT-AREA-HEIGHT' 				=> (string) $yheight, // 100px or 100%
+		'TXT-AREA-CONTENT' 				=> (string) $yvalue,
+		'TXT-AREA-ALLOW-SCRIPTS' 		=> (bool) $y_allow_scripts, // boolean
+		'TXT-AREA-ALLOW-SCRIPT-SRC' 	=> (bool) $y_allow_script_src, // boolean
+		'CLEANER-REMOVE-TAGS' 			=> $y_cleaner_deftags, // mixed
+		'CLEANER-MODE-TAGS' 			=> (string) $y_cleaner_mode,
+		'TXT-AREA-TOOLBAR' 				=> (string) $y_toolbar_ctrls
 	),
 	'yes' // export to cache
 );
@@ -137,14 +151,21 @@ return \SmartMarkersTemplating::render_file_template(
 
 
 //================================================================
-// CallBack Mapping for HTML CkEditor
+/**
+ * CallBack Mapping for HTML (wysiwyg) Editor - FileBrowser Integration
+ *
+ * @param STRING $yurl					The Callback URL
+ * @param BOOLEAN $is_popup 			Set to True if Popup (incl. Modal)
+ *
+ * @return STRING						[JS Code]
+ */
 public static function js_callback_html_area($yurl, $is_popup=false) {
 //--
 return str_replace(array("\r\n", "\r", "\n", "\t"), array(' ', ' ', ' ', ' '), (string)\SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-callback.inc.htm',
 	array(
-		'IS_POPUP' => (int) $is_popup,
-		'URL' => \Smart::escape_js($yurl)
+		'IS_POPUP' 	=> (int) $is_popup,
+		'URL' 		=> (string) $yurl
 	),
 	'yes' // export to cache
 ));
@@ -154,6 +175,11 @@ return str_replace(array("\r\n", "\r", "\n", "\t"), array(' ', ' ', ' ', ' '), (
 
 
 } //END CLASS
+
+//=====================================================================================
+//===================================================================================== CLASS END
+//=====================================================================================
+
 
 //end of php code
 ?>

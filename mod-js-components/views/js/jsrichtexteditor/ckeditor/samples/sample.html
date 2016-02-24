@@ -48,7 +48,9 @@
 <button onClick="alert(document.getElementById('editor').value);">Get Editor Content</button>
 </div>
 <script>
-	initSmartSetupCkEditor('editor');
+	CKEDITOR.config.height = 480;
+	CKEDITOR.config.width = 960;
+	Smart_CKEditor_Activate_HTML_AREA('editor', 480, 960, true, false);
 </script>
 </body>
 </html>

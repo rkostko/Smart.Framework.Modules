@@ -1,11 +1,11 @@
 <!-- Partial Template: ExtraJS.DrawHTMLEditor -->
-<span id="TheSpan__[####TXT-AREA-ID####]__HTMLCkArea">
-<textarea id="[####TXT-AREA-ID####]" name="[####TXT-AREA-VAR-NAME####]" cols="[####TXT-AREA-COLS####]" rows="[####TXT-AREA-ROWS####]" wrap="OFF" onKeyDown="SmartJS_BrowserUtils.catch_TABKey(event);">[####TXT-AREA-CONTENT####]</textarea>
+<span id="TheSpan__[####TXT-AREA-ID|htmid####]__HTMLArea">
+<textarea id="[####TXT-AREA-ID|htmid####]" name="[####TXT-AREA-VAR-NAME|html####]" style="width:[####TXT-AREA-WIDTH|html####];height:[####TXT-AREA-HEIGHT|html####];" wrap="OFF" onKeyDown="SmartJS_BrowserUtils.catch_TABKey(event);">[####TXT-AREA-CONTENT|html####]</textarea>
 </span>
 <script type="text/javascript">
-var Smart__CKEDITOR__[####TXT-AREA-ID####];
-$(function(){
-	Smart__CKEDITOR__[####TXT-AREA-ID####] = initSmartSetupCkEditor('[####TXT-AREA-ID####]');
-});
+var Smart__CKEDITOR__[####TXT-AREA-ID|jsvar####];
+//$(function(){
+Smart__CKEDITOR__[####TXT-AREA-ID|jsvar####] = Smart_CKEditor_Activate_HTML_AREA('[####TXT-AREA-ID|htmid|js####]', '[####TXT-AREA-WIDTH|js####]', '[####TXT-AREA-HEIGHT|js####]', [####TXT-AREA-ALLOW-SCRIPTS|bool####], [####TXT-AREA-ALLOW-SCRIPT-SRC|bool####], [####CLEANER-REMOVE-TAGS|json####], '[####CLEANER-MODE-TAGS|js####]', '[####TXT-AREA-TOOLBAR|js####]');
+//});
 </script>
 <!-- #END :: Partial Template: ExtraJS.DrawHTMLEditor -->

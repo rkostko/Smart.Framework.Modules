@@ -4,18 +4,8 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
 // Contains fixes by unixman (c) 2016 unix-world.org
-// r.2016.02.22.12.32
+// r.2016.02.24
 
-var SmartCkEditCfg__allowedTagAttrs = [
-	// "script", ["src"]
-];
-var SmartCkEditCfg__removeTags = [
-	"?xml", "!doctype", "html", "head", "body", "meta", "style", "link",
-	"base", "basefont", "dir", "isindex", "menu", "command", "keygen",
-	"frame", "frameset", "noframes", "iframe",
-	"embed", "object", "param",
-	"noscript"
-];
 
 (function(){if(window.CKEDITOR&&window.CKEDITOR.dom)return;/**
  * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
@@ -11564,6 +11554,13 @@ CKEDITOR.ENTER_DIV = 3;
  * @singleton
  */
 CKEDITOR.config = {
+
+	//-- unixman (defs for HTML Cleaner)
+	SmartCKEditCfg_allowedTags: [],
+	SmartCKEditCfg_allowedTagAttrs: [ "script", ["src"] ],
+	SmartCKEditCfg_removeTags: [],
+	//--
+
 	/**
 	 * The URL path to the custom configuration file to be loaded. If not
 	 * overwritten with inline configuration, it defaults to the `config.js`
@@ -19468,8 +19465,8 @@ CKEDITOR.htmlParser.fragment = function() {
 	 * @param {CKEDITOR.editor} editor
 	 */
 	CKEDITOR.htmlDataProcessor = function( editor ) {
-		var dataFilter, htmlFilter,
-			that = this;
+
+		var dataFilter, htmlFilter, that = this;
 
 		this.editor = editor;
 
@@ -19507,10 +19504,11 @@ CKEDITOR.htmlParser.fragment = function() {
 				fixBodyTag;
 
 			//-- unixman fix (clean HTML before protecting) ... the CKEditor does a bad task here ...
-			data = $.htmlClean(data, {
-				format: true,
-				allowedAttributes: SmartCkEditCfg__allowedTagAttrs,
-				removeTags: SmartCkEditCfg__removeTags,
+			data = $.htmlClean(data, { // {{{SYNC-HTML-CLEAN}}}
+				'format': true,
+				'allowedTags': 			this.config.SmartCKEditCfg_allowedTags,
+				'allowedAttributes': 	this.config.SmartCKEditCfg_allowedTagAttrs,
+				'removeTags': 			this.config.SmartCKEditCfg_removeTags
 			});
 			//--
 
