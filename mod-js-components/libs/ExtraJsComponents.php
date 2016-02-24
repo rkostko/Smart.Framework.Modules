@@ -100,6 +100,7 @@ public static function js_init_html_area($y_filebrowser_link='') {
 return \SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-init.inc.htm',
 	array(
+		'LANG' => (string) \SmartTextTranslations::getLanguage(),
 		'FILE-BROWSER-CALLBACK-URL' => (string) $y_filebrowser_link
 	),
 	'yes' // export to cache
