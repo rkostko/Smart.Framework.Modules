@@ -54,6 +54,8 @@ CKEDITOR.on('dialogDefinition', function(ev) { // fix image src on OK when inser
 function Smart_CKEditor_Activate_HTML_AREA(id, width, height, allowScripts, allowScriptSrc, tagsDefinition, tagsMode, controls) {
 	//--
 	var options = {
+		'width': width,
+		'height': height,
 		'allowedContent': true, // by default allow all tags ; html filtering will be done by external HTML Cleaner which is more safe !
 		'plugins': 'dialogui,dialog,basicstyles,blockquote,clipboard,button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu,contextmenu,dialogadvtab,elementspath,enterkey,entities,popup,filebrowser,find,link,fakeobjects,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,image,indent,indentlist,indentblock,justify,list,liststyle,magicline,maximize,pastetext,preview,removeformat,resize,selectall,showblocks,showborders,sourcearea,tab,table,tabletools,toolbar,undo,wysiwygarea,wordcount,notification',
 		'filebrowserBrowseUrl': Smart_CKEDITOR_Cfg_filebrowserBrowseUrl,
