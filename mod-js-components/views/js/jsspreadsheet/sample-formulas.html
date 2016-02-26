@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <title>Plugin for handsontable using RuleJS library (formulas parser)</title>
 
+	<style>
+		* { font-family: arial,sans-serif; }
+		td { font-size: 13px !important; }
+	</style>
+
   <!--
   Loading Handsontable (full distribution that includes all dependencies apart from jQuery)
   -->
@@ -36,6 +41,9 @@
 
 </head>
 <body>
+
+<div align="center"><table width="720"><tr><td valign="top">
+
 <div class="wrapper">
   <div class="wrapper-row">
 
@@ -46,10 +54,8 @@
           <div class="descLayout">
             <div class="pad" data-jsfiddle="example1">
 
-              <h2>Integration ruleJS library with Handsontable</h2>
-
-              <p>The following demo uses <code>ruleJS</code> library to parse some formulas.<br>
-                To enable this feature, use setting <code>formulas: true</code></p>
+              <h1>Sample (active) Spreadsheets with Formulas</h1>
+              <p>The first and 3rd tables are active (editable). The 2nd and 4th tables are static to provide how you should see the active tables ... </p>
 
 <hr size="1">
 <br>
@@ -61,7 +67,7 @@
 				<div style="position: relative; left: 0px; top: 0px;" class="wtSpreader">
 					<!-- static -->
 					<br>
-					<table class="htCore">
+					<table class="htCore" title="Static Spreadsheet #2 (Non-Editable)">
 						<colgroup>
 							<col class="rowHeader">
 							<col style="width: 50px;">
@@ -194,7 +200,8 @@
 		</div>
 	</div>
 	<br>
-	<div style="position: absolute; top: 0px; left: 0px; overflow: hidden; transform: translate3d(0px, 0px, 0px); height: 30px;" class="ht_clone_top handsontable">
+	<!-- Active -->
+	<div title="Active Spreadsheet: Editable" style="position: absolute; top: 0px; left: 0px; overflow: hidden; transform: translate3d(0px, 0px, 0px); height: 30px;" class="ht_clone_top handsontable">
 		<div class="wtHolder" style="position: relative; height: 45px;">
 			<div style="width: 550px;" class="wtHider">
 				<div style="position: relative; left: 0px;" class="wtSpreader">
@@ -262,6 +269,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- # -->
 	<div style="position: absolute; top: 0px; left: 0px; overflow: hidden; transform: translate3d(0px, 0px, 0px); width: 54px;" class="ht_clone_left handsontable">
 		<div class="wtHolder" style="position: relative; width: 54px;">
 			<div style="height: 165px;" class="wtHider">
@@ -390,7 +398,7 @@
 				<div style="position: relative; left: 0px; top: 0px;" class="wtSpreader">
 					<!-- static -->
 					<br>
-					<table class="htCore">
+					<table class="htCore" title="Static Spreadsheet #4 (Non-Editable)">
 						<colgroup>
 							<col class="rowHeader">
 							<col style="width: 50px;">
@@ -816,9 +824,14 @@ container2.handsontable({
     </div>
 
   </div>
-</div><div style="position: fixed; top: -10000px; left: -10000px;" id="CopyPasteDiv"><textarea style="width: 10000px; height: 10000px; overflow: hidden; opacity: 0;" class="copyPaste"></textarea></div>
+</div>
 
 <hr size="1">
+
+</td></tr></table></div>
+
+<div style="position: fixed; top: -10000px; left: -10000px;" id="CopyPasteDiv"><textarea style="width: 10000px; height: 10000px; overflow: hidden; opacity: 0;" class="copyPaste"></textarea></div>
+
 <br>
 <br>
 

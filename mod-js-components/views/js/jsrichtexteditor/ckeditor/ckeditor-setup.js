@@ -1,5 +1,5 @@
 
-/* Smart CkEditor :: v.160224 */
+/* Smart CKEditor (w. *Optiona;* CodeMirror) :: v.160225 */
 
 //-- then filter tags
 //SmartCkEditCfg__allowedTagAttrs = [ "script", ["src"] ]; // uncomment this to allow js src attribute
@@ -53,29 +53,32 @@ CKEDITOR.on('dialogDefinition', function(ev) { // fix image src on OK when inser
 //--
 function Smart_CKEditor_Activate_HTML_AREA(id, width, height, allowScripts, allowScriptSrc, tagsDefinition, tagsMode, controls) {
 	//--
+	var loadPlugins = 'sourcedialog,dialogui,dialog,basicstyles,blockquote,clipboard,button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu,contextmenu,dialogadvtab,elementspath,enterkey,entities,popup,filebrowser,find,link,fakeobjects,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,image,indent,indentlist,indentblock,justify,list,liststyle,magicline,maximize,pastetext,removeformat,resize,selectall,showblocks,showborders,sourcearea,tab,table,tabletools,toolbar,undo,wysiwygarea,wordcount,notification';
+	if(typeof (CodeMirror) != 'undefined') {
+		loadPlugins += ',codemirror';
+	} //end if
+	//--
 	var options = {
 		'width': width,
 		'height': height,
 		'allowedContent': true, // by default allow all tags ; html filtering will be done by external HTML Cleaner which is more safe !
-		'plugins': 'dialogui,dialog,basicstyles,blockquote,clipboard,button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu,contextmenu,dialogadvtab,elementspath,enterkey,entities,popup,filebrowser,find,link,fakeobjects,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,image,indent,indentlist,indentblock,justify,list,liststyle,magicline,maximize,pastetext,preview,removeformat,resize,selectall,showblocks,showborders,sourcearea,tab,table,tabletools,toolbar,undo,wysiwygarea,wordcount,notification',
+		'plugins': loadPlugins,
+		//'enterMode': CKEDITOR.ENTER_BR,
 		'filebrowserBrowseUrl': Smart_CKEDITOR_Cfg_filebrowserBrowseUrl,
-		'toolbarGroups': [
-			{ 'name': 'document', 		'groups': [ 'mode', 'document', 'doctools' ] },
-			{ 'name': 'clipboard', 		'groups': [ 'clipboard', 'undo' ] },
-			{ 'name': 'editing', 		'groups': [ 'selection', 'spellchecker', 'find', 'editing' ] },
-			{ 'name': 'links', 			'groups': [ 'links' ] },
-			{ 'name': 'insert', 		'groups': [ 'insert' ] },
-			{ 'name': 'forms', 			'groups': [ 'forms' ] },
-			{ 'name': 'tools', 			'groups': [ 'tools' ] },
-			{ 'name': 'others', 		'groups': [ 'others' ] },
+		'toolbar': [
+			{ 'name': 'document', 		'items': [ 'Maximize', '-', 'Sourcedialog' ] },
+			{ 'name': 'tools', 			'items': [ 'ShowBlocks' ] },
+			{ 'name': 'editing', 		'items': [ 'Undo', 'Redo' ] },
+			{ 'name': 'clipboard', 		'items': [ 'Cut', 'Copy', 'Paste', 'PasteText' ] },
+			{ 'name': 'search', 		'items': [ 'Find', 'Replace', 'SelectAll' ] },
+			{ 'name': 'insert', 		'items': [ 'Blockquote', 'HorizontalRule', 'Table', 'Image' ] },
+			{ 'name': 'links', 			'items': [ 'Link', 'Unlink' ] },
 			'/', // new line in toolbar
-			{ 'name': 'basicstyles', 	'groups': [ 'basicstyles', 'cleanup' ] },
-			{ 'name': 'paragraph', 		'groups': [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-			{ 'name': 'styles', 		'groups': [ 'styles' ] },
-			{ 'name': 'about', 			'groups': [ 'about' ] },
-			{ 'name': 'colors', 		'groups': [ 'colors' ] }
+			{ 'name': 'basicstyles', 	'items': [ 'Bold', 'Italic', 'Underline', '-', 'Strike', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor', 'RemoveFormat' ] },
+			{ 'name': 'paragraph', 		'items': [ 'BulletedList', 'NumberedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+			{ 'name': 'styles', 		'items': [ 'Format' ] },
 		],
-		//removeButtons: 'SpecialChar'
+		//removeButtons: 'Source,Preview'
 	};
 	//--
 	if(allowScripts === true) {

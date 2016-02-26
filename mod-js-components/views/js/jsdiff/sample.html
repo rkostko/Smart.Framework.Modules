@@ -24,8 +24,15 @@
 			return false;
 		} //END FUNCTION
 		</script>
+		<style>
+			* { font-family: tahoma,arial,sans-serif; }
+			h1, h2, h3, h4, h5 { display: inline-block; padding:2px; margin-bottom: 10px; }
+		</style>
 	</head>
 	<body>
+
+<div align="center"><table width="780"><tr><td valign="top">
+
 		<div class="main">
 
 			<div class="header">
@@ -35,8 +42,8 @@
 
 				<div class="contentLeft">
 					<div style="display:inline-block; margin-right:20px; margin-bottom:10px;">
-						<div class="contentItemTitle">Old version</div>
-						<textarea class="contentItemText version" id="old" placeholder="Old Text" style="width:350px; height:100px;">
+						<div class="contentItemTitle"><h3>Old (Text) version</h3></div>
+						<textarea class="contentItemText version" id="old" placeholder="Old Text" style="width:340px; height:100px; background:#F7F7F7; border: 1px solid #FF6600; padding:3px;">
 block: moved,
 string: old,
 test: one,
@@ -45,8 +52,8 @@ deleted: yes
 						</textarea>
 					</div>
 					<div style="display:inline-block; margin-right:20px; margin-bottom:10px;">
-						<div class="contentItemTitle">New version</div>
-						<textarea class="contentItemText version" id="new" placeholder="New Text" style="width:350px; height:100px;">
+						<div class="contentItemTitle"><h3>New (Text) version</h3></div>
+						<textarea class="contentItemText version" id="new" placeholder="New Text" style="width:340px; height:100px; border: 1px solid #003399; padding:3px;">
 string: new,
 block: moved,
 test: two,
@@ -55,9 +62,10 @@ extra: line
 					</div>
 				</div>
 
-				<div style="max-width:96%;">
-					<div class="contentItemTitle">Comparison (diff)
-					</div>
+				<div style="max-width:720px;">
+					<button class="button" onclick="RunDiff();">Run: COMPARE OLD Text WITH NEW Text</button>
+					<br>
+					<div class="contentItemTitle"><h3>Text Comparison (text diff algorithm)</h3></div>
 					<div class="contentItemText">
 						<div class="diff" id="diff"><div class="wikEdDiffContainer" id="wikEdDiffContainer"><pre class="wikEdDiffFragment" style="white-space: pre-wrap;"></pre></div></div>
 					</div>
@@ -66,29 +74,16 @@ extra: line
 			</div>
 			<div class="footer">
 
-				<div class="footerLeft">
-				</div>
-
-				<div class="footerCenter">
-					<div class="footerItemText">
-						<div class="compare">
-							<button class="button" onclick="RunDiff();">Compare</button>
-						</div>
-					</div>
-				</div>
-
 				<div class="footerRight" id="legend" style="visibility:hidden;">
 					<div class="footerItemTitle"><h3>Legend</h3></div>
-					<div class="footerItemText">
-						<div class="legend" style="line-height:32px;">
-							<ul>
-								<li><span class="wikEdDiffMarkRight" title="Moved block" id="wikEdDiffMark999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');"></span> Original block position</li>
-								<li><span title="+" class="wikEdDiffInsert">Inserted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
-								<li><span title="−" class="wikEdDiffDelete">Deleted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
-								<li><span class="wikEdDiffBlockLeft" title="◀" id="wikEdDiffBlock999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');" style="background-color: #E8E8E8;">Moved<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>block<span class="wikEdDiffNewline"> </span></span></li>
-								<li><span class="newlineSymbol">¶</span> Newline <span class="spaceSymbol">·</span> Space <span class="tabSymbol">→</span> Tab</li>
-							</ul>
-						</div>
+					<div class="legend" style="line-height:32px;">
+						<ul style="display:inline-block;">
+							<li><span class="wikEdDiffMarkRight" title="Moved block" id="wikEdDiffMark999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');"></span> Original block position</li>
+							<li><span title="+" class="wikEdDiffInsert">Inserted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
+							<li><span title="−" class="wikEdDiffDelete">Deleted<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>text<span class="wikEdDiffNewline"> </span></span></li>
+							<li><span class="wikEdDiffBlockLeft" title="◀" id="wikEdDiffBlock999" onmouseover="wikEdDiffBlockHandler(undefined, this, 'mouseover');" style="background-color: #E8E8E8;">Moved<span class="wikEdDiffSpace"><span class="wikEdDiffSpaceSymbol"></span> </span>block<span class="wikEdDiffNewline"> </span></span></li>
+							<li><span class="newlineSymbol">¶</span> Newline <span class="spaceSymbol">·</span> Space <span class="tabSymbol">→</span> Tab</li>
+						</ul>
 					</div>
 				</div>
 
@@ -96,6 +91,6 @@ extra: line
 
 		</div>
 
-
+</td></tr></table></div>
 
 </body></html>

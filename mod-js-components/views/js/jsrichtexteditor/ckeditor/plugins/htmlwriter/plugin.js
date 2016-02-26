@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
+// fixed by unixman v.160225
+
 CKEDITOR.plugins.add( 'htmlwriter', {
 	init: function( editor ) {
 		var writer = new CKEDITOR.htmlWriter();
@@ -55,7 +57,7 @@ CKEDITOR.htmlWriter = CKEDITOR.tools.createClass( {
 		 *		// Use HTML4 notation for self-closing elements.
 		 *		editorInstance.dataProcessor.writer.selfClosingEnd = '>';
 		 */
-		this.selfClosingEnd = ' />';
+		this.selfClosingEnd = '>'; // ' />'; :: unixman
 
 		/**
 		 * The characters to be used for line breaks.
@@ -79,8 +81,8 @@ CKEDITOR.htmlWriter = CKEDITOR.tools.createClass( {
 			this.setRules( e, {
 				indent: !dtd[ e ][ '#' ],
 				breakBeforeOpen: 1,
-				breakBeforeClose: !dtd[ e ][ '#' ],
-				breakAfterClose: 1,
+				breakBeforeClose: 0, // !dtd[ e ][ '#' ], :: unixman
+				breakAfterClose: 0, // 1, :: unixman
 				needsSpace: ( e in dtd.$block ) && !( e in { li: 1, dt: 1, dd: 1 } )
 			} );
 		}
@@ -94,11 +96,11 @@ CKEDITOR.htmlWriter = CKEDITOR.tools.createClass( {
 
 		this.setRules( 'style', {
 			indent: 0,
-			breakBeforeClose: 1
+			breakBeforeClose: 0 // 1 :: unixman
 		} );
 
 		this.setRules( 'pre', {
-			breakAfterOpen: 1, // Keep line break after the opening tag
+			breakAfterOpen: 0, // 1, // Keep line break after the opening tag :: unixman
 			indent: 0 // Disable indentation on <pre>.
 		} );
 	},

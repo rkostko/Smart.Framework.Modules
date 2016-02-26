@@ -15,9 +15,13 @@
 </head>
 <body>
 <div align="center">
-<div style="display:inline-block; margin-right:20px; line-height:48px; font-size:32px;">Rich Text Editor</div>
-<div style="display:inline-block; margin-right:20px; line-height:48px;"><img src="img/logo.png" width="96"></div>
-<br>
+	<table width="720">
+		<tr valign="middle">
+			<td><span style="font-size:32px;">Rich Text Editor</span></td>
+			<td><img src="img/logo.png" alt="Logo" width="96"></td>
+		</tr>
+	</table>
+	<br>
 <textarea id="editor">
 &lt;section id=&quot;test&quot;&gt;
 	&lt;h1&gt;Hello world!&lt;/h1&gt;
@@ -45,12 +49,10 @@
 	&lt;/tbody&gt;
 &lt;/table&gt;
 </textarea>
-<button onClick="alert(document.getElementById('editor').value);">Get Editor Content</button>
+	<button onClick="alert(document.getElementById('editor').value);">Get Editor Content</button>
 </div>
 <script>
-	CKEDITOR.config.height = 480;
-	CKEDITOR.config.width = 960;
-	Smart_CKEditor_Activate_HTML_AREA('editor', 480, 960, true, false);
+	Smart_CKEditor_Activate_HTML_AREA('editor', 960, 480, true, false);
 </script>
 </body>
 </html>
