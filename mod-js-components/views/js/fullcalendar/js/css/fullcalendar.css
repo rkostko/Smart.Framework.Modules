@@ -4,13 +4,14 @@
  * (c) 2013 Adam Shaw
  */
 
-/* unixman changes - v.2014.10.20 */
+/* unixman changes - v.2016.03.01 */
 
-/* (unixman) This is a Fix for all styles in NetVision CSS */
-body, table, td, th, div, p, pre, ul, li, a {
-	font-size: 12px;
-	}
-/* end */
+/* Fix by Unixman */
+.fc * {
+	box-sizing: content-box !important;
+	-moz-box-sizing: content-box !important;
+	-webkit-box-sizing: content-box !important;
+}
 
 .fc-today {
 	background: #FFFFCC url('today.png') 3px 3px no-repeat;

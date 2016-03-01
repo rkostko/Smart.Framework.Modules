@@ -1,6 +1,13 @@
 
 /* Flexigrid :: with fixes by unixman */
 
+/* Fix by Unixman */
+.flexigrid * {
+	box-sizing: content-box !important;
+	-moz-box-sizing: content-box !important;
+	-webkit-box-sizing: content-box !important;
+}
+
 .flexigrid {
 	font-size: 11px;
 	line-height: normal;
