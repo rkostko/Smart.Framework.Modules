@@ -1,12 +1,14 @@
 <!-- Partial Template: ExtraJS.InitHTMLEditor -->
-<script type="text/javascript" src="lib/js/jquery/cleditor/jquery.htmlcleaner.js"></script>
-<!-- CkEditor :: START -->
-<script type="text/javascript" src="modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor.js"></script>
-<link type="text/css" rel="stylesheet" href="modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor-custom.css">
-<script type="text/javascript" src="modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor-setup.js"></script>
+<script type="text/javascript">
+	SmartJS_BrowserUtils.RequireJS('lib/js/jquery/cleditor/jquery.htmlcleaner.js');
+	// CkEditor :: START
+	SmartJS_BrowserUtils.RequireJS('modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor.js');
+	SmartJS_BrowserUtils.RequireCSS('modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor-custom.css');
+	SmartJS_BrowserUtils.RequireJS('modules/mod-js-components/views/js/jsrichtexteditor/ckeditor/ckeditor-setup.js');
+</script>
 <script type="text/javascript">
 	CKEDITOR.config.language = '[####LANG|js####]';
 	Smart_CKEDITOR_Cfg_filebrowserBrowseUrl = '[####FILE-BROWSER-CALLBACK-URL|js####]';
+	// CkEditor :: END
 </script>
-<!-- CkEditor :: END -->
 <!-- #END :: Partial Template: ExtraJS.InitHTMLEditor -->
