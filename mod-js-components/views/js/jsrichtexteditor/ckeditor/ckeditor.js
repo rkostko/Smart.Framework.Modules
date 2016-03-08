@@ -6,6 +6,9 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 // Contains fixes by unixman (c) 2016 unix-world.org
 // r.2016.02.24
 
+if(!jQuery().htmlClean) { // unixman
+	throw 'ERROR: This CkEditor version requires the jQuery htmlClean';
+} //end if
 
 (function(){if(window.CKEDITOR&&window.CKEDITOR.dom)return;/**
  * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
