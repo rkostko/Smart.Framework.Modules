@@ -1,9 +1,9 @@
-// <syntaxhighlight lang="JavaScript">
+
+// (c) 2015-2016 unixman, incl. fixes
+// r. 160309 v.1.2.4.1
 
 // ==UserScript==
 // @name        wikEd diff
-// @version     1.2.4
-// @date        October 23, 2014
 // @description improved word-based diff library with block move detection
 // @homepage    https://en.wikipedia.org/wiki/User:Cacycle/diff
 // @source      https://en.wikipedia.org/wiki/User:Cacycle/diff.js
@@ -349,60 +349,68 @@ var WikEdDiff = function () {
 
 			// Insert
 			'.wikEdDiffInsert {' +
-			'font-weight: bold; background-color: #bbddff; ' +
-			'color: #222; border-radius: 0.25em; padding: 0.2em 1px; ' +
+			'font-weight: bold; background-color: #BBDDFF; ' +
+			'color: #222222; border-radius: 0.25em; padding: 0.2em 1px; ' +
+			'text-decoration: overline; text-decoration-color: #AACCEE; ' +
+			'} ' +
+			'.wikEdDiffInsert:hover {' +
+			'text-decoration: none; ' +
 			'} ' +
 			'.wikEdDiffInsertBlank { background-color: #66bbff; } ' +
 			'.wikEdDiffFragment:hover .wikEdDiffInsertBlank { background-color: #bbddff; } ' +
 
 			// Delete
 			'.wikEdDiffDelete {' +
-			'font-weight: bold; background-color: #ffe49c; ' +
-			'color: #222; border-radius: 0.25em; padding: 0.2em 1px; ' +
+			'font-weight: bold; background-color: #F5CBE1; ' +
+			'color: #222222; border-radius: 0.25em; padding: 0.2em 1px; ' +
+			'text-decoration: line-through; text-decoration-color: #E4BAD0; ' +
 			'} ' +
-			'.wikEdDiffDeleteBlank { background-color: #ffd064; } ' +
-			'.wikEdDiffFragment:hover .wikEdDiffDeleteBlank { background-color: #ffe49c; } ' +
+			'.wikEdDiffDelete:hover {' +
+			'text-decoration: none; ' +
+			'} ' +
+			'.wikEdDiffDeleteBlank { background-color: #FFD064; } ' +
+			'.wikEdDiffFragment:hover .wikEdDiffDeleteBlank { background-color: #F5CBE1; } ' +
 
 			// Block
 			'.wikEdDiffBlock {' +
-			'font-weight: bold; background-color: #e8e8e8; ' +
+			'font-weight: bold; background-color: #E8E8E8; ' +
 			'border-radius: 0.25em; padding: 0.2em 1px; margin: 0 1px; ' +
 			'} ' +
 			'.wikEdDiffBlock { } ' +
-			'.wikEdDiffBlock0 { background-color: #ffff80; } ' +
-			'.wikEdDiffBlock1 { background-color: #d0ff80; } ' +
-			'.wikEdDiffBlock2 { background-color: #ffd8f0; } ' +
-			'.wikEdDiffBlock3 { background-color: #c0ffff; } ' +
-			'.wikEdDiffBlock4 { background-color: #fff888; } ' +
-			'.wikEdDiffBlock5 { background-color: #bbccff; } ' +
-			'.wikEdDiffBlock6 { background-color: #e8c8ff; } ' +
-			'.wikEdDiffBlock7 { background-color: #ffbbbb; } ' +
-			'.wikEdDiffBlock8 { background-color: #a0e8a0; } ' +
+			'.wikEdDiffBlock0 { background-color: #FFFF80; } ' +
+			'.wikEdDiffBlock1 { background-color: #D0FF80; } ' +
+			'.wikEdDiffBlock2 { background-color: #FFD8F0; } ' +
+			'.wikEdDiffBlock3 { background-color: #C0FFFF; } ' +
+			'.wikEdDiffBlock4 { background-color: #FFF888; } ' +
+			'.wikEdDiffBlock5 { background-color: #BBCCFF; } ' +
+			'.wikEdDiffBlock6 { background-color: #E8C8FF; } ' +
+			'.wikEdDiffBlock7 { background-color: #FFBBBB; } ' +
+			'.wikEdDiffBlock8 { background-color: #A0E8A0; } ' +
 			'.wikEdDiffBlockHighlight {' +
-			'background-color: #777; color: #fff; ' +
-			'border: solid #777; border-width: 1px 0; ' +
+			'background-color: #777777; color: #FFFFFF; ' +
+			'border: solid #777777; border-width: 1px 0; ' +
 			'} ' +
 
-			// Mark
+			// Mark (move)
 			'.wikEdDiffMarkLeft, .wikEdDiffMarkRight {' +
-			'font-weight: bold; background-color: #ffe49c; ' +
-			'color: #666; border-radius: 0.25em; padding: 0.2em; margin: 0 1px; ' +
+			'font-weight: bold; background-color: #FFE49C; ' +
+			'color: #666666; border-radius: 0.25em; padding: 0.2em; margin: 0 1px; ' +
 			'} ' +
 			'.wikEdDiffMarkLeft:before { content: "{cssMarkLeft}"; } ' +
 			'.wikEdDiffMarkRight:before { content: "{cssMarkRight}"; } ' +
 			'.wikEdDiffMarkLeft.wikEdDiffNoUnicode:before { content: "<"; } ' +
 			'.wikEdDiffMarkRight.wikEdDiffNoUnicode:before { content: ">"; } ' +
-			'.wikEdDiffMark { background-color: #e8e8e8; color: #666; } ' +
-			'.wikEdDiffMark0 { background-color: #ffff60; } ' +
-			'.wikEdDiffMark1 { background-color: #c8f880; } ' +
-			'.wikEdDiffMark2 { background-color: #ffd0f0; } ' +
-			'.wikEdDiffMark3 { background-color: #a0ffff; } ' +
-			'.wikEdDiffMark4 { background-color: #fff860; } ' +
-			'.wikEdDiffMark5 { background-color: #b0c0ff; } ' +
-			'.wikEdDiffMark6 { background-color: #e0c0ff; } ' +
-			'.wikEdDiffMark7 { background-color: #ffa8a8; } ' +
-			'.wikEdDiffMark8 { background-color: #98e898; } ' +
-			'.wikEdDiffMarkHighlight { background-color: #777; color: #fff; } ' +
+			'.wikEdDiffMark { background-color: #E8E8E8; color: #666666; } ' +
+			'.wikEdDiffMark0 { background-color: #FFFF60; } ' +
+			'.wikEdDiffMark1 { background-color: #C8F880; } ' +
+			'.wikEdDiffMark2 { background-color: #FFD0F0; } ' +
+			'.wikEdDiffMark3 { background-color: #A0FFFF; } ' +
+			'.wikEdDiffMark4 { background-color: #FFF860; } ' +
+			'.wikEdDiffMark5 { background-color: #B0C0FF; } ' +
+			'.wikEdDiffMark6 { background-color: #E0C0FF; } ' +
+			'.wikEdDiffMark7 { background-color: #FFA8A8; } ' +
+			'.wikEdDiffMark8 { background-color: #98E898; } ' +
+			'.wikEdDiffMarkHighlight { background-color: #777777; color: #FFFFFF; } ' +
 
 			// Wrappers
 			'.wikEdDiffContainer { } ' +
@@ -420,43 +428,43 @@ var WikEdDiff = function () {
 
 			// Newline
 			'.wikEdDiffNewline:before { content: "¶"; color: transparent; } ' +
-			'.wikEdDiffBlock:hover .wikEdDiffNewline:before { color: #aaa; } ' +
+			'.wikEdDiffBlock:hover .wikEdDiffNewline:before { color: #AAAAAA; } ' +
 			'.wikEdDiffBlockHighlight .wikEdDiffNewline:before { color: transparent; } ' +
-			'.wikEdDiffBlockHighlight:hover .wikEdDiffNewline:before { color: #ccc; } ' +
+			'.wikEdDiffBlockHighlight:hover .wikEdDiffNewline:before { color: #CCCCCC; } ' +
 			'.wikEdDiffBlockHighlight:hover .wikEdDiffInsert .wikEdDiffNewline:before, ' +
 			'.wikEdDiffInsert:hover .wikEdDiffNewline:before' +
-			'{ color: #999; } ' +
+			'{ color: #999999; } ' +
 			'.wikEdDiffBlockHighlight:hover .wikEdDiffDelete .wikEdDiffNewline:before, ' +
 			'.wikEdDiffDelete:hover .wikEdDiffNewline:before' +
-			'{ color: #aaa; } ' +
+			'{ color: #AAAAAA; } ' +
 
 			// Tab
 			'.wikEdDiffTab { position: relative; } ' +
 			'.wikEdDiffTabSymbol { position: absolute; top: -0.2em; } ' +
-			'.wikEdDiffTabSymbol:before { content: "→"; font-size: smaller; color: #ccc; } ' +
-			'.wikEdDiffBlock .wikEdDiffTabSymbol:before { color: #aaa; } ' +
-			'.wikEdDiffBlockHighlight .wikEdDiffTabSymbol:before { color: #aaa; } ' +
-			'.wikEdDiffInsert .wikEdDiffTabSymbol:before { color: #aaa; } ' +
-			'.wikEdDiffDelete .wikEdDiffTabSymbol:before { color: #bbb; } ' +
+			'.wikEdDiffTabSymbol:before { content: "→"; font-size: smaller; color: #333333 !important; } ' +
+			'.wikEdDiffBlock .wikEdDiffTabSymbol:before { color: #AAAAAA; } ' +
+			'.wikEdDiffBlockHighlight .wikEdDiffTabSymbol:before { color: #AAAAAA; } ' +
+			'.wikEdDiffInsert .wikEdDiffTabSymbol:before { color: #AAAAAA; } ' +
+			'.wikEdDiffDelete .wikEdDiffTabSymbol:before { color: #BBBBBB; } ' +
 
 			// Space
 			'.wikEdDiffSpace { position: relative; } ' +
 			'.wikEdDiffSpaceSymbol { position: absolute; top: -0.2em; left: -0.05em; } ' +
 			'.wikEdDiffSpaceSymbol:before { content: "·"; color: transparent; } ' +
-			'.wikEdDiffBlock:hover .wikEdDiffSpaceSymbol:before { color: #999; } ' +
+			'.wikEdDiffBlock:hover .wikEdDiffSpaceSymbol:before { color: #999999; } ' +
 			'.wikEdDiffBlockHighlight .wikEdDiffSpaceSymbol:before { color: transparent; } ' +
-			'.wikEdDiffBlockHighlight:hover .wikEdDiffSpaceSymbol:before { color: #ddd; } ' +
+			'.wikEdDiffBlockHighlight:hover .wikEdDiffSpaceSymbol:before { color: #DDDDDD; } ' +
 			'.wikEdDiffBlockHighlight:hover .wikEdDiffInsert .wikEdDiffSpaceSymbol:before,' +
 			'.wikEdDiffInsert:hover .wikEdDiffSpaceSymbol:before ' +
-			'{ color: #888; } ' +
+			'{ color: #888888; } ' +
 			'.wikEdDiffBlockHighlight:hover .wikEdDiffDelete .wikEdDiffSpaceSymbol:before,' +
 			'.wikEdDiffDelete:hover .wikEdDiffSpaceSymbol:before ' +
-			'{ color: #999; } ' +
+			'{ color: #999999; } ' +
 
 			// Error
 			'.wikEdDiffError .wikEdDiffFragment,' +
 			'.wikEdDiffError .wikEdDiffNoChange' +
-			'{ background: #faa; }'
+			'{ background: #FFAAAA; }'
 	};
 
 	/** Add regular expressions to configuration settings. */
@@ -4573,4 +4581,4 @@ WikEdDiff.WikEdDiffText = function ( text, parent ) {
 	this.init();
 };
 
-// </syntaxhighlight>
+// #END

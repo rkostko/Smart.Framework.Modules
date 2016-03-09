@@ -39,30 +39,33 @@ var Smart_StrDiff = new function() { // START CLASS
 		if(out.n.length == 0) {
 			//--
 			for(var i = 0; i < out.o.length; i++) {
-				str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[i]) + oSpace[i] + '</del>';
+				str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[i]) + '</del>' + oSpace[i];
 			} //end for
 			//--
 		} else {
 			//--
 			if(out.n[0].text == null) {
 				for(n=0; n<out.o.length && out.o[n].text == null; n++) {
-					str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + oSpace[n] + '</del>';
+					str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + '</del>' + oSpace[n];
 				} //end for
 			} //end if
 			//--
 			for(var i=0; i<out.n.length; i++) {
-				if (out.n[i].text == null) {
-					str += '<ins>' + SmartJS_CoreUtils.escape_html(out.n[i]) + nSpace[i] + '</ins>';
+				if(out.n[i].text == null) {
+					str += '<ins>' + SmartJS_CoreUtils.escape_html(out.n[i]) + '</ins>' + nSpace[i];
 				} else {
 					var pre = '';
 					for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-						pre += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + oSpace[n] + '</del>';
+						pre += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + '</del>' + oSpace[n];
 					} //end for
 					str += ' ' + out.n[i].text + nSpace[i] + pre;
 				} //end if else
 			} //end for
 			//--
 		} //end if else
+
+		str = SmartJS_CoreUtils.stringReplaceAll('</ins>\n<del>', '</ins> <del>', str);
+		str = SmartJS_CoreUtils.stringReplaceAll('</del>\n<ins>', '</del> <ins>', str);
 
 		return str;
 

@@ -11,7 +11,7 @@ div#smart_json_diff del {
 	text-decoration: line-through;
 }
 div#smart_json_diff ins {
-	text-decoration: underline;
+	text-decoration: overline;
 }
 
 div#smart_json_diff li > span, div#smart_json_diff ul > span {
@@ -53,6 +53,11 @@ div#smart_json_diff .smart_json_added {
 }
 div#smart_json_diff .smart_json_removed {
 	background-color: #F5CBE1;
+	text-decoration: line-through;
+}
+
+div#smart_json_diff del:hover, div#smart_json_diff ins:hover, div#smart_json_diff .smart_json_removed:hover {
+	text-decoration: none;
 }
 
 /* END */

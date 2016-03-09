@@ -14,39 +14,35 @@ var Smart_JsonDiff = new function() { // START CLASS
 	// :: static
 
 	var theRootName = '#-.JSON:OBJECT.-#';
+	var nodeChanges = 0;
 
-	this.Compare = function(divElement, oldJson, newJson) {
+	this.Compare = function(divElement, aValue, bValue) {
 
-		//document.getElementById("jsonA");
-		//document.getElementById("jsonB");
-
-		var aValue = oldJson.value;
-		var bValue = newJson.value;
+		removeAllChildren(divElement); // clear the div
 
 		var objA, objB;
 
 		try {
 			objA = JSON.parse(aValue);
-			oldJson.style.backgroundColor = '';
-		} catch(e) {
-			oldJson.style.backgroundColor = 'rgba(255,0,0,0.5)'; // ERR red bg 0.5
+		} catch(err) {
+			divElement.innerHTML = '<div style="background:#FF3300; color:#FFFFFF; padding:5px;">ERROR Parsing Diff Json-A</div>';
+			return;
 		} //end try catch
 
 		try {
 			objB = JSON.parse(bValue);
-			newJson.style.backgroundColor = '';
-		} catch(e) {
-			newJson.style.backgroundColor = 'rgba(255,0,0,0.5)'; // ERR red bg 0.5
+		} catch(err) {
+			divElement.innerHTML = '<div style="background:#FF3300; color:#FFFFFF; padding:5px;">ERROR Parsing Diff Json-B</div>';
+			return;
 		} //end try catch
 
-		removeAllChildren(divElement);
-
-		compareTree(objA, objB, theRootName, divElement);
+		nodeChanges = 0;
+		compareTree(objA, objB, theRootName, divElement, 0);
 
 	} //END FUNCTION
 
 
-	var compareTree = function(a, b, name, divElement) {
+	var compareTree = function(a, b, name, divElement, rootLevel) {
 		//--
 		var typeA = typeofReal(a);
 		var typeB = typeofReal(b);
@@ -66,16 +62,19 @@ var Smart_JsonDiff = new function() { // START CLASS
 		leafNode.appendChild(document.createTextNode(name));
 		//--
 		if(a === undefined) {
+			nodeChanges++;
 			leafNode.setAttribute('class', 'smart_json_added');
 			leafNode.setAttribute('title', 'Added');
 			leafNode.appendChild(document.createTextNode(': ' + bString));
 			leafNode.appendChild(typeSpanB);
 		} else if(b === undefined) {
+			nodeChanges++;
 			leafNode.setAttribute('class', 'smart_json_removed');
 			leafNode.setAttribute('title', 'Removed');
 			leafNode.appendChild(document.createTextNode(': ' + aString));
 			leafNode.appendChild(typeSpanA);
 		} else if(typeA !== typeB || (typeA !== 'object' && typeA !== 'array' && aString !== bString)) {
+			nodeChanges++;
 			leafNode.appendChild(document.createTextNode(': '));
 			var leafExt1Node = document.createElement('span');
 			leafExt1Node.setAttribute('class', 'smart_json_changed');
@@ -132,8 +131,18 @@ var Smart_JsonDiff = new function() { // START CLASS
 				} //end if
 				var li = document.createElement('li');
 				listNode.appendChild(li);
-				compareTree(a && a[keys[i]], b && b[keys[i]], keys[i], li);
+				var rLevel = 2;
+				if(rootLevel === 0) {
+					rLevel = 1;
+				} //end if
+				compareTree(a && a[keys[i]], b && b[keys[i]], keys[i], li, rLevel);
 			} //end for
+			//--
+			if(rootLevel === 1) {
+				if(nodeChanges <= 0) {
+					listNode.setAttribute('class', 'closed');
+				} //end if
+			} //end if
 			//--
 			divElement.appendChild(listNode);
 			//--
@@ -142,6 +151,12 @@ var Smart_JsonDiff = new function() { // START CLASS
 			divElement.appendChild(leafNode);
 			//--
 		} //end if else
+		//--
+
+		//--
+		if(rootLevel <= 1) {
+			nodeChanges = 0;
+		} //end if
 		//--
 
 	} //END FUNCTION
