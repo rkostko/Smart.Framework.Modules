@@ -35,7 +35,7 @@
 					showSearchButton: true,
 					showTrailingSpace: true,
 					styleActiveLine: true,
-					theme: 'eclipse'
+					theme: 'uxw'
 				};
 
 			CKEDITOR.document.appendStyleSheet(rootPath + "css/codemirror.css");
