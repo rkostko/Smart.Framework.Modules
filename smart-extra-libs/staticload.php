@@ -13,7 +13,7 @@ require_once('modules/smart-extra-libs/version.php'); 					// extra libs version
 //--
 
 //--
-// StaticLoad Extra Libs from (Smart.Framework.Modules) r.160310
+// StaticLoad Extra Libs from (Smart.Framework.Modules) r.160311
 //--
 require_once('modules/smart-extra-libs/lib_db_mysqli.php'); 			// mysqli db connector
 require_once('modules/smart-extra-libs/lib_db_mongodb.php'); 			// mongodb db connector
