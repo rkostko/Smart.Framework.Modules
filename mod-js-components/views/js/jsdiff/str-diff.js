@@ -1,6 +1,6 @@
 
 // Smart Str(ing) Diff
-// (c) 2015-2016 unixman r.160308
+// (c) 2015-2016 unixman r.160317
 
 var Smart_StrDiff = new function() { // START CLASS
 
@@ -9,7 +9,7 @@ var Smart_StrDiff = new function() { // START CLASS
 
 	this.Compare = function(strOld, strNew) {
 		//--
-		return '' + diffString('' + strOld, '' + strNew); // outputs HTML
+		return '' + diffString(SmartJS_CoreUtils.escape_html(''+strOld), SmartJS_CoreUtils.escape_html(''+strNew)); // outputs HTML
 		//--
 	} //END FUNCTION
 
@@ -19,7 +19,7 @@ var Smart_StrDiff = new function() { // START CLASS
 		o = o.replace(/\s+$/, '');
 		n = n.replace(/\s+$/, '');
 
-		var out = diffRun(o == '' ? [] : o.split(/\s+/), n == '' ? [] : n.split(/\s+/) );
+		var out = diffRun(o == '' ? [] : o.split(/\s+/), n == '' ? [] : n.split(/\s+/));
 		var str = '';
 
 		var oSpace = o.match(/\s+/g);
@@ -39,24 +39,24 @@ var Smart_StrDiff = new function() { // START CLASS
 		if(out.n.length == 0) {
 			//--
 			for(var i = 0; i < out.o.length; i++) {
-				str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[i]) + '</del>' + oSpace[i];
+				str += '<del>' + out.o[i] + '</del>' + oSpace[i];
 			} //end for
 			//--
 		} else {
 			//--
 			if(out.n[0].text == null) {
 				for(n=0; n<out.o.length && out.o[n].text == null; n++) {
-					str += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + '</del>' + oSpace[n];
+					str += '<del>' + out.o[n] + '</del>' + oSpace[n];
 				} //end for
 			} //end if
 			//--
 			for(var i=0; i<out.n.length; i++) {
 				if(out.n[i].text == null) {
-					str += '<ins>' + SmartJS_CoreUtils.escape_html(out.n[i]) + '</ins>' + nSpace[i];
+					str += '<ins>' + out.n[i] + '</ins>' + nSpace[i];
 				} else {
 					var pre = '';
 					for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-						pre += '<del>' + SmartJS_CoreUtils.escape_html(out.o[n]) + '</del>' + oSpace[n];
+						pre += '<del>' + out.o[n] + '</del>' + oSpace[n];
 					} //end for
 					str += ' ' + out.n[i].text + nSpace[i] + pre;
 				} //end if else
@@ -93,22 +93,22 @@ var Smart_StrDiff = new function() { // START CLASS
 
 		for(var i in ns) {
 			if(ns[i].rows.length == 1 && typeof(os[i]) != 'undefined' && os[i].rows.length == 1) {
-				n[ ns[i].rows[0] ] = { text: n[ ns[i].rows[0] ], row: os[i].rows[0] };
-				o[ os[i].rows[0] ] = { text: o[ os[i].rows[0] ], row: ns[i].rows[0] };
+				n[ ns[i].rows[0] ] = { text: n[ns[i].rows[0]], row: os[i].rows[0] };
+				o[ os[i].rows[0] ] = { text: o[os[i].rows[0]], row: ns[i].rows[0] };
 			} //end if
 		} //end for
 
 		for(var i=0; i<n.length-1; i++) {
-			if(n[i].text != null && n[i+1].text == null && n[i].row + 1 < o.length && o[ n[i].row + 1 ].text == null && n[i+1] == o[ n[i].row + 1 ]) {
-				n[i+1] = { text: n[i+1], row: n[i].row + 1 };
-				o[n[i].row+1] = { text: o[n[i].row+1], row: i + 1 };
+			if(n[i].text != null && n[i+1].text == null && n[i].row + 1 < o.length && o[n[i].row+1].text == null && n[i+1] == o[n[i].row+1]) {
+				n[i+1] = { text: n[i+1], row: n[i].row+1 };
+				o[n[i].row+1] = { text: o[n[i].row+1], row: i+1 };
 			} //end if
 		} //end for
 
 		for(var i=n.length-1; i>0; i--) {
-			if(n[i].text != null && n[i-1].text == null && n[i].row > 0 && o[ n[i].row - 1 ].text == null && n[i-1] == o[ n[i].row - 1 ]) {
-				n[i-1] = { text: n[i-1], row: n[i].row - 1 };
-				o[n[i].row-1] = { text: o[n[i].row-1], row: i - 1 };
+			if(n[i].text != null && n[i-1].text == null && n[i].row > 0 && o[n[i].row-1].text == null && n[i-1] == o[n[i].row-1]) {
+				n[i-1] = { text: n[i-1], row: n[i].row-1 };
+				o[n[i].row-1] = { text: o[n[i].row-1], row: i-1 };
 			} //end if
 		} //end for
 
