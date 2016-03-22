@@ -45,7 +45,7 @@ Main components
   width: 4px;
   background: #d7e4ed;
 }
-@media only screen and (min-width: 1170px) {
+@media all and (min-width: 1170px) {
   #cd-timeline {
     margin-top: 3em;
     margin-bottom: 3em;
@@ -71,7 +71,7 @@ Main components
 .cd-timeline-block:last-child {
   margin-bottom: 0;
 }
-@media only screen and (min-width: 1170px) {
+@media all and (min-width: 1170px) {
   .cd-timeline-block {
     margin: 4em 0;
   }
@@ -113,7 +113,7 @@ Main components
   background: #EC971F;
   color: #333333;
 }
-@media only screen and (min-width: 1170px) {
+@media all and (min-width: 1170px) {
   .cd-timeline-icon {
     left: 50%;
     margin-left: -30px;
@@ -180,7 +180,7 @@ Main components
   border: 7px solid transparent;
   border-right: 7px solid #F5F5F5;
 }
-@media only screen and (min-width: 768px) {
+@media all and (min-width: 768px) {
   .cd-timeline-content h2 {
     font-size: 20px;
     font-size: 1.25em;
@@ -194,7 +194,7 @@ Main components
     font-size: 0.875em;
   }
 }
-@media only screen and (min-width: 1170px) {
+@media all and (min-width: 1170px) {
   .cd-timeline-content {
     margin-left: 0;
     padding: 1.6em;
@@ -246,7 +246,7 @@ Main components
   }
 }
 
-@media only screen and (min-width: 1170px) {
+@media all and (min-width: 1170px) {
   /* inverse bounce effect on even content blocks */
   .cssanimations .cd-timeline-block:nth-child(even) .cd-timeline-content.bounce-in {
     -webkit-animation: cd-bounce-2-inverse 0.6s;
