@@ -164,7 +164,6 @@ Main components
 .cd-timeline-content .cd-date {
   float: left;
   padding: .8em 0;
-  opacity: .7;
 }
 .cd-timeline-content::before {
   content: '';
@@ -215,6 +214,7 @@ Main components
   }
   .cd-timeline-block:nth-child(even) .cd-timeline-content {
     float: right;
+    text-align: right;
   }
   .cd-timeline-block:nth-child(even) .cd-timeline-content::before {
     top: 24px;
