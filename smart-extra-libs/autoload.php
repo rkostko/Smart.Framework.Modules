@@ -13,7 +13,7 @@ require_once('modules/smart-extra-libs/version.php'); // extra libs version
 //--
 
 /**
- * Function AutoLoad Extra Libs from (Smart.Framework.Modules) r.160311
+ * Function AutoLoad Extra Libs from (Smart.Framework.Modules) r.160325
  * they are loaded via Dependency Injection
  *
  * @access 		private
