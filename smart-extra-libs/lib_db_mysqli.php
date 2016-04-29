@@ -25,9 +25,9 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 //======================================================
 // Tested and Stable on MySQL versions:
 // 5.0.x / 5.1.x / 5.5.x / 5.6.x
-// Tested and Stable with MariaDB:
+// Tested and Stable with (MySQL compatible) MariaDB versions:
 // 5.1.x / 5.5.x / 10.x
-// Tested and Stable with Percona Server:
+// Tested and Stable with (MySQL compatible) Percona Server versions:
 // 5.5.x / 5.6.x
 //======================================================
 // NOTICE: For MySQLi all queries are using MYSQLI_STORE_RESULT (buffered queries)
