@@ -87,7 +87,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160215
+ * @version 	v.160504
  * @package 	Database:MySQL
  *
  */
@@ -1364,7 +1364,7 @@ public static function check_server_version($y_connection='DEFAULT') {
 	if((string)$error != '') {
 		//--
 		self::error(self::get_connection_id($y_connection), 'CHECK-SERVER-VERSION', $error, $queryval, '');
-		return array();
+		return '';
 		//--
 	} else {
 		//--
@@ -1385,7 +1385,7 @@ public static function check_server_version($y_connection='DEFAULT') {
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'set',
-			'data' => 'Validate MySQL Server Version: '.$mysql_num_version,
+			'data' => 'Detect MySQL Server Version: '.$mysql_num_version,
 			'connection' => (string) self::get_connection_id($y_connection),
 			'skip-count' => 'yes'
 		]);
@@ -1695,7 +1695,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160215
+ * @version 	v.160504
  * @package 	Database:MySQL
  *
  */
