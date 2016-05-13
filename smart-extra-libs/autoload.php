@@ -1,6 +1,7 @@
 <?php
 // [APP - (Extra) Libs AutoLoad]
 // (c) 2006-2016 unix-world.org - all rights reserved
+// v.2.3.2.1 r.2016.05.13
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -13,7 +14,7 @@ require_once('modules/smart-extra-libs/version.php'); // extra libs version
 //--
 
 /**
- * Function AutoLoad Extra Libs from (Smart.Framework.Modules) r.160429
+ * Function AutoLoad Extra Libs from (Smart.Framework.Modules)
  * they are loaded via Dependency Injection
  *
  * @access 		private
