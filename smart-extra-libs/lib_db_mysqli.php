@@ -87,7 +87,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160504
+ * @version 	v.160527
  * @package 	Database:MySQL
  *
  */
@@ -1056,14 +1056,13 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
  *
  * @param ARRAY-associative $arrdata			:: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100;
  * @param ENUM $mode							:: mode: 'insert' | 'update' | 'in-select'
- * @param TRUE/FALSE $escape_data				:: escape data or not (default is TRUE, will escape the data)
  * @param RESOURCE $y_connection 				:: the connection to mysql server
  * @return STRING								:: The SQL partial Statement
  *
  */
-public static function prepare_write_statement($arrdata, $mode, $escape_data=true, $y_connection='DEFAULT') {
+public static function prepare_write_statement($arrdata, $mode, $y_connection='DEFAULT') {
 
-	// version: 151026
+	// version: 160527
 
 	//==
 	$y_connection = self::check_connection($y_connection, 'PREPARE-WRITE-STATEMENT');
@@ -1119,44 +1118,37 @@ public static function prepare_write_statement($arrdata, $mode, $escape_data=tru
 			//--
 			if(is_array($val)) { // array (this is a special case, and always escape data)
 				//--
-				$val_x = (string) self::escape_str(Smart::array_to_list($val), $y_connection); // array values will be converted to: <val1>, <val2>, ...
+				$val_x = (string) "'".self::escape_str(Smart::array_to_list($val), $y_connection)."'"; // array values will be converted to: <val1>, <val2>, ...
 				//--
-			} elseif($val === false) { // emulate the null character through false === (this cannot be set outside PHP)
+			} elseif($val === null) { // emulate the SQL: NULL
 				//--
-				$val_x = false;
+				$val_x = 'NULL';
 				//--
-			} else { // string or number
+			} elseif($val === false) { // emulate the SQL: FALSE
 				//--
-				if($escape_data !== false) {
-					//--
-					$val_x = self::escape_str($val, $y_connection);
-					//--
-				} else {
-					//--
-					$val_x = $val; // expect data that is already escaped !!!
-					//--
-				} //end if else
+				$val_x = 'FALSE';
+				//--
+			} elseif($val === true) { // emulate the SQL: TRUE
+				//--
+				$val_x = 'TRUE';
+				//--
+			} elseif(self::validate_pure_numeric_values($val) === true) { // number
+				//--
+				$val_x = (string) trim((string)$val); // not escaped, it is safe: numeric and can contain just 0-9 - .
+				//--
+			} else { // string or other cases
+				//--
+				$val_x = (string) "'".self::escape_str($val, $y_connection)."'";
 				//--
 			} //end if else
 			//--
-			if($val_x === false) { // the case of NULL
-				if((string)$mode == 'in-select') { // in-select
-					$tmp_query_w .= 'NULL,';
-				} elseif((string)$mode == 'update') { // update
-					$tmp_query_x .= '`'.$key.'`'.'='.'NULL,';
-				} else { // insert
-					$tmp_query_y .= '`'.$key.'`'.',';
-					$tmp_query_z .= 'NULL,';
-				} //end if else
-			} else { // the case of string or number
-				if((string)$mode == 'in-select') { // in-select
-					$tmp_query_w .= "'".$val_x."'".',';
-				} elseif((string)$mode == 'update') { // update
-					$tmp_query_x .= '`'.$key.'`'.'='."'".$val_x."'".',';
-				} else { // insert
-					$tmp_query_y .= '`'.$key.'`'.',';
-					$tmp_query_z .= "'".$val_x."'".',';
-				} //end if else
+			if((string)$mode == 'in-select') { // in-select
+				$tmp_query_w .= $val_x.',';
+			} elseif((string)$mode == 'update') { // update
+				$tmp_query_x .= '`'.$key.'`'.'='.$val_x.',';
+			} else { // insert
+				$tmp_query_y .= '`'.$key.'`'.',';
+				$tmp_query_z .= $val_x.',';
 			} //end if else
 			//--
 		} //end while
@@ -1228,8 +1220,8 @@ public static function prepare_param_query($query, $replacements_arr, $y_connect
 		for($i=0; $i<$expr_count; $i++) {
 			$out_query .= $expr_arr[$i];
 			if($i < ($expr_count - 1)) {
-				if((is_numeric(trim($replacements_arr[$i]))) AND (preg_match('/^[0-9\-\.]+$/', trim($replacements_arr[$i])))) { // detect numbers: 0..9 - .
-					$out_query .= self::escape_str(trim($replacements_arr[$i]), $y_connection);
+				if(self::validate_pure_numeric_values($replacements_arr[$i]) === true) {
+					$out_query .= (string) trim((string)$replacements_arr[$i]); // not escaped, it is safe: numeric and can contain just 0-9 - .
 				} else {
 					$out_query .= "'".self::escape_str((string)$replacements_arr[$i], $y_connection)."'";
 				} //end if else
@@ -1543,6 +1535,19 @@ private static function check_connection($y_connection, $y_description) {
 
 
 //======================================================
+private static function validate_pure_numeric_values($val) {
+	//--
+	if((is_numeric(trim((string)$val))) AND (preg_match('/^(\-)?[0-9]*(\.[0-9]+)?$/', (string)trim((string)$val)))) { // detect numbers: 0..9 - .
+		return true; // VALID
+	} else {
+		return false; // NOT VALID
+	} //end if else
+	//--
+} //END FUNCTION
+//======================================================
+
+
+//======================================================
 private static function validate_table_and_fields_names($y_table_or_field) {
 	//--
 	$y_table_or_field = (string) $y_table_or_field;
@@ -1695,7 +1700,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160504
+ * @version 	v.160527
  * @package 	Database:MySQL
  *
  */
@@ -1884,13 +1889,12 @@ public function write_data($queryval, $params_or_title='') {
  *
  * @param ARRAY-associative $arrdata			:: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100;
  * @param ENUM $mode							:: mode: 'insert' | 'update' | 'in-select'
- * @param TRUE/FALSE $escape_data				:: escape data or not (default is TRUE, will escape the data)
  * @return STRING								:: The SQL partial Statement
  *
  */
-public function prepare_write_statement($arrdata, $mode, $escape_data=true) {
+public function prepare_write_statement($arrdata, $mode) {
 	//--
-	return SmartMysqliDb::prepare_write_statement($arrdata, $mode, $escape_data, $this->connection);
+	return SmartMysqliDb::prepare_write_statement($arrdata, $mode, $this->connection);
 	//--
 } //END FUNCTION
 
