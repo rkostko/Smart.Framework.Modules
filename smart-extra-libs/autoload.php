@@ -1,7 +1,7 @@
 <?php
 // [APP - (Extra) Libs AutoLoad]
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.2.3.2.2 r.2016.06.15 / smart.framework.v.2.3
+// v.2.3.3.1 r.2016.06.17 / smart.framework.v.2.3
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
