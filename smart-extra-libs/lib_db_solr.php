@@ -28,6 +28,7 @@ $configs['solr']['server-ssl']	= false;									// true / false
 $configs['solr']['db']			= 'solr/mydb';								// solr database
 $configs['solr']['username'] 	= '';										// solr username
 $configs['solr']['password'] 	= '';										// solr Base64-Encoded password
+$configs['solr']['mode'] 		= 'json';									// solr backend mode: json | xml
 $configs['solr']['timeout']		= 15;										// solr connect timeout in seconds
 $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query time (for debugging)
 //--
@@ -75,13 +76,16 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.160215
+ * @version 	v.160623
  * @package 	Database:Solr
  *
  */
 final class SmartSolrDb {
 
 // ->
+
+/** @var string */
+private $mode; // json | xml
 
 /** @var string */
 private $host;
@@ -124,7 +128,7 @@ private $slow_time = 0.3300;
  * @internal
  *
  */
-public function __construct($host='', $port='', $ssl='', $db='', $user='', $password='', $timeout=5, $y_debug_exch_slowtime=0.3300, $y_description='DEFAULT') {
+public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $user='', $password='', $timeout=5, $y_debug_exch_slowtime=0.3300, $y_description='DEFAULT') {
 	//--
 	global $configs;
 	//--
@@ -134,6 +138,7 @@ public function __construct($host='', $port='', $ssl='', $db='', $user='', $pass
 	} //end if
 	//--
 	if(((string)$host == '') AND ((string)$port == '') AND ((string)$db == '')) {
+		$mode = (string) $configs['solr']['mode'];
 		$host = (string) $configs['solr']['server-host'];
 		$port = (int) $configs['solr']['server-port'];
 		$ssl = (bool) $configs['solr']['server-ssl'];
@@ -149,6 +154,11 @@ public function __construct($host='', $port='', $ssl='', $db='', $user='', $pass
 		return;
 	} //end if
 	//--
+	if((string)$mode != 'xml') {
+		$mode = 'json';
+	} //end if else
+	//--
+	$this->mode = (string) $mode;
 	$this->host = (string) $host;
 	$this->port = (int) $port;
 	$this->ssl = (bool) $ssl;
@@ -378,7 +388,7 @@ public function findQuery($y_query, $y_options=array('settings' => array(), 'sor
 
 
 //======================================================
-public function addDocument($arrdoc) {
+public function addDocument($arrdoc, $use_autocommit=0) {
 	//--
 	$connect = $this->solr_connect();
 	//--
@@ -416,8 +426,12 @@ public function addDocument($arrdoc) {
 	//--
 	try {
 		//--
-		$updateResponse = $this->instance->addDocument($doc);
-		$this->instance->commit(); // save
+		if((int)$use_autocommit > 0) {
+			$updateResponse = $this->instance->addDocument($doc, true, (int)$use_autocommit);
+		} else {
+			$updateResponse = $this->instance->addDocument($doc, true, 0);
+			$this->instance->commit(); // save
+		} //end if else
 		//--
 	} catch (Exception $e) {
 		//--
@@ -583,13 +597,13 @@ private function solr_connect() {
 		//--
 		$options['path'] = $this->db;
 		//--
-		$options['wt'] = 'json';
+		$options['wt'] = $this->mode;
 		//--
 		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 			//--
 			SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 				'type' => 'open-close',
-				'data' => 'Solr DB :: Open Connection to DB: '.$this->db.' :: '.$this->description.' @ HOST: '.$this->protocol.$this->host.':'.$this->port.' # User: '.$this->user
+				'data' => 'Solr DB :: Open Connection ['.$this->mode.'] to DB: '.$this->db.' :: '.$this->description.' @ HOST: '.$this->protocol.$this->host.':'.$this->port.' # User: '.$this->user
 			]);
 			//--
 		} //end if
