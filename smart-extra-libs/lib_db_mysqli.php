@@ -87,7 +87,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160527
+ * @version 	v.160703
  * @package 	Database:MySQL
  *
  */
@@ -1191,22 +1191,32 @@ public static function prepare_write_statement($arrdata, $mode, $y_connection='D
 
 
 //======================================================
+/**
+ * Create Escaped SQL Statements from Parameters and Array of Data by replacing ? (question marks)
+ * This can be used for a full SQL statement or just for a part.
+ * The statement must not contain any Single Quotes !
+ *
+ * @param STRING $query							:: SQL Statement to process like '   WHERE ("id" = ?)'
+ * @param ARRAY $arrdata 						:: The non-associative array as of: $arr=array('a');
+ * @param RESOURCE $y_connection 				:: the connection to mysql server
+ * @return STRING								:: The SQL processed (partial/full) Statement
+ */
 public static function prepare_param_query($query, $replacements_arr, $y_connection='DEFAULT') {
 	//--
 	$y_connection = self::check_connection($y_connection, 'PREPARE-PARAM-QUERY');
 	//--
 	if(!is_string($query)) {
-		throw new Exception('MySQL / PrepareParamQuery :: The param/query requires and Query String !');
+		self::error(self::get_connection_id($y_connection), 'PREPARE-PARAM-QUERY', 'Query is not a string !', print_r($query,1), print_r($replacements_arr,1));
 		return ''; // single quote is not allowed
 	} //end if
 	//--
 	if(stripos($query, "'") !== false) {
-		throw new Exception('MySQL / PrepareParamQuery :: The param/query cannot contain single quotes !');
+		self::error(self::get_connection_id($y_connection), 'PREPARE-PARAM-QUERY', 'Query cannot contain single quotes !', (string)$query, print_r($replacements_arr,1));
 		return ''; // single quote is not allowed
 	} //end if
 	//--
 	if(!is_array($replacements_arr)) {
-		throw new Exception('MySQL / PrepareParamQuery :: The param/query requires and Array of Parameters !');
+		self::error(self::get_connection_id($y_connection), 'PREPARE-PARAM-QUERY', 'Query Replacements is NOT Array !', (string)$query, print_r($replacements_arr,1));
 		return ''; // single quote is not allowed
 	} //end if
 	//--
@@ -1700,7 +1710,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160527
+ * @version 	v.160703
  * @package 	Database:MySQL
  *
  */
@@ -1900,7 +1910,7 @@ public function prepare_write_statement($arrdata, $mode) {
 
 
 /**
- * Create Escaped SQL Statements from Parameters and Array of Data
+ * Create Escaped SQL Statements from Parameters and Array of Data by replacing ? (question marks)
  * This can be used for a full SQL statement or just for a part.
  * The statement must not contain any Single Quotes !
  *
