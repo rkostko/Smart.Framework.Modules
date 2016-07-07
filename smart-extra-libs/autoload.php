@@ -31,6 +31,10 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 	//--
 	switch((string)$classname) {
 		//--
+		case 'SmartCurlHttpFtpClient':
+			require_once('modules/smart-extra-libs/lib_curl_http_ftp_cli.php'); // curl http/ftp connector
+			break;
+		//--
 		case 'SmartMysqliDb':
 		case 'SmartMysqliExtDb':
 			require_once('modules/smart-extra-libs/lib_db_mysqli.php'); // mysqli db connector
