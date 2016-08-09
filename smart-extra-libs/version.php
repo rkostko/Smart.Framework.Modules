@@ -1,7 +1,7 @@
 <?php
 // [APP - (Extra) Libs AutoLoad]
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.2.3.5.1 r.2016.07.28 / smart.framework.v.2.3
+// v.2.3.5.2 r.2016.08.09 / smart.framework.v.2.3
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -9,8 +9,8 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 } //end if
 //-----------------------------------------------------
 
-define('SMART_FRAMEWORK_MODULES_HEAD_VERSION', 'v.2.3.5.1');
-define('SMART_FRAMEWORK_MODULES_VERSION', 'r.2016.07.28');
+define('SMART_FRAMEWORK_MODULES_HEAD_VERSION', 'v.2.3.5.2');
+define('SMART_FRAMEWORK_MODULES_VERSION', 'r.2016.08.09');
 
 if(((string)SMART_FRAMEWORK_RELEASE_TAGVERSION != (string)SMART_FRAMEWORK_MODULES_HEAD_VERSION) OR ((string)SMART_FRAMEWORK_MODULES_VERSION > (string)SMART_FRAMEWORK_RELEASE_VERSION)) { // check framework version
 	die('Smart.Framework.Modules requires Smart.Framework '.SMART_FRAMEWORK_MODULES_HEAD_VERSION.' '.SMART_FRAMEWORK_MODULES_VERSION.' ...');
