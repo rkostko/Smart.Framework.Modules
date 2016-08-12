@@ -87,7 +87,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160703
+ * @version 	v.160812
  * @package 	Database:MySQL
  *
  */
@@ -329,7 +329,7 @@ public static function escape_str($y_string, $y_connection='DEFAULT') {
 	//==
 
 	//-- Fix
-	$y_string = (string) SmartUnicode::utf8_fix_charset((string)$y_string);
+	$y_string = (string) SmartUnicode::fix_charset((string)$y_string);
 	//--
 
 	//--
@@ -1710,7 +1710,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160703
+ * @version 	v.160812
  * @package 	Database:MySQL
  *
  */
