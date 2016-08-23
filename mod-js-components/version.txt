@@ -1,6 +1,6 @@
 
 # Smart.Framework.Modules / SmartExtraJs #
 
-v.2.3.5.2 r.2016.08.09 / smart.framework.v.2.3
+v.2.3.5.3 r.2016.08.23 / smart.framework.v.2.3
 
 ###

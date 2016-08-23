@@ -1,6 +1,7 @@
 <?php
 // [LIB - SmartFramework / Plugins / PDF Export]
 // (c) 2006-2016 unix-world.org - all rights reserved
+// v.2.3.5.3 r.2016.08.23 / smart.framework.v.2.3
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
