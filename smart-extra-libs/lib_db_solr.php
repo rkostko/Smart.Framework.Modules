@@ -133,11 +133,6 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
 	//--
 	global $configs;
 	//--
-	if(version_compare(phpversion('solr'), '2.0') < 0) {
-		$this->error('PHP Solr Extension', 'This version of SOLR Client Library needs the Solr PHP Extension version 2.0 or later', 'CHECK PHP Solr Version');
-		return;
-	} //end if
-	//--
 	if(((string)$host == '') AND ((string)$port == '') AND ((string)$db == '')) {
 		$mode = (string) $configs['solr']['mode'];
 		$host = (string) $configs['solr']['server-host'];
@@ -150,16 +145,21 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
 		$y_debug_exch_slowtime = 0 + $configs['solr']['slowtime'];
 	} //end if
 	//--
+	if((string)$mode != 'xml') { // need to be before raising any errors as it is used in error display
+		$mode = 'json';
+	} //end if else
+	$this->mode = (string) $mode;
+	//--
+	if(version_compare(phpversion('solr'), '2.0') < 0) {
+		$this->error('PHP Solr Extension', 'This version of SOLR Client Library needs the Solr PHP Extension version 2.0 or later', 'CHECK PHP Solr Version');
+		return;
+	} //end if
+	//--
 	if(((string)$host == '') OR ((string)$port == '') OR ((string)$db == '') OR ((string)$timeout == '')) {
 		$this->error('Solr Configuration Init', 'Some Required Parameters are Empty', 'CHECK Connection Params');
 		return;
 	} //end if
 	//--
-	if((string)$mode != 'xml') {
-		$mode = 'json';
-	} //end if else
-	//--
-	$this->mode = (string) $mode;
 	$this->host = (string) $host;
 	$this->port = (int) $port;
 	$this->ssl = (bool) $ssl;
@@ -644,62 +644,45 @@ private function solr_connect() {
  * @return :: HALT EXECUTION WITH ERROR MESSAGE
  *
  */
-private function error($y_area, $y_error_message, $y_query='', $y_warning='Execution Halted !') {
+private function error($y_area, $y_error_message, $y_query='', $y_warning='') {
 //--
-$the_area = Smart::escape_html($y_area);
-//--
+$def_warn = 'Execution Halted !';
+$y_warning = (string) trim((string)$y_warning);
 if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
-	$the_error_message = Smart::escape_html($y_error_message);
-	$the_query_info = Smart::escape_html($y_query);
 	$width = 750;
+	$the_area = (string) $y_area;
+	if((string)$y_warning == '') {
+		$y_warning = (string) $def_warn;
+	} //end if
+	$the_error_message = 'Operation FAILED: '.$def_warn."\n".$y_error_message;
+	$the_params = '- Mode: '.$this->mode.' -';
+	$the_query_info = (string) $y_query;
+	if((string)$the_query_info == '') {
+		$the_query_info = '-'; // query cannot e empty in this case (templating enforcement)
+	} //end if
 } else {
 	$width = 550;
-	$the_error_message = 'An operation failed. '.Smart::escape_html($y_warning).'...';
-	$the_query_info = 'View the App ERROR Log for more details about this Error !'; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
+	$the_area = '';
+	$the_error_message = 'Operation FAILED: '.$def_warn;
+	$the_params = '';
+	$the_query_info = ''; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
 } //end if else
 //--
-$out = <<<HTML_CODE
-<style type="text/css">
-	* {
-		font-family: verdana,tahoma,arial,sans-serif;
-		font-smooth: always;
-	}
-</style>
-<div align="center">
-	<table width="{$width}" cellspacing="0" cellpadding="8" bordercolor="#CCCCCC" border="1" style="border-style: solid; border-color: #CCCCCC; border-collapse: collapse;">
-		<tr valign="middle" bgcolor="#FFFFFF">
-			<td width="64" align="center">
-				<img src="lib/framework/img/sign_error.png">
-			</td>
-			<td align="center">
-				<div align="center"><font size="5" color="#DD0000"><b>Solr :: ERROR</b><br>{$the_area}</font></div>
-			</td>
-		</tr>
-		<tr valign="top" bgcolor="#FFFFFF">
-			<td width="64" align="center">
-				<img src="modules/smart-extra-libs/img/solr_logo_trans.png">
-				<br>
-				<br>
-				<font size="1" color="#778899"><sub><b>Solr</b><br><b><i>DB&nbsp;Server</i></b></sub></font>
-			</td>
-			<td>
-				<div align="center">
-					<font size="4" color="#778899"><b>[ ! ]</b></font>
-				</div>
-				<br>
-				<div align="left">
-					<font size="3" color="#DD0000"><b>{$the_error_message}</b></font>
-					<br>
-					<font size="3" color="#DD0000">{$the_query_info}</font>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
-HTML_CODE;
+$out = SmartComponents::db_error_message(
+	'Solr Client',
+	'Apache-Solr',
+	'FTS',
+	'Server',
+	'modules/smart-extra-libs/img/solr_logo_trans.png',
+	$width, // width
+	$the_area, // area
+	$the_error_message, // err msg
+	$the_params, // title or params
+	$the_query_info // command
+);
 //--
 Smart::raise_error(
-	'#SOLR-DB# :: Q# // Solr :: ERROR :: '.$y_area."\n".$y_query."\n".'Error: '.$y_error_message,
+	'#SOLR-DB# :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Stetement:'."\n".$y_query,
 	$out // msg to display
 );
 die(''); // just in case

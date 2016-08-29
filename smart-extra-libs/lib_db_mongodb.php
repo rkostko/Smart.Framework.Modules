@@ -15,7 +15,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 // Smart-Framework - MongoDB Client
 // DEPENDS:
 //	* Smart::
-// DEPENDS-EXT: PHP MongoClient / PECL (v.1.5.0 or later)
+// DEPENDS-EXT: PHP MongoClient / PECL (v.1.4.5 or later)
 //======================================================
 // Tested and Stable on MongoDB versions:
 // 2.x / 3.x
@@ -41,7 +41,7 @@ $configs['mongodb']['slowtime']		= 0.0035;								// 0.0025 .. 0.0090 slow query
 
 
 /**
- * Class Smart MongoDB Client (for PHP-MongoDB v.1.5.0 or later)
+ * Class Smart MongoDB Client (for PHP-MongoDB v.1.4.5 or later)
  *
  * <code>
  *
@@ -77,13 +77,12 @@ $configs['mongodb']['slowtime']		= 0.0035;								// 0.0025 .. 0.0090 slow query
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @access 		PUBLIC
- * @depends 	extensions: PHP MongoClient (v.1.5.0 or later) ; classes: Smart
- * @version 	v.160215
+ * @depends 	extensions: PHP MongoClient (v.1.4.5 or later) ; classes: Smart
+ * @version 	v.160827
  * @package 	Database:MongoDB
  *
- * @method	MIXED		find()										# find multi data in a collection
- * @method	MIXED		findOne()									# find single data in a collection
- * @method MIXED		findAndModify()								# find and modify data in a collection
+ * @method MIXED		find()										# find multi data in a collection
+ * @method MIXED		findOne()									# find single data in a collection
  * @method MIXED		count()										# count data in a collection
  * @method MIXED		insert()									# add data in a collection
  * @method MIXED		update()									# modify data in a collection
@@ -116,6 +115,7 @@ private $db;
 private $timeout;
 
 /** @var resource */
+private $mongodbclient;
 private $mongoclient;
 
 /** @var $mongodb */
@@ -138,8 +138,8 @@ public function __construct($col, $y_configs_arr=array()) {
 	//--
 	global $configs;
 	//--
-	if(version_compare(phpversion('mongo'), '1.5.0') < 0) {
-		$this->error('[INIT]', 'PHP MongoDB Extension', 'CHECK PHP MongoDB Version', 'This version of MongoDB Client Library needs the MongoDB PHP Extension v.1.5.0 or later');
+	if((version_compare(phpversion('mongodb'), '1.0.0') < 0) AND (version_compare(phpversion('mongo'), '1.4.5') < 0)) {
+		$this->error('[INIT]', 'PHP MongoDB/Mongo Extension', 'CHECK PHP MongoDB/Mongo Version', 'This version of MongoDB/Mongo Client Library needs either MongoDB PHP Extension v.1.0.0 or later or Mongo PHP Extension v.1.4.5 or later');
 		return;
 	} //end if
 	//--
@@ -172,7 +172,7 @@ public function __construct($col, $y_configs_arr=array()) {
 	} //end if
 	//--
 	if(((string)$host == '') OR ((string)$port == '') OR ((string)$db == '') OR ((string)$timeout == '')) {
-		$this->error('[CHECK-CONFIGS]', 'MongoDB Configuration Init', 'CHECK Connection Params', 'Some Required Parameters are Empty');
+		$this->error('[CHECK-CONFIGS]', 'MongoDB Configuration Init', 'CHECK Connection Params: '.$host.':'.$port.'@'.$db, 'Some Required Parameters are Empty');
 		return;
 	} //end if
 	//--
@@ -196,18 +196,18 @@ public function __construct($col, $y_configs_arr=array()) {
 		]);
 		//--
 		if((float)$configs['mongodb']['slowtime'] > 0) {
-			self::$slow_time = (float) $configs['mongodb']['slowtime'];
+			$this->slow_time = (float) $configs['mongodb']['slowtime'];
 		} //end if
-		if(self::$slow_time < 0.0000001) {
-			self::$slow_time = 0.0000001;
-		} elseif(self::$slow_time > 0.9999999) {
-			self::$slow_time = 0.9999999;
+		if($this->slow_time < 0.0000001) {
+			$this->slow_time = 0.0000001;
+		} elseif($this->slow_time > 0.9999999) {
+			$this->slow_time = 0.9999999;
 		} //end if
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mongodb|slow-time', number_format($this->slow_time, 7, '.', ''), '=');
 		SmartFrameworkRegistry::setDebugMsg('db', 'mongodb|log', [
 			'type' => 'metainfo',
-			'data' => 'Fast Query Reference Time < '.number_format(self::$slow_time, 7, '.', '').' seconds'
+			'data' => 'Fast Query Reference Time < '.number_format($this->slow_time, 7, '.', '').' seconds'
 		]);
 		//--
 	} //end if
@@ -228,10 +228,22 @@ public function __construct($col, $y_configs_arr=array()) {
 		} //end if
 	} //end if
 	//--
-	$this->mongoclient = new MongoClient(
-		(string) $this->server,
-		(array) $options
-	);
+/*
+	if(class_exists('\\MongoDB\\Driver\\Manager')) {
+		$this->mongodbclient = new \MongoDB\Driver\Manager(
+			(string) 'mongodb://'.$this->server,
+			(array) $options
+		);
+	} elseif(class_exists('MongoClient')) {
+*/
+	if(class_exists('MongoClient')) {
+		$this->mongoclient = new MongoClient(
+			(string) $this->server,
+			(array) $options
+		);
+	} else {
+		$this->error((string)$the_conns[0]['hash'], 'MongoDB Driver', 'No Compatible MongoDB Driver found', '');
+	} //end if else
 	//--
 } //END FUNCTION
 
@@ -257,16 +269,21 @@ public function __call($method, array $args) {
 	$the_conns = $this->connect();
 	//--
 	try {
-		$this->mongodb = $this->mongoclient->selectDB((string)$this->db);
+		if(is_object($this->mongodbclient)) {
+			// mongoclient does not need this
+		} elseif(is_object($this->mongoclient)) {
+			$this->mongodb = $this->mongoclient->selectDB((string)$this->db);
+			if(!is_object($this->mongodb)) {
+				$this->error((string)$the_conns[0]['hash'], 'MongoDB Object', 'Mongo DB is not an object', 'ERROR: Invalid MongoDB Object on: '.$this->server.'@'.$this->db);
+				return null;
+			} //end if
+		} else {
+			throw new Exception('ERROR: No Mongo Client Driver Available: select db');
+		} //end if
 	} catch(Exception $err) {
 		$this->error((string)$the_conns[0]['hash'], 'MongoDB Select DB', 'Failed to select the DB: '.$this->db.' on '.$this->server, 'ERROR: '.$err->getMessage());
 		return null;
 	} //end try catch
-	//--
-	if(!is_object($this->mongodb)) {
-		$this->error((string)$the_conns[0]['hash'], 'MongoDB Object', 'Mongo DB is not an object', 'ERROR: Invalid MongoDB Object on: '.$this->server.'@'.$this->db);
-		return null;
-	} //end if
 	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		//--
@@ -294,8 +311,16 @@ public function __call($method, array $args) {
 				unset($args[1]);
 			} //end if
 			//--
+			$collection = null;
+			//--
 			try {
-				$collection = $this->mongodb->selectCollection($this->collection);
+				if(is_object($this->mongodbclient)) {
+					// mongoclient does not need this
+				} elseif(is_object($this->mongoclient)) {
+					$collection = $this->mongodb->selectCollection($this->collection);
+				} else {
+					throw new Exception('ERROR: No Mongo Client Driver Available: select collection');
+				} //end if
 			} catch(Exception $err) {
 				$this->error((string)$the_conns[0]['hash'], 'MongoDB Select Collection', 'Failed to select the Collection: '.$this->collection.' on '.$this->server.'@'.$this->db, 'ERROR: '.$err->getMessage());
 				return null;
@@ -311,33 +336,81 @@ public function __call($method, array $args) {
 				//--
 			} //end if
 			//--
-			$cursor = call_user_func_array(array($collection, $method), $args);
-			//--
-			if(!is_object($cursor)) {
-				$this->error((string)$the_conns[0]['hash'], 'MongoDB Cursor', 'Mongo DB->Find() return no cursor', 'ERROR: '.get_class($this).'->'.__FUNCTION__.'() :: '.$this->server.'@'.$this->db);
-				return null;
-			} //end if
-			//--
-			if(Smart::array_size($opts) > 0) {
-				foreach($opts as $key => $val) {
-					$cursor->{$key}($val);
-				} //end foreach
-			} //end if
-			//--
 			$obj = array();
 			//--
-			if(is_object($cursor)) {
-				foreach($cursor as $doc) {
-					$obj[] = $doc;
+			if(is_object($this->mongodbclient)) {
+				//-- fix: select just particular fields
+				$opts['projection'] = array();
+				if(Smart::array_size($args[1]) > 0) {
+					for($i=0; $i<count($args[1]); $i++) {
+						$args[1][$i] = (string) trim((string)$args[1][$i]);
+						if((string)$args[1][$i] != '') {
+							$opts['projection'][(string)$args[1][$i]] = 1;
+						} //end if
+					} //end for
+				} //end if
+				//print_r($opts); die();
+				//--
+				$query = new \MongoDB\Driver\Query( // max 2 parameters
+					(array) $args[0], // query (empty: select all)
+					(array) $opts // options
+				);
+				//print_r($query); die();
+				if(!is_object($query)) {
+					$this->error((string)$the_conns[0]['hash'], 'MongoDB Query', 'Mongo DB->Find() return no query', 'ERROR: '.get_class($this).'->'.__FUNCTION__.'() :: '.$this->server.'@'.$this->db);
+					return null;
+				} //end if
+				//--
+				$cursor = $this->mongodbclient->executeQuery($this->db.'.'.$this->collection, $query);
+				if(!is_object($cursor)) {
+					$this->error((string)$the_conns[0]['hash'], 'MongoDB Cursor', 'Mongo DB->Find() return no cursor', 'ERROR: '.get_class($this).'->'.__FUNCTION__.'() :: '.$this->server.'@'.$this->db);
+					return null;
+				} //end if
+				$cursor->setTypeMap(['root' => 'array', 'document' => 'array', 'array' => 'array']);
+				//print_r($cursor); die();
+				if(is_object($cursor)) {
+					foreach($cursor as $doc) {
+						$obj[] = (array) $doc;
+					} //end foreach
 				} //end foreach
-			} //end foreach
-			//--
-			unset($cursor);
+				//--
+				unset($cursor);
+				unset($query);
+				//--
+			} elseif(is_object($this->mongoclient)) {
+				//--
+				$cursor = call_user_func_array(array($collection, $method), $args);
+				//--
+				if(!is_object($cursor)) {
+					$this->error((string)$the_conns[0]['hash'], 'MongoClient Cursor', 'Mongo DB->Find() return no cursor', 'ERROR: '.get_class($this).'->'.__FUNCTION__.'() :: '.$this->server.'@'.$this->db);
+					return null;
+				} //end if
+				//--
+				if(Smart::array_size($opts) > 0) {
+					foreach($opts as $key => $val) {
+						$cursor->{$key}($val);
+					} //end foreach
+				} //end if
+				//--
+				if(is_object($cursor)) {
+					foreach($cursor as $doc) {
+						$obj[] = (array) $doc;
+					} //end foreach
+				} //end foreach
+				//--
+				unset($cursor);
+				//--
+			} else {
+				//--
+				$this->error((string)$the_conns[0]['hash'], 'MongoDB Cursor', 'Mongo DB->Find() Invalid Client Driver', 'ERROR: '.get_class($this).'->'.__FUNCTION__.'() :: '.$this->server.'@'.$this->db);
+				return null;
+				//--
+			} //end if else
 			//--
 			break;
 		//--
 		case 'findOne':
-		case 'findAndModify':
+		//case 'findAndModify': // this is a special method not available in the new driver, thus is commented out
 		case 'count':
 		case 'insert':
 		case 'update':
@@ -351,6 +424,14 @@ public function __call($method, array $args) {
 		case 'validate':
 		case 'drop': // drops collection
 		//--
+
+/*
+// Sample count with the new driver
+$cmd = new \MongoDB\Driver\Command( [ 'findOne' => $this->collection, 'query' => [] ] );
+$r = $this->mongodbclient->executeCommand( $this->db, $cmd );
+print_r($r);
+die();
+*/
 			//--
 			try {
 				$collection = $this->mongodb->selectCollection($this->collection);
@@ -421,7 +502,7 @@ private function connect() {
 		return null;
 	} //end if
 	//--
-	$the_conn_key = (string) $this->server.'@'.$this->db.':'.$this->collection;
+	$the_conn_key = (string) $this->server.'@'.$this->db.':'.$this->collection; // do not change this format, this is the format used by mongo internally
 	//--
 	if(array_key_exists((string)$the_conn_key, (array)SmartFrameworkRegistry::$Connections['mongodb'])) {
 		//--
@@ -529,62 +610,45 @@ public function disconnect() {
  * @return :: HALT EXECUTION WITH ERROR MESSAGE
  *
  */
-private function error($y_chash, $y_area, $y_error_message, $y_query='', $y_warning='Execution Halted !') {
+private function error($y_conhash, $y_area, $y_error_message, $y_query='', $y_warning='') {
 //--
-$the_area = Smart::escape_html($y_area);
-//--
+$def_warn = 'Execution Halted !';
+$y_warning = (string) trim((string)$y_warning);
 if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
-	$the_error_message = Smart::escape_html($y_error_message);
-	$the_query_info = Smart::escape_html($y_query);
 	$width = 750;
+	$the_area = (string) $y_area;
+	if((string)$y_warning == '') {
+		$y_warning = (string) $def_warn;
+	} //end if
+	$the_error_message = 'Operation FAILED: '.$def_warn."\n".$y_error_message;
+	$the_params = '- '.'MongoClient v.'.phpversion('mongo').' -';
+	$the_query_info = (string) $y_query;
+	if((string)$the_query_info == '') {
+		$the_query_info = '-'; // query cannot e empty in this case (templating enforcement)
+	} //end if
 } else {
 	$width = 550;
-	$the_error_message = 'An operation failed. '.Smart::escape_html($y_warning).'...';
-	$the_query_info = 'View the App ERROR Log for more details about this Error !'; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
+	$the_area = '';
+	$the_error_message = 'Operation FAILED: '.$def_warn;
+	$the_params = '';
+	$the_query_info = ''; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
 } //end if else
 //--
-$out = <<<HTML_CODE
-<style type="text/css">
-	* {
-		font-family: verdana,tahoma,arial,sans-serif;
-		font-smooth: always;
-	}
-</style>
-<div align="center">
-	<table width="{$width}" cellspacing="0" cellpadding="8" bordercolor="#CCCCCC" border="1" style="border-style: solid; border-color: #CCCCCC; border-collapse: collapse;">
-		<tr valign="middle" bgcolor="#FFFFFF">
-			<td width="64" align="center">
-				<img src="lib/framework/img/sign_error.png">
-			</td>
-			<td align="center">
-				<div align="center"><font size="5" color="#DD0000"><b>MongoDB :: ERROR</b><br>{$the_area}</font></div>
-			</td>
-		</tr>
-		<tr valign="top" bgcolor="#FFFFFF">
-			<td width="64" align="center">
-				<img src="modules/smart-extra-libs/img/mongodb_logo_trans.png">
-				<br>
-				<br>
-				<font size="1" color="#778899"><sub><b>MongoDB</b><br><b><i>DB&nbsp;Server</i></b></sub></font>
-			</td>
-			<td>
-				<div align="center">
-					<font size="4" color="#778899"><b>[ ! ]</b></font>
-				</div>
-				<br>
-				<div align="left">
-					<font size="3" color="#DD0000"><b>{$the_error_message}</b></font>
-					<br>
-					<font size="3" color="#DD0000">{$the_query_info}</font>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>
-HTML_CODE;
+$out = SmartComponents::db_error_message(
+	'MongoDB Client',
+	'MongoDB',
+	'NoSQL/DB',
+	'Server',
+	'modules/smart-extra-libs/img/mongodb_logo_trans.png',
+	$width, // width
+	$the_area, // area
+	$the_error_message, // err msg
+	$the_params, // title or params
+	$the_query_info // command
+);
 //--
 Smart::raise_error(
-	'#MONGO-DB@'.$y_chash.'# :: Q# // MongoDB :: ERROR :: '.$y_area."\n".$y_query."\n".'Error: '.$y_error_message,
+	'#MONGO-DB@'.$y_conhash.'# :: Q# // MongoDB :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Stetement:'."\n".$y_query,
 	$out // msg to display
 );
 die(''); // just in case
