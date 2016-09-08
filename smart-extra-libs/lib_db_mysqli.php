@@ -362,7 +362,7 @@ public static function check_if_table_exists($y_table, $y_connection='DEFAULT') 
 	//==
 
 	//--
-	$y_table = @str_replace('"', '', $y_table);
+	$y_table = (string) str_replace('"', '', (string)$y_table);
 	//--
 
 	//--
@@ -1105,7 +1105,7 @@ public static function prepare_write_statement($arrdata, $mode, $y_connection='D
 		//--
 		foreach($arrdata as $key => $val) {
 			//-- check for SQL INJECTION
-			$key = trim(@str_replace(array('`', "'", '"'), array('', '', ''), (string)$key));
+			$key = trim(str_replace(array('`', "'", '"'), array('', '', ''), (string)$key));
 			//-- Except in-select, do not allow invalid keys as they represent the field names ; valid fields must contain only the following chars [A..Z][a..z][0..9][_]
 			if((string)$mode == 'in-select') { // in-select
 				$key = (int) $key; // force int keys
