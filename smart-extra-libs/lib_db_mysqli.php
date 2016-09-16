@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160827
+ * @version 	v.160915
  * @package 	Database:MySQL
  *
  */
@@ -1204,6 +1204,13 @@ public static function prepare_write_statement($arrdata, $mode, $y_connection='D
  * @return STRING								:: The SQL processed (partial/full) Statement
  */
 public static function prepare_param_query($query, $replacements_arr, $y_connection='DEFAULT') { // {{{SYNC-SQL-PARAM-QUERY}}}
+
+	// version: 160915
+
+	//==
+	$y_connection = self::check_connection($y_connection, 'PREPARE-PARAM-QUERY');
+	//==
+
 	//--
 	if(!is_string($query)) {
 		self::error(self::get_connection_id($y_connection), 'PREPARE-PARAM-QUERY', 'Query is not a string !', print_r($query,1), $replacements_arr);
@@ -1260,8 +1267,11 @@ public static function prepare_param_query($query, $replacements_arr, $y_connect
 		//--
 	} //end if else
 	//--
+
+	//--
 	return (string) $out_query;
 	//--
+
 } //END FUNCTION
 //======================================================
 
@@ -1279,6 +1289,10 @@ public static function prepare_param_query($query, $replacements_arr, $y_connect
  */
 public static function new_safe_id($y_mode, $y_id_field, $y_table_name, $y_connection='DEFAULT') {
 
+	//==
+	$y_connection = self::check_connection($y_connection, 'NEW-SAFE-ID');
+	//==
+
 	//--
 	if(!self::validate_table_and_fields_names($y_table_name)) {
 		self::error(self::get_connection_id($y_connection), 'NEW-SAFE-ID', 'Get New Safe ID', 'Invalid Table Name', $y_table_name);
@@ -1289,10 +1303,6 @@ public static function new_safe_id($y_mode, $y_id_field, $y_table_name, $y_conne
 		return '';
 	} //end if
 	//--
-
-	//==
-	$y_connection = self::check_connection($y_connection, 'NEW-SAFE-ID');
-	//==
 
 	//--
 	$tmp_result = 'NO-ID-INIT'; //init (must be not empty)
@@ -1331,7 +1341,7 @@ public static function new_safe_id($y_mode, $y_id_field, $y_table_name, $y_conne
 		} //end switch
 		//--
 		$result_arr = array();
-		$result_arr = self::read_data('SELECT `'.$y_id_field.'` FROM `'.$y_table_name.'` WHERE (`'.$y_id_field.'` = \''.$this->quote($new_id).'\') LIMIT 1 OFFSET 0', 'Checking if NEW ID Exists ...');
+		$result_arr = self::read_data('SELECT `'.$y_id_field.'` FROM `'.$y_table_name.'` WHERE (`'.$y_id_field.'` = \''.$this->quote($new_id).'\') LIMIT 1 OFFSET 0', 'Checking if NEW ID Exists ...', $y_connection);
 		$tmp_result = (string) trim((string)$result_arr[0]);
 		$result_arr = array();
 		//--
@@ -1700,7 +1710,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160827
+ * @version 	v.160915
  * @package 	Database:MySQL
  *
  */
