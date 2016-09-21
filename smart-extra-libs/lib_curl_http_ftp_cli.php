@@ -520,9 +520,8 @@ final class SmartCurlHttpFtpClient {
 					//--
 					$is_ok = 0;
 					//--
-					Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL () // CURL Execution Failed to Separe HTTP Header from Body. Reported (invalid) Header size is: ['.$hd_len.']');
-					//--
 					if($this->debug) {
+						Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL () // CURL Execution Failed to Separe HTTP Header from Body. Reported (invalid) Header size is: ['.$hd_len.']');
 						$this->log .= '[ERR] CURL Execution Failed to Separe HTTP Header from Body. Invalid Header size: ['.$hd_len.']'."\n";
 					} //end if
 					//--
