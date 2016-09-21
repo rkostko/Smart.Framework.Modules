@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / CURL HTTP(S) Client with Optional Proxy Support]
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.2.3.5.3 r.2016.08.23 / smart.framework.v.2.3
+// v.2.3.7.1 r.2016.09.21 / smart.framework.modules.v.2.3
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
@@ -537,10 +537,13 @@ final class SmartCurlHttpFtpClient {
 				$is_unauth = true;
 				//--
 				if($this->debug) {
-					$this->log .= '[ERR] HTTP Authentication Failed for URL [User='.$user.']: '.$url."\n";
-				} //end if
-				if((string)$user != '') {
-					Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL // HTTP Authentication Failed for URL: '.$url);
+					if((string)$user != '') {
+						$this->log .= '[ERR] HTTP Authentication Failed for URL: [User='.$user.']: '.$url."\n";
+						Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL // HTTP Authentication Failed for URL: [User='.$user.']: '.$url);
+					} else {
+						$this->log .= '[ERR] HTTP Authentication is Required for URL: '.$url."\n";
+						Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL // HTTP Authentication is Required for URL: '.$url);
+					} //end if
 				} //end if
 				//--
 			} //end if
@@ -555,10 +558,9 @@ final class SmartCurlHttpFtpClient {
 				//--
 				$is_ok = 0;
 				//--
-				Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL () // CURL Execution Reported some Errors. ErrorCode: ['.$error.']');
-				//--
 				if($this->debug) {
 					$this->log .= '[ERR] CURL Execution Reported some Errors. ErrorCode: ['.$error.']'."\n";
+					Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL () // CURL Execution Reported some Errors. ErrorCode: ['.$error.']');
 				} //end if
 				//--
 			} //end if
