@@ -29,7 +29,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP CURL, PHP OpenSSL (optional, just for HTTPS) ; classes: Smart
- * @version 	v.160707.r3
+ * @version 	v.160921
  * @package 	Network:CURL
  *
  */
@@ -540,7 +540,9 @@ final class SmartCurlHttpFtpClient {
 				if($this->debug) {
 					$this->log .= '[ERR] HTTP Authentication Failed for URL [User='.$user.']: '.$url."\n";
 				} //end if
-				Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL // HTTP Authentication Failed for URL: '.$url);
+				if((string)$user != '') {
+					Smart::log_notice('LibCurlHttp(s)Ftp // GetFromURL // HTTP Authentication Failed for URL: '.$url);
+				} //end if
 				//--
 			} //end if
 			//--
