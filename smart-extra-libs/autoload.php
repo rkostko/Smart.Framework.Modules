@@ -34,6 +34,9 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 		case 'SmartCurlHttpFtpClient':
 			require_once('modules/smart-extra-libs/lib_curl_http_ftp_cli.php'); // curl http/ftp connector
 			break;
+		case 'SmartLangIdClient':
+			require_once('modules/smart-extra-libs/lib_langid_cli.php'); // langid client
+			break;
 		//--
 		case 'SmartMysqliDb':
 		case 'SmartMysqliExtDb':
@@ -48,12 +51,12 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 			require_once('modules/smart-extra-libs/lib_db_solr.php'); // solr db connector
 			break;
 		//--
-		case 'SmartTwigTemplating':
-			require_once('modules/smart-extra-libs/lib_templating_twig.php'); // twig templating
-			break;
-		//-- pdf export
 		case 'SmartPdfExport':
 			require_once('modules/smart-extra-libs/lib_export_pdf.php'); // pdf export
+			break;
+		//--
+		case 'SmartTwigTemplating':
+			require_once('modules/smart-extra-libs/lib_templating_twig.php'); // twig templating
 			break;
 		//--
 		default:
