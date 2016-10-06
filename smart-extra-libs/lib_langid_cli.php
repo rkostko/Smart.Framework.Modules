@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / LangID Service Client]
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.2.3.7.2 r.2016.09.27 / smart.framework.modules.v.2.3
+// v.2.3.7.3 r.2016.10.05 / smart.framework.modules.v.2.3
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
@@ -52,8 +52,8 @@ $configs['langid']['auth-pass']		= '';										// LangId.Py Service Auth Pass
  * @hints		If the DEFAULT settings are not available will simply fallback for not using any service.
  *
  * @depends 	classes: Smart, SmartHttpClient
- * @version 	v.160930
- * @package 	Services:LangId.Py
+ * @version 	v.161005
+ * @package 	Services:LangId-Py
  *
  */
 final class SmartLangIdClient {
