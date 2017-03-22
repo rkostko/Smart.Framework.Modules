@@ -33,7 +33,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @hints		needs to be extended and a constructor to be defined to init this ORM as: $this->initORM('pgsql-orm');
  *
  * @depends 	extensions: PHP PostgreSQL ; classes: Smart, SmartUnicode, SmartUtils, SmartPgsqlExtDb
- * @version 	v.170308
+ * @version 	v.170322
  * @package 	Database:PostgreSQL
  *
  */
@@ -208,12 +208,23 @@ abstract class SmartAbstractPgsqlOrmDb {
 			} //end if
 		} //end if
 		//--
+		$replacements = '';
+		if(is_array($where)) {
+			$tmp_where = (array) $where;
+			$where = (string) $tmp_where[0];
+			if((string)$where != '') {
+				if((Smart::array_size($tmp_where[1]) > 0) AND (Smart::array_type_test($tmp_where[1]) == 1)) {
+					$replacements = (array) $tmp_where[1];
+				} //end if
+			} //end if
+		} //end if
 		if((string)$where != '') {
 			$where = ' WHERE ('.$where.')';
 		} //end if
 		//--
 		return (array) $this->getConnection()->read_adata(
-			'SELECT '.$this->parseArrFieldsToSqlSelectStatement((array)$fields).' FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).$where.$order.' LIMIT '.(int)$limit.' OFFSET '.(int)$offset
+			'SELECT '.$this->parseArrFieldsToSqlSelectStatement((array)$fields).' FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).$where.$order.' LIMIT '.(int)$limit.' OFFSET '.(int)$offset,
+			$replacements
 		);
 		//--
 	} //END FUNCTION
@@ -221,12 +232,24 @@ abstract class SmartAbstractPgsqlOrmDb {
 
 	final protected function getCountByConditionTableSchema($schema, $table, $where) {
 		//--
+		$replacements = '';
+		if(is_array($where)) {
+			$tmp_where = (array) $where;
+			$where = (string) $tmp_where[0];
+			if((string)$where != '') {
+				if((Smart::array_size($tmp_where[1]) > 0) AND (Smart::array_type_test($tmp_where[1]) == 1)) {
+					$replacements = (array) $tmp_where[1];
+				} //end if
+			} //end if
+		} //end if
+		//--
 		if((string)$where != '') {
 			$where = ' WHERE ('.$where.')';
 		} //end if
 		//--
 		return (int) $this->getConnection()->count_data(
-			'SELECT COUNT(1) FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).$where
+			'SELECT COUNT(1) FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).$where,
+			$replacements
 		);
 		//--
 	} //END FUNCTION
