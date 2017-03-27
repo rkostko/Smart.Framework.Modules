@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / ExtraLibs / MongoDB Database Client]
 // (c) 2006-2017 unix-world.org - all rights reserved
-// v.2.3.7.7 r.2017.02.22 / smart.framework.v.2.3
+// v.2.3.7.8 r.2017.03.27 / smart.framework.v.2.3
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
@@ -42,6 +42,7 @@ $configs['mongodb']['slowtime']		= 0.0035;								// 0.0025 .. 0.0090 slow query
 
 /**
  * Class Smart MongoDB Client (for PHP-MongoDB v.1.4.5 or later)
+ * DEPRECATED
  *
  * <code>
  *

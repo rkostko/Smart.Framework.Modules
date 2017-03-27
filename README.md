@@ -8,8 +8,12 @@ License: BSD
 
 ## Extra Libs:
 	* MySQLi (connector for MySQL: 5.0, 5.1, 5.5, 5.6, 5.7) / MariaDB: 5.x, 10.x / Percona Server: 5.1 / 5.5 / 5.6 / 5.7)
-	* MongoDB (connector for MongoDB 2.x / 3.x)
 	* Solr (connector for Apache Solr 3.x / 4.x / 5.x)
+	* MongoDB (connector for MongoDB 2.x / 3.x) !!! DEPRECATED !!!
+	* CURL based HTTP Client Lib with proxy support
+	* PDF export Lib (htmldoc wrapper)
+	* LangID.py client wrapper (a simplistic language detection utility)
+	* Twig wrapper Lib for the includded Twig module
 
 ## Installation NOTES:
 	* install first the Smart.Framework

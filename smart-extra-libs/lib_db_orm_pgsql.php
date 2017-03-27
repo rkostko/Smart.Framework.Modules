@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / ExtraLibs / ORM PgSQL Database Client (Abstract)]
 // (c) 2006-2017 unix-world.org - all rights reserved
-// v.2.3.7.7 r.2017.02.22 / smart.framework.v.2.3
+// v.2.3.7.8 r.2017.03.27 / smart.framework.v.2.3
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
@@ -28,12 +28,13 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * Abstract Class: SmartAbstractPgsqlOrmDb - provides a basic ORM PostgreSQL DB Server Client that can be used with custom made connections.
  *
  * This class is based and extended from SmartPgsqlExtDb.
+ * It should be extended further ...
  *
  * @usage 		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  * @hints		needs to be extended and a constructor to be defined to init this ORM as: $this->initORM('pgsql-orm');
  *
  * @depends 	extensions: PHP PostgreSQL ; classes: Smart, SmartUnicode, SmartUtils, SmartPgsqlExtDb
- * @version 	v.170322
+ * @version 	v.170327
  * @package 	Database:PostgreSQL
  *
  */
