@@ -208,7 +208,7 @@ abstract class SmartAbstractPgsqlOrmDb {
 			} //end if
 		} //end if
 		//--
-		$replacements = '';
+		$replacements = ''; // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
 		if(is_array($where)) {
 			$tmp_where = (array) $where;
 			$where = (string) $tmp_where[0];
@@ -232,7 +232,7 @@ abstract class SmartAbstractPgsqlOrmDb {
 
 	final protected function getCountByConditionTableSchema($schema, $table, $where) {
 		//--
-		$replacements = '';
+		$replacements = ''; // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
 		if(is_array($where)) {
 			$tmp_where = (array) $where;
 			$where = (string) $tmp_where[0];
@@ -242,7 +242,6 @@ abstract class SmartAbstractPgsqlOrmDb {
 				} //end if
 			} //end if
 		} //end if
-		//--
 		if((string)$where != '') {
 			$where = ' WHERE ('.$where.')';
 		} //end if
