@@ -31,10 +31,10 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * It should be extended further ...
  *
  * @usage 		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
- * @hints		needs to be extended and a constructor to be defined to init this ORM as: $this->initORM('pgsql-orm');
+ * @hints		needs to be extended and a constructor to be defined to init this ORM as: $this->initConnection('pgsql-orm');
  *
  * @depends 	extensions: PHP PostgreSQL ; classes: Smart, SmartUnicode, SmartUtils, SmartPgsqlExtDb
- * @version 	v.170327
+ * @version 	v.170328
  * @package 	Database:PostgreSQL
  *
  */
@@ -50,7 +50,7 @@ abstract class SmartAbstractPgsqlOrmDb {
 	/*
 	{
 		//--
-		$this->initORM('pgsql-orm');
+		$this->initConnection('pgsql-orm'); // set connection using settings from configs section: pgsql-orm
 		//--
 	} //END FUNCTION
 	*/
@@ -63,7 +63,12 @@ abstract class SmartAbstractPgsqlOrmDb {
 	} //END FUNCTION
 
 
-	final protected function initORM($cfg_pgsql_area) {
+	final protected function initConnection($cfg_pgsql_area) {
+		//--
+		if($this->pgsql !== null) {
+			Smart::log_warning('WARNING: The '.__CLASS__.'->'.__FUNCTION__.'() was already initialized !');
+			return;
+		} //end if
 		//--
 		$this->configs = (array) Smart::get_from_config((string)$cfg_pgsql_area);
 		if(Smart::array_size($this->configs) <= 0) {
@@ -115,54 +120,30 @@ abstract class SmartAbstractPgsqlOrmDb {
 	//=====
 
 
-	final protected function parseArrFieldsToSqlSelectStatement($fields) {
+	final public function getOneByKeyTableSchema($schema, $table, $field, $value, $fields=[], $where='') {
 		//--
-		if(Smart::array_size((array)$fields) <= 0) {
-			return '*'; // default
+		$replacements = '';
+		//--
+		if(is_array($where)) { // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
+			$tmp_where = (array) $this->parseArrWhere($where);
+			$where = (string) $tmp_where['where']; // string
+			$replacements = $tmp_where['replacements']; // mixed
+			unset($tmp_where);
+		} //end if # End Sync
+		//--
+		if((string)$where != '') {
+			$where = ' AND ('.$where.')'; // a condition already exists here so there is a WHERE ; we add extra conditions with AND()
 		} //end if
-		//--
-		$arr = [];
-		//--
-		foreach((array)$fields as $key => $val) {
-			if(is_int($key)) {
-				$val = (string) trim((string)$val);
-				if((string)$val != '') {
-					$val = (string) $this->getConnection()->escape_identifier((string)$val);
-					$arr[] = $val;
-				} //end if
-			} else {
-				$key = (string) trim((string)$key);
-				if((string)$key != '') {
-					if($val !== true) { // if true, it is an expression
-						$key = (string) $this->getConnection()->escape_identifier((string)$key);
-					} //end if else
-					$arr[] = $key;
-				} //end if
-			} //end if else
-		} //end foreach
-		//--
-		if(Smart::array_size($arr) <= 0) {
-			return '*'; // default
-		} //end if
-		//--
-		return (string) implode(', ', (array)$arr);
-		//--
-	} //END FUNCTION
-
-
-	final protected function getOneByKeyTableSchema($schema, $table, $field, $value, $fields=[]) {
 		//--
 		return (array) $this->getConnection()->read_asdata(
-			'SELECT '.$this->parseArrFieldsToSqlSelectStatement((array)$fields).' FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).' WHERE ('.$this->getConnection()->escape_identifier((string)$field).' = $1) LIMIT 1 OFFSET 0',
-			[
-				(string) $value
-			]
+			'SELECT '.$this->parseArrFieldsToSqlSelectStatement((array)$fields).' FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).' WHERE (('.$this->getConnection()->escape_identifier((string)$field).' = '.$this->getConnection()->escape_literal((string)$value).')'.$where.') LIMIT 1 OFFSET 0',
+			$replacements
 		);
 		//--
 	} //END FUNCTION
 
 
-	final protected function getManyByConditionTableSchema($schema, $table, $where, $limit, $offset, $fields=[], $orderby=[]) {
+	final public function getManyByConditionTableSchema($schema, $table, $where, $limit, $offset, $fields=[], $orderby=[]) {
 		//--
 		$limit  = (int) $limit;
 		if($limit < 1) {
@@ -209,16 +190,15 @@ abstract class SmartAbstractPgsqlOrmDb {
 			} //end if
 		} //end if
 		//--
-		$replacements = ''; // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
-		if(is_array($where)) {
-			$tmp_where = (array) $where;
-			$where = (string) $tmp_where[0];
-			if((string)$where != '') {
-				if((Smart::array_size($tmp_where[1]) > 0) AND (Smart::array_type_test($tmp_where[1]) == 1)) {
-					$replacements = (array) $tmp_where[1];
-				} //end if
-			} //end if
-		} //end if
+		$replacements = '';
+		//--
+		if(is_array($where)) { // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
+			$tmp_where = (array) $this->parseArrWhere($where);
+			$where = (string) $tmp_where['where']; // string
+			$replacements = $tmp_where['replacements']; // mixed
+			unset($tmp_where);
+		} //end if # End Sync
+		//--
 		if((string)$where != '') {
 			$where = ' WHERE ('.$where.')';
 		} //end if
@@ -231,18 +211,17 @@ abstract class SmartAbstractPgsqlOrmDb {
 	} //END FUNCTION
 
 
-	final protected function getCountByConditionTableSchema($schema, $table, $where) {
+	final public function getCountByConditionTableSchema($schema, $table, $where) {
 		//--
-		$replacements = ''; // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
-		if(is_array($where)) {
-			$tmp_where = (array) $where;
-			$where = (string) $tmp_where[0];
-			if((string)$where != '') {
-				if((Smart::array_size($tmp_where[1]) > 0) AND (Smart::array_type_test($tmp_where[1]) == 1)) {
-					$replacements = (array) $tmp_where[1];
-				} //end if
-			} //end if
-		} //end if
+		$replacements = '';
+		//--
+		if(is_array($where)) { // {{{SYNC-PG-ORM-WHERE-BUILD-UP}}}
+			$tmp_where = (array) $this->parseArrWhere($where);
+			$where = (string) $tmp_where['where']; // string
+			$replacements = $tmp_where['replacements']; // mixed
+			unset($tmp_where);
+		} //end if # End Sync
+		//--
 		if((string)$where != '') {
 			$where = ' WHERE ('.$where.')';
 		} //end if
@@ -251,6 +230,67 @@ abstract class SmartAbstractPgsqlOrmDb {
 			'SELECT COUNT(1) FROM '.$this->getConnection()->escape_identifier((string)$schema).'.'.$this->getConnection()->escape_identifier((string)$table).$where,
 			$replacements
 		);
+		//--
+	} //END FUNCTION
+
+
+	//=====
+
+
+	final protected function parseArrWhere($where) {
+		//--
+		$replacements = '';
+		//--
+		if(is_array($where)) {
+			$tmp_where = (array) $where;
+			$where = (string) trim((string)$tmp_where[0]);
+			if((string)$where != '') {
+				if((Smart::array_size($tmp_where[1]) > 0) AND (Smart::array_type_test($tmp_where[1]) == 1)) { // array must be non-associative and have at least one element
+					$replacements = (array) $tmp_where[1];
+				} //end if
+			} //end if
+			unset($tmp_where);
+		} //end if
+		//--
+		return [
+			'where' => (string) $where, 		// string
+			'replacements' => $replacements 	// mixed: array or string
+		];
+		//--
+	} //END FUNCTION
+
+
+	final protected function parseArrFieldsToSqlSelectStatement($fields) {
+		//--
+		if(Smart::array_size((array)$fields) <= 0) {
+			return '*'; // default
+		} //end if
+		//--
+		$arr = [];
+		//--
+		foreach((array)$fields as $key => $val) {
+			if(is_int($key)) {
+				$val = (string) trim((string)$val);
+				if((string)$val != '') {
+					$val = (string) $this->getConnection()->escape_identifier((string)$val);
+					$arr[] = $val;
+				} //end if
+			} else {
+				$key = (string) trim((string)$key);
+				if((string)$key != '') {
+					if($val !== true) { // if true, it is an expression
+						$key = (string) $this->getConnection()->escape_identifier((string)$key);
+					} //end if else
+					$arr[] = $key;
+				} //end if
+			} //end if else
+		} //end foreach
+		//--
+		if(Smart::array_size($arr) <= 0) {
+			return '*'; // default
+		} //end if
+		//--
+		return (string) implode(', ', (array)$arr);
 		//--
 	} //END FUNCTION
 
