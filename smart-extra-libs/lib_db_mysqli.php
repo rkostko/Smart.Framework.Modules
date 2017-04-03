@@ -81,7 +81,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * 		'active' => 1,
  * 		'name' => 'Test Record'
  * );
- * $insert = (array) SmartMysqliDb::write_data('INSERT INTO `table` '.SmartMysqliDb::prepare_write_statement($arr_insert, 'insert'));
+ * $insert = (array) SmartMysqliDb::write_data('INSERT INTO `table` '.SmartMysqliDb::prepare_statement($arr_insert, 'insert'));
  * $prepared_sql = $db->prepare_param_query('SELECT * FROM `table` WHERE `id` = ?', [99]);
  *
  * </code>
@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160915
+ * @version 	v.170403
  * @package 	Database:MySQL
  *
  */
@@ -1054,39 +1054,40 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
 //======================================================
 /**
  * Create Escaped Write SQL Statements from Data - to be used with MySQL for: INSERT ; UPDATE ; IN-SELECT
- * To be used with: write_data() to build an INSERT / UPDATE / SELECT IN query from an associative array
+ * Can be used with: write_data() to build INSERT / UPDATE queries from an associative array
+ * or can be used with read_data(), read_adata(), read_asdata(), count_data() to build IN-SELECT queries from a non-associative array
  *
- * @param ARRAY-associative $arrdata			:: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100;
+ * @param ARRAY $arrdata 						:: associative array: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100; | non-associative array $arr[] = 'some value'; $arr[] = 'other-value', ...
  * @param ENUM $mode							:: mode: 'insert' | 'update' | 'in-select'
  * @param RESOURCE $y_connection 				:: the connection to mysql server
  * @return STRING								:: The SQL partial Statement
- *
  */
-public static function prepare_write_statement($arrdata, $mode, $y_connection='DEFAULT') {
+public static function prepare_statement($arrdata, $mode, $y_connection='DEFAULT') {
 
-	// version: 160527
+	// version: 170403
 
 	//==
-	$y_connection = self::check_connection($y_connection, 'PREPARE-WRITE-STATEMENT');
+	$y_connection = self::check_connection($y_connection, 'PREPARE-STATEMENT');
 	//==
 
 	//--
 	$mode = strtolower((string)$mode);
 	//--
 	switch((string)$mode) {
+		//-- associative array
 		case 'insert':
-		case 'new':
 			$mode = 'insert';
 			break;
 		case 'update':
-		case 'edit':
 			$mode = 'update';
 			break;
+		//-- non-associative array
 		case 'in-select':
 			$mode = 'in-select';
 			break;
+		//-- invalid
 		default:
-			self::error(self::get_connection_id($y_connection), 'PREPARE-WRITE-STATEMENT', 'Invalid Mode', '', $mode);
+			self::error(self::get_connection_id($y_connection), 'PREPARE-STATEMENT', 'Invalid Mode', '', $mode);
 			return '';
 	} //end switch
 	//--
@@ -1111,7 +1112,7 @@ public static function prepare_write_statement($arrdata, $mode, $y_connection='D
 				$key = (int) $key; // force int keys
 			} else {
 				if(!self::validate_table_and_fields_names($key)) { // no unicode modifier
-					self::error(self::get_connection_id($y_connection), 'PREPARE-WRITE-STATEMENT', 'Invalid KEY', '', $key);
+					self::error(self::get_connection_id($y_connection), 'PREPARE-STATEMENT', 'Invalid KEY', '', $key);
 					return '';
 				} //end if
 			} //end if
@@ -1157,7 +1158,7 @@ public static function prepare_write_statement($arrdata, $mode, $y_connection='D
 		//--
 	} else {
 		//--
-		self::error(self::get_connection_id($y_connection), 'PREPARE-WRITE-STATEMENT', 'The first argument must be array !', '', '');
+		self::error(self::get_connection_id($y_connection), 'PREPARE-STATEMENT', 'The first argument must be array !', '', '');
 		return '';
 		//--
 	} //end if else
@@ -1710,7 +1711,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.160915
+ * @version 	v.170403
  * @package 	Database:MySQL
  *
  */
@@ -1895,16 +1896,16 @@ public function write_data($queryval, $params_or_title='') {
 
 /**
  * Create Escaped Write SQL Statements from Data - to be used with MySQL for: INSERT ; UPDATE ; IN-SELECT
- * To be used with: write_data() to build an INSERT / UPDATE / SELECT IN query from an associative array
+ * Can be used with: write_data() to build INSERT / UPDATE queries from an associative array
+ * or can be used with read_data(), read_adata(), read_asdata(), count_data() to build IN-SELECT queries from a non-associative array
  *
- * @param ARRAY-associative $arrdata			:: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100;
+ * @param ARRAY $arrdata 						:: associative array: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100; | non-associative array $arr[] = 'some value'; $arr[] = 'other-value', ...
  * @param ENUM $mode							:: mode: 'insert' | 'update' | 'in-select'
  * @return STRING								:: The SQL partial Statement
- *
  */
-public function prepare_write_statement($arrdata, $mode) {
+public function prepare_statement($arrdata, $mode) {
 	//--
-	return SmartMysqliDb::prepare_write_statement($arrdata, $mode, $this->connection);
+	return SmartMysqliDb::prepare_statement($arrdata, $mode, $this->connection);
 	//--
 } //END FUNCTION
 

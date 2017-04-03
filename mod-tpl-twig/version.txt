@@ -1,5 +1,5 @@
 
-# Smart.Framework.Modules / TplTwig 1.23.3 #
+# Smart.Framework.Modules / TplTwig 1.33.0 #
 
 // v.2.3.7.8 r.2017.03.27 / smart.framework.v.2.3
 

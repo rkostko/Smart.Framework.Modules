@@ -65,7 +65,11 @@ final class Templating {
 			]
 		);
 		if(SMART_FRAMEWORK_DEBUG_MODE === 'yes') {
-			$this->twig->disableDebug(); // $this->twig->enableDebug(); // this is actually not needed at all
+			if(defined('SMART_FRAMEWORK_DEBUG_TWIG_TEMPLATING')) {
+				$this->twig->enableDebug(); // advanced debugging
+			} else {
+				$this->twig->disableDebug();
+			} //end if else
 			$this->twig->setCache(false);
 		} else {
 			$this->twig->disableDebug();
