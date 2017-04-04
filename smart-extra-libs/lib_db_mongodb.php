@@ -42,7 +42,7 @@ $configs['mongodb']['slowtime']		= 0.0035;								// 0.0025 .. 0.0090 slow query
 
 /**
  * Class Smart MongoDB Client (for PHP-MongoDB v.1.4.5 or later)
- * DEPRECATED
+ * DEPRECATED ! This will be removed or replaced in the nearest future !
  *
  * <code>
  *
