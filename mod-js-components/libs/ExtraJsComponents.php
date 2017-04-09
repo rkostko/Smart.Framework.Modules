@@ -48,7 +48,7 @@ public static function js_init_sel_list() {
  * Function: JS Draw SList
  *
  */
-public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8') {
+public static function html_js_sellist($y_var_name, $y_options_arr, $y_size='8') {
 	//--
 	$tmp_init_slist = "\n";
 	//--
@@ -95,7 +95,7 @@ public static function js_draw_sel_list($y_var_name, $y_options_arr, $y_size='8'
  *
  * @return STRING							[HTML Code]
  */
-public static function js_init_html_area($y_filebrowser_link='') {
+public static function html_jsload_htmlarea($y_filebrowser_link='') {
 //--
 return \SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-init.inc.htm',
@@ -128,7 +128,7 @@ return \SmartMarkersTemplating::render_file_template(
  * @return STRING						[HTML Code]
  *
  */
-public static function js_draw_html_area($yid, $yvarname, $yvalue='', $ywidth='720px', $yheight='480px', $y_allow_scripts=false, $y_allow_script_src=false, $y_cleaner_deftags='', $y_cleaner_mode='', $y_toolbar_ctrls='') {
+public static function html_js_htmlarea($yid, $yvarname, $yvalue='', $ywidth='720px', $yheight='480px', $y_allow_scripts=false, $y_allow_script_src=false, $y_cleaner_deftags='', $y_cleaner_mode='', $y_toolbar_ctrls='') {
 //--
 return \SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-draw.inc.htm',
@@ -153,14 +153,14 @@ return \SmartMarkersTemplating::render_file_template(
 
 //================================================================
 /**
- * CallBack Mapping for HTML (wysiwyg) Editor - FileBrowser Integration
+ * Returns the HTML / Javascript code for CallBack Mapping for HTML (wysiwyg) Editor - FileBrowser Integration
  *
  * @param STRING $yurl					The Callback URL
  * @param BOOLEAN $is_popup 			Set to True if Popup (incl. Modal)
  *
  * @return STRING						[JS Code]
  */
-public static function js_callback_html_area($yurl, $is_popup=false) {
+public static function html_js_htmlarea_fm_callback($yurl, $is_popup=false) {
 //--
 return str_replace(array("\r\n", "\r", "\n", "\t"), array(' ', ' ', ' ', ' '), (string)\SmartMarkersTemplating::render_file_template(
 	'modules/mod-js-components/libs/templates/html-editor-callback.inc.htm',

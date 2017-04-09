@@ -21,7 +21,6 @@ require_once('modules/smart-extra-libs/lib_langid_cli.php'); 			// langid client
 //--
 require_once('modules/smart-extra-libs/lib_db_orm_pgsql.php'); 			// pgsql orm db connector
 require_once('modules/smart-extra-libs/lib_db_mysqli.php'); 			// mysqli db connector
-require_once('modules/smart-extra-libs/lib_db_mongodb.php'); 			// mongodb db connector
 require_once('modules/smart-extra-libs/lib_db_solr.php'); 				// solr db connector
 //--
 require_once('modules/smart-extra-libs/lib_export_pdf.php'); 			// pdf export

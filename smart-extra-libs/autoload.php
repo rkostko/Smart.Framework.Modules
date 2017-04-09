@@ -41,16 +41,10 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 		case 'SmartAbstractPgsqlOrmDb':
 			require_once('modules/smart-extra-libs/lib_db_orm_pgsql.php'); // pgsql orm db connector
 			break;
-		//--
 		case 'SmartMysqliDb':
 		case 'SmartMysqliExtDb':
 			require_once('modules/smart-extra-libs/lib_db_mysqli.php'); // mysqli db connector
 			break;
-		//--
-		case 'SmartMongoDb':
-			require_once('modules/smart-extra-libs/lib_db_mongodb.php'); // mongodb db connector
-			break;
-		//--
 		case 'SmartSolrDb':
 			require_once('modules/smart-extra-libs/lib_db_solr.php'); // solr db connector
 			break;

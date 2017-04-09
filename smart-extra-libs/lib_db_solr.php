@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.160623
+ * @version 	v.170408
  * @package 	Database:Solr
  *
  */
@@ -668,7 +668,7 @@ if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 	$the_query_info = ''; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
 } //end if else
 //--
-$out = SmartComponents::db_error_message(
+$out = SmartComponents::app_error_message(
 	'Solr Client',
 	'Apache-Solr',
 	'FTS',

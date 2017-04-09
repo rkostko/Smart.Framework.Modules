@@ -33,8 +33,8 @@ class SmartAppIndexController extends SmartAbstractAppController {
 				$main = '<h1>Advanced WYSIWYG EDITOR</h1>';
 				$main .= SmartComponents::js_init_away_page();
 				$main .= SmartComponents::js_init_editarea(); // codemirror is optional for CKEditor, but if found, will use it ;)
-				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::js_init_html_area();
-				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::js_draw_html_area('test_html_area', 'test_html_area', '', '920px', '470px', true);
+				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::html_jsload_htmlarea();
+				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::html_js_htmlarea('test_html_area', 'test_html_area', '', '920px', '470px', true);
 				$main .= '<button class="ux-button" onClick="alert($(\'#test_html_area\').val());">Get HTML Source</button>';
 				//--
 				break;

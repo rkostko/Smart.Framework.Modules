@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170403
+ * @version 	v.170408
  * @package 	Database:MySQL
  *
  */
@@ -1648,7 +1648,7 @@ if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 	$the_query_info = ''; // do not display query if not in debug mode ... this a security issue if displayed to public ;)
 } //end if else
 //--
-$out = SmartComponents::db_error_message(
+$out = SmartComponents::app_error_message(
 	'MySQLi Client',
 	'MySQL',
 	'SQL/DB',
@@ -1711,7 +1711,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170403
+ * @version 	v.170408
  * @package 	Database:MySQL
  *
  */
