@@ -18,5 +18,5 @@ License: BSD
 	* install first the Smart.Framework
 	* after, copy all these into this folder: smart-framework/modules/
 	* uncomment or add the following line into: modules/app/app-custom-bootstrap.php
-		require_once('modules/extra-libs/autoload.php'); // the autoloader for Smart.Framework modules/extra-libs
+		require_once('modules/smart-extra-libs/autoload.php'); // the autoloader for Smart.Framework modules/extra-libs
 
