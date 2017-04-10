@@ -32,7 +32,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 // 5.5.x / 5.6.x
 //======================================================
 // NOTICE: For MySQLi all queries are using MYSQLI_STORE_RESULT (buffered queries)
-// NEVER use UNBUFFERED QUERIES (MYSQLI_USE_RESULT) because for unbuffered result sets,
+// NEVER use UNBUFFERED QUERIES (MYSQLI_USE_RESULT) because for unbuffered result sets there is no 100% guarantee all happens as planned !!!
 //======================================================
 // NOTICE OF POSSIBLE ERRORS WHEN USING THE CLASS FUNCTIONS IN A WRONG WAY:
 //  mysqli_num_rows() will not return the correct number of rows until all the rows in the result have been retrieved
@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170408
+ * @version 	v.170410
  * @package 	Database:MySQL
  *
  */
@@ -1064,7 +1064,7 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
  */
 public static function prepare_statement($arrdata, $mode, $y_connection='DEFAULT') {
 
-	// version: 170403
+	// version: 170410
 
 	//==
 	$y_connection = self::check_connection($y_connection, 'PREPARE-STATEMENT');
@@ -1106,7 +1106,7 @@ public static function prepare_statement($arrdata, $mode, $y_connection='DEFAULT
 		//--
 		foreach($arrdata as $key => $val) {
 			//-- check for SQL INJECTION
-			$key = trim(str_replace(array('`', "'", '"'), array('', '', ''), (string)$key));
+			$key = (string) trim(str_replace(array('`', "'", '"'), array('', '', ''), (string)$key));
 			//-- Except in-select, do not allow invalid keys as they represent the field names ; valid fields must contain only the following chars [A..Z][a..z][0..9][_]
 			if((string)$mode == 'in-select') { // in-select
 				$key = (int) $key; // force int keys
@@ -1330,9 +1330,9 @@ public static function new_safe_id($y_mode, $y_id_field, $y_table_name, $y_conne
 			case 'uid36':
 				$new_id = (string) Smart::uuid_36(SMART_FRAMEWORK_NETSERVER_ID.SmartUtils::get_server_current_url()); // will use the server ID.Host as Prefix to ensure it is true unique in a cluster
 				break;
-//			case 'uid10seq': // sequences are not safe without a second registry allocation table as the chance to generate the same ID in the same time moment is just 1 in 999
-//				$new_id = (string) Smart::uuid_10_seq();
-//				break;
+			case 'uid10seq': // ! sequences are not safe without a second registry allocation table as the chance to generate the same ID in the same time moment is just 1 in 999
+				$new_id = (string) Smart::uuid_10_seq();
+				break;
 			case 'uid10num':
 				$new_id = (string) Smart::uuid_10_num();
 				break;
@@ -1711,7 +1711,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170408
+ * @version 	v.170410
  * @package 	Database:MySQL
  *
  */
