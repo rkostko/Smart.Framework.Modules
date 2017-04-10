@@ -1,6 +1,10 @@
 
 # CHANGELOG / MIGRATION NOTES - SMART.FRAMEWORK.MODULES #
 
+Apr, 10, 2017 :: Version 3.1
+	* Release / Stable
+	* removed deprecated Mongo Client Library
+
 Feb, 19, 2016 :: Version 2.3
 	* Release / Stable (switch to SVN ; keep GIT just for public ...)
 

@@ -1,12 +1,13 @@
 <?php
 // Class: \SmartModExtLib\JsComponents\ExtraJsComponents
 // (c) 2006-2016 unix-world.org - all rights reserved
+// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
 
 namespace SmartModExtLib\JsComponents;
 
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.1')) {
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------

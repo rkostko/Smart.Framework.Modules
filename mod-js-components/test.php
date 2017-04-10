@@ -2,7 +2,7 @@
 // Controller: ModJsComponents/Test
 // Route: ?/page/js-components.test (?page=js-components.test)
 // Author: unix-world.org
-// r.2016-02-24
+// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -31,8 +31,8 @@ class SmartAppIndexController extends SmartAbstractAppController {
 				//--
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$main = '<h1>Advanced WYSIWYG EDITOR</h1>';
-				$main .= SmartComponents::js_init_away_page();
-				$main .= SmartComponents::js_init_editarea(); // codemirror is optional for CKEditor, but if found, will use it ;)
+				$main .= '<script type="text/javascript">'.SmartComponents::js_code_init_away_page().'</script>';
+				$main .= SmartComponents::html_jsload_editarea(); // codemirror is optional for CKEditor, but if found, will use it ;)
 				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::html_jsload_htmlarea();
 				$main .= \SmartModExtLib\JsComponents\ExtraJsComponents::html_js_htmlarea('test_html_area', 'test_html_area', '', '920px', '470px', true);
 				$main .= '<button class="ux-button" onClick="alert($(\'#test_html_area\').val());">Get HTML Source</button>';

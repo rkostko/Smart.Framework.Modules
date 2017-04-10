@@ -1,13 +1,14 @@
 <?php
 // Twig Templating for Smart.Framework
 // Module Library
+// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 
 namespace SmartModExtLib\TplTwig;
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.2.3')) {
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.1')) {
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
