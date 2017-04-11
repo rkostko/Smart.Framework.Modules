@@ -1,7 +1,7 @@
 <?php
 // Twig Templating for Smart.Framework
 // Module Library
-// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
+// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 

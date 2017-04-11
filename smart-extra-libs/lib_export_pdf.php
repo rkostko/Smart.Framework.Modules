@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / Plugins / PDF Export]
 // (c) 2006-2017 unix-world.org - all rights reserved
-// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
+// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.1')) {
@@ -17,7 +17,8 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 //		* SmartUtils::
 //		* SmartFileSysUtils::
 //		* SmartHtmlParser->
-// DEPENDS-EXT: HTMLDOC Executable (external)
+// DEPENDS-EXT: HTMLDOC Executable 1.8.x (external)
+// 		tested with htmldoc-1.8.24 / htmldoc-1.8.25 / htmldoc-1.8.26 / htmldoc-1.8.27
 //======================================================
 
 // [REGEX-SAFE-OK]
@@ -37,7 +38,7 @@ define('SMART_FRAMEWORK_PDF_GENERATOR_MODE', 	'color'); 						// PDF mode: `colo
  *
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
- * @depends 	executables: HTMLDoc 1.8.25 + ; classes: Smart, SmartUtils, SmartFileSysUtils, SmartHtmlParser
+ * @depends 	executables: HTMLDoc ; classes: Smart, SmartUtils, SmartFileSysUtils, SmartHtmlParser
  * @version 	v.160204
  * @package 	Exporters
  *

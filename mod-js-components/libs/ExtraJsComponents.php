@@ -1,7 +1,7 @@
 <?php
 // Class: \SmartModExtLib\JsComponents\ExtraJsComponents
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.3.1.1 r.2017.04.10 / smart.framework.v.3.1
+// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
 
 namespace SmartModExtLib\JsComponents;
 
