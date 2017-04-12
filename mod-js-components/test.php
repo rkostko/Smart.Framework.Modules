@@ -1,5 +1,5 @@
 <?php
-// Controller: ModJsComponents/Test
+// Controller: Js Components Sample Test
 // Route: ?/page/js-components.test (?page=js-components.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
@@ -21,6 +21,13 @@ define('SMART_APP_MODULE_AREA', 'SHARED'); // INDEX, ADMIN, SHARED
 class SmartAppIndexController extends SmartAbstractAppController {
 
 	public function Run() {
+
+		//-- dissalow run this sample if not test mode enabled
+		if(SMART_FRAMEWORK_TEST_MODE !== true) {
+			$this->PageViewSetCfg('error', 'ERROR: Test mode is disabled ...');
+			return 500;
+		} //end if
+		//--
 
 		//--
 		$op = $this->RequestVarGet('op', '', 'string');

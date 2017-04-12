@@ -1,0 +1,6 @@
+
+# Smart.Framework.Modules / UI Bootstrap 3.3.7 #
+
+// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
+
+###

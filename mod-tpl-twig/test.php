@@ -1,5 +1,5 @@
 <?php
-// Controller: Sample Test - Twig Templating for Smart.Framework
+// Controller: Twig Test Sample - Twig Templating for Smart.Framework
 // Route: ?/page/tpl-twig.test (?page=tpl-twig.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
@@ -22,7 +22,16 @@ class SmartAppIndexController extends SmartAbstractAppController {
 
 	public function Run() {
 
+		//-- dissalow run this sample if not test mode enabled
+		if(SMART_FRAMEWORK_TEST_MODE !== true) {
+			$this->PageViewSetCfg('error', 'ERROR: Test mode is disabled ...');
+			return 500;
+		} //end if
+		//--
+
+		//--
 		$the_tpl = $this->ControllerGetParam('module-path').'views/sample.twig.htm';
+		//--
 
 		// render using only this module
 		$this->PageViewSetVars([
