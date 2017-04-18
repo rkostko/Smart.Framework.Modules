@@ -1,0 +1,39 @@
+/* font-family: 'Roboto Mono' :: v4 :: Latin + Latin Extended :: r.2017.04.17 */
+
+@font-face {
+	font-family: 'Roboto Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto Mono'), local('RobotoMono-Regular'),
+		 url('roboto-mono-regular.woff') format('woff'),
+		 url('roboto-mono-regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Mono';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Roboto Mono Italic'), local('RobotoMono-Italic'),
+		 url('roboto-mono-italic.woff') format('woff'),
+		 url('roboto-mono-italic.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Mono';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Mono Bold'), local('RobotoMono-Bold'),
+		 url('roboto-mono-bold.woff') format('woff'),
+		 url('roboto-mono-bold.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Roboto Mono';
+	font-style: italic;
+	font-weight: 700;
+	src: local('Roboto Mono Bold Italic'), local('RobotoMono-BoldItalic'),
+		 url('roboto-mono-bold-italic.woff') format('woff'),
+		 url('roboto-mono-bold-italic.ttf') format('truetype');
+}
+
+/* END */

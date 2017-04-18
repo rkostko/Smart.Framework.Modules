@@ -1,0 +1,54 @@
+/* jQueryUI Fixes Fix */
+
+.ui-tooltip {
+	max-width: 512px;
+	word-wrap: break-word;
+}
+
+.ui-autocomplete {
+	max-height: 250px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.ui-dialog {
+	z-index: 2137483009;
+	max-width: 92% !important;
+	max-height: 96% !important;
+}
+.ui-widget-overlay {
+	z-index: 2137483001;
+}
+
+.ui-datepicker {
+	font-size: 14px !important;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.ui-datepicker select {
+	font-size: 1em !important;
+	background-color: #FFFFFF;
+	color: #000000;
+	border: 0px none;
+	border-radius: 3px;
+	padding: 0px;
+}
+.ui-datepicker-trigger {
+	margin-left: 3px;
+	margin-top: 3px;
+	margin-bottom: -3px;
+}
+
+.ui-menu .ui-menu-item a, .ui-menu .ui-menu-item a:link, .ui-menu .ui-menu-item a:visited {
+	display: block;
+}
+
+.ui-slider .ui-slider-range {
+	background: #778899;
+}
+
+.ui-progressbar .ui-progressbar-value {
+	background: #778899;
+}
+
+/* END */

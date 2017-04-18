@@ -52,6 +52,14 @@ function autoload__SmartFrameworkModulesExtraLibs($classname) {
 		case 'SmartPdfExport':
 			require_once('modules/smart-extra-libs/lib_export_pdf.php'); // pdf export
 			break;
+		//-- mediagallery
+		case 'SmartMediaGalleryManager':
+		case 'SmartMediaGalleryConverter':
+		case 'SmartMediaGalleryPlayers':
+		case 'SmartGdImageProcess':
+		case 'SmartImagickImageProcess':
+			require_once('modules/smart-extra-libs/lib_mediagallery.php'); // mediagallery
+			break;
 		//--
 		case 'SmartTwigTemplating':
 			require_once('modules/smart-extra-libs/lib_templating_twig.php'); // twig templating
