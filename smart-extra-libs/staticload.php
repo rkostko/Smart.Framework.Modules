@@ -26,8 +26,6 @@ require_once('modules/smart-extra-libs/lib_db_solr.php'); 				// solr db connect
 //--
 require_once('modules/smart-extra-libs/lib_export_pdf.php'); 			// pdf export
 //--
-require_once('modules/smart-extra-libs/lib_mediagallery.php'); 			// mediagallery
-//--
 require_once('modules/smart-extra-libs/lib_templating_twig.php'); 		// twig templating
 //--
 
