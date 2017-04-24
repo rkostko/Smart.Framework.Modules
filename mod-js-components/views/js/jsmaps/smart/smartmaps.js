@@ -1,9 +1,8 @@
 
 // [@[#[!JS-Compress!]#]@]
-// SmartMaps // JS Lib
-// v.2015.02.15
-// (c) 2012-2015 unix-world.org
-// License: Creative Commons Attribution-NonCommercial 3.0
+// SmartMaps // JS Lib # v.2017.04.21
+// (c) 2012-2017 unix-world.org
+// License: Apache 2.0 License
 
 // DEPENDS: SmartJS_CoreUtils, OpenLayers (patched version)
 
@@ -15,12 +14,12 @@ function Smart_Maps(y_proxycachebuf, y_proxycacheurl, y_proxymaptype) { // OBJEC
 var _class = this; // self referencing
 
 //--
-var version_smartmaps = '20151120';
-var reqver_openlayers = 'v.2.12.1.r.20150215.unixw';
+var version_smartmaps = '20170421';
+var reqver_openlayers = 'v.2.12.1.r.20170421.unixw';
 //--
-var author = '(c) 2012-2015 unix-world.org - all rights reserved';
-var typelicense = 'Creative Commons Attribution-NonCommercial 3.0 License';
-var license = 'SmartMaps // Version: ' + version_smartmaps + ' / Author: ' + author + ' / License: ' + typelicense + ' / Info: This software part is Free for Non-commercial use. For commercial use please contact us at: support@unix-world.org .';
+var author = '(c) 2012-2017 unix-world.org - all rights reserved';
+var typelicense = 'Apache 2.0 License';
+var license = 'SmartMaps v.' + version_smartmaps + ' :: ' + author + ' :: License: ' + typelicense;
 var copyright = '<span style="padding: 2px; font-size:12px; color: #FFFFFF; background-color: #1D0092; cursor: help;" title="' + license + '">Map.Data CC-By-SA: OpenStreetMap // Map.API by: &copy; unix-world.org </span>';
 //--
 if(OpenLayers.VERSION_NUMBER !== reqver_openlayers) {
@@ -138,120 +137,6 @@ OpenLayers.Layer.OSM.MapnikLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
 		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
 	},
 	CLASS_NAME: "OpenLayers.Layer.OSM.MapnikLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.MapQuestOpenLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'mqcdn') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=mapquest"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg"
-			];
-		} //end if else
-		rendermode = mode;
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 19,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.MapQuestOpenLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'mqcdn-sat') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=mapquest-aerial"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"
-			];
-		} //end if else
-		rendermode = mode;
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 12,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.CycleMapLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'opencyclemap') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=cyclemap"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://a.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-				"http://b.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-				"http://c.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png"
-			];
-		} //end if else
-		rendermode = mode;
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 19,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.CycleMapLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.CycleMapTransportLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'opencyclemap-transport') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=cyclemap-transport"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://a.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
-				"http://b.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png",
-				"http://c.tile2.opencyclemap.org/transport/${z}/${x}/${y}.png"
-			];
-		} //end if else
-		rendermode = mode;
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 19,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.CycleMapTransportLocalProxy"
 });
 //--
 
@@ -710,37 +595,62 @@ this.DrawUpAreas = function(y_areas) {
 //--
 
 //--
+var fixZoom = function(zoom) {
+	//--
+	zoom = parseInt(zoom);
+	if(isNaN(zoom) || (zoom > 50)) {
+		zoom = 50; // hard limit
+	} else if(zoom < 1) {
+		zoom = 1;
+	} //end if else
+	//--
+	return zoom;
+	//--
+} //END FUNCTION
+//--
 var getCrrZoom = function() {
+	//--
 	return parseInt(crrzoom);
+	//--
 } //END FUNCTION
 //--
 this.getCurrentZoom = function() {
+	//--
 	return getCrrZoom();
+	//--
 } //END FUNCTION
 //--
 
 //--
 var getCrrLat = function() {
+	//--
 	return crrlat;
+	//--
 } //END FUNCTION
 //--
 this.getCurrentLat = function() {
+	//--
 	return getCrrLat();
+	//--
 } //END FUNCTION
 //--
 
 //--
 var getCrrLon = function() {
+	//--
 	return crrlon;
+	//--
 } //END FUNCTION
 //--
 this.getCurrentLon = function() {
+	//--
 	return getCrrLon();
+	//--
 } //END FUNCTION
 //--
 
 //--
-this.SetMapDivID = function(y_div) {
+this.setMapDivID = function(y_div) {
 	//--
 	divmap = '' + y_div;
 	//--
@@ -749,10 +659,6 @@ this.SetMapDivID = function(y_div) {
 
 //--
 var draw_map = function(y_lat, y_lon, y_zoom, y_markers, y_areas, y_mode) {
-
-	//--
-	y_zoom = parseInt(y_zoom);
-	//--
 
 	//--
 	if(divmap == '') {
@@ -771,86 +677,30 @@ var draw_map = function(y_lat, y_lon, y_zoom, y_markers, y_areas, y_mode) {
 	//--
 
 	//--
-	if((y_zoom < 1) || (y_zoom > 18)) {
-		y_zoom = 18;
-	} //end if
+	var offszoom = 0; // map initialize zoom offset (some maps may have a different scale of zoom levels, thus this need to adjust it)
 	//--
-	var offszoom = 0;
-	//--
-	switch(y_mode) {
-		case 'test': // Test Direct Render (Mapnik)
-			map.addLayer(new OpenLayers.Layer.OSM());
-			break;
-		case 'mapnik': // OpenStreetMaps (Mapnik) Proxy Caching Render
-		case 'openstreetmap':
-			map.addLayer(new OpenLayers.Layer.OSM.MapnikLocalProxy("OpenStreetMap"));
-			break;
-		case 'mapquest': // OpenMapQuest Proxy Caching Render
-			map.addLayer(new OpenLayers.Layer.OSM.MapQuestOpenLocalProxy("OpenMapQuest"));
-			break;
-		case 'mapquest-aerial': // OpenMapQuest Aerial Proxy Caching Render
-			if(y_zoom > 11) {
-				y_zoom = 11;
+	if(typeof y_mode == 'function') {
+		try {
+			offszoom = parseInt(y_mode(map));
+			if(offszoom < -5 || (offszoom > 5) || isNaN(offszoom)) {
+				offszoom = 0;
 			} //end if
-			map.addLayer(new OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy("OpenMapQuest Aerial"));
-			break;
-		case 'cyclemap': // OpenCycleMaps Proxy Caching Render
-			map.addLayer(new OpenLayers.Layer.OSM.CycleMapLocalProxy("OpenCycleMap"));
-			break;
-		case 'cyclemap-transport': // OpenCycleMaps Transport Proxy Caching Render
-			map.addLayer(new OpenLayers.Layer.OSM.CycleMapTransportLocalProxy("OpenCycleMap Transport"));
-			break;
-		case 'google':
-		case 'google-hybrid':
-		case 'google-aerial':
-		case 'google-physical':
-			//-- commercial, for high loads requires a contract # because of a recent bug in GoogleMaps v3, multiple layers at once fail with OpenStreetMaps !!
-			if(y_mode == 'google-physical') {
-				//--
-				if(y_zoom > 15) {
-					y_zoom = 15;
-				} //end if
-				//--
-				var GooglePhy = new OpenLayers.Layer.Google(
-					"Google Physical",
-					{type: google.maps.MapTypeId.TERRAIN, numZoomLevels: 16}
-				);
-				//--
-				map.addLayers([GooglePhy]);
-				//--
-			} else if(y_mode == 'google-hybrid') {
-				//--
-				var GoogleHyb = new OpenLayers.Layer.Google(
-					"Google Hybrid",
-					{type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
-				);
-				map.addLayers([GoogleHyb]);
-				GoogleHyb.mapObject.setTilt(0); // disable BirdEye 45 degree Angles
-				//--
-			} else if(y_mode == 'google-aerial') {
-				//--
-				var GoogleSat = new OpenLayers.Layer.Google(
-					"Google Satellite",
-					{type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 21}
-				);
-				map.addLayers([GoogleSat]);
-				GoogleSat.mapObject.setTilt(0); // disable BirdEye 45 degree Angles
-				//--
-			} else { // google streets (default)
-				//--
-				var GoogleMap = new OpenLayers.Layer.Google(
-					"Google Streets", // the default
-					{numZoomLevels: 20}
-				);
-				map.addLayers([GoogleMap]);
-				//--
-			} //end if else
-			//--
-			break;
-		default:
-			alert('ERROR: SmartMaps // Invalid Draw Mode !');
-			return;
-	} //end switch
+		} catch(err){ console.log(err); }
+	} else {
+		switch(y_mode) {
+			case 'test': // Test Direct Render (Mapnik)
+				map.addLayer(new OpenLayers.Layer.OSM());
+				break;
+			case 'mapnik': // OpenStreetMaps (Mapnik) Proxy Caching Render
+			case 'openstreetmap':
+				map.addLayer(new OpenLayers.Layer.OSM.MapnikLocalProxy("OpenStreetMap"));
+				break;
+			default:
+				alert('ERROR: SmartMaps // Invalid Map Selected ... Available built-in options are: openstreetmap');
+				return;
+		} //end switch
+		//--
+	} //end if else
 	//--
 	pmap = map.getProjectionObject(); // it should be EPSG:900913
 	//alert(pmap);
@@ -860,16 +710,22 @@ var draw_map = function(y_lat, y_lon, y_zoom, y_markers, y_areas, y_mode) {
 		pmap // to Spherical Mercator Projection (EPSG:900913)
 	);
 	//--
-	var zoom = parseInt(y_zoom);
+
 	//--
-	map.setCenter(lonLat, zoom);
+	crrzoom = fixZoom(y_zoom) + offszoom;
+	if((crrzoom < 1) || (crrzoom > fixZoom(map.getNumZoomLevels()) - 1)) {
+		crrzoom = fixZoom(map.getNumZoomLevels()) - 1;
+	} //end if
+	//--
+	crrlat = '' + y_lat;
+	crrlon = '' + y_lon;
+	//--
+
+	//--
+	map.setCenter(lonLat, crrzoom);
 	if(!map.getCenter()) {
 		map.zoomToMaxExtent();
 	} //end if
-	//--
-	crrzoom = zoom;
-	crrlat = '' + y_lat;
-	crrlon = '' + y_lon;
 	//--
 
 	//--
@@ -1145,7 +1001,7 @@ var draw_map = function(y_lat, y_lon, y_zoom, y_markers, y_areas, y_mode) {
 	//-- handle map events: moveend, zoomend (zoomend - appears not to be required as it is handled by moveend)
 	map.events.register("moveend", map, function(e) {
 		//--
-		var zoom = parseInt(map.getZoom() + offszoom);
+		var zoom = parseInt(map.getZoom());
 		var lonlat =  map.getCenter();
 		var lonlatTransf = lonlat.transform(pmap, proj4326);
 		//--

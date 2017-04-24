@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SmartMaps // HTML Example v.2016.02.21 -->
+<!-- SmartMaps // HTML Example v.2017.04.21 -->
 <html>
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -24,21 +24,22 @@
 	<script type="text/javascript" src="../openlayers-google.js"></script>
 	<link rel="stylesheet" href="../theme/default/style.css"  type="text/css">
 	<script type="text/javascript" src="smartmaps.js"></script>
+	<script type="text/javascript" src="smartmaps-plugin-cyclemaps.js"></script>
 	<script type="text/javascript">
 		//--
 		Test_Browser_Compliance.checkIEVersion(9); // require IE9 or later
 		//--
-		var the_proxy_cache_url = ''; // some maps support proxy caching, but this is a custom feature :-) (document.URL.substring(0, document.URL.lastIndexOf('/')) + '/openstreetmaps-cache?page=')
+		var the_proxy_cache_url = ''; // some maps support proxy caching, but this is a custom feature !! (document.URL.substring(0, document.URL.lastIndexOf('/')) + '/openstreetmaps-cache?page=')
 		var the_proxy_buf_level = 0;
 		//--
 		OpenLayers.ImgPath = '../img/';
 		var MySmartMap = new Smart_Maps(the_proxy_cache_url, the_proxy_buf_level);
-		MySmartMap.SetMapDivID('map1');
+		MySmartMap.setMapDivID('map1');
 		MySmartMap.allowOperationEdit(5); // allow edit with as more as 5 markers
 		MySmartMap.setDebug(1); // enable debug
 		//--
 		// Full Open Map(s): openstreetmap
-		// Open Map(s): mapquest | mapquest-aerial | cyclemap | cyclemap-transport
+		// Open Map(s): cyclemap | cyclemap-transport
 		// Commercial Maps (Google v3): google | google-physical | google-hybrid | google-aerial
 		var the_map_type = 'openstreetmap'; // the selected map
 		/*
@@ -157,7 +158,72 @@
 			//-- reset the Canvas (this is required for switching from a Map type to another (example: switch from Openstreetmaps to Googlemaps)
 			$('#map1_canvas').html('<div id="map1" style="width: 760px; height: 480px; border: 1px solid #CCCCCC;"></div>');
 			//-- draw the map
-			MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, the_map_type);
+			switch(the_map_type) {
+				case 'cyclemap':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map){
+						map.addLayer(new OpenLayers.Layer.OSM.CycleMapLocalProxy("OpenCycleMap"));
+						return 0; // zoom offset
+					});
+					break;
+				case 'cyclemap-transport':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map){
+						map.addLayer(new OpenLayers.Layer.OSM.CycleMapLocalProxy("OpenCycleMap Transport"));
+						return 0; // zoom offset
+					});
+					break;
+				case 'google':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map){
+						var GoogleMap = new OpenLayers.Layer.Google(
+							"Google Streets",
+							{
+								numZoomLevels: 20
+							}
+						);
+						map.addLayers([GoogleMap]);
+						return 0; // zoom offset
+					});
+					break;
+				case 'google-hybrid':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map){
+						var GoogleHyb = new OpenLayers.Layer.Google(
+							"Google Hybrid",
+							{
+								type: google.maps.MapTypeId.HYBRID,
+								numZoomLevels: 20
+							}
+						);
+						map.addLayers([GoogleHyb]);
+						GoogleHyb.mapObject.setTilt(0); // disable BirdEye 45 degree Angles
+						return 0; // zoom offset
+					});
+					break;
+				case 'google-aerial':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map){
+						var GoogleSat = new OpenLayers.Layer.Google(
+							"Google Satellite",
+							{
+								type: google.maps.MapTypeId.SATELLITE,
+								numZoomLevels: 21
+							}
+						);
+						map.addLayers([GoogleSat]);
+						GoogleSat.mapObject.setTilt(0); // disable BirdEye 45 degree Angles
+						return 0; // zoom offset
+					});
+					break;
+				case 'google-physical':
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, function(map, zoom){
+						var GooglePhy = new OpenLayers.Layer.Google(
+							"Google Physical",
+							{type: google.maps.MapTypeId.TERRAIN, numZoomLevels: 16}
+						);
+						map.addLayers([GooglePhy]);
+						return 0; // zoom offset
+					});
+					break;
+				default:
+					MySmartMap.DrawMap(the_lat, the_lon, the_zoom, the_markers, the_areas, the_map_type);
+			} //end switch
 			//--
 		} //END FUNCTION
 		//--
@@ -210,7 +276,7 @@
 						js.id = id;
 						js.async = true;
 						js.type = "text/javascript";
-						js.src = "//maps.google.com/maps/api/js?v=3.5&sensor=false&callback=Init_SmartMaps";
+						js.src = "//maps.google.com/maps/api/js?v=3.26&callback=Init_SmartMaps";
 						ref.parentNode.insertBefore(js, ref);
 					} //end if else
 				}(document));
@@ -255,8 +321,6 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<select id="SmartMapsControlType" onchange="MyMapChanged = true; the_zoom = MySmartMap.getCurrentZoom(); the_lat = MySmartMap.getCurrentLat(); the_lon = MySmartMap.getCurrentLon(); the_map_type = this.value; Render_SmartMaps();">
 				<option value="openstreetmap">OpenStreet Maps</option>
-				<option value="mapquest">OpenQuest Maps</option>
-				<option value="mapquest-aerial">OpenMapQuest Aerial</option>
 				<option value="cyclemap">OpenCycle Maps</option>
 				<option value="cyclemap-transport">OpenCycleMap Transport</option>
 				<option value="google">Google StreetMaps</option>
@@ -285,6 +349,6 @@
 		//MySmartMap.RestrictExtent(19.5, 43.25, 30.5, 48.5); // example to restrict map to RO area
 		//--
 	</script>
-	<div style="position:fixed; right:25px; bottom:5px; text-align:right;"><font size="1" color="#CCCCCC">(c) 2012 - 2016 unix-world.org</font></div>
+	<div style="position:fixed; right:25px; bottom:5px; text-align:right;"><font size="1" color="#CCCCCC">(c) 2012 - 2017 unix-world.org</font></div>
 </body>
 </html>

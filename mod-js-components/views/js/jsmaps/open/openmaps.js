@@ -1,8 +1,7 @@
 
 // [@[#[!JS-Compress!]#]@]
-// OpenMaps // JS Lib
-// v.2015.02.15
-// (c) 2012-2015 unix-world.org
+// OpenMaps // JS Lib # v.2017.04.21
+// (c) 2012-2017 unix-world.org
 // License: aGPLv3
 
 // DEPENDS: OpenLayers
@@ -104,62 +103,6 @@ OpenLayers.Layer.OSM.MapnikLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
 		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
 	},
 	CLASS_NAME: "OpenLayers.Layer.OSM.MapnikLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.MapQuestOpenLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'mqcdn') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=mapquest"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
-				"http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg"
-			];
-		} //end if else
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 19,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.MapQuestOpenLocalProxy"
-});
-//--
-OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
-	initialize: function(name, options) {
-		var url;
-		var mode;
-		if((localproxytype == 'mqcdn-sat') && (localproxyurl !== '')) { // local proxy / cache
-			mode = '[P]';
-			url = [localproxyurl + "&z=${z}&x=${x}&y=${y}&r=mapquest-aerial"];
-		} else { // direct
-			mode = '[D]';
-			url = [
-				"http://oatile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-				"http://oatile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"
-			];
-		} //end if else
-		options = OpenLayers.Util.extend({
-			singleTile: false,
-			numZoomLevels: 12,
-			buffer: buflevel, // when loading extra surrounding tiles can be buffered
-			attribution: copyright
-		}, options);
-		var newArguments = [name, url, options];
-		OpenLayers.Layer.OSM.prototype.initialize.apply(this, newArguments);
-	},
-	CLASS_NAME: "OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy"
 });
 //--
 OpenLayers.Layer.OSM.CycleMapLocalProxy = OpenLayers.Class(OpenLayers.Layer.OSM, {
@@ -622,15 +565,6 @@ var draw_map = function(y_lat, y_lon, y_zoom, y_markers, y_mode) {
 		case 'mapnik': // OpenStreetMaps (Mapnik) Proxy Caching Render
 		case 'openstreetmap':
 			map.addLayer(new OpenLayers.Layer.OSM.MapnikLocalProxy("OpenStreetMap"));
-			break;
-		case 'mapquest': // OpenMapQuest Proxy Caching Render
-			map.addLayer(new OpenLayers.Layer.OSM.MapQuestOpenLocalProxy("OpenMapQuest"));
-			break;
-		case 'mapquest-aerial': // OpenMapQuest Aerial Proxy Caching Render
-			if(y_zoom > 11) {
-				y_zoom = 11;
-			} //end if
-			map.addLayer(new OpenLayers.Layer.OSM.MapQuestAerialOpenLocalProxy("OpenMapQuest Aerial"));
 			break;
 		case 'cyclemap': // OpenCycleMaps Proxy Caching Render
 			map.addLayer(new OpenLayers.Layer.OSM.CycleMapLocalProxy("OpenCycleMap"));

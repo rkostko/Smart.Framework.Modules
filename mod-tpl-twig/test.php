@@ -30,7 +30,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		//--
 
 		//--
-		$the_tpl = $this->ControllerGetParam('module-path').'views/sample.twig.htm';
+		$the_tpl = $this->ControllerGetParam('module-path').'views/sample.twig.inc.htm';
 		//--
 
 		// render using only this module

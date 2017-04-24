@@ -3,7 +3,7 @@
 
 /*
   OpenLayers.js -- OpenLayers Map Viewer Library
-  v.2015.02.15 (2.12 stable)
+  version: 2.12.1 stable + patches :: v.2.12.1.r.20170421.unixw
 
 	# Google and Bing provided separately
 	# patched by unixman
@@ -77,7 +77,7 @@ var OpenLayers = {
 	/**
 	 * Constant: VERSION_NUMBER
 	 */
-	VERSION_NUMBER: "v.2.12.1.r.20150215.unixw",
+	VERSION_NUMBER: "v.2.12.1.r.20170421.unixw",
 
 	/**
 	 * Constant: singleFile

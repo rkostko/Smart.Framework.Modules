@@ -47,62 +47,51 @@ final class Players { // [OK]
 	// ::
 
 //===================================================================== [OK]
-public static function videoPlayer($y_url, $y_title, $y_movie, $y_type, $y_width='720', $y_height='404') {
+public static function videoPlayer($y_url, $y_title, $y_movie, $y_type, $y_width='720', $y_height='404', $y_autoplay=true) {
 
-//--
-$player_title = (string) \Smart::escape_html((string)$y_title);
-//--
+	//--
+	if(((string)$y_type != 'ogv') AND ((string)$y_type != 'webm') AND ((string)$y_type != 'mp4')) { // {{{SYNC-MOVIE-TYPE}}}
+		return (string) \SmartComponents::operation_notice('Invalid Media Type / Video: '.Smart::escape_html((string)$y_type), '725px');
+	} //end if
+	//--
 
-//--
-if((string)$y_url == '') {
-	$y_url = \SmartUtils::get_server_current_url();
-} //end if
-//--
-$player_movie = (string) $y_url.$y_movie;
-//--
-$tmp_movie_id = 'smartframework_movie_player_'.sha1($player_movie);
-//--
+	//--
+	if((string)$y_url == '') {
+		$y_url = (string) \SmartUtils::get_server_current_url();
+	} //end if
+	//--
 
-//--
-$tmp_div_width = $y_width + 5;
-//--
-$tmp_bgcolor = '#222222';
-$tmp_color = '#FFFFFF';
-//--
+	//--
+	$the_title = (string) \Smart::escape_html((string)$y_title);
+	//--
+	$tmp_movie_id = 'smartframework_movie_player_'.sha1($player_movie);
+	$player_movie = (string) $y_url.$y_movie;
+	//--
 
-//--
-if(((string)$y_type == 'ogv') OR ((string)$y_type == 'webm') OR ((string)$y_type == 'mp4')) { // {{{SYNC-MOVIE-TYPE}}}
-//--
-if((string)$y_type == 'webm') {
-	$tmp_vtype = 'type="video/webm; codecs=&quot;vp8.0, vorbis&quot;"';
-} else {
-	$tmp_vtype = 'type="video/ogg; codecs=&quot;theora, vorbis&quot;"';
-} //end if else
-//--
-$html = <<<HTML_CODE
-<div align="center" style="padding-top:4px;">
-<div style="z-index:1; background-color:{$tmp_bgcolor}; padding:2px; width:725px;">
-<!-- start HTML5 Open-Media Player v.120415 -->
-<video id="{$tmp_movie_id}" width="{$y_width}" height="{$y_height}" controls="controls" autoplay="autoplay">
-	<source src="{$player_movie}" {$tmp_vtype}>
-	WARNING: Your browser does not support the HTML5 Video Tag.
-</video>
-<br>
-<h2 style="color:{$tmp_color}">{$player_title}</h2>
-</div>
-<!-- end HTML5 Open-Media Player -->
-</div>
-</div>
-<br>
-HTML_CODE;
-} else {
-	$html = (string) \SmartComponents::operation_notice('Invalid Media Type / Video: '.Smart::escape_html((string)$y_type), '725px');
-} //end if else
+	//--
+	if((string)$y_type == 'webm') {
+		$tmp_vtype = 'video/webm'; // 'video/webm; codecs="vp8.0, vorbis"'
+	} elseif((string)$y_type == 'mp4') {
+		$tmp_vtype = 'video/mp4';
+	} else { // ogv
+		$tmp_vtype = 'video/ogg'; // 'video/ogg; codecs="theora, vorbis"'
+	} //end if else
+	//--
 
-
-//--
-return (string) $html;
-//--
+	//--
+	return (string) SmartMarkersTemplating::render_file_template(
+		'modules/mod-media-gallery/players/html5/player.inc.htm',
+		[
+			'MOVIE-TITLE' 		=> (string) $the_title,
+			'MOVIE-ID' 			=> (string) $tmp_movie_id,
+			'MOVIE-URL' 		=> (string) $player_movie,
+			'MOVIE-TYPE' 		=> (string) $tmp_vtype,
+			'MOVIE-AUTOPLAY' 	=> (string) ($y_autoplay ? 'autoplay' : ''),
+			'WIDTH' 			=> (string) $y_width,
+			'HEIGHT' 			=> (string) $y_height
+		]
+	);
+	//--
 
 } //END FUNCTION
 //=====================================================================

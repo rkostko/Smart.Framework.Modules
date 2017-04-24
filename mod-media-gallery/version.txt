@@ -1,5 +1,5 @@
 
-# Smart.Framework.Modules / SmartExtraJs #
+# Smart.Framework.Modules / MediaGallery #
 
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
 

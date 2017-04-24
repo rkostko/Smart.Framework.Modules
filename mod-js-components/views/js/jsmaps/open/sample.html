@@ -38,7 +38,7 @@
 		MyOpenMap.BingSetApiKey('AjIeV1e2mXb5L4gwVmLpO6ZXKUvf5FIkYmpthVd0sYBiSuytD7Jh_mkH6M5Zyl-j'); // set the ApiKey for Bing as we want it in the Maps List
 		//--
 		// Full Open Map(s): openstreetmap
-		// Open Map(s): mapquest | mapquest-aerial | cyclemap | cyclemap-transport
+		// Open Map(s): cyclemap | cyclemap-transport
 		// Commercial Maps (Bing, requires an ApiKey): bing | bing-hybrid | bing-aerial
 		// Commercial Maps (Google v3): google | google-physical | google-hybrid | google-aerial
 		var the_map_type = 'openstreetmap'; // the selected map
@@ -169,8 +169,6 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<select id="OpenMapsControlType" onchange="MyMapChanged = true; the_zoom = MyOpenMap.getCurrentZoom(); the_lat = MyOpenMap.getCurrentLat(); the_lon = MyOpenMap.getCurrentLon(); the_map_type = this.value; Render_OpenMap();">
 				<option value="openstreetmap">OpenStreet Maps</option>
-				<option value="mapquest">OpenQuest Maps</option>
-				<option value="mapquest-aerial">OpenMapQuest Aerial</option>
 				<option value="cyclemap">OpenCycle Maps</option>
 				<option value="cyclemap-transport">OpenCycleMap Transport</option>
 				<option value="google">Google StreetMaps</option>
