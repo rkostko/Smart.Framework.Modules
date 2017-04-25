@@ -7,7 +7,7 @@ License: BSD
 	* UI Bootstrap: CSS + Javascript UI Toolkit
 	* UI Uikit: CSS + Javascript UI Toolkit
 	* UI jQueryUI: CSS + Javascript UI Toolkit
-	* JS Components: a collection of Javascript components
+	* JS Components: a collection of Javascript components and utils
 	* Twig Templating Engine: integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup, just copy into smart-framework/modules/
 
 ## Extra Libs:
