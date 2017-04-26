@@ -1,5 +1,6 @@
 <?php
-// Controller: UI Bootstrap Test
+// [@[#[!DEV-ONLY!]#]@]
+// Controller: UI Bootstrap Test Sample
 // Route: ?/page/ui-bootstrap.test (?page=ui-bootstrap.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1

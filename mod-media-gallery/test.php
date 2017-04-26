@@ -1,5 +1,6 @@
 <?php
-// Controller: Media Gallery Sample
+// [@[#[!DEV-ONLY!]#]@]
+// Controller: Media Gallery Test Sample
 // Route: ?/page/media-gallery.test (?page=media-gallery.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1

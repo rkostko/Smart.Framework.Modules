@@ -1,5 +1,6 @@
 <?php
-// Controller: Twig Test Sample - Twig Templating for Smart.Framework
+// [@[#[!DEV-ONLY!]#]@]
+// Controller: Twig Templating Test Sample
 // Route: ?/page/tpl-twig.test (?page=tpl-twig.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1

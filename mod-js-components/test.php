@@ -1,5 +1,6 @@
 <?php
-// Controller: Js Components Sample Test
+// [@[#[!DEV-ONLY!]#]@]
+// Controller: Js Components Test Sample
 // Route: ?/page/js-components.test (?page=js-components.test)
 // Author: unix-world.org
 // v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
