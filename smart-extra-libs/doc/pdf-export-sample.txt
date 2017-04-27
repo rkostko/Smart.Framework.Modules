@@ -1,5 +1,5 @@
 
-/* PHP Config Code
+/* PHP Config Code (etc/config.php)
 define('SMART_FRAMEWORK_PDF_GENERATOR_APP', 	'/usr/bin/htmldoc'); 			// path to HtmlDoc Utility (change to match your system) ; can be `/usr/bin/htmldoc` or `/usr/local/bin/htmldoc` or `c:/open_runtime/htmldoc/htmldoc.exe` or any custom path
 define('SMART_FRAMEWORK_PDF_GENERATOR_FORMAT', 	'pdf13'); 						// PDF format: `pdf14` | `pdf13` | `pdf12`
 define('SMART_FRAMEWORK_PDF_GENERATOR_MODE', 	'color'); 						// PDF mode: `color` | `gray`
