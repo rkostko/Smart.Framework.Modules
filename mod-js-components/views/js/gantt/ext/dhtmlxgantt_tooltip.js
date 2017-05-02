@@ -1,11 +1,14 @@
+
+// dhtmlxGantt - Tooltip Extension v.3.2.0
+// (c) 2015 Dinamenta, UAB.
+// License: GPL v2
+
+// (c) 2015-2017 unix-world.org
 /*
-@license
-
-dhtmlxGantt v.3.2.0 Stardard
-This software is covered by GPL license.
-
-(c) Dinamenta, UAB.
+modified by unixman:
+	- changed text: Title instead of Task
 */
+
 gantt._tooltip = {};
 gantt._tooltip_class = "gantt_tooltip";
 gantt.config.tooltip_timeout = 30;//,
@@ -168,5 +171,7 @@ gantt.attachEvent("onMouseLeave", function(ev){
 /* Could be redifined */
 gantt.templates.tooltip_date_format = gantt.date.date_to_str("%Y-%m-%d");
 gantt.templates.tooltip_text = function(start, end, event) {
-	return "<b>Task:</b> " + event.text + "<br/><b>Start date:</b> " + gantt.templates.tooltip_date_format(start) + "<br/><b>End date:</b> " + gantt.templates.tooltip_date_format(end);
-};
+	return "<b>Title:</b> " + event.text + "<br/><b>Start date:</b> " + gantt.templates.tooltip_date_format(start) + "<br/><b>End date:</b> " + gantt.templates.tooltip_date_format(end);
+}; // fix by unixman
+
+// #END

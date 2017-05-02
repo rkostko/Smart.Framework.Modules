@@ -1,11 +1,14 @@
+
+// dhtmlxGantt v.3.2.0.uxm.170502
+// (c) 2015 Dinamenta, UAB.
+// License: GPL v2
+
+// (c) 2015-2017 unix-world.org
 /*
-@license
-
-dhtmlxGantt v.3.2.0 Stardard
-This software is covered by GPL license.
-
-(c) Dinamenta, UAB.
+modified by unixman:
+	- add types: project, milestone
 */
+
 if (typeof(window.dhx4) == "undefined") {
 
 	window.dhx4 = {
@@ -2404,12 +2407,6 @@ gantt.roundTaskDates = function(task){
 	gantt._tasks_dnd._fix_dnd_scale_time(task, drag_state);
 };
 
-
-
-
-
-
-
 gantt._render_link = function(id){
 	var link = this.getLink(id);
 	var renders = gantt._get_link_renderers();
@@ -2531,7 +2528,6 @@ gantt._render_link_arrow = function(point, direction){
 
 	return div;
 };
-
 
 gantt._drawer = {
 	current_pos:null,
@@ -5435,7 +5431,25 @@ gantt._get_duration_unit = function(){
 };
 
 gantt._get_safe_type = function(type){
-	return "task";
+	//return "task"; // Fix by Unixman :: implement missing milestone and project
+	/* these comes from: gantt.config.types
+			'task':'task',
+			'project':'project',
+			'milestone':'milestone'
+	*/
+	var realType = 'task';
+	switch(type) {
+		case 'milestone':
+			realType = 'milestone';
+			break;
+		case 'project':
+			realType = 'project';
+			break;
+		case 'task':
+		default:
+			realType = 'task';
+	} //end switch
+	return realType;
 };
 gantt._get_type_name = function(type_value){
 	for(var i in this.config.types){
@@ -8824,8 +8838,8 @@ dhtmlx.mixin(gantt.config,
 	show_chart : true,
 	show_grid : true,
 	min_duration : 60*60*1000,
-	xml_date : "%d-%m-%Y %H:%i",
-	api_date : "%d-%m-%Y %H:%i",
+	xml_date : "%Y-%m-%d %H:%i",
+	api_date : "%Y-%m-%d %H:%i",
 	start_on_monday: true,
 	server_utc : false,
 	show_progress:true,
@@ -9422,3 +9436,5 @@ gantt._touch_events = function(names, accessor, ignore){
 		}
 	}
 };
+
+// #END

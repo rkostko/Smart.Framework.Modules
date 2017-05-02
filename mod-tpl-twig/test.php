@@ -1,5 +1,5 @@
 <?php
-// [@[#[!DEV-ONLY!]#]@]
+// [@[#[!SF.DEV-ONLY!]#]@]
 // Controller: Twig Templating Test Sample
 // Route: ?/page/tpl-twig.test (?page=tpl-twig.test)
 // Author: unix-world.org

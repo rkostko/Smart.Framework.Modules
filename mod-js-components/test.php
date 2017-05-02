@@ -1,5 +1,5 @@
 <?php
-// [@[#[!DEV-ONLY!]#]@]
+// [@[#[!SF.DEV-ONLY!]#]@]
 // Controller: Js Components Test Sample
 // Route: ?/page/js-components.test (?page=js-components.test)
 // Author: unix-world.org

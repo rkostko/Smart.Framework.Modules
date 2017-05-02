@@ -1,5 +1,5 @@
 <?php
-// [@[#[!DEV-ONLY!]#]@]
+// [@[#[!SF.DEV-ONLY!]#]@]
 // Controller: UI Bootstrap Test Sample
 // Route: ?/page/ui-bootstrap.test (?page=ui-bootstrap.test)
 // Author: unix-world.org

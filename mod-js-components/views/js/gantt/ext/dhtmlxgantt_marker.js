@@ -1,11 +1,7 @@
-/*
-@license
 
-dhtmlxGantt v.3.2.0 Stardard
-This software is covered by GPL license.
-
-(c) Dinamenta, UAB.
-*/
+// dhtmlxGantt - Marker Extension v.3.2.0
+// (c) 2015 Dinamenta, UAB.
+// License: GPL v2
 
 if(!gantt._markers)
 	gantt._markers = {};
@@ -117,3 +113,5 @@ gantt.renderMarkers = function(){
 
 	return true;
 };
+
+// #END

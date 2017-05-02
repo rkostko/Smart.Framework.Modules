@@ -1,5 +1,5 @@
 <?php
-// [@[#[!DEV-ONLY!]#]@]
+// [@[#[!SF.DEV-ONLY!]#]@]
 // Controller: Media Gallery Test Sample
 // Route: ?/page/media-gallery.test (?page=media-gallery.test)
 // Author: unix-world.org

@@ -1,11 +1,8 @@
-/*
-@license
 
-dhtmlxGantt v.3.2.0 Stardard
-This software is covered by GPL license.
+// dhtmlxGantt - QuickInfo Extension v.3.2.0
+// (c) 2015 Dinamenta, UAB.
+// License: GPL v2
 
-(c) Dinamenta, UAB.
-*/
 gantt.config.quickinfo_buttons = ["icon_delete","icon_edit"];
 gantt.config.quick_info_detached = true;
 gantt.config.show_quick_info = true;
@@ -216,3 +213,5 @@ gantt._fill_quick_data  = function(id){
 	var main = qi.firstChild.nextSibling;
 	main.innerHTML = gantt.templates.quick_info_content(ev.start_date, ev.end_date, ev);
 };
+
+// #END
