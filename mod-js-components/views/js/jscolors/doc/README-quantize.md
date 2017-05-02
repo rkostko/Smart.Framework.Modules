@@ -1,13 +1,5 @@
-quantize
-========
 
-Node.js module for color quantization, based on Leptonica.
-
-
-Install
--------
-
-	npm install quantize
+#Javascript module for color quantization, based on Leptonica
 
 Quick Overview
 --------------
@@ -32,7 +24,7 @@ The `.palette()` method returns an array that contains the reduced color palette
 
 `````javascript
 // Returns the reduced palette
-colorMap.palette(); 
+colorMap.palette();
 // [[204, 204, 204], [208,212,212], [188,196,188], [212,204,196]]
 `````
 
@@ -45,17 +37,6 @@ The `.map(pixel)` method maps an individual pixel to the reduced color palette.
 colorMap.map(arrayOfPixels[0]);
 // [188,196,188]
 `````
-
-Author
-------
-
-* [Olivier Lesnicki](https://github.com/olivierlesnicki)
-
-Contributors
-------------
-
-* [Nick Rabinowitz](https://github.com/nrabinowitz)
-* [Mike Bostock] (https://github.com/mbostock)
 
 License
 -------
