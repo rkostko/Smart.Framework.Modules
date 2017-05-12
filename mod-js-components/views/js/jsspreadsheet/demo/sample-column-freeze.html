@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Manual Column Freeze - Handsontable</title>
+  <title>Manual Column Freeze - Spreadsheet</title>
 
   <link rel="stylesheet" media="screen" href="../../jspikaday/pikaday.css">
   <script src="../../jspikaday/pikaday.js"></script>
@@ -21,67 +21,64 @@
 
 <div class="wrapper">
   <div class="wrapper-row">
-    <div id="global-menu-clone">
-      <h1><a href="../index.html">Handsontable</a></h1>
+	<div id="global-menu-clone">
+	  <h1>Spreadsheet</h1>
 
-    </div>
+	</div>
 
-    <div id="container">
-      <div class="columnLayout">
+	<div id="container">
+	  <div class="columnLayout">
 
-        <div class="rowLayout">
-          <div class="descLayout">
-            <div class="pad" data-jsfiddle="example1">
-              <h2>Manual Column Freeze</h2>
+		<div class="rowLayout">
+		  <div class="descLayout">
+			<div class="pad" data-jsfiddle="example1">
+			  <h2>Manual Column Freeze</h2>
 
-              <p>In order to manually freeze a column (in another words - make it fixed), you need to set the <code>manualColumnFreeze</code>
-                config item to <code>true</code> in Handsontable initialization.</p>
+			  <p>In order to manually freeze a column (in another words - make it fixed), you need to set the <code>manualColumnFreeze</code>
+				config item to <code>true</code> in Handsontable initialization.</p>
 
-              <p>When the Manual Column Freeze plugin is enabled, you can freeze any non-fixed column and unfreeze any
-                fixed column in your Handsontable instance using the Context Menu.</p>
+			  <p>When the Manual Column Freeze plugin is enabled, you can freeze any non-fixed column and unfreeze any
+				fixed column in your Handsontable instance using the Context Menu.</p>
 
-              <p>Note: to properly use this plugin, you need to have the Context Menu plugin enabled.</p>
+			  <p>Note: to properly use this plugin, you need to have the Context Menu plugin enabled.</p>
 
-              <div id="example1" style="width: 400px; height: 300px; overflow: hidden;"></div>
+			  <div id="example1" style="width: 400px; height: 300px; overflow: hidden;"></div>
 
-              <p>
-                <button name="dump" data-instance="ht" data-dump="#example1"
-                        title="Prints current data source to Firebug/Chrome Dev Tools">
-                  Dump data to console
-                </button>
-              </p>
-            </div>
-          </div>
+			  <p>
 
-          <div class="codeLayout">
-            <div class="pad">
-              <div class="jsFiddle">
-                <button class="jsFiddleLink" data-runfiddle="example1">Edit in jsFiddle</button>
-              </div>
+			  </p>
+			</div>
+		  </div>
 
-              <script data-jsfiddle="example1">
-                var myData = Handsontable.helper.createSpreadsheetData(1000, 100);
-                var container = document.getElementById('example1');
+		  <div class="codeLayout">
+			<div class="pad">
+			  <div class="jsFiddle">
 
-                var ht = new Handsontable(container, {
-                  data: myData,
-                  rowHeaders: true,
-                  colHeaders: true,
-                  fixedColumnsLeft: 2,
-                  contextMenu: true,
-                  manualColumnFreeze: true
-                });
+			  </div>
 
-              </script>
-            </div>
-          </div>
-        </div>
+			  <script data-jsfiddle="example1">
+				var myData = Handsontable.helper.createSpreadsheetData(1000, 100);
+				var container = document.getElementById('example1');
 
-        <div class="footer-text">
-        </div>
-      </div>
+				var ht = new Handsontable(container, {
+				  data: myData,
+				  rowHeaders: true,
+				  colHeaders: true,
+				  fixedColumnsLeft: 2,
+				  contextMenu: true,
+				  manualColumnFreeze: true
+				});
 
-    </div>
+			  </script>
+			</div>
+		  </div>
+		</div>
+
+		<div class="footer-text">
+		</div>
+	  </div>
+
+	</div>
 
   </div>
 </div>

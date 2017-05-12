@@ -8,6 +8,7 @@ License: BSD
 	* UI Uikit: CSS + Javascript UI Toolkit
 	* UI jQueryUI: CSS + Javascript UI Toolkit
 	* JS Components: a collection of Javascript components and utils
+	* Biz Components: another collection of Javascript components and utils
 	* Twig Templating Engine: integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup, just copy into smart-framework/modules/
 
 ## Extra Libs:
@@ -20,7 +21,9 @@ License: BSD
 
 ## Installation NOTES:
 	* install first the Smart.Framework
-	* after, copy all these into this folder: smart-framework/modules/
-	* uncomment or add the following line into: modules/app/app-custom-bootstrap.php
-		require_once('modules/smart-extra-libs/autoload.php'); // the autoloader for Smart.Framework modules/extra-libs
+	* after, copy the desired modules from here into the Smart.Framework modules folder: smart-framework/modules/
+	* all libs in modules are auto-loaded via built-in Autoloader (except smart-extra-libs)
+	* (just for using the smart-extra-libs)
+		uncomment or add the following line into: modules/app/app-custom-bootstrap.php
+			require_once('modules/smart-extra-libs/autoload.php'); // the autoloader for Smart.Framework modules/extra-libs
 

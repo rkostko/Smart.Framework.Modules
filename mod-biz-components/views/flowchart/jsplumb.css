@@ -1,0 +1,7 @@
+/** DISABLE TEXT SELECTION (SET ON BODY WHEN DRAGGING IS OCCURRING) **/
+
+._jsPlumb_drag_select * {
+	user-select: none;
+}
+
+/* END */

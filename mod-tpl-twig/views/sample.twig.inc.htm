@@ -1,10 +1,37 @@
 <!-- start twig template -->
 <div align="center">
 <br>
-<div><a href="http://twig.sensiolabs.org/documentation" target="_blank"><img src="modules/mod-tpl-twig/views/img/twig.png"></a><br>Twig Templating for Smart.Framework</div>
+<div>
+<a href="http://twig.sensiolabs.org/documentation" target="_blank">
+<img src="modules/mod-tpl-twig/views/img/twig.png"></a>
+<br>
+Twig v.{{ constant('Twig_Environment::VERSION') }} Templating Engine - as module for Smart.Framework
+</div>
 {{ hello|raw }}
+<div align="center">
+	<a href="?/page/tpl-twig.test" class="ux-button ux-button-small"><i class="fa fa-refresh"></i> &nbsp; Reload TPL Render Test</a>
+	&nbsp;&nbsp;
+	<a href="?/page/tpl-twig.test/op/viewsource" target="tpl_twig_view_source" data-smart="open.modal" class="ux-button ux-button-small"><i class="fa fa-code"></i> &nbsp; View TPL Source</a>
+</div>
+<br>
+<table style="border: 1px solid #ECECEC; width: 550px;">
+<tr>
+	<th>Column 1<th>
+	<th>Column 2<th>
+	<th>Column 3<th>
+</tr>
+{% for var in tbl%}
+<tr>
+	<td>cell {{ var.a1 }}<td>
+	<td>cell {{ var.a2 }}<td>
+	<td>cell {{ var.a3 }}<td>
+</tr>
+{%endfor%}
+</table>
+<ul>
 {% for item in navigation %}
 	<li><a href="{{ item.href }}">{{ item.caption }}</a></li>
 {% endfor %}
+</ul>
 </div>
 <!-- end twig template -->

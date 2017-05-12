@@ -1,7 +1,7 @@
 
 // [LIB - SmartFramework / JS / Browser UI Utils - jQueryUI]
 // (c) 2006-2017 unix-world.org - all rights reserved
-// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
+// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
 
 // DEPENDS: jQuery, SmartJS_CoreUtils, SmartJS_BrowserUtils, jQueryUI, jQuery.UI.ListSelect, jQuery.UI.TimePicker
 

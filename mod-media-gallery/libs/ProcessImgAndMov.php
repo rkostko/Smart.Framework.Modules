@@ -2,7 +2,7 @@
 // Class: \SmartModExtLib\MediaGallery\ProcessImgAndMov
 // Media Gallery Process: Images and Movies :: for Smart.Framework
 // Module Library
-// v.3.1.2 r.2017.04.11 / smart.framework.v.3.1
+// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 

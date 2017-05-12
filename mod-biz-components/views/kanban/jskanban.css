@@ -1,0 +1,82 @@
+/* Js Kanban CSS */
+
+.jskanban_area {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.jskanban_holder {
+	min-width: 320px;
+	width: 22%;
+	float: left;
+	clear: right;
+	margin: 1%;
+	border: 1px solid #FFFFFF;
+	border-radius: 5px;
+}
+
+.jskanban_holder_highlight {
+	border: 1px solid #333333;
+}
+
+.jskanban_holder_todo {
+	background: #DC3C48;
+	color: #FFFFFF;
+}
+
+.jskanban_holder_inprogress {
+	background: #9F4D75;
+	color: #FFFFFF;
+}
+
+.jskanban_holder_check {
+	background: #D8AC61;
+	color: #FFFFFF;
+}
+
+.jskanban_holder_done {
+	background: #8D9D56;
+	color: #FFFFFF;
+}
+
+.jskanban_sorter {
+	list-style-type: none;
+	margin: 0;
+	padding: 2px;
+	min-height: 30px;
+	border-radius: 5px;
+}
+
+.jskanban_sorter li {
+	margin: 3px 3px 3px 3px;
+	padding: 0.4em;
+	padding-left: 1.5em;
+	font-size: 1em;
+	height: 18px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.jskanban_sorter li span {
+	position: absolute;
+	margin-left: -1.3em;
+}
+
+.jskanban_box{
+	background: #FFFFFF;
+	color: #111111;
+	border-radius: 3px;
+}
+
+.jskanban_add_field {
+}
+
+.jskanban_add_bttn {
+}
+
+.jskanban_save_bttn {
+}
+
+/* END */

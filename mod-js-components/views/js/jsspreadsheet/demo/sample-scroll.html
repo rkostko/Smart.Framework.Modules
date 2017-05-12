@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Scroll - Handsontable</title>
+  <title>Scroll - Spreadsheet</title>
 
   <link rel="stylesheet" media="screen" href="../../jspikaday/pikaday.css">
   <script src="../../jspikaday/pikaday.js"></script>
@@ -22,7 +22,7 @@
 <div class="wrapper">
 <div class="wrapper-row">
 <div id="global-menu-clone">
-  <h1><a href="../index.html">Handsontable</a></h1>
+  <h1>Spreadsheet</h1>
 
 </div>
 
@@ -31,83 +31,81 @@
 
 <div class="rowLayout">
   <div class="descLayout">
-    <div class="pad" data-jsfiddle="example1">
-      <h2>Vertical and horizontal scrollbars</h2>
+	<div class="pad" data-jsfiddle="example1">
+	  <h2>Vertical and horizontal scrollbars</h2>
 
-      <p>If you want scrollbars, just set container width, height and <code>overflow: scroll</code> in CSS.</p>
+	  <p>If you want scrollbars, just set container width, height and <code>overflow: scroll</code> in CSS.</p>
 
-      <p>This demo shows table of <strong>1000</strong> rows and columns. Only visible part is rendered. Native div scrollbar is used to
-        scroll through the table.</p>
+	  <p>This demo shows table of <strong>1000</strong> rows and columns. Only visible part is rendered. Native div scrollbar is used to
+		scroll through the table.</p>
 
-      <p>
-        <button class="maximize">Maximize HOT table</button>
-      </p>
+	  <p>
+		<button class="maximize">Maximize HOT table</button>
+	  </p>
 
-      <div id="example1" style="width: 400px; height: 200px; overflow: hidden"></div>
+	  <div id="example1" style="width: 400px; height: 200px; overflow: hidden"></div>
 
-      <p>
-        <button name="dump" data-dump="#example1" data-instance="hot1" title="Prints current data source to Firebug/Chrome Dev Tools">Dump
-          data to console
-        </button>
-      </p>
-    </div>
+	  <p>
+
+	  </p>
+	</div>
   </div>
 
   <div class="codeLayout">
-    <div class="pad">
-      <div class="jsFiddle">
-        <button class="jsFiddleLink" data-runfiddle="example1">Edit in jsFiddle</button>
-      </div>
+	<div class="pad">
+	  <div class="jsFiddle">
 
-      <script data-jsfiddle="example1">
-        var
-          example = document.getElementById('example1'),
-          maximize = document.querySelector('.maximize'),
-          maxed = false,
-          resizeTimeout,
-          availableWidth,
-          availableHeight,
-          hot1;
+	  </div>
 
-        hot1 = new Handsontable(example,{
-          data: Handsontable.helper.createSpreadsheetData(1000, 1000),
-          colWidths: [55, 80, 80, 80, 80, 80, 80], //can also be a number or a function
-          rowHeaders: true,
-          colHeaders: true,
-          fixedColumnsLeft: 2,
-          fixedRowsTop: 2,
-          minSpareRows: 1,
-          contextMenu: true
-        });
+	  <script data-jsfiddle="example1">
+		var
+		  example = document.getElementById('example1'),
+		  maximize = document.querySelector('.maximize'),
+		  maxed = false,
+		  resizeTimeout,
+		  availableWidth,
+		  availableHeight,
+		  hot1;
 
-        function calculateSize() {
-          var offset;
+		hot1 = new Handsontable(example,{
+		  data: Handsontable.helper.createSpreadsheetData(1000, 1000),
+		  colWidths: [55, 80, 80, 80, 80, 80, 80], //can also be a number or a function
+		  rowHeaders: true,
+		  colHeaders: true,
+		  fixedColumnsLeft: 2,
+		  fixedRowsTop: 2,
+		  minSpareRows: 1,
+		  contextMenu: true
+		});
 
-          if (maxed) {
-            offset = Handsontable.Dom.offset(example);
-            availableWidth = Handsontable.Dom.innerWidth(document.body) - offset.left + window.scrollX;
-            availableHeight = Handsontable.Dom.innerHeight(document.body) - offset.top + window.scrollY;
+		function calculateSize() {
+		  var offset;
 
-            example.style.width = availableWidth + 'px';
-            example.style.height = availableHeight + 'px';
-          }
-        }
+		  if (maxed) {
+			offset = Handsontable.Dom.offset(example);
+			availableWidth = Handsontable.Dom.innerWidth(document.body) - offset.left + window.scrollX;
+			availableHeight = Handsontable.Dom.innerHeight(document.body) - offset.top + window.scrollY;
 
-        Handsontable.Dom.addEvent(window, 'resize', calculateSize);
-        Handsontable.Dom.addEvent(maximize, 'click', function() {
-          maxed = !maxed;
+			example.style.width = availableWidth + 'px';
+			example.style.height = availableHeight + 'px';
+		  }
+		}
 
-          if (maxed) {
-            calculateSize();
-          }
-          else {
-            example.style.width = 400 + 'px';
-            example.style.height = 400 + 'px';
-          }
-          hot1.render();
-        });
-      </script>
-    </div>
+		Handsontable.Dom.addEvent(window, 'resize', calculateSize);
+		Handsontable.Dom.addEvent(maximize, 'click', function() {
+		  maxed = !maxed;
+
+		  if (maxed) {
+			calculateSize();
+		  }
+		  else {
+			example.style.width = 400 + 'px';
+			example.style.height = 400 + 'px';
+		  }
+		  hot1.render();
+		});
+	  </script>
+	</div>
   </div>
 </div>
 
