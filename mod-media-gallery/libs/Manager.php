@@ -94,7 +94,7 @@ public function __construct($y_url_player_mov='') {
 	//--
 	$this->use_styles = 'yes';
 	//--
-	$this->pict_reloading = 'lib/framework/img/busy_circle.gif';
+	$this->pict_reloading = 'lib/framework/img/loading-spokes.svg';
 	$this->pict_delete = 'modules/mod-media-gallery/views/img/delete.png';
 	//--
 	$this->preview_formvar = '';

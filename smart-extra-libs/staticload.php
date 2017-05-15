@@ -24,7 +24,7 @@ require_once('modules/smart-extra-libs/lib_db_orm_pgsql.php'); 			// pgsql orm d
 require_once('modules/smart-extra-libs/lib_db_mysqli.php'); 			// mysqli db connector
 require_once('modules/smart-extra-libs/lib_db_solr.php'); 				// solr db connector
 //--
-require_once('modules/smart-extra-libs/lib_export_pdf.php'); 			// pdf export
+require_once('modules/smart-extra-libs/lib_charts.php'); 				// gd charts
 //--
 require_once('modules/smart-extra-libs/lib_templating_twig.php'); 		// twig templating
 //--

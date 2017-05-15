@@ -1,0 +1,3 @@
+<svg id="barcodes-2d" width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+  <path d="m 576,1216 v 128 H 448 v -128 h 128 z m 0,-768 V 576 H 448 V 448 h 128 z m 768,0 V 576 H 1216 V 448 h 128 z M 320,1471 H 704 V 1088 H 320 v 383 z m 0,-767 H 704 V 320 H 320 v 384 z m 768,0 h 384 V 320 H 1088 V 704 z M 832,960 v 640 H 192 V 960 h 640 z m 512,512 v 128 h -128 v -128 h 128 z m 256,0 v 128 h -128 v -128 h 128 z m 0,-512 v 384 h -384 v -128 h -128 v 384 H 960 V 960 h 384 v 128 h 128 V 960 h 128 z M 832,192 V 832 H 192 V 192 h 640 z m 768,0 V 832 H 960 V 192 h 640 z" id="path3" />
+</svg>

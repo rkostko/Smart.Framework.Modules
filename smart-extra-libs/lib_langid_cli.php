@@ -1,5 +1,5 @@
 <?php
-// [LIB - SmartFramework / LangID Service Client]
+// [LIB - SmartFramework / ExtraLibs / LangID Service Client]
 // (c) 2006-2017 unix-world.org - all rights reserved
 // v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
 

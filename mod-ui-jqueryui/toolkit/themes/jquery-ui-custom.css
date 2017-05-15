@@ -20,6 +20,11 @@
 	z-index: 2137483001;
 }
 
+.ui-tabs-anchor {
+	padding-left: 11px !important;
+	padding-right: 11px !important;
+}
+
 .ui-datepicker {
 	font-size: 14px !important;
 	margin-top: 25px;
