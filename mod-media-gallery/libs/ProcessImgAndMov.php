@@ -75,7 +75,7 @@ if(!defined('SMART_FRAMEWORK_MEDIAGALLERY_PDF_EXTRACTOR')) {
  * @internal
  *
  * @depends 	extensions: plugins: \SmartModExtLib\MediaGallery\ImgProcImagick:: OR \SmartModExtLib\MediaGallery\ImgProcGd:: ;
- * @version 	v.170418
+ * @version 	v.170518
  * @package 	Media:Gallery
  *
  */

@@ -38,7 +38,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP GD Extension (w. TrueColor support) ; executables: imageMagick Utility (can replace PHP GD), FFMpeg (for movies) ; classes: Smart, SmartUtils, SmartFileSystem
- * @version 	v.170418
+ * @version 	v.170518
  * @package 	Media:Gallery
  *
  */
@@ -478,7 +478,7 @@ private function img_draw_box($y_dir, $y_big_img_file) {
 		$description = '';
 	} //end if
 	//--
-	$out .= '<a rel="slimbox[media_gallery]" rel="nofollow" href="'.\Smart::escape_html($the_img).'" target="_blank" '.'title="'.$description.'"'.'>';
+	$out .= '<a data-slimbox="slimbox" rel="nofollow" href="'.\Smart::escape_html($the_img).'" target="_blank" '.'title="'.$description.'"'.'>';
 	$out .= '<img src="'.\Smart::escape_html($the_preview).'" border="0" alt="'.$description.'" title="'.$description.'"'.$forced_dim.'>';
 	$out .= '</a>';
 	//--

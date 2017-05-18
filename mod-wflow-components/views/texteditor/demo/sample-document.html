@@ -15,7 +15,7 @@
 <div align="center">
 	<table width="720">
 		<tr valign="middle">
-			<td><span style="font-size:32px;">Demo: Text Editor</span></td>
+			<td><span style="font-size:32px;">Demo: Text Document Editor</span></td>
 			<td><img src="img/logo.png" alt="Logo" width="96"></td>
 		</tr>
 	</table>
@@ -56,7 +56,7 @@
 		&lt;/tbody&gt;
 	&lt;/table&gt;
 
-	&lt;p style="text-align:justify"&gt;&lt;span style="font-family:Georgia,serif"&gt;The project that you participated in is of utmost importance to the future success of our platform. &amp;nbsp;We are very proud to share that&amp;nbsp;the&amp;nbsp;CKEditor implementation was a huge success and brought congratulations from both the key Stakeholders and the Customers:&lt;/span&gt;&lt;/p&gt;
+	&lt;p style="text-align:justify"&gt;&lt;span style="font-family:Georgia,serif"&gt;The project that you participated in is of utmost importance to the future success of our platform. &amp;nbsp;We are very proud to share that&amp;nbsp;the&amp;nbsp;Text Editor implementation was a huge success and brought congratulations from both the key Stakeholders and the Customers:&lt;/span&gt;&lt;/p&gt;
 
 	&lt;blockquote&gt;
 		&lt;p style="text-align:center"&gt;This new editor has totally changed our content creation experience!&lt;/p&gt;
@@ -82,6 +82,26 @@
 	CKEDITOR.config.language = 'en';
 	CKEDITOR.on('instanceReady', function(ev) {
 		ev.editor.dataProcessor.writer.selfClosingEnd = '>'; // fix tag ends
+	});
+
+	// disable drag and drop from outside
+	var isCkEditorDragging = false;
+	CKEDITOR.on('instanceCreated', function(ev) {
+		ev.editor.on('contentDom', function() {
+			ev.editor.document.on('dragstart', function(e) {
+				isCkEditorDragging = true;
+			});
+			ev.editor.document.on('dragend', function(e) {
+				isCkEditorDragging = false;
+			});
+			ev.editor.document.on('drop', function(e) {
+				ev.editor.fire('change'); // required !!
+				if(!isCkEditorDragging) {
+					e.data.preventDefault(true); // fix drag and drop from outside problem
+				} //end if
+				isCkEditorDragging = false;
+			});
+		});
 	});
 
 	var theAreaId = 'editor';
@@ -128,8 +148,9 @@
 		//  - About Advanced Content Filter: http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter
 		//  - About Disallowed Content: http://docs.ckeditor.com/#!/guide/dev_disallowed_content
 		//  - About Allowed Content: http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules
-		disallowedContent: 'img{width,height,float}',
-		extraAllowedContent: 'img[width,height,align]',
+		//disallowedContent: 'img{width,height,float}',
+		//disallowedContent: 'img{float}',
+		//extraAllowedContent: 'img[width,height,align]',
 
 		plugins: 'print,pagebreak,sourcedialog,dialogui,dialog,basicstyles,blockquote,clipboard,button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu,contextmenu,dialogadvtab,elementspath,enterkey,entities,popup,filebrowser,find,link,fakeobjects,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,image,indent,indentlist,indentblock,justify,list,liststyle,magicline,maximize,pastetext,removeformat,resize,selectall,showblocks,showborders,sourcearea,tab,table,tabletools,toolbar,undo,wysiwygarea,wordcount,notification',
 

@@ -1,27 +1,25 @@
-/* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
  * jQuery MultiSelect UI Widget 1.14pre.fixed.1 (fix by unixman on 2014-12-09: html_escape)
- * Copyright (c) 2012 Eric Hynds
- *
+ * copyright (c) 2012 Eric Hynds
  * http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
  *
+ * License: MIT
+ *
  * Depends:
- *   - jQuery 1.4.2+
- *   - jQuery UI 1.8 widget factory
+ *   - jQuery 3.0+
+ *   - jQuery UI 1.12+ widget factory
  *   - SmartJS_CoreUtils (fixes by unixman)
  *
  * Optional:
  *   - jQuery UI effects
  *   - jQuery UI position utility
  *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
- *
+ * copyright (c) 2012-2017 unix-world.org
  * Fixes by unixman:
  * 		* highlights corrections
  * 		* fix html special characters
  * 		* replaced jQuery deprecated $.isArray() with Array.isArray()
+ * 		* deprecated delegate()
  *
  */
 (function($, undefined) {
@@ -303,7 +301,8 @@
 	  });
 
 	  // header links
-	  this.header.delegate('a', 'click.multiselect', function(e) {
+	  //this.header.delegate('a', 'click.multiselect', function(e) {
+	  this.header.on('click.multiselect', 'a', function(e) { // #fix by unixman: deprecated delegate()
 		// close link
 		if($(this).hasClass('ui-multiselect-close')) {
 		  self.close();
@@ -317,7 +316,8 @@
 	  });
 
 	  // optgroup label toggle support
-	  this.menu.delegate('li.ui-multiselect-optgroup-label a', 'click.multiselect', function(e) {
+	  //this.menu.delegate('li.ui-multiselect-optgroup-label a', 'click.multiselect', function(e) {
+	  this.menu.on('click.multiselect', 'li.ui-multiselect-optgroup-label a', function(e) { // #fix by unixman: deprecated delegate()
 		e.preventDefault();
 
 		var $this = $(this);
@@ -342,13 +342,15 @@
 		  checked: nodes[0].checked
 		});
 	  })
-	  .delegate('label', 'mouseenter.multiselect', function() {
+	  //.delegate('label', 'mouseenter.multiselect', function() {
+	  .on('mouseenter.multiselect', 'label', function() { // #fix by unixman: deprecated delegate()
 		if(!$(this).hasClass('ui-state-disabled')) {
 		  self.labels.removeClass('ui-state-hover');
 		  $(this).addClass('ui-state-hover').find('input').focus();
 		}
 	  })
-	  .delegate('label', 'keydown.multiselect', function(e) {
+	  //.delegate('label', 'keydown.multiselect', function(e) {
+	  .on('keydown.multiselect', 'label', function(e) { // #fix by unixman: deprecated delegate()
 		e.preventDefault();
 
 		switch(e.which) {
@@ -367,7 +369,8 @@
 		  break;
 		}
 	  })
-	  .delegate('input[type="checkbox"], input[type="radio"]', 'click.multiselect', function(e) {
+	  //.delegate('input[type="checkbox"], input[type="radio"]', 'click.multiselect', function(e) {
+	  .on('click.multiselect', 'input[type="checkbox"], input[type="radio"]', function(e) { // #fix by unixman: deprecated delegate()
 		var $this = $(this);
 		var val = this.value;
 		var checked = this.checked;

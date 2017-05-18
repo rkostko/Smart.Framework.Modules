@@ -10,7 +10,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 //-----------------------------------------------------
 
 define('SMART_FRAMEWORK_MODULES_HEAD_VERSION', 'v.3.5.1');
-define('SMART_FRAMEWORK_MODULES_VERSION', 'r.2017.05.15');
+define('SMART_FRAMEWORK_MODULES_VERSION', 'r.2017.05.17');
 
 if(((string)SMART_FRAMEWORK_RELEASE_TAGVERSION != (string)SMART_FRAMEWORK_MODULES_HEAD_VERSION) OR ((string)SMART_FRAMEWORK_MODULES_VERSION > (string)SMART_FRAMEWORK_RELEASE_VERSION)) { // check framework version
 	die('Smart.Framework.Modules requires Smart.Framework '.SMART_FRAMEWORK_MODULES_HEAD_VERSION.' '.SMART_FRAMEWORK_MODULES_VERSION.' ...');

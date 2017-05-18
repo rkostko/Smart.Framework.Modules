@@ -278,7 +278,7 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 	//--
 	HtmlElement.datepicker({
 		showAnim: null, duration: null,
-		numberOfMonths: noOfMonths, stepMonths: 1,
+		numberOfMonths: 1, stepMonths: 1, // noOfMonths is ignored (set to 1) to be compatible with LightJSComponents
 		showButtonPanel: true, showWeek: true, weekHeader: '#',
 		prevText: '&lt;&lt;', nextText: '&gt;&gt;',
 		changeYear: true, changeMonth: true,

@@ -3,6 +3,8 @@
 // Author: Brian Grinstead
 // License: MIT
 
+// unixman: #Fix: delegate() is deprecated since jQuery 3+
+
 (function (factory) {
 	"use strict";
 
@@ -472,8 +474,12 @@
 			}
 
 			var paletteEvent = IE ? "mousedown.spectrum" : "click.spectrum touchstart.spectrum";
-			paletteContainer.delegate(".sp-thumb-el", paletteEvent, paletteElementClick);
-			initialColorContainer.delegate(".sp-thumb-el:nth-child(1)", paletteEvent, { ignore: true }, paletteElementClick);
+			//-- unixman: #Fix: delegate() is deprecated since jQuery 3+
+			//paletteContainer.delegate(".sp-thumb-el", paletteEvent, paletteElementClick);
+			paletteContainer.on(paletteEvent, ".sp-thumb-el", paletteElementClick);
+			//initialColorContainer.delegate(".sp-thumb-el:nth-child(1)", paletteEvent, { ignore: true }, paletteElementClick);
+			initialColorContainer.on(paletteEvent, ".sp-thumb-el:nth-child(1)", { ignore: true }, paletteElementClick);
+			//-- #end fix
 		}
 
 		function updateSelectionPaletteFromStorage() {

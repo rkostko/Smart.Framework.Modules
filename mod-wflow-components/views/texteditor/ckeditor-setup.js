@@ -13,45 +13,6 @@ CKEDITOR.tools.enableHtml5Elements(document); // suppose NOT to have IE8 or lowe
 CKEDITOR.config.language = 'en'; // default language
 CKEDITOR.config.startupOutlineBlocks = true; // enable show blocks by default
 CKEDITOR.config.image_previewText = CKEDITOR.tools.repeat(' ',1); // reset lorem ipsum text in preview
-CKEDITOR.on('instanceReady', function(ev) {
-	ev.editor.dataProcessor.writer.selfClosingEnd = '>'; // fix tag ends
-});
-// disable drag and drop: but this will also prevent moving images in page ... need another solution here !
-/*
-CKEDITOR.on('instanceCreated', function(ev) {
-		ev.editor.on('contentDom', function() {
-			ev.editor.document.on('drop', function(ev) {
-				console.log(ev);
-				ev.data.preventDefault(true); // fix drag and drop from outside problem
-			}
-		);
-	});
-});
-*/
-CKEDITOR.on('dialogDefinition', function(ev) { // fix image src on OK when insert Image in textarea + Removed input for width and hegight image
-	var dialogName = ev.data.name;
-	var dialogDefinition = ev.data.definition;
-	if(dialogName == 'image') {
-		var infoTab = dialogDefinition.getContents('info');
-		var advancedTab = dialogDefinition.getContents('advanced');
-		var styleField = advancedTab.get('txtdlgGenStyle');
-		styleField['default'] = 'max-width:100%!important;';
-		dialogDefinition.removeContents( 'Link' ); // Remove Link Tab From Image Dialog popup
-		infoTab.remove('basic'); // remove alignment from Image Info tab
-		advancedTab.remove('linkId'); // remove linkid from Image Advanced tab
-		advancedTab.remove('cmbLangDir'); // remove language dir from Image Advanced tab
-		advancedTab.remove('txtLangCode'); // remove language code from Image Advanced tab
-		advancedTab.remove('txtGenLongDescr'); // remove long title description from Image Advanced tab
-		var onOk = dialogDefinition.onOk;
-		dialogDefinition.onOk = function(e) {
-			var input = this.getContentElement('info', 'txtAlt');
-			var inputTitle = this.getContentElement('advanced', 'txtGenTitle');
-			var imageSrcUrl = input.getValue();
-			inputTitle.setValue(imageSrcUrl); // manipulate imageSrcUrl and set it
-			onOk && onOk.apply(this, e);
-		};
-	} //end if
-});
 //--
 
 //--
@@ -120,6 +81,53 @@ function Smart_CKEditor_Activate_HTML_AREA(id, width, height, allowScripts, allo
 	if((typeof controls != 'undefined') && (controls != null) && (controls !== '')) {
 		options['controls'] = controls;
 	} //end if
+	CKEDITOR.on('instanceReady', function(ev) {
+		ev.editor.dataProcessor.writer.selfClosingEnd = '>'; // fix tag ends
+	});
+	//-- disable drag and drop from outside
+	var isCkEditorDragging = false;
+	CKEDITOR.on('instanceCreated', function(ev) {
+		ev.editor.on('contentDom', function() {
+			ev.editor.document.on('dragstart', function(e) {
+				isCkEditorDragging = true;
+			});
+			ev.editor.document.on('dragend', function(e) {
+				isCkEditorDragging = false;
+			});
+			ev.editor.document.on('drop', function(e) {
+				ev.editor.fire('change'); // required !!
+				if(!isCkEditorDragging) {
+					e.data.preventDefault(true); // fix drag and drop from outside problem
+				} //end if
+				isCkEditorDragging = false;
+			});
+		});
+	});
+	//-- fix image src on OK when insert Image in textarea + Removed input for width and hegight image
+	CKEDITOR.on('dialogDefinition', function(ev) {
+		var dialogName = ev.data.name;
+		var dialogDefinition = ev.data.definition;
+		if(dialogName == 'image') {
+			var infoTab = dialogDefinition.getContents('info');
+			var advancedTab = dialogDefinition.getContents('advanced');
+			var styleField = advancedTab.get('txtdlgGenStyle');
+			styleField['default'] = 'max-width:100%!important;';
+			dialogDefinition.removeContents( 'Link' ); // Remove Link Tab From Image Dialog popup
+			infoTab.remove('basic'); // remove alignment from Image Info tab
+			advancedTab.remove('linkId'); // remove linkid from Image Advanced tab
+			advancedTab.remove('cmbLangDir'); // remove language dir from Image Advanced tab
+			advancedTab.remove('txtLangCode'); // remove language code from Image Advanced tab
+			advancedTab.remove('txtGenLongDescr'); // remove long title description from Image Advanced tab
+			var onOk = dialogDefinition.onOk;
+			dialogDefinition.onOk = function(e) {
+				var input = this.getContentElement('info', 'txtAlt');
+				var inputTitle = this.getContentElement('advanced', 'txtGenTitle');
+				var imageSrcUrl = input.getValue();
+				inputTitle.setValue(imageSrcUrl); // manipulate imageSrcUrl and set it
+				onOk && onOk.apply(this, e);
+			};
+		} //end if
+	});
 	//--
 	the_editor = CKEDITOR.replace(id, options);  // will use the width and height of the textarea
 	//--

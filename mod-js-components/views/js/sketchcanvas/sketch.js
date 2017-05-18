@@ -1,7 +1,9 @@
 
 // jQuery Sketch
 // http://intridea.github.com/sketch.js/lib/sketch.js
-// v.170505
+// v.170517
+
+// unixman: #Fix: delegate() is deprecated since jQuery 3+
 
 (function($) {
 
@@ -54,7 +56,10 @@
 			this.action = [];
 			this.canvas.bind('click mousedown mouseup mousemove mouseleave mouseout touchstart touchmove touchend touchcancel', this.onEvent);
 			if (this.options.toolLinks) {
-				$('body').delegate("a[href=\"#" + (this.canvas.attr('id')) + "\"]", 'click', function(e) {
+				//-- unixman: #Fix: delegate() is deprecated since jQuery 3+
+				//$('body').delegate("a[href=\"#" + (this.canvas.attr('id')) + "\"]", 'click', function(e) {
+				$('body').on('click', "a[href=\"#" + (this.canvas.attr('id')) + "\"]", function(e) {
+				//-- #end fix
 					var $canvas, $this, key, sketch, _i, _len, _ref;
 					$this = $(this);
 					$canvas = $($this.attr('href'));
