@@ -19,6 +19,8 @@
  * require('jspdf.js'); require('lib/css_colors.js');
  */
 
+// contain js syntax fixes by unixman (failed with node-js lint)
+
 (function (jsPDFAPI) {
 	'use strict';
 
@@ -132,7 +134,7 @@
 			// get the decimal values of r, g, and b;
 			var r, g, b, a;
 			if (!style) {
-				return {r: 0, g: 0, b: 0, a: 0, style};
+				return {r: 0, g: 0, b: 0, a: 0, style:null};
 			}
 
 			if (this.internal.rxTransparent.test(style)) {
@@ -183,7 +185,7 @@
 					}
 				}
 			}
-			return {r, g, b, a, style};
+			return {r:r, g:g, b:b, a:a, style:style};
 		},
 
 		setFillStyle: function (style) {
@@ -260,7 +262,7 @@
 			}
 
 			// In some cases the transform was very small (5.715760606202283e-17).  Most likely a canvg rounding error.
-			if (scale < .01) {
+			if (scale < 0.01) {
 				this.pdf.text(text, x, this._getBaseline(y), null, degs);
 			}
 			else {
