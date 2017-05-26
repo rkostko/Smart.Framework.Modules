@@ -80,6 +80,9 @@ public $pict_delete;				// path to delete icon
 //-- counter for items [private]
 public $gallery_show_counter;		// can be: full/yes/no
 public $gallery_items;				// register the number of gallery items
+//-- gallery viewer
+public $gallery_img_link_attr = 'data-slimbox="slimbox" rel="nofollow"'; // can also be: 'class="swipebox"', ...
+public $gallery_mov_link_attr = 'data-smart="open.modal 780 475 1" rel="nofollow"';
 //--
 //=====================================================================
 
@@ -433,7 +436,7 @@ private function img_conform_create($y_file, $y_newfile) {
 
 //===================================================================== [OK]
 /**
- * [PRIVATE] Draw a box for one Image Preview with link to Image, using SlimBox
+ * [PRIVATE] Draw a box for one Image Preview with link to Image
  *
  * @param RELATIVEPATH $y_big_img_file
  * @return HTML Code
@@ -478,7 +481,7 @@ private function img_draw_box($y_dir, $y_big_img_file) {
 		$description = '';
 	} //end if
 	//--
-	$out .= '<a data-slimbox="slimbox" rel="nofollow" href="'.\Smart::escape_html($the_img).'" target="_blank" '.'title="'.$description.'"'.'>';
+	$out .= '<a '.$this->gallery_img_link_attr.' href="'.\Smart::escape_html($the_img).'" target="_blank" '.'title="'.$description.'"'.'>';
 	$out .= '<img src="'.\Smart::escape_html($the_preview).'" border="0" alt="'.$description.'" title="'.$description.'"'.$forced_dim.'>';
 	$out .= '</a>';
 	//--
@@ -570,7 +573,7 @@ private function mov_draw_box($y_dir, $y_video_file, $y_type) {
 		$description = '';
 	} //end if
 	//--
-	$out .= '<a data-smart="open.modal 780 475 1" rel="nofollow" href="'.$link.'" target="media-gallery-movie-player" '.'title="'.$description.'"'.'>';
+	$out .= '<a '.$this->gallery_mov_link_attr.' href="'.$link.'" target="media-gallery-movie-player" '.'title="'.$description.'"'.'>';
 	$out .= '<img src="'.\Smart::escape_html($the_preview).'" border="0" alt="'.$description.'" title="'.$description.'"'.$forced_dim.'>';
 	$out .= '</a>';
 	//--
