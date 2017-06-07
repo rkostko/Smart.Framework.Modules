@@ -5,7 +5,7 @@
 
 // DEPENDS: jQuery, SmartJS_CoreUtils, SmartJS_BrowserUtils, jQueryUI, jQuery.UI.ListSelect, jQuery.UI.TimePicker
 
-// v.170407
+// v.170607
 
 // ! To use jQueryUI bindings for Smart.Framework load this instead of lib/js/jquery/jquery.smartframework.ui.js ; they are a drop-in replacements for LighJS-UI !
 
@@ -92,7 +92,7 @@ this.DialogAlert = function(y_message_html, evcode, y_title, y_width, y_height) 
 								eval('(function(){ ' + evcode + ' })();'); // sandbox
 							} //end if else
 						} catch(err) {
-							console.log('ERROR: JS-Eval Error on BrowserUI DialogAlert Function' + '\nDetails: ' + err);
+							console.error('ERROR: JS-Eval Error on BrowserUI DialogAlert Function' + '\nDetails: ' + err);
 						} //end try catch
 					} //end if
 					//--
@@ -179,7 +179,7 @@ this.DialogConfirm = function(y_question_html, evcode, y_title, y_width, y_heigh
 								eval('(function(){ ' + evcode + ' })();'); // sandbox
 							} //end if else
 						} catch(err) {
-							console.log('ERROR: JS-Eval Error on BrowserUI DialogConfirm Function' + '\nDetails: ' + err);
+							console.error('ERROR: JS-Eval Error on BrowserUI DialogConfirm Function' + '\nDetails: ' + err);
 						} //end try catch
 					} //end if
 					//--
@@ -237,7 +237,7 @@ this.Smart_SelectList = function(elemID, dimW, dimH, allowMulti, useFilter) {
 						} //end if
 					} //end if else
 				} catch(err) {
-					console.log('ERROR: JS-Eval Error on Smart-SelectList: ' + elemID + '\nDetails: ' + err);
+					console.error('ERROR: JS-Eval Error on Smart-SelectList: ' + elemID + '\nDetails: ' + err);
 				} //end try catch
 			} //end if
 			//--
@@ -299,7 +299,7 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 				} //end if
 			} catch(err) {
 				console.log('Date conversion is not supported by the browser. Using ISO Date');
-			}
+			} //end try catch
 			$('#date-entry-' + elemID).val(altdate);
 			//--
 			if((typeof evcode != 'undefined') && (evcode != 'undefined') && (evcode != null) && (evcode != '')) {
@@ -310,7 +310,7 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 						eval('(function(){ ' + evcode + ' })();'); // sandbox
 					} //end if else
 				} catch(err) {
-					console.log('ERROR: JS-Eval Error on DatePicker: ' + elemID + '\nDetails: ' + err);
+					console.error('ERROR: JS-Eval Error on DatePicker: ' + elemID + '\nDetails: ' + err);
 				} //end try catch
 			} //end if
 			//--
@@ -379,7 +379,7 @@ this.Time_Picker_Init = function(elemID, hStart, hEnd, mStart, mEnd, mInterval, 
 							eval('(function(){ ' + evcode + ' })();'); // sandbox
 						} //end if else
 					} catch(err) {
-						console.log('ERROR: JS-Eval Error on TimePicker: ' + elemID + '\nDetails: ' + err);
+						console.error('ERROR: JS-Eval Error on TimePicker: ' + elemID + '\nDetails: ' + err);
 					} //end try catch
 				} //end if
 			} //end if
@@ -519,7 +519,7 @@ this.AutoCompleteField = function(single_or_multi, elem_id, data_url, var_term, 
 			ajax.done(function(msg) { // {{{JQUERY-AJAX}}}
 				response(msg); // this will bind json to the autocomplete
 			}).fail(function(msg) {
-				console.log('UI.AutoCompleteField: FAILED to fetch results for Element: ' + elem_id);
+				console.error('UI.AutoCompleteField: FAILED to fetch results for Element: ' + elem_id);
 			});
 		},
 		search: function() {
@@ -545,7 +545,7 @@ this.AutoCompleteField = function(single_or_multi, elem_id, data_url, var_term, 
 					HtmlElement.val(value); // on select replace element value with the selected item
 				} //end if else
 			} catch(err) {
-				console.log('UI.AutoCompleteField: ERROR ... could not bind value to Element: ' + elem_id);
+				console.error('UI.AutoCompleteField: ERROR ... could not bind value to Element: ' + elem_id);
 			}
 			if((typeof evcode != 'undefined') && (evcode != 'undefined') && (evcode != null) && (evcode != '')) {
 				try {
@@ -555,7 +555,7 @@ this.AutoCompleteField = function(single_or_multi, elem_id, data_url, var_term, 
 						eval('(function(){ ' + evcode + ' })();'); // sandbox
 					} //end if else
 				} catch(err) {
-					console.log('UI.AutoCompleteField ERROR: JS-Eval Error on Element: ' + elem_id + '\nDetails: ' + err);
+					console.error('UI.AutoCompleteField ERROR: JS-Eval Error on Element: ' + elem_id + '\nDetails: ' + err);
 				} //end try catch
 			}
 			return false;
