@@ -29,7 +29,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP CURL, PHP OpenSSL (optional, just for HTTPS) ; classes: Smart
- * @version 	v.160921
+ * @version 	v.170613
  * @package 	Network:CURL
  *
  */
@@ -67,6 +67,8 @@ final class SmartCurlHttpFtpClient {
 	private $url_parts = array();							// URL Parts
 	private $method = 'GET';								// method: GET / POST / HEAD / PUT / DELETE ...
 	private $no_content_stop_if_unauth = true;				// Return no Content (response body) if Not Auth (401)
+	//--
+	private $cafile = '';									// Certificate Authority File (instead of using the global SMART_FRAMEWORK_SSL_CA_FILE can use a private cafile
 	//--
 	//==============================================
 
@@ -110,6 +112,16 @@ final class SmartCurlHttpFtpClient {
 		$this->no_content_stop_if_unauth = (bool) $y_no_content_stop_if_unauth;
 		//--
 
+	} //END FUNCTION
+	//==============================================
+
+
+	//==============================================
+	// [PUBLIC] :: set the SSL/TLS Certificate Authority File
+	public function set_ssl_tls_ca_file($cafile) {
+		//--
+		$this->cafile = (string) $cafile;
+		//--
 	} //END FUNCTION
 	//==============================================
 
@@ -378,11 +390,19 @@ final class SmartCurlHttpFtpClient {
 			//--
 			@curl_setopt($this->curl, CURLOPT_SSLVERSION, $browser_protocol);
 			//--
-			if(defined('SMART_FRAMEWORK_SSL_CA_PATH')) {
-				if((string)SMART_FRAMEWORK_SSL_CA_PATH != '') {
-					@curl_setopt($this->curl, CURLOPT_CAPATH, Smart::real_path((string)SMART_FRAMEWORK_SSL_CA_PATH));
+			$cafile = '';
+			if((string)$this->cafile != '') {
+				$cafile = (string) $this->cafile;
+			} elseif(defined('SMART_FRAMEWORK_SSL_CA_FILE')) {
+				if((string)SMART_FRAMEWORK_SSL_CA_FILE != '') {
+					$cafile = (string) SMART_FRAMEWORK_SSL_CA_FILE;
 				} //end if
 			} //end if
+			//--
+			if((string)$cafile != '') {
+				@curl_setopt($this->curl, CURLOPT_CAINFO, Smart::real_path((string)$cafile));
+			} //end if
+			//--
 			@curl_setopt($this->curl, CURLOPT_SSL_CIPHER_LIST, (string)SMART_FRAMEWORK_SSL_CIPHERS);
 			@curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, (bool)SMART_FRAMEWORK_SSL_VFY_PEER_NAME); // FIX: use vfy peer name instead of SMART_FRAMEWORK_SSL_VFY_HOST as there is no fine tunning here ...
 			@curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, (bool)SMART_FRAMEWORK_SSL_VFY_PEER);

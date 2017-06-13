@@ -14,7 +14,8 @@
 		[ "dynamicAnchors", "Dynamic Anchors" ],
 		[ "animation", "Animation" ],
 		[ "groups", "Groups" ],
-//		[ "fastConnectivity", "Fast Connectivity" ]
+		[ "designer", "Workflow Board" ],
+		[ "fastConnectivity", "Fast Connectivity" ],
 	];
 
 	jsPlumb.bind("ready", function () {

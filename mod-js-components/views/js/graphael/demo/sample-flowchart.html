@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Flowchart Diagrams - Demo</title>
+
+	<style type="text/css">
+		.end-element {
+			background-color: #FFCCFF;
+		}
+	</style>
+
+	<script src="../../../../../../lib/js/jquery/jquery.js" type="text/javascript"></script>
+	<script src="../raphael.js" type="text/javascript"></script>
+	<script src="../flowchart.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div>
+<select id="sel-list" onChange="$('#code').val($(this).val());">
+	<option value="st=&gt;start: Start|past:&gt;http://www.google.com[blank]
+e=&gt;end: End:&gt;http://www.google.com
+op1=&gt;operation: My Operation|past
+op2=&gt;operation: Stuff|current
+sub1=&gt;subroutine: My Subroutine|invalid
+cond=&gt;condition: Yes
+or No?|approved:&gt;http://www.google.com
+c2=&gt;condition: Good idea|rejected
+io=&gt;inputoutput: catch something...|request
+
+st-&gt;op1(right)-&gt;cond
+cond(yes, right)-&gt;c2
+cond(no)-&gt;sub1(left)-&gt;op1
+c2(yes)-&gt;io-&gt;e
+c2(no)-&gt;op2-&gt;e">Sample 1</option>
+	<option value="st=&gt;start: Start|past:&gt;http://www.google.com[blank]
+e=&gt;end: End|future:&gt;http://www.google.com
+op1=&gt;operation: My Operation|past
+op2=&gt;operation: Stuff|current
+sub1=&gt;subroutine: My Subroutine|invalid
+cond=&gt;condition: Yes
+or No?|approved:&gt;http://www.google.com
+c2=&gt;condition: Good idea|rejected
+io=&gt;inputoutput: catch something...|future
+
+st-&gt;op1(right)-&gt;cond
+cond(yes, right)-&gt;c2
+cond(no)-&gt;sub1(left)-&gt;op1
+c2(yes)-&gt;io-&gt;e
+c2(no)-&gt;op2-&gt;e">Sample 2</option>
+	<option value="st=&gt;start: Start:&gt;http://www.google.com[blank]
+e=&gt;end:&gt;http://www.google.com
+op1=&gt;operation: My Operation
+sub1=&gt;subroutine: My Subroutine
+cond=&gt;condition: Yes
+or No?:&gt;http://www.google.com
+io=&gt;inputoutput: catch something...
+
+st-&gt;op1-&gt;cond
+cond(yes)-&gt;io-&gt;e
+cond(no)-&gt;sub1(right)-&gt;op1">Sample 3</option>
+</select>
+<textarea id="code" style="width:99%;" rows="11"></textarea>
+</div>
+<div><button id="run" type="button">Render Flowchart Diagram</button></div>
+<div id="canvas"></div>
+<script>
+$(function() {
+
+	var btn = document.getElementById("run"),
+		cd = document.getElementById("code"),
+		chart;
+
+	(btn.onclick = function () {
+
+		var code = cd.value;
+
+		if(!code) {
+			return;
+		}
+
+		if(chart) {
+			chart.clean();
+		}
+
+		chart = flowchart.parse(code);
+		chart.drawSVG('canvas', {
+		  // 'x': 30,
+		  // 'y': 50,
+		  'line-width': 3,
+		  'maxWidth': 50,//ensures the flowcharts fits within a certian width
+		  'line-length': 50,
+		  'text-margin': 10,
+		  'font-size': 14,
+		  'font': 'normal',
+		  'font-family': 'Helvetica',
+		  'font-weight': 'normal',
+		  'font-color': 'black',
+		  'line-color': 'black',
+		  'element-color': 'black',
+		  'fill': 'white',
+		  'yes-text': 'yes',
+		  'no-text': 'no',
+		  'arrow-end': 'block',
+		  'scale': 1,
+		  'symbols': {
+			'start': {
+			  'font-color': 'red',
+			  'element-color': 'green',
+			  'fill': 'yellow'
+			},
+			'end':{
+			  'class': 'end-element'
+			}
+		  },
+		  'flowstate' : {
+			'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},
+			'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},
+			'future' : { 'fill' : '#FFFF99'},
+			'request' : { 'fill' : 'blue'},
+			'invalid': {'fill' : '#444444'},
+			'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },
+			'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }
+		  }
+		});
+
+		$('[id^=sub1]').click(function(){
+		  alert('info here');
+		});
+	})();
+
+	$('#sel-list').trigger('change');
+	$('#run').trigger('click');
+
+});
+</script>
+</body>
+</html>
