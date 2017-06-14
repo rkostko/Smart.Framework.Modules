@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170408
+ * @version 	v.170614
  * @package 	Database:Solr
  *
  */
@@ -156,7 +156,7 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
 	} //end if
 	//--
 	if(((string)$host == '') OR ((string)$port == '') OR ((string)$db == '') OR ((string)$timeout == '')) {
-		$this->error('Solr Configuration Init', 'Some Required Parameters are Empty', 'CHECK Connection Params');
+		throw new Exception('Solr Configuration Init: Some Required Parameters are Empty. CHECK the Connection Params ...'); // this must be catcheable exception !!!
 		return;
 	} //end if
 	//--
