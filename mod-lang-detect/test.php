@@ -1,0 +1,62 @@
+<?php
+// [@[#[!SF.DEV-ONLY!]#]@]
+// Controller: Lang Detect Test Sample
+// Route: ?/page/lang-detect.test (?page=lang-detect.test)
+// Author: unix-world.org
+// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
+
+//----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
+if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
+	die('Invalid Runtime Status in PHP Script: '.@basename(__FILE__).' ...');
+} //end if
+//-----------------------------------------------------
+
+define('SMART_APP_MODULE_AREA', 'SHARED'); // INDEX, ADMIN, SHARED
+
+/**
+ * Index Controller
+ *
+ * @ignore
+ *
+ */
+class SmartAppIndexController extends SmartAbstractAppController {
+
+	public function Run() {
+
+		//-- dissalow run this sample if not test mode enabled
+		if(SMART_FRAMEWORK_TEST_MODE !== true) {
+			$this->PageViewSetErrorStatus(500, 'ERROR: Test mode is disabled ...');
+			return;
+		} //end if
+		//--
+
+		//--
+		//$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams($this->ControllerGetParam('module-path').'libs/data-1-3-20k', ['en']);
+		//$lndet->setMaxNgrams(20000);
+		//--
+		$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams(); // default, 310 max Ngrams
+		//--
+		$text = SmartFileSystem::staticread($this->ControllerGetParam('module-path').'libs/data-1-3-310/en/en.txt');
+		//$arr = $lndet->detect($text);
+		$arr = $lndet->getLanguageConfidence($text);
+		//--
+
+		//--
+		$this->PageViewSetVars([
+			'title' => 'Sample Language Detection: nGrams',
+			'main' => '<h1>Language Detection Test:</h1><pre>'.Smart::escape_html(print_r($arr,1)).'</pre>'.'<hr>'.'<pre>'.Smart::escape_html($text).'</pre>'
+		]);
+		//--
+
+	} //END FUNCTION
+
+} //END CLASS
+
+class SmartAppAdminController extends SmartAppIndexController {
+
+	// this will clone the SmartAppIndexController to run exactly the same action in admin.php
+
+} //END CLASS
+
+//end of php code
+?>

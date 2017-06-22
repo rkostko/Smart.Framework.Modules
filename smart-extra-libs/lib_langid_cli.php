@@ -54,7 +54,7 @@ $configs['langid']['auth-pass']		= '';										// LangId.Py Service Auth Pass
  * @hints		If the DEFAULT settings are not available will simply fallback for not using any service.
  *
  * @depends 	classes: Smart, SmartHttpClient
- * @version 	v.161005
+ * @version 	v.170622
  * @package 	Services:LangId-Py
  *
  */
@@ -89,7 +89,7 @@ final class SmartLangIdClient {
 
 
 	/**
-	 * Checks the Language Confidence by trying to detect the correct language for a text using the LangId.Py Service.
+	 * Checks and Get the Language Confidence information for the best detected Language (from the available list) for a given text using the LangId.Py Service.
 	 * If LangId.Py is not set in configuration as it may not be available will return a negative confidence score and the default language: en.
 	 *
 	 * @param STRING $the_text						:: The text to be checked
