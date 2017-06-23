@@ -16,7 +16,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 
 
 //======================================================
-// Language Detection - Ngrams
+// Language Detection - Ngrams PHP
 // DEPENDS:
 //	* Smart::
 //	* SmartUnicode::
