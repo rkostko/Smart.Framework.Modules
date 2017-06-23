@@ -42,6 +42,8 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  */
 final class LanguageNgrams {
 
+	// v.170623
+
 
 	/**
 	 * @var int
@@ -58,7 +60,7 @@ final class LanguageNgrams {
 	/**
 	 * @var int
 	 */
-	private $maxNgrams = 310; // default is 310
+	private $maxNgrams = 930; // default is 310, but inefficient, thus increase 3x
 
 
 	/**
@@ -73,7 +75,7 @@ final class LanguageNgrams {
 	 * @param STRING 		$ngrams_path 		The path to the resources or NULL if only need to train
 	 * @param ARRAY 		$lang 				The Array of languages to detect for OR an empty array to try detect all available languages
 	 */
-	public function __construct($ngrams_path='modules/mod-lang-detect/libs/data-1-3-310', $lang=[]) {
+	public function __construct($ngrams_path='modules/mod-lang-detect/libs/data-1-3-930', $lang=[]) {
 
 		if($ngrams_path === null) {
 			return;
@@ -157,16 +159,14 @@ final class LanguageNgrams {
 	 */
 	public function detect($str) {
 
-		$str = (string) \SmartUnicode::str_tolower((string)$str);
-
 		$ngrams = (array) $this->getNgrams($str);
 
 		$result = [];
 		if(count($ngrams) > 0) {
-			foreach ($this->tokens as $lang => $value) {
+			foreach($this->tokens as $lang => $value) {
 				$index = $sum = 0;
 				$value = array_flip($value);
-				foreach($ngrams as $v) {
+				foreach($ngrams as $k => $v) {
 					if(isset($value[$v])) {
 						$x = $index++ - $value[$v];
 						$y = $x >> (PHP_INT_SIZE * 8);
@@ -226,15 +226,15 @@ final class LanguageNgrams {
 	 */
 	public function getNgrams($str) {
 
-		$str = (string) $str;
+		$str = (string) \SmartUnicode::str_tolower((string)$str);
 
 		$tokens = [];
 
 		foreach($this->tokenize($str) as $k => $word) {
-			$l = mb_strlen($word);
+			$l = \SmartUnicode::str_len($word);
 			for($i=$this->minLength; $i<=$this->maxLength; ++$i) {
 				for($j=0; ($i+$j-1) < $l; ++$j, ++$tmp) {
-					$tmp =& $tokens[$i][mb_substr($word, $j, $i)];
+					$tmp =& $tokens[$i][(string)\SmartUnicode::sub_str($word, $j, $i)];
 				} //end for
 			} //end for
 		} //end foreach
@@ -246,7 +246,7 @@ final class LanguageNgrams {
 		foreach($tokens as $i => $token) {
 			$sum = array_sum($token);
 			foreach($token as $j => $value) {
-				$tokens[$i][$j] = number_format($value / $sum, 12, '.', '');
+				$tokens[$i][$j] = \Smart::format_number_dec($value / $sum, 12, '.', '');
 			} //end foreach
 		} //end foreach
 
@@ -355,17 +355,49 @@ final class LanguageNgrams {
 
 /***** Sample Usage:
 
-// DETECT
+//--
+//##### DETECT
+//--
 $lndet = new \SmartModExtLib\LangDetect\LanguageNgrams();
 $lndet->setMaxNgrams(20000);
 $arr = $lndet->detect(SmartFileSystem::staticread('ngrams-res/en/en.txt'));
 print_r($arr); die();
+//--
 
-// TRAIN
-$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams(null);
-$lndet->setMaxNgrams(20000);
-$arr = $lndet->train('eng', \SmartFileSystem::staticread('ngrams-resources/eng/eng20k.txt'));
-print_r($arr); die();
+//--
+//##### TRAIN
+//--
+$ngrams_path = 'modules/mod-lang-detect/libs/data-1-4-15k';
+//--
+$ngrams_path = \SmartFileSysUtils::add_dir_last_slash($ngrams_path);
+$jsons = array();
+$lang = array();
+$arr_fs = (array) (new \SmartGetFileSystem(true))->get_storage((string)$ngrams_path, false, false, '');
+if(\Smart::array_size($arr_fs['list-dirs']) > 0) {
+	$lang = (array) $arr_fs['list-dirs'];
+} //end if
+$arr_fs = array();
+//--
+if(\Smart::array_size($lang) > 0) {
+	for($i=0; $i<\Smart::array_size($lang); $i++) {
+		//--
+		$txt_file  = (string) \SmartFileSysUtils::add_dir_last_slash((string)$ngrams_path.\Smart::safe_filename((string)$lang[$i])).\Smart::safe_filename((string)$lang[$i]).'.txt';
+		$json_file = (string) \SmartFileSysUtils::add_dir_last_slash((string)$ngrams_path.\Smart::safe_filename((string)$lang[$i])).\Smart::safe_filename((string)$lang[$i]).'.json';
+		//--
+		$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams(null);
+		$lndet->setMaxNgrams(15000);
+		$lndet->setMinLength(1);
+		$lndet->setMaxLength(4);
+		$json_data = (string) $lndet->train((string)$lang[$i], \SmartFileSystem::staticread($txt_file));
+		//--
+		\SmartFileSystem::write($json_file, $json_data);
+		$jsons[] = $json_file;
+		//--
+	} //end for
+} //end if
+//--
+die('Training DONE for: '.$ngrams_path.'<pre>'.print_r($jsons,1).'</pre>');
+//--
 
 *****/
 

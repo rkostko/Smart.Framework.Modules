@@ -30,13 +30,21 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		} //end if
 		//--
 
+		//-- use default, 1-3-930
+		$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams();
 		//--
-		//$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams($this->ControllerGetParam('module-path').'libs/data-1-3-20k', ['en']);
-		//$lndet->setMaxNgrams(20000);
+
+		//-- or use enhanced but slower 1-4-15k
+		/*
+		$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams($this->ControllerGetParam('module-path').'libs/data-1-4-15k');
+		$lndet->setMaxNgrams(15000);
+		$lndet->setMinLength(1);
+		$lndet->setMaxLength(4);
+		*/
 		//--
-		$lndet = new \SmartModExtLib\LangDetect\LanguageNgrams(); // default, 310 max Ngrams
+
 		//--
-		$text = SmartFileSystem::staticread($this->ControllerGetParam('module-path').'libs/data-1-3-310/en/en.txt');
+		$text = SmartFileSystem::staticread($this->ControllerGetParam('module-path').'libs/data-1-3-930/en/en.txt');
 		//$arr = $lndet->detect($text);
 		$arr = $lndet->getLanguageConfidence($text);
 		//--
