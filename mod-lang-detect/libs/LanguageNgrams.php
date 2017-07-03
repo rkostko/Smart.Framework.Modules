@@ -226,7 +226,39 @@ final class LanguageNgrams {
 	 */
 	public function getNgrams($str) {
 
-		$str = (string) \SmartUnicode::str_tolower((string)$str);
+		$str = (string) str_replace(
+			[
+				'_', // special character used by tokenize
+				'~',
+				'@',
+				'#',
+				'^',
+				'&',
+				'*',
+				'+',
+				'=',
+				'(',
+				')',
+				'[',
+				']',
+				'{',
+				'}',
+				';',
+				':',
+				'"',
+				'.',
+				'<',
+				'>',
+				',',
+				'/',
+				'!',
+				'?'
+			],
+			' ',
+			(string) $str
+		); // replace non-alphabet characters
+
+		$str = (string) \SmartUnicode::str_tolower((string)$str); // make all lowercase
 
 		$tokens = [];
 
