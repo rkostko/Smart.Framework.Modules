@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170614
+ * @version 	v.170705
  * @package 	Database:Solr
  *
  */
@@ -266,7 +266,7 @@ public function __destruct() {
  *			]
  *
  */
-public function findQuery($y_query, $y_options=array('settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array())) {
+public function findQuery($y_query, $y_options=array('settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array(), 'boost'=>array())) {
 	//--
 	$connect = $this->solr_connect();
 	//--
@@ -278,12 +278,12 @@ public function findQuery($y_query, $y_options=array('settings' => array(), 'sor
 		//--
 	} //end if
 	//--
-	$query = new SolrQuery();
-	$query->setQuery(SolrUtils::escapeQueryChars("'".$y_query)."'");
+	$query = new SolrDisMaxQuery(); // SolrQuery();
+	$query->setQuery('"'.SolrUtils::escapeQueryChars($y_query).'"');
 	if(Smart::array_size($y_options['settings']) > 0) {
 		foreach($y_options['settings'] as $key => $val) {
 			$method = ucfirst(strtolower($key));
-			$query->{'set'.$method}($val);
+			$query->{'set'.$method}($val); // ex: setStart, setRows
 		} //end for
 	} //end if
 	if(Smart::array_size($y_options['sort']) > 0) {
@@ -312,6 +312,16 @@ public function findQuery($y_query, $y_options=array('settings' => array(), 'sor
 			$query->addField((string)$y_options['fields'][$i]);
 		} //end for
 	} //end if
+	$have_boost = false;
+	if(Smart::array_size($y_options['boost']) > 0) {
+		$have_boost = true;
+		foreach($y_options['boost'] as $key => $val) {
+			//echo 'Boost Query: '.(string)$key.' / '.(float)$val.'<br>';
+			$query->addQueryField((string)$key, (float)$val);
+		} //end for
+	} //end if
+	//echo (string)$query;
+	//--
 	try {
 		//--
 		$response = $this->instance->query($query);
