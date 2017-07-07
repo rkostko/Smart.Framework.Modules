@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170705
+ * @version 	v.170707
  * @package 	Database:Solr
  *
  */
@@ -250,6 +250,7 @@ public function __destruct() {
 /* Options sample:
  *
  *			[
+ * 			'mode' => 'phrase', // and | or
  *			'settings' => [
  *				'start' 			=> 0,
  *				'rows' 				=> 4,
@@ -262,11 +263,15 @@ public function __destruct() {
  *					'category' => 'My Categ',
  *					'subcategory' => 'My Sub-Categ'
  *				],
- *				'fields' => [] // default, add all
+ *				'fields' => [], // default, add all
+ * 				'boost' => [ // optional boost search
+ * 					'name' => 5,
+ * 					'descr' => 10
+ * 				]
  *			]
  *
  */
-public function findQuery($y_query, $y_options=array('settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array(), 'boost'=>array())) {
+public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array(), 'boost'=>array())) {
 	//--
 	$connect = $this->solr_connect();
 	//--
@@ -279,7 +284,31 @@ public function findQuery($y_query, $y_options=array('settings' => array(), 'sor
 	} //end if
 	//--
 	$query = new SolrDisMaxQuery(); // SolrQuery();
-	$query->setQuery('"'.SolrUtils::escapeQueryChars($y_query).'"');
+	//--
+	$y_query = (string) Smart::normalize_spaces((string)$y_query);
+	$expr = (array) explode(' ', (string)trim((string)$y_query));
+	$qmode = (string) strtoupper((string)trim((string)$y_options['mode']));
+	switch((string)$qmode) {
+		case 'OR':
+		case 'AND':
+			$qexpr = array();
+			for($i=0; $i<Smart::array_size($expr); $i++) {
+				$expr[$i] = (string) trim((string)$expr[$i]);
+				if((string)$expr[$i] != '') {
+					$qexpr[] = '"'.SolrUtils::escapeQueryChars((string)$expr[$i]).'"';
+				} //end if
+			} //end for
+			if(Smart::array_size($qexpr) > 0) {
+				$query->setQuery((string)implode(' '.$qmode.' ', (array)$qexpr));
+			} //end if
+			$qexpr = array(); // free mem
+			break;
+		case 'PHRASE': // CI exact match
+		default:
+			$query->setQuery('"'.SolrUtils::escapeQueryChars((string)$y_query).'"');
+	} //end switch
+	$expr = array(); // free mem
+	//--
 	if(Smart::array_size($y_options['settings']) > 0) {
 		foreach($y_options['settings'] as $key => $val) {
 			$method = ucfirst(strtolower($key));
@@ -344,9 +373,10 @@ public function findQuery($y_query, $y_options=array('settings' => array(), 'sor
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 			'type' => 'nosql',
-			'data' => 'FIND-QUERY: '.$y_query,
+			'data' => 'FIND-QUERY: `'.$y_query.'`',
 			'command' => $y_options,
-			'time' => Smart::format_number_dec($time_end, 9, '.', '')
+			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
+			'connection' => (string) $response->getRequestUrl().'&'.$query
 		]);
 		//--
 	} //end if
@@ -464,7 +494,8 @@ public function addDocument($arrdoc, $use_autocommit=0) {
 			'type' => 'nosql',
 			'data' => 'ADD-UPDATE-QUERY',
 			'command' => $arrdoc,
-			'time' => Smart::format_number_dec($time_end, 9, '.', '')
+			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
+			'connection' => (string) $updateResponse->getRequestUrl()
 		]);
 		//--
 	} //end if
@@ -544,8 +575,9 @@ public function deleteDocument($id) {
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 			'type' => 'nosql',
 			'data' => 'DELETE-QUERY',
-			'command' => array('ID' => (string)$id),
-			'time' => Smart::format_number_dec($time_end, 9, '.', '')
+			'command' => [ 'ID' => (string)$id ],
+			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
+			'connection' => (string) $updateResponse->getRequestUrl()
 		]);
 		//--
 	} //end if
