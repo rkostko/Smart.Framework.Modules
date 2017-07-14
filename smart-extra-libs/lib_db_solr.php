@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170707
+ * @version 	v.170713
  * @package 	Database:Solr
  *
  */
@@ -267,11 +267,24 @@ public function __destruct() {
  * 				'boost' => [ // optional boost search
  * 					'name' => 5,
  * 					'descr' => 10
+ * 				],
+ * 				'mlt' => [
+ * 					'id' => 'id_field',
+ * 					'min-doc-frequency' => 1,
+ * 					'min-term-frequency' => 1,
+ * 					'min-word-length' => 0,
+ * 					'max-word-length' => 0,
+ * 					'max-num-tokens' => 0,
+ * 					'boost' => false,
+ * 					'fields' => [
+ * 						'descr',
+ * 						'extra',
+ * 					]
  * 				]
  *			]
  *
  */
-public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array(), 'boost'=>array())) {
+public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settings' => array(), 'sort' => array(), 'filters' => array(), 'facets' => array(), 'fields' => array(), 'boost'=>array(), 'mlt'=>array())) {
 	//--
 	$connect = $this->solr_connect();
 	//--
@@ -288,7 +301,52 @@ public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settin
 	$y_query = (string) Smart::normalize_spaces((string)$y_query);
 	$expr = (array) explode(' ', (string)trim((string)$y_query));
 	$qmode = (string) strtoupper((string)trim((string)$y_options['mode']));
+	$have_mlt = false;
 	switch((string)$qmode) {
+		case 'MLT': // more like this
+			if(Smart::array_size($y_options['mlt']) <= 0) { // more like this
+				Smart::log_warning('Solr Query: Invalid MLT Definition');
+				return array(); // connection errors will be threated silently as Solr is a remote service
+			} //end if
+			if((string)$y_options['mlt']['id'] == '') {
+				Smart::log_warning('Solr Query: Invalid MLT ID Field');
+				return array(); // connection errors will be threated silently as Solr is a remote service
+			} //end if
+			$mlt_mindocfreq  = Smart::format_number_int((int)$y_options['mlt']['min-doc-frequency'], '+');
+			if($mlt_mindocfreq < 1) {
+				$mlt_mindocfreq = 1;
+			} //end if
+			$mlt_mintermfreq = Smart::format_number_int((int)$y_options['mlt']['min-term-frequency'], '+');
+			if($mlt_mintermfreq < 1) {
+				$mlt_mintermfreq = 1;
+			} //end if
+			$mlt_min_word_length = Smart::format_number_int((int)$y_options['mlt']['min-word-length'], '+');
+			$mlt_max_word_length = Smart::format_number_int((int)$y_options['mlt']['max-word-length'], '+');
+			$mlt_max_num_tokens = Smart::format_number_int((int)$y_options['mlt']['max-num-tokens'], '+');
+			$have_mlt = true;
+			$query->setMlt(true);
+			$query->setMltMinDocFrequency((int)$mlt_mindocfreq);
+			$query->setMltMinTermFrequency((int)$mlt_mintermfreq);
+			if((int)$mlt_min_word_length > 0) {
+				$query->setMltMinWordLength((int)$mlt_min_word_length);
+			} //end if
+			if((int)$mlt_max_word_length > 0) {
+				$query->setMltMaxWordLength((int)$mlt_max_word_length);
+			} //end if
+			if((int)$mlt_max_num_tokens > 0) {
+				$query->setMltMaxNumTokens((int)$mlt_max_num_tokens);
+			} //end if
+			if($y_options['mlt']['boost'] === true) {
+				$query->setMltBoost(true);
+			} //end if
+			$query->setMltCount(Smart::format_number_int($y_options['settings']['rows'],'+'));
+			$query->setQuery($y_options['mlt']['id'].':"'.SolrUtils::escapeQueryChars((string)$y_query).'"');
+			if(Smart::array_size($y_options['mlt']['fields']) > 0) {
+				for($i=0; $i<Smart::array_size($y_options['mlt']['fields']); $i++) {
+					$query->addMltField((string)$y_options['mlt']['fields'][$i]);
+				} //end for
+			} //end if
+			break;
 		case 'OR':
 		case 'AND':
 			$qexpr = array();
@@ -345,10 +403,16 @@ public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settin
 	if(Smart::array_size($y_options['boost']) > 0) {
 		$have_boost = true;
 		foreach($y_options['boost'] as $key => $val) {
-			//echo 'Boost Query: '.(string)$key.' / '.(float)$val.'<br>';
-			$query->addQueryField((string)$key, (float)$val);
+			if($have_mlt) {
+				//echo 'MLT Boost Query: '.(string)$key.' / '.(float)$val.'<br>';
+				$query->addMltQueryField((string)$key, (float)$val);
+			} else {
+				//echo 'Boost Query: '.(string)$key.' / '.(float)$val.'<br>';
+				$query->addQueryField((string)$key, (float)$val);
+			} //end if else
 		} //end for
 	} //end if
+	//--
 	//echo (string)$query;
 	//--
 	try {
@@ -413,16 +477,33 @@ public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settin
 		return array(); // connection errors will be threated silently as Solr is a remote service
 	} //end if
 	//--
-	if(!is_array($data['response']->docs)) {
-		$this->error('Solr Query', 'Invalid Response Document Format', $y_query);
-		return array();
-	} //end if
-	//--
+	$out = array('header' => $data['responseHeader'], 'total' => (int)$data['response']->numFound, 'docs' => array());
 	if(($have_facets) AND is_object($data['facet_counts'])) {
-		return array('header' => $data['responseHeader'], 'total' => (int)$data['response']->numFound, 'docs' => (array)$data['response']->docs, 'facets' => (array)$data['facet_counts']->facet_fields);
-	} else {
-		return array('header' => $data['responseHeader'], 'total' => (int)$data['response']->numFound, 'docs' => (array)$data['response']->docs);
+		$out['facets'] = (array) $data['facet_counts']->facet_fields;
 	} //end if else
+	//--
+	if($have_mlt) {
+		if(!is_array($data->moreLikeThis)) {
+			$this->error('Solr Query', 'Invalid Response MLT Data Format', $y_query);
+			return array();
+		} //end if
+		foreach((array)$data->moreLikeThis as $key => $val) {
+			if(!is_array($val->docs)) {
+				$this->error('Solr Query', 'Invalid Response MLT Document Format', $y_query);
+				return array();
+			} //end if
+			$out['docs'] = (array) $val->docs;
+			break;
+		} //end foreach
+	} else {
+		if(!is_array($data['response']->docs)) {
+			$this->error('Solr Query', 'Invalid Response Document Format', $y_query);
+			return array();
+		} //end if
+		$out['docs'] = (array) $data['response']->docs;
+	} //end if else
+	//--
+	return (array) $out;
 	//--
 } //END FUNCTION
 //======================================================
