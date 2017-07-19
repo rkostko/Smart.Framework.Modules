@@ -105,6 +105,9 @@ gantt.getMarker(markerId);
 
 		$("#mygantt").dhx_gantt({
 			data: demo_tasks,
+			start_date: new Date(2017, 5-1, 1),
+			end_date: new Date(2017, 6-1, 1),
+			scale_unit: 'day', // day, week, month
 			//grid_width: 0, // disable right grid
 			//scale_unit: "week",
 			//step:1,
@@ -119,5 +122,5 @@ gantt.getMarker(markerId);
 
 	</script>
 </div>
-<button onClick="console.log(gantt.serialize());" style="position:fixed; top:15px; right:105px;">Save Data (view console)</button>
+<button onClick="console.log(JSON.stringify(gantt.serialize()));" style="position:fixed; top:15px; right:105px;">Save Data (view console)</button>
 </body>

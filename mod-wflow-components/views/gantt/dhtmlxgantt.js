@@ -1,5 +1,5 @@
 
-// dhtmlxGantt v.3.2.1.uxm.170507
+// dhtmlxGantt v.3.2.1.uxm.170715
 // License: GPL v2
 // (c) 2015 Dinamenta, UAB.
 // (c) 2015-2017 unix-world.org
@@ -7,6 +7,7 @@
 modified by unixman:
 	- add types: project, milestone
 	- removed all unusable (garbage) code
+	- enhanced task add / edit
 */
 
 if (typeof(window.dhx4) == "undefined") {
@@ -691,7 +692,7 @@ if(!window.dhtmlx)
 	};
 })();
 gantt = {
-	version:"3.2.1.uxm.170507"
+	version:"3.2.1.uxm.170715"
 };
 
 /*jsl:ignore*/
@@ -1207,7 +1208,7 @@ gantt._calc_grid_width = function () {
 		for (var i = 0; i < width.length; i++) {
 			columns[i].width = width[i];
 		}
-	}else{
+	} else {
 		this.config.grid_width = cols_width;
 	}
 };
@@ -2091,10 +2092,13 @@ gantt._tasks_dnd = {
 					return false;
 				}
 
-				if(gantt._is_flex_task(task) && drag.mode != gantt.config.drag_mode.progress){//only progress drag is allowed for tasks with flexible duration
+				//-- uxm: allow drag flextask ; change this to not allow drag closed tasks
+			//	if(gantt._is_flex_task(task) && drag.mode != gantt.config.drag_mode.progress){//only progress drag is allowed for tasks with flexible duration
+				if(!task.open && drag.mode != gantt.config.drag_mode.progress){//only progress drag is allowed for tasks with flexible duration
 					this.clear_drag_state();
 					return;
 				}
+				//-- #uxm
 
 				drag.id = id;
 				var pos = gantt._get_mouse_pos(e);
@@ -3471,29 +3475,33 @@ gantt._combine_item_class = function(basic, template, itemId){
 		css.push("gantt_project");
 	}
 
-	if(this._is_flex_task(task))
+	if(this._is_flex_task(task)) {
 		css.push("gantt_dependent_task");
+	}
 
-	if(this.config.select_task && itemId == state.selected_task)
+	if(this.config.select_task && itemId == state.selected_task) {
 		css.push("gantt_selected");
+	}
 
-	if(itemId == state.drag_id){
+	if(itemId == state.drag_id) {
 		css.push("gantt_drag_" + state.drag_mode);
 		if(state.touch_drag){
 			css.push("gantt_touch_" + state.drag_mode);
 		}
 	}
 	var links = gantt._get_link_state();
-	if(links.link_source_id == itemId)
+	if(links.link_source_id == itemId) {
 		css.push("gantt_link_source");
+	}
 
-	if(links.link_target_id == itemId)
+	if(links.link_target_id == itemId) {
 		css.push("gantt_link_target");
-
+	}
 
 	if(this.config.highlight_critical_path && this.isCriticalTask){
-		if(this.isCriticalTask(task))
+		if(this.isCriticalTask(task)) {
 			css.push("gantt_critical_task");
+		}
 	}
 
 	if(links.link_landing_area &&
@@ -4873,12 +4881,14 @@ gantt.createTask = function(item, parent){
 		this.setParent(item, parent);
 		parent = this.getTask(parent);
 		parent.$open = true;
+	} else {
+		item.type = 'project';
 	}
 
 	if(!this.callEvent("onTaskCreated", [item])){
 		return null;
 	}
-	if (this.config.details_on_create){
+//	if (this.config.details_on_create){
 		item.$new = true;
 		this._pull[item.id] = this._init_task(item);
 
@@ -4887,12 +4897,12 @@ gantt.createTask = function(item, parent){
 		this.selectTask(item.id);
 		this.refreshData();
 		this.showLightbox(item.id);
-	}else{
-		if (this.addTask(item)){
-			this.showTask(item.id);
-			this.selectTask(item.id);
-		}
-	}
+//	}else{
+//		if (this.addTask(item)){
+//			this.showTask(item.id);
+//			this.selectTask(item.id);
+//		}
+//	}
 	return item.id;
 };
 
@@ -5070,6 +5080,9 @@ gantt._get_safe_type = function(type){
 		case 'project':
 			realType = 'project';
 			break;
+		case 'flextask':
+			realType = 'flextask';
+			break;
 		case 'task':
 		default:
 			realType = 'task';
@@ -5167,11 +5180,12 @@ gantt._init_task = function(task){
 };
 
 gantt._init_task_timing = function(task){
+
 	var task_type = this._get_safe_type(task.type);
 
-	if(task.$rendered_type === undefined){
+	if(task.$rendered_type === undefined) {
 		task.$rendered_type = task_type;
-	}else if(task.$rendered_type != task_type){
+	} else if(task.$rendered_type != task_type) {
 		delete task.$no_end;
 		delete task.$no_start;
 		task.$rendered_type = task_type;
@@ -5182,7 +5196,12 @@ gantt._init_task_timing = function(task){
 			//project duration is always defined by children duration
 			task.$no_end = task.$no_start = true;
 			this._set_default_task_timing(task);
-		}else{
+		} else if(task_type == this.config.types.flextask) {
+			//console.log(task.text);
+			task.$no_end = true;
+			task.$no_start = !task.start_date;
+			this._set_default_task_timing(task);
+		} else {
 			//tasks can have fixed duration, children duration(as projects), or one date fixed, and other defined by nested items
 			task.$no_end = !(task.end_date || task.duration);
 			task.$no_start = !task.start_date;
@@ -5196,17 +5215,38 @@ gantt._init_task_timing = function(task){
 		task.duration = this.calculateDuration(task.start_date, task.end_date);
 	}
 	task.duration = task.duration || 0;
+
+	//console.log(task.text + ': ' + task.duration + ' @ ' + task.type);
+
 };
 gantt._is_flex_task = function(task){
 	return !!(task.$no_end || task.$no_start);
 };
 
-// downward calculation of project duration
-gantt.resetProjectDates = function(task){
+// downward calculation of project duration: uxm
+gantt.resetProjectDates = function(task) {
 	if(task.$no_end || task.$no_start){
 		var dates = this.getSubtaskDates(task.id);
+		if(task.type == this.config.types.flextask) {
+			if(this.config.end_date) {
+				dates.end_date = this.config.end_date;
+			} else {
+				dates.end_date = this.calculateEndDate(task.start_date, 365);
+			}
+		} else if(task.type == this.config.types.project) {
+			if(dates.end_date === null) {
+				if(this.config.end_date) {
+					dates.end_date = this.config.end_date;
+				} else {
+					dates.end_date = this.calculateEndDate(task.start_date, 365);
+				}
+			}
+		}
+		if((dates.end_date === null) || (dates.end_date.getTime() <= task.start_date.getTime())) {
+			dates.end_date = this.calculateEndDate(task.start_date, 1);
+		}
 		this._assign_project_dates(task, dates.start_date, dates.end_date);
-	}
+	} //end if
 };
 
 gantt.getSubtaskDates = function(task_id){
@@ -5265,9 +5305,9 @@ gantt._update_parents = function(taskId, silent){
 
 	if(task.$no_start || task.$no_end){
 		gantt.resetProjectDates(task);
-
-		if(!silent)
+		if(!silent) {
 			this.refreshTask(task.id, true);
+		}
 	}
 
 	if(pid && this.isTaskExists(pid)){
@@ -6355,7 +6395,7 @@ gantt.form_blocks={
 	textarea:{
 		render:function(sns){
 			var height=(sns.height||"130")+"px";
-			return "<div class='gantt_cal_ltext' style='height:"+height+";'><textarea></textarea></div>";
+			return "<div class='gantt_cal_ltext' style='height:"+height+";'><textarea maxlength='255'></textarea></div>";
 		},
 		set_value:function(node,value,ev){
 			node.firstChild.value=value||"";
@@ -6367,6 +6407,31 @@ gantt.form_blocks={
 			var a=node.firstChild; gantt._focus(a, true);
 		}
 	},
+	//-- uxm
+	tasktype:{
+		render:function(sns){
+			var height="23px";
+			var html="<div class='gantt_cal_ltext' style='height:"+height+";'><select style='width:100%;'>";
+			html+="<option value='"+this.config.types.task+"'>"+this.locale.labels["type_task"]+"</option>";
+			html+="<option value='"+this.config.types.flextask+"'>"+this.locale.labels["type_flextask"]+"</option>";
+			html+="<option value='"+this.config.types.milestone+"'>"+this.locale.labels["type_milestone"]+"</option>";
+			html+="</select></div>";
+			return html;
+		},
+		set_value:function(node,value,ev){
+			var select = node.firstChild;
+			if(typeof value == "undefined")
+				value = (select.options[0]||{}).value;
+			select.value=value||"";
+		},
+		get_value:function(node,ev){
+			return node.firstChild.value;
+		},
+		focus:function(node){
+			var a=node.firstChild; gantt._focus(a, true);
+		}
+	},
+	//-- #uxm
 	select:{
 		render:function(sns){
 			var height=(sns.height||"23")+"px";
@@ -6398,14 +6463,12 @@ gantt.form_blocks={
 			var time = this.form_blocks.getTimePicker.call(this, sns);
 			var parts = ["<div style='height:"+(sns.height || 30)+"px;padding-top:0px;font-size:inherit;text-align:center;' class='gantt_section_time'>"];
 			parts.push(time);
-
 			if(sns.single_date){
 				time = this.form_blocks.getTimePicker.call(this, sns, true);
 				parts.push("<span></span>");
 			}else{
 				parts.push("<span style='font-weight:normal; font-size:10pt;'> &nbsp;&ndash;&nbsp; </span>");
 			}
-
 			parts.push(time);
 			parts.push("</div>");
 			return parts.join('');
@@ -6517,10 +6580,13 @@ gantt.form_blocks={
 			function _change_duration(step) {
 				var value = duration.value;
 				value = parseInt(value, 10);
-				if (window.isNaN(value))
-					value = 0;
-				value+=step;
-				if (value < 1) value = 1;
+				if(window.isNaN(value)) {
+					value = 1;
+				}
+				value += step;
+				if(value < 1) {
+					value = 1;
+				}
 				duration.value = value;
 				_calc_date();
 			}
@@ -6575,17 +6641,20 @@ gantt.form_blocks={
 				if(isNaN(time) && input.hasAttribute("data-value")){
 					time = parseInt(input.getAttribute("data-value"), 10);
 				}
-
-				hours = Math.floor(time/60);
-				minutes = time%60;
+				hours = Math.floor(time / 60);
+				minutes = time % 60;
 			}
 			return new Date(s[map[2]].value,s[map[1]].value,s[map[0]].value,hours,minutes);
 		},
 		_get_duration: function(node, config) {
 			var duration = node.getElementsByTagName("input")[1];
 			duration = parseInt(duration.value, 10);
-			if (!duration || window.isNaN(duration)) duration = 1;
-			if (duration < 0) duration *= -1;
+			if(window.isNaN(duration)) {
+				duration = 1;
+			}
+			if(duration < 1) {
+				duration = 1;
+			};
 			return duration;
 		},
 
@@ -6663,7 +6732,6 @@ gantt.form_blocks={
 			var newOptions = tmpDom.removeChild(tmpDom.firstChild);
 			node.onselect = null;
 			node.parentNode.replaceChild(newOptions, node);
-
 			return gantt.form_blocks.select.set_value.apply(gantt, [newOptions,value,ev,config]);
 		},
 		get_value:function(){
@@ -7764,8 +7832,8 @@ if(!gantt.templates) gantt.templates = {};
 
 (function(){
 
-dhtmlx.mixin(gantt.config,
-	{links : {
+dhtmlx.mixin(gantt.config, {
+	links : {
 		"finish_to_start":"0",
 		"start_to_start":"1",
 		"finish_to_finish":"2",
@@ -7773,6 +7841,7 @@ dhtmlx.mixin(gantt.config,
 	},
 	types : {
 		'task':'task',
+		'flextask':'flextask',
 		'project':'project',
 		'milestone':'milestone'
 	},
@@ -7862,17 +7931,26 @@ dhtmlx.mixin(gantt.config,
 	lightbox: {
 		sections: [
 			{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
-			{name: "time", type: "duration", map_to: "auto"}
+			{name: "type", type: "tasktype", map_to: "type"},
+			{name: "parent", type: "parent", map_to: "parent"},
+			{name: "time", type: "duration", map_to: "auto"},
+		],
+		flextask_sections: [
+			{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+			{name: "type", type: "tasktype", map_to: "type"},
+			{name: "parent", type: "parent", map_to: "parent"},
+			{name: "time", type: "duration", single_date:true, map_to: "auto"},
+		],
+		milestone_sections: [
+			{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+			{name: "type", type: "tasktype", map_to: "type"},
+			{name: "parent", type: "parent", map_to: "parent"},
+			{name: "time", type: "duration", single_date:true, map_to: "auto"},
 		],
 		project_sections: [
 			{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
 			{name: "type", type: "typeselect", map_to: "type"},
-			{name: "time", type: "duration", readonly:true, map_to: "auto"}
-		],
-		milestone_sections: [
-			{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
-			{name: "type", type: "typeselect", map_to: "type"},
-			{name: "time", type: "duration", single_date:true, map_to: "auto"}
+			{name: "time", type: "duration", readonly:true, map_to: "auto"},
 		]
 	},
 	drag_lightbox: true,
@@ -7883,27 +7961,27 @@ dhtmlx.mixin(gantt.config,
 	task_scroll_offset : 100,
 
 	task_height: "full",//number px of 'full' for row height
-	min_column_width:70,
+	min_column_width: 75,
 
 	// min width for grid column (when resizing)
-	min_grid_column_width:70,
+	min_grid_column_width: 75,
 	// name of the attribute with column index for resize element
 	grid_resizer_column_attribute: "column_index",
 	// name of the attribute with column index for resize element
 	grid_resizer_attribute: "grid_resizer",
 
 	// grid width can be increased after the column has been resized
-	keep_grid_width:false,
+	keep_grid_width: false,
 
 	// grid width can be adjusted
-	grid_resize:false,
+	grid_resize: false,
 
 	//
 	readonly_property: "readonly",
 	editable_property: "editable",
 	type_renderers:{},
 
-	open_tree_initially: false,
+	open_tree_initially: true,
 	optimize_render: 'auto',
 	prevent_default_scroll: false
 
@@ -8111,12 +8189,14 @@ gantt.locale = {
 		section_description:"Description",
 		section_time:"Time period",
 		section_type:"Type",
+		section_parent : "Parent",
 
 		/* grid columns */
 
 		column_text : "Task name",
 		column_start_date : "Start time",
 		column_duration : "Duration",
+		column_parent : "Parent",
 		column_add : "",
 
 		/* link confirmation */
@@ -8126,6 +8206,7 @@ gantt.locale = {
 		link_end: " (end)",
 
 		type_task: "Task",
+		type_flextask: "FlexTask",
 		type_project: "Project",
 		type_milestone: "Milestone",
 

@@ -122,7 +122,7 @@ function ResultViewModel(parent, id, sourceId, targetId, sourceEndpoint, targetE
 
 						jsPlumb.select().each(function(conn) {
 							if(conn.id === conId) {
-								jsPlumb.detach(conn);
+								jsPlumb.deleteConnection(conn);
 							}
 						});
 

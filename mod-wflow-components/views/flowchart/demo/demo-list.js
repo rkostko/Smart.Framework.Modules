@@ -6,6 +6,7 @@
 (function () {
 	var list = [
 		[ "flowchart", "Flowchart" ],
+		[ "flowchart-editor", "Flowchart Editor" ],
 		[ "statemachine", "State Machine" ],
 		[ "draggableConnectors", "Drag and Drop"],
 		[ "perimeterAnchors", "Perimeter Anchors"],

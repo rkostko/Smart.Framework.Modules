@@ -3,17 +3,17 @@ var demo_tasks = {
 	"data":[
 
 		{"id":1, "text":"Project #1", "start_date":"2017-05-01", "duration":"18", "progress": 0.4, "open": true, "type":'project'},
-		{"id":2, "text":"Task #1", "start_date":"2017-05-02", "duration":"8", "parent":"1", "progress":0.5, "open": true},
-		{"id":5, "text":"Task #1.1", "start_date":"2017-05-02", "duration":"7", "parent":"2", "progress": 0.6, "open": true},
+		{"id":2, "text":"Task #1", "start_date":"2017-05-02", "parent":"1", "progress":0.5, "open": true, "type":'flextask'},
+		{"id":5, "text":"Task #1.1", "start_date":"2017-05-02", "duration":"7", "parent":"2", "progress": 0.6, "open": false},
 		{"id":6, "text":"Task #1.2", "start_date":"2017-05-03", "duration":"7", "parent":"2", "progress": 0.6, "open": true},
 		{"id":3, "text":"Task #2", "start_date":"2017-05-11", "duration":"8", "parent":"1", "progress": 0.6, "open": true},
 		{"id":7, "text":"Task #2.1", "start_date":"2017-05-12", "duration":"8", "parent":"3", "progress": 0.6, "open": true},
 		{"id":4, "text":"Task #3", "start_date":"2017-05-13", "duration":"6", "parent":"1", "progress": 0.5, "open": true},
 		{"id":8, "text":"Task #3.1", "start_date":"2017-05-14", "duration":"5", "parent":"4", "progress": 0.5, "open": true},
 		{"id":9, "text":"Task #3.2", "start_date":"2017-05-14", "duration":"4", "parent":"4", "progress": 0.5, "open": true},
-		{"id":10, "text":"Milestone #1", "start_date":"2017-05-14", "duration":"3", "parent":"4", "progress": 0.5, "open": true, "type":'milestone'},
+		{"id":10, "text":"Milestone #1", "start_date":"2017-05-14", "parent":"4", "progress": 0.5, "open": true, "type":'milestone'},
 
-		{"id":11, "text":"Project #2", "start_date":"2017-03-28", "duration":"11", "progress": 0.6, "open": true, "type":'project'},
+		{"id":11, "text":"Project #2", "start_date":"2017-05-02", "duration":"11", "progress": 0.6, "open": true, "type":'project'},
 		{"id":12, "text":"Task #1", "start_date":"2017-05-03", "duration":"5", "parent":"11", "progress": 1, "open": true},
 		{"id":13, "text":"Task #2", "start_date":"2017-05-02", "duration":"7", "parent":"11", "progress": 0.5, "open": true},
 		{"id":17, "text":"Task #2.1", "start_date":"2017-05-03", "duration":"2", "parent":"13", "progress": 1, "open": true},

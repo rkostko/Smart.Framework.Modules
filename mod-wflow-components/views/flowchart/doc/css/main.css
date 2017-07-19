@@ -1,84 +1,17 @@
-@font-face {
-	font-family: 'ico-jsplumb';
-	src: url("ico-jsplumb.woff?-oqkwhs") format("woff"), url("ico-jsplumb.ttf?-oqkwhs") format("truetype");
-	font-weight: normal;
-	font-style: normal
-}
-
-[class^="icon-"], [class*=" icon-"] {
-	font-family: 'ico-jsplumb';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1
-}
-
-.icon-license:before {
-	content: "\e604"
-}
-
-.icon-source:before {
-	content: "\e605"
-}
-
-.icon-support:before {
-	content: "\e606"
-}
-
-.icon-facebook:before {
-	content: "\e600"
-}
-
-.icon-twitter:before {
-	content: "\e601"
-}
-
-.icon-github:before {
-	content: "\e602"
-}
-
-.icon-linkedin:before {
-	content: "\e603"
-}
-
-.icon-cross:before {
-	content: "\ea0f"
-}
-
-.icon-checkmark:before {
-	content: "\ea10"
-}
-
-*, *:before, *:after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-rendering: optimizeLegibility
-}
 
 html {
 	padding: 0;
-	margin: 0
+	margin: 0;
 }
 
 body {
 	background-color: #FFF;
 	color: #434343;
-	font-family: "Lato", sans-serif;
+	font-family: helvetica, sans-serif;
 	font-size: 14px;
 	font-weight: 400;
 	height: 100%;
 	padding: 0
-}
-
-@media only screen and (max-width: 320px) {
-	body {
-		margin-top: 51px
-	}
 }
 
 .clear-padding {
@@ -98,20 +31,8 @@ body {
 	width: 100%
 }
 
-@media only screen and (max-width: 320px) {
-	.full-width-container {
-		padding: 30px 0
-	}
-}
-
 .padding-top-page {
 	padding-top: 92px
-}
-
-@media only screen and (max-width: 320px) {
-	.padding-top-page {
-		padding-top: 10px
-	}
 }
 
 .center-block {
@@ -120,12 +41,6 @@ body {
 
 .pos-relative {
 	position: relative
-}
-
-@media only screen and (max-width: 320px) {
-	.mobile-center {
-		text-align: center
-	}
 }
 
 .bg-sepia {
@@ -413,22 +328,22 @@ body {
 	font-weight: 700
 }
 
-@media only screen and (max-width: 320px) {
-	.navbar-top {
-		background-color: #58775d
-	}
+
+.navbar-top {
+	background-color: #58775d;
 }
 
 .navbar-brand {
-	height: 56px
+	height: 56px;
+	color: #FFFFFF;
 }
 
 .nav-wrapper {
-	margin-top: 10px
+	margin-top: 10px;
 }
 
 .navbar-header a {
-	border: none
+	border: none;
 }
 
 .navbar-nav > li > a {
@@ -1090,15 +1005,6 @@ pre.license {
 	-ms-transition: height 0.5s linear;
 	-o-transition: height 0.5s linear;
 	transition: height 0.5s linear
-}
-
-.jtk-payment-form label {
-	display: block
-}
-
-.jtk-payment-form label span {
-	font-size: 12px;
-	color: cadetblue
 }
 
 .error {
