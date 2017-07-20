@@ -2,7 +2,7 @@
 /*
 // jsPlumb Editor
 // (c) 2017 unix-world.org
-// v.170719.r2
+// v.170720
 */
 
 .flowchart-area * {
@@ -31,6 +31,7 @@
 .flowchart-area .window:hover {
 	box-shadow: 2px 2px 19px #999999;
 	opacity: 0.99;
+	z-index: 21212;
 }
 
 .flowchart-area .active {
@@ -46,7 +47,8 @@
 }
 
 .flowchart-area .jtk-endpoint, .endpointTargetLabel, .endpointSourceLabel {
-	z-index: 21;
+/*	z-index: 21; */
+	z-index: 23232;
 	cursor: pointer;
 }
 
@@ -61,10 +63,11 @@
 	z-index: 22;
 	border: 1px dotted gray;
 	opacity: 0.8;
-	cursor: pointer;
+	cursor: cell;
 }
 
 .flowchart-area .aLabel.jtk-hover {
+	z-index: 22222;
 	opacity: 1;
 }
 
@@ -106,6 +109,7 @@ path, .jtk-endpoint {
 	color: #778899;
 	border: 1px dotted #FAFAFA;
 	opacity: 0.8;
+	cursor: context-menu;
 }
 
 .jtk-node p {
@@ -118,6 +122,7 @@ path, .jtk-endpoint {
 	position: absolute;
 	top: 32px;
 	left: 7px;
+	cursor: cell;
 }
 
 .circle {
