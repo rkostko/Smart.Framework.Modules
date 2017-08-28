@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="../jsplumbtoolkit-demo.css">
 
 	<link rel="stylesheet" href="../../editor/flowchart-editor.css">
+	<script src="../../editor/flowchart-editor.js"></script>
 
 	<script src="../../jsplumb.js"></script>
 </head>
@@ -39,6 +40,9 @@
 	<button class="btn btn-regular" id="flowchartNewDBtn" onclick="" style="margin-left: 15px;">New Decision</button>
 	<button class="btn btn-regular" id="flowchartNewIOBtn" onclick="" style="margin-left: 15px;">New Data</button>
 	<button class="btn btn-success" id="flowchartSaveBtn" onclick="" style="margin-left: 15px;">Save (dump to console)</button><br><br>
+	<!-- * optional*
+	<button class="btn btn-success" id="flowchartExportBtn" onclick="" style="margin-left: 15px;">Export (dump to console)</button><br><br>
+	-->
 	<div class="jtk-demo-canvas canvas-wide flowchart-area jtk-surface jtk-surface-nopan" id="canvas"></div>
 </div>
 <script>
@@ -46,9 +50,14 @@ var flowchartIsReadonly = false;
 var flowchartSaveDataHelper = function(data) {
 	console.log(JSON.stringify(data));
 }
+var flowchartExportDataHelper = function(data) {
+	console.log(JSON.stringify(data));
+}
 </script>
 <script src="data.js"></script>
-<script src="../../editor/flowchart-editor.js"></script>
+<script>
+	flowchartEditorInit(flowchartDataObj, false);
+</script>
 <script src="../demo-list.js"></script>
 
 </body>

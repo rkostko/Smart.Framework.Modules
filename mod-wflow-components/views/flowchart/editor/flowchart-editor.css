@@ -1,8 +1,8 @@
 
 /*
-// jsPlumb Editor
+// jsPlumb Flowchart Editor
 // (c) 2017 unix-world.org
-// v.170720
+// v.170828
 */
 
 .flowchart-area * {
@@ -123,6 +123,8 @@ path, .jtk-endpoint {
 	top: 32px;
 	left: 7px;
 	cursor: cell;
+	font-size: 1em;
+	line-height: 1.25em;
 }
 
 .circle {
