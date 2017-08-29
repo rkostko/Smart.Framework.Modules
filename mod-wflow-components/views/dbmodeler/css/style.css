@@ -1,9 +1,11 @@
 
+/* DB-Modeler :: r.170829 */
+
 #area {
 	position: relative;
 	background: transparent url(../images/back.png);
 	width: 5000px;
-	height: 2500px;
+	height: 5000px;
 }
 
 #controls {
@@ -258,3 +260,5 @@ label, input, select {
 	opacity: 0.5;
 	visibility: hidden;
 }
+
+/* END */
