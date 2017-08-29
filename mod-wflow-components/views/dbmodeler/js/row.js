@@ -409,19 +409,27 @@ SQL.Row.prototype.fromXML = function(node) {
 	obj.ai = (node.getAttribute("autoincrement") == "1");
 
 	var cs = node.getElementsByTagName("comment");
-	if (cs.length && cs[0].firstChild) { obj.comment = cs[0].firstChild.nodeValue; }
+	if (cs.length && cs[0].firstChild) {
+		obj.comment = cs[0].firstChild.nodeValue;
+	}
 
 	var d = node.getElementsByTagName("datatype");
 	if (d.length && d[0].firstChild) {
 		var s = d[0].firstChild.nodeValue;
 		var r = s.match(/^([^\(]+)(\((.*)\))?.*$/);
+//console.log(r);
 		var type = r[1];
-		if (r[3]) { obj.size = r[3]; }
+		if(r[3]) {
+			obj.size = r[3];
+		}
 		var types = window.DATATYPES.getElementsByTagName("type");
-		for (var i=0;i<types.length;i++) {
+		for(var i=0;i<types.length;i++) {
 			var sql = types[i].getAttribute("sql");
 			var re = types[i].getAttribute("re");
-			if (sql == type || (re && new RegExp(re).exec(type)) ) { obj.type = i; }
+			//if(sql == type || (re && new RegExp(re).exec(type)) ) { // fix by unixman
+			if(sql == type || (re && (re == type))) {
+				obj.type = i;
+			}
 		}
 	}
 

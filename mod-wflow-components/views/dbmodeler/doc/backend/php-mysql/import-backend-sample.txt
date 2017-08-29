@@ -1,10 +1,24 @@
 
+//---------------------------------------------------------------------
+// MySQL server backend for DB Modeler
+// version 0.1.170828.uxm
+//---------------------------------------------------------------------
+
 // PHP Code
 //=====
 die('Uncomment this Line to Enable');
 //=====
 
-	set_time_limit(0);
+ini_set('display_errors', '1');	// display runtime errors
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED); // error reporting
+ini_set("log_errors", 1);
+//ini_set("error_log", "/tmp/php-error.log");
+ini_set('memory_limit', '256M');		// set the memory limit
+ini_set('default_socket_timeout', 60);	// socket timeout (2 min.)
+ini_set('max_execution_time', 300);		// execution timeout this value must be close to httpd.conf's timeout
+
+//================================================
+
 	function setup_saveloadlist() {
 		define("SERVER","localhost");
 		define("USER","");

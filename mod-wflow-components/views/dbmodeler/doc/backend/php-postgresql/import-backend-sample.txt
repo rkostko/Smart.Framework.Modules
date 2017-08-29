@@ -1,7 +1,7 @@
 
 //---------------------------------------------------------------------
-// Postgresql server backend for wwwsqldesigner
-// version 0.1.170828.uxm
+// Postgresql server backend for DB Modeler
+// version 0.1.170828.uxm.r2
 //---------------------------------------------------------------------
 
 // PHP Code
@@ -13,18 +13,20 @@ ini_set('display_errors', '1');	// display runtime errors
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED); // error reporting
 ini_set("log_errors", 1);
 //ini_set("error_log", "/tmp/php-error.log");
-//error_log( "Hello, errors!" );
-
 ini_set('memory_limit', '256M');		// set the memory limit
 ini_set('default_socket_timeout', 60);	// socket timeout (2 min.)
 ini_set('max_execution_time', 300);		// execution timeout this value must be close to httpd.conf's timeout
 
+//==
 // Parameters for the database you want to import in the application
 define("HOST_ADDR", "127.0.0.1");			// if the database cluster is on the same server as this application use 'localhost' otherwise the appropriate address (192.168.0.2 for example).
 define("PORT_NO", "5432");					// default port is 5432. If you have or had more than one db cluster at the same time, consider ports 5433,... etc.
 define("DATABASE_NAME", "some_database");	// the database you want to import
 define("USER_NAME", "pgsql");				// role having rights to read the database
 define("PASSWORD", "pgsql");				// password for role
+//==
+
+//================================================
 
 function connect() {
 	$str="host=".HOST_ADDR." port=".PORT_NO." dbname=".DATABASE_NAME." user=".USER_NAME." password=".PASSWORD;
@@ -92,15 +94,23 @@ SQL;
 			ORDER BY ordinal_position
 		;";
 		$result2 = pg_query($conn, $qstr);
-		while ($row = pg_fetch_array($result2)) {
+		while($row = pg_fetch_array($result2)) {
+//print_r($row);
 			$name  = $row["column_name"];
 			$type  = $row["data_type"];		// maybe use "udt_name" instead to consider user types
+			if((string)$row['character_maximum_length']) {
+				$type .= '('.$row['character_maximum_length'].')';
+			} elseif(((string)strtoupper((string)$type) == 'NUMERIC') AND (((string)$row['numeric_precision'] != '') OR ((string)$row['numeric_scale'] != ''))) {
+				$type .= '('.(int)$row['numeric_precision'].','.(int)$row['numeric_scale'].')';
+			} //end if
 			$comment = (isset($row["column_comment"]) ? $row["column_comment"] : "");
 			$null = ($row["is_nullable"] == "YES" ? "1" : "0");
 			$def = $row["column_default"];
 			// $ai:autoincrement... Not in postgresql, Ignore
 			$ai = "0";
-			if ($def == "NULL") { $def = ""; }
+			if($def == "NULL") {
+				$def = "";
+			} //end if
 			$xml .= '<row name="'.htmlspecialchars($name).'" null="'.htmlspecialchars($null).'" autoincrement="'.htmlspecialchars($ai).'">';
 			$xml .= '<datatype>'.strtoupper($type).'</datatype>';
 			$xml .= '<default>'.htmlspecialchars($def).'</default>';
@@ -226,6 +236,7 @@ SQL;
 //case "import":
 $conn = connect();
 header("Content-type: text/xml");
+echo '<'.'?xml version="1.0" encoding="utf-8" ?'.'>'."\n";
 echo import($conn);
 
 // #END PHP Code
