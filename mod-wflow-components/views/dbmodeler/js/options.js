@@ -7,7 +7,9 @@ SQL.Options = function(owner) {
 		container:OZ.$("opts"),
 		btn:OZ.$("options")
 	}
-	this.dom.btn.value = _("options");
+	try {
+		this.dom.btn.value = _("options");
+	} catch(err){}
 	this.save = this.save.bind(this);
 	this.build();
 }
@@ -31,7 +33,7 @@ SQL.Options.prototype.build = function() {
 		} catch(err){}
 	}
 
-/*
+/* unixman: don't use locales or available DBs as options ...
 	var ls = CONFIG.AVAILABLE_LOCALES;
 	OZ.DOM.clear(this.dom.optionlocale);
 	for (var i=0;i<ls.length;i++) {
@@ -55,7 +57,10 @@ SQL.Options.prototype.build = function() {
 
 	OZ.Event.add(this.dom.btn, "click", this.click.bind(this));
 
-	this.dom.container.parentNode.removeChild(this.dom.container);
+	try {
+		this.dom.container.parentNode.removeChild(this.dom.container);
+	} catch(err){}
+
 }
 
 SQL.Options.prototype.save = function() {

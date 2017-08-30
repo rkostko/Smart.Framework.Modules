@@ -37,13 +37,14 @@
 
             <xsl:choose>
                 <xsl:when test="@autoincrement = 1">
-                    <!-- use postgresql BIGSERIAL shortcut for columns marked as
+                    <!-- DISABLED: use postgresql BIGSERIAL shortcut for columns marked as
                     auto-increment. this creates integer column,
                     corresponding sequence, and default expression for the
                     column with nextval(). see:
                     http://www.postgresql.org/docs/current/static/datatype-numeric.html#DATATYPE-SERIAL
-                    -->
                     <xsl:text>BIGSERIAL</xsl:text>
+                    -->
+                    <xsl:value-of select="datatype" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="datatype" />
@@ -63,11 +64,11 @@
                 </xsl:if>
 			</xsl:if>
 
-			<xsl:if test="comment">
+		<!--	<xsl:if test="comment">
 				<xsl:text>/* </xsl:text>
                 <xsl:value-of select="comment"/>
                 <xsl:text> */</xsl:text>
-			</xsl:if>
+			</xsl:if> -->
 
 			<xsl:if test="not (position()=last())">
 				<xsl:text>,
