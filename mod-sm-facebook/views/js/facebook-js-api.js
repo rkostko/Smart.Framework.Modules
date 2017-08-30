@@ -1,7 +1,7 @@
 
 // Facebook API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170825
+// v.170830
 
 // Depends on: jQuery
 // Depends *optional* on: SmartJS_Base64
@@ -25,7 +25,7 @@ var FacebookApiHandler = new function() { // START CLASS
 	var FbLoginData = null;
 
 
-	var FbGetLoginData = function(fxResponseLogin) {
+	var FbGetLoginData = function(fxResponseOk) {
 		//--
 		FB.api('/me?fields=name,first_name,middle_name,last_name,email,gender,birthday,education,hometown,location,locale,timezone,verified,website,permissions', function(response) {
 			//console.log(response);
@@ -53,17 +53,17 @@ var FacebookApiHandler = new function() { // START CLASS
 					birthday: response.birthday,
 					permissions: perms
 				};
-				if(typeof fxResponseLogin === 'function') {
-					fxResponseLogin(response, FbLoginData);
+				if(typeof fxResponseOk === 'function') {
+					fxResponseOk(response, FbLoginData, FbAccessToken);
 				} //end if
 			} //end if
-			console.log(FbLoginData);
+			//console.log(FbLoginData);
 		});
 		//--
 	} //END FUNCTION
 
 
-	this.init = function(settings, fxSubscribe, fxResponseOk, fxResponseNotOk, fxResponseUnauth, fxResponseLogin) {
+	this.init = function(settings, fxSubscribe, fxResponseOk, fxResponseNotOk, fxResponseUnauth) {
 		//-- mandatory settings
 		FbSettings.appId = '' + settings.appId;
 		//-- optional settings
@@ -102,19 +102,11 @@ var FacebookApiHandler = new function() { // START CLASS
 			});
 			FB.getLoginStatus(function(response) {
 				//console.log('FB:Logging....');
-				if(response && response.status === 'connected') {
+				if(response && response.status === 'connected' && response.authResponse && response.authResponse.accessToken) {
 					// the user is logged in and has authenticated your app, and response.authResponse supplies the user's ID,
 					// a valid access token, a signed request, and the time the access token  and signed request each expire
-					if(response.authResponse && response.authResponse.accessToken) {
-						FbAccessToken = response.authResponse.accessToken;
-						if(typeof fxResponseLogin === 'function') {
-							FbGetLoginData(fxResponseLogin);
-						} //end if
-						//console.log(FbAccessToken);
-					} //end if
-					if(typeof fxResponseOk === 'function') {
-						fxResponseOk(response, FbAccessToken);
-					} //end if
+					FbAccessToken = response.authResponse.accessToken;
+					FbGetLoginData(fxResponseOk);
 				} else if(response && response.status === 'not_authorized') {
 					// the user is logged in to Facebook, but has not authorized the app
 					if(typeof fxResponseUnauth === 'function') {
@@ -149,25 +141,24 @@ var FacebookApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	this.login = function(fxResponseLogin) {
+	this.login = function(fxResponseOk) {
 		//--
 		FB.getLoginStatus(
 			function(response){
-				if(response && response.status !== 'connected') {
-					FB.login(
-						function(response) {
-							if(response && response.authResponse) { //user authorized the app
-								FbGetLoginData(fxResponseLogin);
+				FB.login(
+					function(response) {
+						if(response && response.authResponse) { //user authorized the app
+							if(response.authResponse && response.authResponse.accessToken) {
+								FbAccessToken = response.authResponse.accessToken;
+								FbGetLoginData(fxResponseOk);
 							} //end if
-						},
-						{
-							scope: String(FbSettings.perms),
-							return_scopes: true
-						}
-					);
-				} else { // already logged in
-					FbGetLoginData(fxResponseLogin);
-				} //end if
+						} //end if
+					},
+					{
+						scope: String(FbSettings.perms),
+						return_scopes: true
+					}
+				);
 			} //end function
 		);
 		//--
