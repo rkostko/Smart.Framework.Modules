@@ -9,6 +9,7 @@
 	<link href="../../../../../../lib/framework/css/fonts/fontawesome.css" rel="stylesheet">
 
 	<script src="../../../../../../lib/js/jquery/jquery.js"></script>
+	<!-- UI Dialog * Optional* --><link rel="stylesheet" type="text/css" href="../../../../../../lib/js/jquery/dialog/simple-dialog.css"><script type="text/javascript" src="../../../../../../lib/js/jquery/dialog/simple-dialog.js"></script>
 	<script src="../../../../../../lib/js/framework/smart-framework.js"></script>
 
 	<link rel="stylesheet" href="../../doc/css/main.css">
@@ -34,29 +35,35 @@
 	</div>
 </div>
 <div class="jtk-demo-main">
-	<button class="btn btn-regular" id="flowchartNewSBtn" onclick="" style="margin-left: 15px;" title="Start / Stop">New Start/Stop</button>
+	<button class="btn btn-regular" id="flowchartNewSBtn" onclick="" style="margin-left: 15px;" title="Start / Stop">New Terminal</button>
 	<button class="btn btn-regular" id="flowchartNewCBtn" onclick="" style="margin-left: 15px;">New Display</button>
 	<button class="btn btn-regular" id="flowchartNewBtn" onclick="" style="margin-left: 15px;">New Process</button>
 	<button class="btn btn-regular" id="flowchartNewDBtn" onclick="" style="margin-left: 15px;">New Decision</button>
 	<button class="btn btn-regular" id="flowchartNewIOBtn" onclick="" style="margin-left: 15px;">New Data</button>
-	<button class="btn btn-success" id="flowchartSaveBtn" onclick="" style="margin-left: 15px;">Save (dump to console)</button><br><br>
+	<button class="btn btn-success" id="flowchartSaveBtn" onclick="" style="margin-left: 15px;">Save (dump to console)</button>
 	<!-- * optional*
-	<button class="btn btn-success" id="flowchartExportBtn" onclick="" style="margin-left: 15px;">Export (dump to console)</button><br><br>
+	<button class="btn btn-success" id="flowchartExportBtn" onclick="" style="margin-left: 15px;">Export (dump to console)</button>
 	-->
+	<br><br>
 	<div class="jtk-demo-canvas canvas-wide flowchart-area jtk-surface jtk-surface-nopan" id="canvas"></div>
 </div>
+<script src="data.js"></script>
 <script>
-var flowchartIsReadonly = false;
+//var flowchartAddDialogHelper = null;
+var flowchartAddDialogHelper = function(elemType, fxGenerateElement) {
+	SmartJS_BrowserUtils.confirm_Dialog('<h3>Add Element: ' + SmartJS_CoreUtils.escape_html(SmartJS_CoreUtils.ucfirst(elemType)) + '</h3><div>Select the Connector Type for Element: <select id="flowchart-add-element-type"><option value="DEFAULT">Default</option><option value="INVERTED">Inverted</option><option value="PERIMETER">Perimeter</option></select></div>', function(){ var theLabel = $("#flowchart-add-element-type").val(); fxGenerateElement(elemType, theLabel); }, 'Add New Flowchart Element', 550, 200);
+}
 var flowchartSaveDataHelper = function(data) {
+	console.log('----- Save -----');
 	console.log(JSON.stringify(data));
 }
 var flowchartExportDataHelper = function(data) {
+	console.log('----- Export -----');
 	console.log(JSON.stringify(data));
 }
 </script>
-<script src="data.js"></script>
 <script>
-	flowchartEditorInit(flowchartDataObj, false);
+	flowchartEditorInit(flowchartDataObj, false, flowchartAddDialogHelper, flowchartSaveDataHelper, flowchartExportDataHelper);
 </script>
 <script src="../demo-list.js"></script>
 

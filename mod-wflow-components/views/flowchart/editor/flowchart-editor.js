@@ -1,9 +1,9 @@
 
 // jsPlumb Flowchart Editor
 // (c) 2017 unix-world.org
-// v.170828
+// v.170830
 
-function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
+function flowchartEditorInit(flwcDataObj, flwcIsReadonly, fxAddDialogHelper, fxSaveDataHelper, fxExportDataHelper) {
 
 	if(typeof flwcDataObj == 'undefined') {
 		//alert('flwcDataObj not found !!');
@@ -158,7 +158,7 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 				iconFA = '';
 				theIcon = '<span class=""></span>';
 			} //end if else
-			var Div = $('<div class="'+SmartJS_CoreUtils.escape_html(clsName)+'" id="'+SmartJS_CoreUtils.escape_html(theID)+'" data-conn-perimeter="'+SmartJS_CoreUtils.escape_html(dataAttrPerimeter)+'" data-conn-inv="'+SmartJS_CoreUtils.escape_html(dataAttrInvert)+'" data-fa-icon="'+SmartJS_CoreUtils.escape_html(iconFA)+'">'+theIcon+'<p>'+SmartJS_CoreUtils.escape_html(textLabel)+'</p></div>');
+			var Div = jQuery('<div class="'+SmartJS_CoreUtils.escape_html(clsName)+'" id="'+SmartJS_CoreUtils.escape_html(theID)+'" data-conn-perimeter="'+SmartJS_CoreUtils.escape_html(dataAttrPerimeter)+'" data-conn-inv="'+SmartJS_CoreUtils.escape_html(dataAttrInvert)+'" data-fa-icon="'+SmartJS_CoreUtils.escape_html(iconFA)+'">'+theIcon+'<p>'+SmartJS_CoreUtils.escape_html(textLabel)+'</p></div>');
 			Div.css({
 				border: 'solid 1px',
 				left: posX ? (posX + 'px') : '0px',
@@ -181,18 +181,18 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 			Div.addClass('window');
 		}
 
-		var _saveFlowChartAsJson = function (fxSaveFunction) {
+		var _saveFlowChartAsJson = function (fxSaveOrExportFunction) {
 
 			var totalCount = 0;
 
 			var nodes = [];
 
-			$(".jtk-node").each(function (index, element) {
+			jQuery('.jtk-node').each(function (index, element) {
 				totalCount++;
-				var $element = $(element);
-				var theIcon = $element.attr('data-fa-icon').toString();
-				var usePerimeterAnchors = $element.attr('data-conn-perimeter').toString();
-				var isInverted = $element.attr('data-conn-inv').toString();
+				var jqElement = jQuery(element);
+				var theIcon = jqElement.attr('data-fa-icon').toString();
+				var usePerimeterAnchors = jqElement.attr('data-conn-perimeter').toString();
+				var isInverted = jqElement.attr('data-conn-inv').toString();
 				if(usePerimeterAnchors == 'perimeter') {
 					usePerimeterAnchors = true;
 				} else {
@@ -204,19 +204,19 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 					isInverted = false;
 				} //end if else
 				nodes.push({
-					elementId: $element.attr('id'),
-					positionX: parseInt($element.css("left"), 10),
-					positionY: parseInt($element.css("top"), 10),
-					clsName: $element.attr('class').toString(),
+					elementId: jqElement.attr('id'),
+					positionX: parseInt(jqElement.css("left"), 10),
+					positionY: parseInt(jqElement.css("top"), 10),
+					clsName: jqElement.attr('class').toString(),
 					usePerimeterAnchors: usePerimeterAnchors,
 					isInverted: isInverted,
-					label: $element.text(),
+					label: jqElement.text(),
 					icon: theIcon
 				});
 			});
 
 			var connections = [];
-			$.each(instance.getConnections(), function (index, connection) {
+			jQuery.each(instance.getConnections(), function (index, connection) {
 				//console.log(connection);
 				connections.push({
 				//	connectionId: connection.id,
@@ -235,8 +235,8 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 			flowchartSave.nodes = nodes;
 			flowchartSave.connections = connections;
 
-			if(typeof fxSaveFunction == 'function') {
-				fxSaveFunction(flowchartSave);
+			if(typeof fxSaveOrExportFunction == 'function') {
+				fxSaveOrExportFunction(flowchartSave);
 			} else {
 				console.log(flowchartSave);
 			} //end if
@@ -325,16 +325,16 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 
 		if(flwcIsReadonly !== true) {
 
-			$('body').on('click', 'div.jtk-node > p', function(el) {
-				var tgtP = $(this);
+			jQuery('body').on('click', 'div.jtk-node > p', function(el) {
+				var tgtP = jQuery(this);
 				var label = prompt("Box Label", tgtP.text());
 				if(label) {
 					tgtP.empty().text(label);
 				} //end if
 			});
 
-			$('body').on('click', 'div.jtk-node > span', function(el) {
-				var tgtP = $(this);
+			jQuery('body').on('click', 'div.jtk-node > span', function(el) {
+				var tgtP = jQuery(this);
 				var eClass = tgtP.attr('class') ? tgtP.attr('class') : 'fa fa-';
 				var label = prompt("Box Icon", eClass);
 				if(label) {
@@ -343,9 +343,9 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 				} //end if
 			});
 
-			$('body').on('dblclick', 'div.jtk-node', function(el) {
+			jQuery('body').on('dblclick', 'div.jtk-node', function(el) {
 				if(confirm("Delete this element ?")) {
-					var targetBoxId = $(this);
+					var targetBoxId = jQuery(this);
 					instance.deleteConnectionsForElement(targetBoxId);
 					instance.removeAllEndpoints(targetBoxId);
 					//instance.detach(targetBoxId);
@@ -355,7 +355,7 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 
 		} //end if
 
-		function generateFlowChartUUID() {
+		var generateFlowChartUUID = function() {
 			var date = new Date();
 			var seconds = date.getTime();
 			var milliseconds = date.getMilliseconds();
@@ -364,8 +364,8 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 			return uuID;
 		} //END FUNCTION
 
-		function addAnchorType() {
-			var label = prompt('Anchors Type', 'DEFAULT');
+		var generateFlowChartElement = function(elemType, label) {
+			//console.log(elemType);
 			var usePerimeterAnchors = false;
 			var isInverted = false;
 			if(label == 'INVERTED') {
@@ -373,57 +373,76 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly) {
 			} else if(label == 'PERIMETER') {
 				usePerimeterAnchors = true;
 			} //end if
-			return {
+			var anchorProperties = {
 				usePerimeterAnchors: usePerimeterAnchors,
 				isInverted: isInverted
 			};
+			var uuID = generateFlowChartUUID();
+			switch(elemType) {
+				case 'process':
+					_AddNodeElement('flowchartElemProcess_'+uuID, 0, 0, 'window jtk-node', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Process', '');
+					break;
+				case 'terminal':
+					_AddNodeElement('flowchartElemTerminal_'+uuID, 0, 0, 'window jtk-node circle', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Terminal', '');
+					break;
+				case 'display':
+					_AddNodeElement('flowchartElemDisplay_'+uuID, 0, 0, 'window jtk-node oval', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Display', '');
+					break;
+				case 'decision':
+					_AddNodeElement('flowchartElemDecision_'+uuID, 0, 0, 'window jtk-node diamond', anchorProperties.usePerimeterAnchors, !anchorProperties.isInverted, 'Decision', '');
+					break;
+				case 'data':
+					_AddNodeElement('flowchartElemData_'+uuID, 0, 0, 'window jtk-node parallelogram', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Data', '');
+					break;
+				default:
+					console.error('Flowcharts: Invalid Element Type to Add');
+			} //end switch
+		} //END FUNCTION
+
+		function _addFlowchartElement(elemType, fxAddDialogFunction) {
+			if(typeof fxAddDialogFunction == 'function') {
+				fxAddDialogFunction(elemType, generateFlowChartElement);
+			} else {
+				var label = prompt('Anchors Type: [DEFAULT, INVERTED, PERIMETER]', 'DEFAULT');
+				generateFlowChartElement(elemType, label);
+			} //end if else
 		} //END FUNCTION
 
 		if(flwcIsReadonly !== true) {
 
 			document.getElementById('flowchartNewBtn').onclick = function() {
-				var anchorProperties = addAnchorType();
-				var uuID = generateFlowChartUUID();
-				_AddNodeElement('flowchartElemProcess_'+uuID, 0, 0, 'window jtk-node', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Process', '');
+				_addFlowchartElement('process', fxAddDialogHelper);
 				return false;
 			};
 
 			document.getElementById('flowchartNewSBtn').onclick = function() {
-				var anchorProperties = addAnchorType();
-				var uuID = generateFlowChartUUID();
-				_AddNodeElement('flowchartElemTerminal_'+uuID, 0, 0, 'window jtk-node circle', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Terminal', '');
+				_addFlowchartElement('terminal', fxAddDialogHelper);
 				return false;
 			};
 
 			document.getElementById('flowchartNewCBtn').onclick = function() {
-				var anchorProperties = addAnchorType();
-				var uuID = generateFlowChartUUID();
-				_AddNodeElement('flowchartElemDisplay_'+uuID, 0, 0, 'window jtk-node oval', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Display', '');
+				_addFlowchartElement('display', fxAddDialogHelper);
 				return false;
 			};
 
 			document.getElementById('flowchartNewDBtn').onclick = function() {
-				var anchorProperties = addAnchorType();
-				var uuID = generateFlowChartUUID();
-				_AddNodeElement('flowchartElemDecision_'+uuID, 0, 0, 'window jtk-node diamond', anchorProperties.usePerimeterAnchors, !anchorProperties.isInverted, 'Decision', '');
+				_addFlowchartElement('decision', fxAddDialogHelper);
 				return false;
 			};
 
 			document.getElementById('flowchartNewIOBtn').onclick = function() {
-				var anchorProperties = addAnchorType();
-				var uuID = generateFlowChartUUID();
-				_AddNodeElement('flowchartElemData_'+uuID, 0, 0, 'window jtk-node parallelogram', anchorProperties.usePerimeterAnchors, anchorProperties.isInverted, 'Data', '');
+				_addFlowchartElement('data', fxAddDialogHelper);
 				return false;
 			};
 
 			document.getElementById('flowchartSaveBtn').onclick = function() {
-				_saveFlowChartAsJson(flowchartSaveDataHelper);
+				_saveFlowChartAsJson(fxSaveDataHelper);
 				return false;
 			};
 
 			try { // this element is optional
 				document.getElementById('flowchartExportBtn').onclick = function() {
-					_saveFlowChartAsJson(flowchartExportDataHelper);
+					_saveFlowChartAsJson(fxExportDataHelper);
 					return false;
 				};
 			} catch(err){}

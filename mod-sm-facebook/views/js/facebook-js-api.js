@@ -1,7 +1,7 @@
 
-// Facebook API Handler
+// Facebook JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170830
+// v.170831
 
 // Depends on: jQuery
 // Depends *optional* on: SmartJS_Base64
@@ -54,7 +54,7 @@ var FacebookApiHandler = new function() { // START CLASS
 					permissions: perms
 				};
 				if(typeof fxResponseOk === 'function') {
-					fxResponseOk(response, FbLoginData, FbAccessToken);
+					fxResponseOk(response, FbAccessToken, FbLoginData);
 				} //end if
 			} //end if
 			//console.log(FbLoginData);

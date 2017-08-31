@@ -11,7 +11,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 
 
 //======================================================
-// PHP Charts - Output to PNG images
+// PHP Charts - Output to PNG or GIF images
 // DEPENDS:
 //	* Smart::
 //	* SmartUnicode::

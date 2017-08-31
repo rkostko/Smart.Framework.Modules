@@ -5,7 +5,7 @@
 
 // DEPENDS: jQuery, SmartJS_CoreUtils, SmartJS_BrowserUtils, jQueryUI, jQuery.UI.ListSelect, jQuery.UI.TimePicker
 
-// v.170607
+// v.170831
 
 // ! To use jQueryUI bindings for Smart.Framework load this instead of lib/js/jquery/jquery.smartframework.ui.js ; they are a drop-in replacements for LighJS-UI !
 
@@ -81,8 +81,6 @@ this.DialogAlert = function(y_message_html, evcode, y_title, y_width, y_height) 
 				click: function() {
 					//--
 					$(this).dialog('close');
-					$(this).dialog('destroy');
-					$(this).remove();
 					//--
 					if((typeof evcode != 'undefined') && (evcode != 'undefined') && (evcode != null) && (evcode != '')) {
 						try {
@@ -95,6 +93,9 @@ this.DialogAlert = function(y_message_html, evcode, y_title, y_width, y_height) 
 							console.error('ERROR: JS-Eval Error on BrowserUI DialogAlert Function' + '\nDetails: ' + err);
 						} //end try catch
 					} //end if
+					//--
+					$(this).dialog('destroy');
+					$(this).remove();
 					//--
 				}
 			}
@@ -168,8 +169,6 @@ this.DialogConfirm = function(y_question_html, evcode, y_title, y_width, y_heigh
 				click: function() {
 					//--
 					$(this).dialog('close');
-					$(this).dialog('destroy');
-					$(this).remove();
 					//--
 					if((typeof evcode != 'undefined') && (evcode != 'undefined') && (evcode != null) && (evcode != '')) {
 						try {
@@ -182,6 +181,9 @@ this.DialogConfirm = function(y_question_html, evcode, y_title, y_width, y_heigh
 							console.error('ERROR: JS-Eval Error on BrowserUI DialogConfirm Function' + '\nDetails: ' + err);
 						} //end try catch
 					} //end if
+					//--
+					$(this).dialog('destroy');
+					$(this).remove();
 					//--
 				}
 			}
@@ -265,12 +267,12 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 	//--
 	// evcode params: date, altdate, inst, elemID
 	//--
-	var the_initial_date = '' + selDate;
+	var the_initial_date = String(selDate);
 	//--
 	var the_initial_altdate = '';
 	if(the_initial_date != '') {
-		$('#date-bttn-' + elemID).attr('title', '' + selDate);
-		the_initial_altdate = SmartJS_CoreUtils.formatDate('' + dateFmt, new Date(the_initial_date));
+		$('#date-bttn-' + elemID).attr('title', String(selDate));
+		the_initial_altdate = SmartJS_CoreUtils.formatDate(String(dateFmt), new Date(the_initial_date));
 		$('#date-entry-' + elemID).val(the_initial_altdate);
 	} //end if
 	//--
@@ -285,7 +287,7 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 		showOtherMonths: true, selectOtherMonths: false,
 		firstDay: calStart,
 		dateFormat: 'yy-mm-dd',
-		altFormat: '' + dateFmt,
+		altFormat: String(dateFmt),
 		altField: '#date-entry-' + elemID,
 		minDate: calMinDate, maxDate: calMaxDate,
 		onSelect: function(date, inst) {
@@ -293,7 +295,7 @@ this.Date_Picker_Init = function(elemID, dateFmt, selDate, calStart, calMinDate,
 			$('#date-bttn-' + elemID).attr('title', date);
 			var altdate = date;
 			try {
-				altdate = SmartJS_CoreUtils.formatDate('' + dateFmt, new Date(date));
+				altdate = SmartJS_CoreUtils.formatDate(String(dateFmt), new Date(date));
 				if(/Invalid|NaN/.test(altdate)) {
 					altdate = date;
 				} //end if
@@ -534,10 +536,10 @@ this.AutoCompleteField = function(single_or_multi, elem_id, data_url, var_term, 
 			return false;
 		},
 		select: function(event, ui) {
-			var id = '' + ui.item.id;
-			var value = '' + ui.item.value;
-			var label = '' + ui.item.label;
-			var data = '' + ui.item.data; // can be a json to be used with JSON.parse(data) to pass extra properties
+			var id = String(ui.item.id);
+			var value = String(ui.item.value);
+			var label = String(ui.item.label);
+			var data = String(ui.item.data); // can be a json to be used with JSON.parse(data) to pass extra properties
 			try {
 				if(single_or_multi === 'multilist') {
 					HtmlElement.val(SmartJS_CoreUtils.addToList(value, HtmlElement.val(), ','));
