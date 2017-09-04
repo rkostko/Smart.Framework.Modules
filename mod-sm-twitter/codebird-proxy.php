@@ -166,7 +166,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		} //end if
 		if($version_pos === false) {
 			//header('HTTP/1.1 412 Precondition failed');
-			$this->PageViewSetErrorStatus(400, 'This is a private Proxy to support requests to REST API version 1.1 / Twitter TON API / Twitter Ads API.');
+			$this->PageViewSetErrorStatus(400, 'This is a private Proxy to support requests to REST API version 1.1 / Twitter TON API / Twitter Ads API / CodeBird.');
 			return;
 		} //end if
 		// use media endpoint if necessary
