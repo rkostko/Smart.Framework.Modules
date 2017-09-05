@@ -1,5 +1,5 @@
 
-# Smart.Framework.Modules / UI Bootstrap 3.3.7 #
+# Smart.Framework.Modules / LangDetect #
 
 // v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
 

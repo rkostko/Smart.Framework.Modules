@@ -3,7 +3,7 @@
 // Controller: Twig Templating Test Sample
 // Route: ?/page/tpl-twig.test (?page=tpl-twig.test)
 // Author: unix-world.org
-// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
+// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -88,11 +88,19 @@ class SmartAppIndexController extends SmartAbstractAppController {
 
 } //END CLASS
 
+
+/**
+ * Admin Controller
+ *
+ * @ignore
+ *
+ */
 class SmartAppAdminController extends SmartAppIndexController {
 
 	// this will clone the SmartAppIndexController to run exactly the same action in admin.php
 
 } //END CLASS
+
 
 //end of php code
 ?>

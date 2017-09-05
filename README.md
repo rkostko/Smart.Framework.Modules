@@ -3,6 +3,8 @@
 License: BSD
 
 ## Extra Modules:
+	* SocialMedia Facebook Js.Api
+	* SocialMedia Twitter Js.Api
 	* UI Fonts: Web fonts + Captcha fonts
 	* UI Bootstrap: CSS + Javascript UI Toolkit
 	* UI Uikit: CSS + Javascript UI Toolkit

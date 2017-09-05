@@ -12,18 +12,20 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 
 define('SMART_APP_MODULE_AREA', 'SHARED');
 
+
+// This class is based on the Codebird Twitter Proxy,
+// Proxy to the Twitter API, adding CORS headers to replies.
+// version 1.5.0.uxm.170831
+// author Jublo Solutions <support@jublo.net>
+// copyright 2013-2015 Jublo Solutions <support@jublo.net>
+// license: GPL
+
 /**
- * This class is based on the Codebird Twitter Proxy,
- * Proxy to the Twitter API, adding CORS headers to replies.
+ * Index Controller
  *
- * @package codebird
- * @version 1.5.0.uxm.170831
- * @author Jublo Solutions <support@jublo.net>
- * @copyright 2013-2015 Jublo Solutions <support@jublo.net>
- * @license: GPL
+ * @ignore
  *
  */
-
 class SmartAppIndexController extends SmartAbstractAppController {
 
 	private $media_file = '';
@@ -306,6 +308,12 @@ class SmartAppIndexController extends SmartAbstractAppController {
 } //END CLASS
 
 
+/**
+ * Admin Controller
+ *
+ * @ignore
+ *
+ */
 class SmartAppAdminController extends SmartAppIndexController {
 
 	// this will clone the SmartAppIndexController to run exactly the same action in admin.php

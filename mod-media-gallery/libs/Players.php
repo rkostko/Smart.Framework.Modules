@@ -2,7 +2,7 @@
 // Class: \SmartModExtLib\MediaGallery\Players
 // Media Gallery Manager Plugin: Players :: for Smart.Framework
 // Module Library
-// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
+// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 

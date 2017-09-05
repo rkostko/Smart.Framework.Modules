@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170830
+// v.170905
 
 // Depends on: codebird.js
 
@@ -14,6 +14,10 @@ var TwitterApiHandler = new function() { // START CLASS
 	var cb = null;
 
 	this.init = function(kKey, kSecret, proxyUrl) { // always !!
+
+		if(typeof localStorage == 'undefined') {
+			console.error('The browser have no Web Storage support');
+		} //end if
 
 		cb = new Codebird;
 		if(proxyUrl) {

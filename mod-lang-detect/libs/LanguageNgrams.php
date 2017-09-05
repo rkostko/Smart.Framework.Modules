@@ -2,7 +2,7 @@
 // Class: \SmartModExtLib\LangDetect\LanguageNgrams
 // Ngrams Language Detection :: for Smart.Framework
 // Module Library
-// v.3.5.1 r.2017.05.12 / smart.framework.v.3.5
+// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 
@@ -38,6 +38,24 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 
 /**
  * Class LanguageNgrams
+ *
+ */
+
+/**
+ * Class: LanguageNgrams - provides a Language Detection utility based on Text N-Grams that can be used to validate Language / GetLanguage Confidence for a text.
+ *
+ * <code>
+ *
+ * $langtest = (new \SmartModExtLib\LangDetect\LanguageNgrams())->getLanguageConfidence('Your Text to Check Goes Here ...');
+ *
+ * </code>
+ *
+ * @usage 		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
+ * @hints		By default will use the 1-3-930 NGrams. To use extended NGrams (Ex: 1-4-15k) see the local code examples.
+ *
+ * @depends 	classes: Smart, SmartUnicode, SmartFileSysUtils
+ * @version 	v.170622
+ * @package 	LanguageDetection
  *
  */
 final class LanguageNgrams {
