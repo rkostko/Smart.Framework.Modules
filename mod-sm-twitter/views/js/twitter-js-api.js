@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170905
+// v.170906
 
 // Depends on: codebird.js
 
@@ -17,6 +17,21 @@ var TwitterApiHandler = new function() { // START CLASS
 
 		if(typeof localStorage == 'undefined') {
 			console.error('The browser have no Web Storage support');
+			return;
+		} //end if
+
+		if(((typeof kKey == 'undefined') || (kKey === null)) && ((typeof kSecret == 'undefined') || (kSecret === null))) {
+			kKey = String(localStorage.getItem('weblogin_twitter_cb_kkey'));
+			kSecret = String(localStorage.getItem('weblogin_twitter_cb_ksecret'));
+			proxyUrl = String(localStorage.getItem('weblogin_twitter_cb_proxyurl'));
+		} else {
+			localStorage.setItem('weblogin_twitter_cb_kkey', String(kKey));
+			localStorage.setItem('weblogin_twitter_cb_ksecret', String(kSecret));
+			if(proxyUrl) {
+				localStorage.setItem('weblogin_twitter_cb_proxyurl', String(proxyUrl));
+			} else {
+				localStorage.setItem('weblogin_twitter_cb_proxyurl', '');
+			} //end if else
 		} //end if
 
 		cb = new Codebird;
@@ -29,12 +44,17 @@ var TwitterApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	this.unauthorize = function() {
+	this.unauthorize = function(fxLogout) {
 
 		localStorage.setItem('weblogin_twitter_data', '');
 		localStorage.setItem('weblogin_twitter_vf', '');
 		localStorage.setItem('weblogin_twitter_sk', '');
 		localStorage.setItem('weblogin_twitter_token', '');
+		localStorage.setItem('weblogin_twitter_auth', '');
+
+		if(typeof fxLogout === 'function') {
+			fxLogout();
+		} //end if
 
 	} //END FUNCTION
 
@@ -49,13 +69,15 @@ var TwitterApiHandler = new function() { // START CLASS
 		if(oauth_token && oauth_token_secret && oauth_verifier && oauth_data) {
 			cb.setToken(String(oauth_token), String(oauth_token_secret));
 		} else {
-			requestPermissions(String(callbackUrl));
+			requestPermissions(String(callbackUrl), fxResponseOk, fxResponseNotOk);
 		} //end if else
 
 	} //END FUNCTION
 
 
 	this.finalizeauth = function(fxFinalizeOk, fxFinalizeNotOk) { // for redirection popup
+
+		_class.init();
 
 		var urlParams = parseUrlParams();
 
@@ -98,6 +120,7 @@ var TwitterApiHandler = new function() { // START CLASS
 				//console.log(twData);
 				if(twData.httpstatus === 200 && twData.user_id && twData.oauth_token && twData.oauth_token_secret) {
 					localStorage.setItem('weblogin_twitter_data', String(JSON.stringify(twData)));
+					localStorage.setItem('weblogin_twitter_auth', 'yes');
 					if(typeof fxFinalizeOk === 'function') {
 						fxFinalizeOk(reply); // be sure to call popup close in fxFinalizeOk()
 					} else {
@@ -220,7 +243,7 @@ var TwitterApiHandler = new function() { // START CLASS
 	//#####
 
 
-	var requestPermissions = function(callbackUrl) {
+	var requestPermissions = function(callbackUrl, fxResponseOk, fxResponseNotOk) {
 
 		cb.__call(
 			'oauth_requestToken',
@@ -229,11 +252,8 @@ var TwitterApiHandler = new function() { // START CLASS
 			},
 			function(reply, rate, err) {
 				if(err) {
-					if(typeof fxResponseNotOk === 'function') {
-						fxResponseNotOk(err);
-					} else {
-						console.error('TwitterApiHandler: Error response or timeout exceeded' + err.error);
-					} //end if
+					console.error('TwitterApiHandler: Error response or timeout exceeded' + err.error);
+					return;
 				} //end if
 				if(reply && reply.oauth_token && reply.oauth_token_secret) {
 					//console.log('reply', reply)
@@ -253,18 +273,37 @@ var TwitterApiHandler = new function() { // START CLASS
 						'oauth_authorize',
 						{},
 						function(auth_url) {
-							var ref = window.open(String(auth_url), '_blank', 'location=no,width=600, height=400'); // redirection
-							if(!ref) { // popup may be blocked
+							try {
+								var wndPopUp = window.open(String(auth_url), '_blank', 'location=no,width=600,height=400,top=10,left=10');
+							} catch(err){
+								console.error('ERROR when trying to raise a new PopUp Window for Twitter CallBack: ' + err);
+							} //end try catch
+							if(!wndPopUp) { // popup may be blocked
 								alert('Twitter Api requires a PopUp to be opened. If you blocked PopUps you may allow this one in order to continue ...');
 								return;
 							} //end if
 							var pollTimer = setInterval(function() {
-								if(ref.closed) {
+								if(wndPopUp && wndPopUp.closed) {
 									clearInterval(pollTimer);
-									if(typeof fxResponseOk === 'function') {
-										fxResponseOk();
+									var auth_ok = localStorage.getItem('weblogin_twitter_auth');
+									if(auth_ok) {
+										auth_ok = String(auth_ok);
 									} else {
-										console.log('TwitterApiHandler: auth_url = ' + String(auth_url));
+										auth_ok = null;
+									} //end if else
+									if(auth_ok === 'yes') {
+										if(typeof fxResponseOk === 'function') {
+											fxResponseOk();
+										} else {
+											console.log('TwitterApiHandler: auth_url = ' + String(auth_url));
+										} //end if else
+									} else {
+										var msg = 'Twitter Api Authorization Failed. User did not accepted the permissions ...';
+										if(typeof fxResponseNotOk === 'function') {
+											fxResponseNotOk(msg);
+										} else {
+											console.error(msg);
+										} //end if
 									} //end if else
 									return false;
 								}
