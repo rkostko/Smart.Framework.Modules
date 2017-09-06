@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170906
+// v.170906.r9
 
 // Depends on: codebird.js
 
@@ -13,26 +13,11 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	var cb = null;
 
-	this.init = function(kKey, kSecret, proxyUrl) { // always !!
+	var storageBaseDomain = null;
 
-		if(typeof localStorage == 'undefined') {
-			console.error('The browser have no Web Storage support');
-			return;
-		} //end if
+	this.init = function(kKey, kSecret, proxyUrl, theBaseDomain) { // always !!
 
-		if(((typeof kKey == 'undefined') || (kKey === null)) && ((typeof kSecret == 'undefined') || (kSecret === null))) {
-			kKey = String(localStorage.getItem('weblogin_twitter_cb_kkey'));
-			kSecret = String(localStorage.getItem('weblogin_twitter_cb_ksecret'));
-			proxyUrl = String(localStorage.getItem('weblogin_twitter_cb_proxyurl'));
-		} else {
-			localStorage.setItem('weblogin_twitter_cb_kkey', String(kKey));
-			localStorage.setItem('weblogin_twitter_cb_ksecret', String(kSecret));
-			if(proxyUrl) {
-				localStorage.setItem('weblogin_twitter_cb_proxyurl', String(proxyUrl));
-			} else {
-				localStorage.setItem('weblogin_twitter_cb_proxyurl', '');
-			} //end if else
-		} //end if
+		storageBaseDomain = theBaseDomain ? String(theBaseDomain) : null;
 
 		cb = new Codebird;
 		if(proxyUrl) {
@@ -46,11 +31,11 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.unauthorize = function(fxLogout) {
 
-		localStorage.setItem('weblogin_twitter_data', '');
-		localStorage.setItem('weblogin_twitter_vf', '');
-		localStorage.setItem('weblogin_twitter_sk', '');
-		localStorage.setItem('weblogin_twitter_token', '');
-		localStorage.setItem('weblogin_twitter_auth', '');
+		storageSetItem('smarttwittjsapi_data', '');
+		storageSetItem('smarttwittjsapi_vf', '');
+		storageSetItem('smarttwittjsapi_sk', '');
+		storageSetItem('smarttwittjsapi_token', '');
+		storageSetItem('smarttwittjsapi_auth', '');
 
 		if(typeof fxLogout === 'function') {
 			fxLogout();
@@ -61,13 +46,18 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.authorize = function(callbackUrl, fxResponseOk, fxResponseNotOk) { // for main window
 
-		var oauth_token = localStorage.getItem('weblogin_twitter_token');
-		var oauth_token_secret = localStorage.getItem('weblogin_twitter_sk');
-		var oauth_verifier = localStorage.getItem('weblogin_twitter_vf');
-		var oauth_data = localStorage.getItem('weblogin_twitter_data');
+		var oauth_token = storageGetItem('smarttwittjsapi_token');
+		var oauth_token_secret = storageGetItem('smarttwittjsapi_sk');
+		var oauth_verifier = storageGetItem('smarttwittjsapi_vf');
+		var oauth_data = storageGetItem('smarttwittjsapi_data');
 
 		if(oauth_token && oauth_token_secret && oauth_verifier && oauth_data) {
 			cb.setToken(String(oauth_token), String(oauth_token_secret));
+			if(typeof fxResponseOk === 'function') {
+				fxResponseOk();
+			} else {
+				console.log('Twitter already authorized ...');
+			} //end if else
 		} else {
 			requestPermissions(String(callbackUrl), fxResponseOk, fxResponseNotOk);
 		} //end if else
@@ -77,14 +67,12 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.finalizeauth = function(fxFinalizeOk, fxFinalizeNotOk) { // for redirection popup
 
-		_class.init();
-
 		var urlParams = parseUrlParams();
 
 		var oauth_token = '';
 		if(urlParams.oauth_token) {
 			oauth_token = String(urlParams.oauth_token);
-			cb.setToken(oauth_token, String(localStorage.getItem('weblogin_twitter_sk'))); // oauth_token_secret
+			cb.setToken(oauth_token, String(storageGetItem('smarttwittjsapi_sk'))); // oauth_token_secret
 		} else {
 			console.error('Twitter Js Api FinalizeAuth: No oAuth Token in URL');
 			return;
@@ -94,7 +82,7 @@ var TwitterApiHandler = new function() { // START CLASS
 		var oauth_verifier = '';
 		if(urlParams.oauth_verifier) {
 			oauth_verifier = String(urlParams.oauth_verifier);
-			localStorage.setItem('weblogin_twitter_vf', String(oauth_verifier));
+			storageSetItem('smarttwittjsapi_vf', String(oauth_verifier));
 		} else {
 			console.error('Twitter Js Api FinalizeAuth: No oAuth Verifier in URL');
 			return;
@@ -119,8 +107,8 @@ var TwitterApiHandler = new function() { // START CLASS
 				} catch(err){}
 				//console.log(twData);
 				if(twData.httpstatus === 200 && twData.user_id && twData.oauth_token && twData.oauth_token_secret) {
-					localStorage.setItem('weblogin_twitter_data', String(JSON.stringify(twData)));
-					localStorage.setItem('weblogin_twitter_auth', 'yes');
+					storageSetItem('smarttwittjsapi_data', String(JSON.stringify(twData)));
+					storageSetItem('smarttwittjsapi_auth', 'yes');
 					if(typeof fxFinalizeOk === 'function') {
 						fxFinalizeOk(reply); // be sure to call popup close in fxFinalizeOk()
 					} else {
@@ -129,7 +117,7 @@ var TwitterApiHandler = new function() { // START CLASS
 						_class.closepopup();
 					} //end if else
 				} else {
-					localStorage.setItem('weblogin_twitter_data', '');
+					storageSetItem('smarttwittjsapi_data', '');
 					if(typeof fxFinalizeNotOk === 'function') {
 						fxFinalizeNotOk(reply); // be sure to call popup close in fxFinalizeOk()
 					} else {
@@ -157,7 +145,7 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.getLoginData = function() {
 
-		var oauth_data = String(localStorage.getItem('weblogin_twitter_data'));
+		var oauth_data = String(storageGetItem('smarttwittjsapi_data'));
 		//console.log(oauth_data);
 		if(!oauth_data) {
 			return false;
@@ -260,8 +248,8 @@ var TwitterApiHandler = new function() { // START CLASS
 					// stores it
 					cb.setToken(String(reply.oauth_token), String(reply.oauth_token_secret));
 					// save the token for the redirect (after user authorizes) ; we'll want to compare these values
-					localStorage.setItem('weblogin_twitter_token', String(reply.oauth_token));
-					localStorage.setItem('weblogin_twitter_sk', String(reply.oauth_token_secret));
+					storageSetItem('smarttwittjsapi_token', String(reply.oauth_token));
+					storageSetItem('smarttwittjsapi_sk', String(reply.oauth_token_secret));
 					// gets the authorize screen URL
 					// window.open(auth_url);
 					// $('#authorize').attr('href', auth_url);
@@ -285,7 +273,7 @@ var TwitterApiHandler = new function() { // START CLASS
 							var pollTimer = setInterval(function() {
 								if(wndPopUp && wndPopUp.closed) {
 									clearInterval(pollTimer);
-									var auth_ok = localStorage.getItem('weblogin_twitter_auth');
+									var auth_ok = storageGetItem('smarttwittjsapi_auth');
 									if(auth_ok) {
 										auth_ok = String(auth_ok);
 									} else {
@@ -319,6 +307,30 @@ var TwitterApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
+	//##### Data Model
+
+
+	var storageGetItem = function(key) {
+		//--
+		return getCookie(key);
+		//--
+	} //END FUNCTION
+
+
+	var storageSetItem = function(key, value) {
+		//--
+		if(value) {
+			setCookie(key, value, null, '/', storageBaseDomain);
+		} else {
+			deleteCookie(key, '/', storageBaseDomain);
+		} //end if else
+		//--
+	} //END FUNCTION
+
+
+	//##### Below functions can be supplied by Smart.Framework/Js.Api
+
+
 	var parseUrlParams = function() {
 		//--
 		var result = {};
@@ -343,6 +355,54 @@ var TwitterApiHandler = new function() { // START CLASS
 		return result; // Object
 		//--
 	} //END FUNCTION
+
+
+	var getCookie = function(name) {
+		//--
+		var c;
+		try {
+			c = document.cookie.match(new RegExp('(^|;)\\s*' + String(name) + '=([^;\\s]*)'));
+		} catch(err){
+			console.error('NOTICE: BrowserUtils Failed to getCookie: ' + err);
+		} //end try catch
+		//--
+		if(c && c.length >= 3) {
+			var d = decodeURIComponent(c[2]) || ''; // fix to avoid working with null !!
+			return String(d);
+		} else {
+			return ''; // fix to avoid working with null !!
+		} //end if
+		//--
+	} //END FUNCTION
+
+
+	var setCookie = function(name, value, days, path, domain, secure) {
+		//--
+		if((typeof value == 'undefined') || (value == undefined) || (value == null)) {
+			return; // bug fix (avoid to set null cookie)
+		} //end if
+		//--
+		var d = new Date();
+		//--
+		if(days) {
+			d.setTime(d.getTime() + (days * 8.64e7)); // now + days in milliseconds
+		} //end if
+		//--
+		try {
+			document.cookie = String(name) + '=' + encodeURIComponent(value) + (days ? ('; expires=' + d.toGMTString()) : '') + '; path=' + (path || '/') + (domain ? ('; domain=' + domain) : '') + (secure ? '; secure' : '');
+		} catch(err){
+			console.error('NOTICE: Failed to setCookie: ' + err);
+		} //end try catch
+		//--
+	} //END FUNCTION
+
+
+	var deleteCookie = function(name, path, domain, secure) {
+		//--
+		setCookie(name, '', -1, path, domain, secure); // sets expiry to now - 1 day
+		//--
+	} //END FUNCTION
+
 
 
 } //END CLASS

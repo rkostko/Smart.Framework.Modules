@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v.170906.r9 -->
 <html>
 <head>
 <meta charset="UTF-8">
@@ -26,13 +27,13 @@
 		} else {
 			$('#btn-login').show();
 			$('#btn-logout').hide();
-			$('#btn-imgpost').hide();
-			$('#post_img_preview').hide();
+	//		$('#btn-imgpost').hide();
+	//		$('#post_img_preview').hide();
 		} //end if else
 	});
 
 	function twitterLogin() {
-		TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl);
+		TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain);
 		TwitterApiHandler.authorize(
 			twitterLocalCallbackUrl,
 			function(){ // OK
@@ -46,23 +47,39 @@
 	function twitterLogout() {
 		TwitterApiHandler.unauthorize(
 			function(){ // ALWAYS
-				self.location.reload();
+				console.log('You have been logged out from Twitter ...');
+				setTimeout(function(){
+					self.location.reload();
+				}, 1500);
 			}
 		);
 	}
 	function twitterPost() {
-		twitterLogin();
-		TwitterApiHandler.postImage(
-			imgB64,
-			'Hello World, a test message ...',
-			function(){ // function OK
-				console.log('Twitter image was posted OK');
-				$('#btn-imgpost').hide();
+		TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain);
+		TwitterApiHandler.authorize(
+			twitterLocalCallbackUrl,
+			function(){ // OK
+				TwitterApiHandler.postImage(
+					imgB64,
+					'Hello World, a test message ...',
+					function(){ // function OK
+						console.log('Twitter image was posted OK');
+						$('#btn-imgpost').hide();
+						setTimeout(function(){
+							self.location.reload();
+						}, 1500);
+					},
+					function(){ // function FAIL
+						alert('ERROR: Twitter image was NOT posted !!!');
+					}
+				);
 			},
-			function(){ // function FAIL
-				alert('ERROR: Twitter image was NOT posted !!!');
+			function(){ // ERR
+				alert('Twitter Login / Authorize FAILED');
 			}
 		);
+
+
 	}
 
 </script>
