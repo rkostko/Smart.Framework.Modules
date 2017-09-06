@@ -2,7 +2,7 @@
 // Controller: SmTwitter/CodebirdProxy
 // Route: ?page=sm-twitter.codebird-proxy
 // Author: Radu I.
-// v.170906.r9
+// v.170906.r11
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -52,7 +52,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		$method = (string) $_SERVER['REQUEST_METHOD'];
 
 		$cors_headers = [
-			'Access-Control-Allow-Origin' 	=> ' *',
+			'Access-Control-Allow-Origin' 	=> '*',
 			'Access-Control-Allow-Headers' 	=> 'Origin, X-Authorization, Content-Type, Content-Range, X-TON-Expires, X-TON-Content-Type, X-TON-Content-Length',
 			'Access-Control-Allow-Methods' 	=> 'POST, GET, OPTIONS',
 			'Access-Control-Expose-Headers' => 'X-Rate-Limit-Limit, X-Rate-Limit-Remaining, X-Rate-Limit-Reset'
@@ -179,6 +179,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		$url = 'https://'.$api_host.substr($url, $version_pos);
 
 		// send request to Twitter API
+		//Smart::log_notice($url);
 		$ch = curl_init($url);
 		if(!$ch) {
 			$this->PageViewSetErrorStatus(502, 'ERROR: while initialize connection to Twitter API URL.');

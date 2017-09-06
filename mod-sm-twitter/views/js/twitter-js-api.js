@@ -1,9 +1,9 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170906.r9
+// v.170906.r11
 
-// Depends on: codebird.js
+// Depends on: codebird.js, SmartJS_BrowserUtils
 
 var TwitterApiHandler = new function() { // START CLASS
 
@@ -107,25 +107,70 @@ var TwitterApiHandler = new function() { // START CLASS
 				} catch(err){}
 				//console.log(twData);
 				if(twData.httpstatus === 200 && twData.user_id && twData.oauth_token && twData.oauth_token_secret) {
-					storageSetItem('smarttwittjsapi_data', String(JSON.stringify(twData)));
-					storageSetItem('smarttwittjsapi_auth', 'yes');
-					if(typeof fxFinalizeOk === 'function') {
-						fxFinalizeOk(reply); // be sure to call popup close in fxFinalizeOk()
-					} else {
-						console.log('TwitterApiHandler: OK-reply =');
-						console.log(reply);
-						_class.closepopup();
-					} //end if else
+					cb.__call(
+						'account_verifyCredentials',
+						{
+							include_entities: 'false',
+							skip_status: 'false',
+							include_email: 'true'
+						},
+						function(reply) {
+							console.log(reply);
+							if(reply && reply.httpstatus === 200 && reply.id && reply.id == twData.user_id) {
+								//--
+								twData.httpstatus = 'OK:' + String(twData.httpstatus) + '/' + String(reply.httpstatus);
+								twData.email = reply.email || '';
+								twData.name = reply.name || '';
+								twData.description = reply.description || '';
+								twData.lang = reply.lang || '';
+								twData.location = reply.location || '';
+								twData.time_zone = reply.time_zone || '';
+								twData.utc_offset = reply.utc_offset || 0;
+								twData.verified = reply.verified || false;
+								twData.has_extended_profile = reply.has_extended_profile || false;
+								twData.default_profile = reply.default_profile || false;
+								//twData.default_profile_image = reply.default_profile_image || false;
+								twData.profile_image_url = reply.profile_image_url_https || reply.profile_image_url || '';
+								//--
+								storageSetItem('smarttwittjsapi_data', String(JSON.stringify(twData)));
+								storageSetItem('smarttwittjsapi_auth', 'yes');
+								//--
+								if(typeof fxFinalizeOk === 'function') {
+									fxFinalizeOk(reply); // be sure to call popup close in fxFinalizeOk()
+								} else {
+									console.log('TwitterApiHandler: OK-reply =');
+									console.log(reply);
+									_class.closepopup();
+								} //end if else
+								//--
+							} else {
+								//--
+								storageSetItem('smarttwittjsapi_data', '');
+								//--
+								if(typeof fxFinalizeNotOk === 'function') {
+									fxFinalizeNotOk(reply); // be sure to call popup close in fxFinalizeOk()
+								} else {
+									console.log('TwitterApiHandler: NOTOK-#2-reply =');
+									console.log(reply);
+									_class.closepopup();
+								} //end if else
+								//--
+							} //end if else
+						} // end function
+					);
 				} else {
+					//--
 					storageSetItem('smarttwittjsapi_data', '');
+					//--
 					if(typeof fxFinalizeNotOk === 'function') {
 						fxFinalizeNotOk(reply); // be sure to call popup close in fxFinalizeOk()
 					} else {
-						console.log('TwitterApiHandler: NOTOK-reply =');
+						console.log('TwitterApiHandler: NOTOK-#1-reply =');
 						console.log(reply);
 						_class.closepopup();
 					} //end if else
-				}
+					//--
+				} //end if else
 			} //end function
 		);
 
@@ -164,7 +209,7 @@ var TwitterApiHandler = new function() { // START CLASS
 			return false;
 		} //end if
 
-		if((!oauth_data.hasOwnProperty('oauth_token')) || (!oauth_data.hasOwnProperty('oauth_token_secret')) || (!oauth_data.hasOwnProperty('user_id')) || (!oauth_data.hasOwnProperty('httpstatus')) || (oauth_data.httpstatus !== 200)) {
+		if((!oauth_data.hasOwnProperty('oauth_token')) || (!oauth_data.hasOwnProperty('oauth_token_secret')) || (!oauth_data.hasOwnProperty('user_id')) || (!oauth_data.hasOwnProperty('httpstatus')) || (oauth_data.httpstatus !== 'OK:200/200')) {
 			return false;
 		} //end if
 
@@ -328,11 +373,14 @@ var TwitterApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	//##### Below functions can be supplied by Smart.Framework/Js.Api
+	//##### Below functions can be supplied by Smart.Framework/Js.Api/SmartJS_BrowserUtils
 
 
 	var parseUrlParams = function() {
 		//--
+		return SmartJS_BrowserUtils.parseCurrentUrlGetParams()
+		//--
+		/*
 		var result = {};
 		//--
 		if(!location.search) {
@@ -351,6 +399,7 @@ var TwitterApiHandler = new function() { // START CLASS
 				result[String(item[0])] = String(decodeURIComponent(String(item[1])));
 			} //end if
 		});
+		*/
 		//--
 		return result; // Object
 		//--
@@ -359,6 +408,9 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	var getCookie = function(name) {
 		//--
+		return SmartJS_BrowserUtils.getCookie(name);
+		//--
+		/*
 		var c;
 		try {
 			c = document.cookie.match(new RegExp('(^|;)\\s*' + String(name) + '=([^;\\s]*)'));
@@ -372,12 +424,16 @@ var TwitterApiHandler = new function() { // START CLASS
 		} else {
 			return ''; // fix to avoid working with null !!
 		} //end if
+		*/
 		//--
 	} //END FUNCTION
 
 
 	var setCookie = function(name, value, days, path, domain, secure) {
 		//--
+		SmartJS_BrowserUtils.setCookie(name, value, days, path, domain, secure);
+		//--
+		/*
 		if((typeof value == 'undefined') || (value == undefined) || (value == null)) {
 			return; // bug fix (avoid to set null cookie)
 		} //end if
@@ -393,13 +449,18 @@ var TwitterApiHandler = new function() { // START CLASS
 		} catch(err){
 			console.error('NOTICE: Failed to setCookie: ' + err);
 		} //end try catch
+		*/
 		//--
 	} //END FUNCTION
 
 
 	var deleteCookie = function(name, path, domain, secure) {
 		//--
+		SmartJS_BrowserUtils.deleteCookie(name, path, domain, secure);
+		//--
+		/*
 		setCookie(name, '', -1, path, domain, secure); // sets expiry to now - 1 day
+		*/
 		//--
 	} //END FUNCTION
 
