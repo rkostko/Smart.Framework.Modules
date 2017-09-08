@@ -155,10 +155,12 @@ var TwitterApiHandler = new function() { // START CLASS
 								loginData.location = reply.location || '';
 								//--
 								loginData.locale = reply.lang || '';
-								loginData.imgurl = reply.profile_image_url_https || '';
+								loginData.username = reply.username || '';
 								//--
 								loginData.verified = reply.verified ? 1 : 0;
 								loginData.permissions = [];
+								//--
+								// #imageurl# : https://twitter.com/{username}/profile_image?size=mini|normal|original
 								//--
 								storageSetItem('smarttwittjsapi_data', String(JSON.stringify(loginData)), true);
 								storageSetItem('smarttwittjsapi_auth', 'Y');

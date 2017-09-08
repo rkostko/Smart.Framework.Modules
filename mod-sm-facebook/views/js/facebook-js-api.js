@@ -61,6 +61,8 @@ var FacebookApiHandler = new function() { // START CLASS
 					verified: response.verified ? 1 : 0,
 					permissions: perms
 					//--
+					// #imageurl# : http://graph.facebook.com/{uid}/picture?width=64|1280&height=64|1280
+					//--
 				};
 				if(typeof fxResponseOk === 'function') {
 					fxResponseOk(response, FbLoginData);
