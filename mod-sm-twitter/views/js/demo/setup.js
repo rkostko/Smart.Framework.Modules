@@ -1,10 +1,10 @@
 
-// Twitter Api Setup :: v.170906.r11
+// Twitter Api Setup :: v.170908
 
 var twitterConsumerKey = '';
 var twitterConsumerSecret = '';
-var twitterCbProxyUrl = '?/page/sm-twitter/codebird-proxy/';
-var twitterLocalCallbackUrl = 'callback.html';
+var twitterCbProxyUrl = 'https://127.0.0.1/sites/frameworks/smart-framework/index.php/page/sm-twitter.codebird-proxy/~/';
+var twitterLocalCallbackUrl = 'https://127.0.0.1/sites/frameworks/smart-framework/modules/mod-sm-twitter/views/js/demo/callback.html';
 var twitterLocalBaseDomain = null; // null or domain.ext if multi sub-domain web app ...
 
 // END

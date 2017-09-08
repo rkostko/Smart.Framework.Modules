@@ -9,7 +9,7 @@
  * @link      https://github.com/jublonet/codebird-php
  */
 
-// v.170906.r11
+// v.170908
 
 /* jshint curly: true,
 		eqeqeq: true,

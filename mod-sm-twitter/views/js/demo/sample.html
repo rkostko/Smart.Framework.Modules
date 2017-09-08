@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- v.170906.r11 -->
+<!-- v.170908 -->
 <html>
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Twitter JS API Test</title>
-<script src="../jquery.js"></script>
-<script src="../smart-framework.js"></script>
+<script src="../../../../../lib/js/jquery/jquery.js"></script>
+<script src="../../../../../lib/js/framework/smart-framework.js"></script>
 <script src="../codebird.js"></script>
 <script src="../twitter-js-api.js"></script>
 <script src="setup.js"></script>
@@ -21,6 +21,7 @@
 	$(document).ready(function() {
 		$('#post_img_preview').attr('src', imgB64);
 		if(isLoggedIn) {
+			console.log(isLoggedIn);
 			$('#btn-login').hide();
 			$('#btn-logout').show();
 			$('#btn-imgpost').show();
@@ -34,16 +35,17 @@
 	});
 
 	function twitterLogin() {
-		TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain);
-		TwitterApiHandler.authorize(
-			twitterLocalCallbackUrl,
-			function(){ // OK
-				self.location.reload();
-			},
-			function(){ // ERR
-				alert('Twitter Login / Authorize FAILED');
-			}
-		);
+		if(TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain)) {
+			TwitterApiHandler.authorize(
+				twitterLocalCallbackUrl,
+				function(){ // OK
+					self.location.reload();
+				},
+				function(){ // ERR
+					alert('Twitter Login / Authorize FAILED');
+				}
+			);
+		}
 	}
 	function twitterLogout() {
 		TwitterApiHandler.unauthorize(
@@ -56,31 +58,31 @@
 		);
 	}
 	function twitterPost() {
-		TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain);
-		TwitterApiHandler.authorize(
-			twitterLocalCallbackUrl,
-			function(){ // OK
-				TwitterApiHandler.postImage(
-					imgB64,
-					'Hello World, a test message ...',
-					function(){ // function OK
-						console.log('Twitter image was posted OK');
-						$('#btn-imgpost').hide();
-						setTimeout(function(){
-							self.location.reload();
-						}, 1500);
-					},
-					function(){ // function FAIL
-						alert('ERROR: Twitter image was NOT posted !!!');
-					}
-				);
-			},
-			function(){ // ERR
-				alert('Twitter Login / Authorize FAILED');
-			}
-		);
-
-
+		if(TwitterApiHandler.init(twitterConsumerKey, twitterConsumerSecret, twitterCbProxyUrl, twitterLocalBaseDomain)) {
+			TwitterApiHandler.authorize(
+				twitterLocalCallbackUrl,
+				function(){ // OK
+					TwitterApiHandler.postImage(
+						imgB64,
+						'Hello World, a test message ...',
+						function(){ // function OK
+							console.log('Twitter image was posted OK');
+							$('#btn-imgpost').hide();
+							setTimeout(function(){
+								self.location.reload();
+							}, 1500);
+						},
+						function(reply, rate, err){ // function FAIL
+							alert('ERROR: Twitter image was NOT posted !!!');
+							console.log(reply, rate, err);
+						}
+					);
+				},
+				function(){ // ERR
+					alert('Twitter Login / Authorize FAILED');
+				}
+			);
+		}
 	}
 
 </script>

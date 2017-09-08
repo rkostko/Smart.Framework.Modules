@@ -2,7 +2,7 @@
 // Controller: SmTwitter/CodebirdProxy
 // Route: ?page=sm-twitter.codebird-proxy
 // Author: Radu I.
-// v.170906.r11
+// v.170908
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -48,7 +48,8 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			return;
 		} //end if
 
-		$url = (string) $_SERVER['REQUEST_URI'];
+	//	$url = (string) $this->RequestPathGet(); // this does not works OK ...
+		$url = (string) $_SERVER['REQUEST_URI']; // (original) this works with both: ApacheRewrite and SmartFramework crafted PathInfo
 		$method = (string) $_SERVER['REQUEST_METHOD'];
 
 		$cors_headers = [

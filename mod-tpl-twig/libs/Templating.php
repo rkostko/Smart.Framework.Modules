@@ -111,13 +111,13 @@ final class Templating {
 //--
 function autoload__TwigTemplating_SFM($classname) {
 	//--
-	$classname = (string) ''.$classname;
+	$classname = (string) $classname;
 	//--
 	if(strpos((string)$classname, '\\') !== false) { // if have no namespace
 		return;
 	} //end if
 	//--
-	if(substr((string)$classname, 0, 4) !== 'Twig') { // if class name is not starting with Twig
+	if((string)substr((string)$classname, 0, 4) !== 'Twig') { // if class name is not starting with Twig
 		return;
 	} //end if
 	//--

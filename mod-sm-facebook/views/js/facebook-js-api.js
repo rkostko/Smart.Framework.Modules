@@ -1,10 +1,10 @@
 
 // Facebook JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170831
+// v.170908
 
 // Depends on: jQuery
-// Depends *optional* on: SmartJS_Base64
+// Depends on: SmartJS_Base64, SmartJS_Archiver_LZS, SmartJS_BrowserUtils
 
 var FacebookApiHandler = new function() { // START CLASS
 
@@ -17,7 +17,8 @@ var FacebookApiHandler = new function() { // START CLASS
 		oauth: 		true,
 		xfbml: 		true,
 		perms: 		'public_profile,email,publish_actions', // Extended permissions (req. FB approval): 'manage_pages,publish_pages,user_managed_groups'
-		version: 	'v2.10'
+		version: 	'v2.10',
+		domain: 	null
 	};
 
 
@@ -26,36 +27,45 @@ var FacebookApiHandler = new function() { // START CLASS
 
 
 	var FbGetLoginData = function(fxResponseOk) {
-		//--
-		FB.api('/me?fields=name,first_name,middle_name,last_name,email,gender,birthday,education,hometown,location,locale,timezone,verified,website,permissions', function(response) {
+		//-- {{{SYNC-FACEBOOK-GET-ME}}}
+		FB.api('/me?fields=id,name,email,gender,birthday,location,timezone,locale,verified,permissions', function(response) {
 			//console.log(response);
 			if(response && response.id) {
 				//--
-				var perms = {};
+				var perms = [];
 				if(response.permissions && response.permissions.data) {
 					for(var i=0; i<response.permissions.data.length; i++) {
-						var p = response.permissions.data[i].permission;
-						var s = response.permissions.data[i].status;
-						perms[p] = s;
+						if(response.permissions.data[i].status === 'granted') {
+							var p = response.permissions.data[i].permission;
+							perms.push(String(p));
+						} //end if
 					} //end for
 				} //end if
 				//--
-				FbLoginData = {
-					login: 1,
-					uid: response.id,
-					name: response.name,
-					f_name: response.first_name,
-					m_name: response.middle_name,
-					l_name: response.last_name,
-					email: response.email,
-					gender: response.gender,
-					location: response.location,
-					birthday: response.birthday,
+				FbLoginData = { // {{{SYNC-FB-DATA}}}
+					//--
+					httpstatus: '200/200',
+					//--
+					token: String(FbAccessToken) || '',
+					//--
+					uid: response.id || '',
+					email: response.email || '',
+					name: response.name || '',
+					timezone: Math.round(response.timezone) * 60 || 0, // timezone in minutes
+					location: response.location || '',
+					//--
+					locale: response.locale || '',
+					gender: response.gender || '',
+					birthday: response.birthday || '',
+					//--
+					verified: response.verified ? 1 : 0,
 					permissions: perms
+					//--
 				};
 				if(typeof fxResponseOk === 'function') {
-					fxResponseOk(response, FbAccessToken, FbLoginData);
+					fxResponseOk(response, FbLoginData);
 				} //end if
+				storageSetItem('smartfbookjsapi_data', String(JSON.stringify(FbLoginData)), true);
 			} //end if
 			//console.log(FbLoginData);
 		});
@@ -64,11 +74,15 @@ var FacebookApiHandler = new function() { // START CLASS
 
 
 	this.init = function(settings, fxSubscribe, fxResponseOk, fxResponseNotOk, fxResponseUnauth) {
+		//--
+		if(!settings.appId) {
+			console.error('Facebook Js Api: No App Id used to initialize ...');
+		} //end if
 		//-- mandatory settings
-		FbSettings.appId = '' + settings.appId;
+		FbSettings.appId = String(settings.appId);
 		//-- optional settings
 		if(settings.lang) {
-			FbSettings.lang = '' + settings.lang;
+			FbSettings.lang = String(settings.lang);
 		} //end if
 		if(settings.status === false) {
 			FbSettings.status = false;
@@ -134,13 +148,6 @@ var FacebookApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	this.getAccessToken = function() {
-		//--
-		return FbAccessToken;
-		//--
-	} //END FUNCTION
-
-
 	this.login = function(fxResponseOk) {
 		//--
 		FB.getLoginStatus(
@@ -173,6 +180,7 @@ var FacebookApiHandler = new function() { // START CLASS
 					FB.logout(function(response) {
 						FbLoginData = null;
 						FbAccessToken = null;
+						storageSetItem('smartfbookjsapi_data', '', true);
 						fxResponseLogout(response);
 					});
 				} //end if
@@ -219,11 +227,11 @@ var FacebookApiHandler = new function() { // START CLASS
 		//--
 		var blob;
 		try {
-			if(typeof SmartJS_Base64 != 'undefined') {
+		//	if(typeof SmartJS_Base64 != 'undefined') {
 				var byteString = SmartJS_Base64.decode(imB64, true); // works in all browsers
-			} else {
-				var byteString = atob(imB64); // IE 10+ ; FFox 3+ ; Webkit 3+ ; Safari 3+ ; Opera 7+
-			} //end if else
+		//	} else {
+		//		var byteString = atob(imB64); // IE 10+ ; FFox 3+ ; Webkit 3+ ; Safari 3+ ; Opera 7+
+		//	} //end if else
 			var ab = new ArrayBuffer(byteString.length);
 			var ia = new Uint8Array(ab);
 			for(var i = 0; i < byteString.length; i++) {
@@ -268,6 +276,103 @@ var FacebookApiHandler = new function() { // START CLASS
 				auth_type: 'rerequest'
 			}
 		);
+		//--
+	} //END FUNCTION
+
+
+	//##### Data Model
+
+
+	var storageGetItem = function(key, archive) {
+		//--
+		var value = getCookie(key);
+		//--
+		if(archive) {
+			if(value) {
+				value = String(SmartJS_Archiver_LZS.decompressFromBase64(String(value)));
+			} //end if
+		} //end if
+		//--
+		return value;
+		//--
+	} //END FUNCTION
+
+
+	var storageSetItem = function(key, value, archive) {
+		//--
+		if(archive) {
+			if(value) {
+				value = String(SmartJS_Archiver_LZS.compressToBase64(String(value)));
+			} //end if
+		} //end if
+		//--
+		if(value) {
+			setCookie(key, value, null, '/', FbSettings.domain);
+		} else {
+			deleteCookie(key, '/', FbSettings.domain);
+		} //end if else
+		//--
+	} //END FUNCTION
+
+
+	//##### Below functions can be supplied by Smart.Framework/Js.Api/SmartJS_BrowserUtils
+
+
+	var getCookie = function(name) {
+		//--
+		return SmartJS_BrowserUtils.getCookie(name);
+		//--
+		/*
+		var c;
+		try {
+			c = document.cookie.match(new RegExp('(^|;)\\s*' + String(name) + '=([^;\\s]*)'));
+		} catch(err){
+			console.error('NOTICE: BrowserUtils Failed to getCookie: ' + err);
+		} //end try catch
+		//--
+		if(c && c.length >= 3) {
+			var d = decodeURIComponent(c[2]) || ''; // fix to avoid working with null !!
+			return String(d);
+		} else {
+			return ''; // fix to avoid working with null !!
+		} //end if
+		*/
+		//--
+	} //END FUNCTION
+
+
+	var setCookie = function(name, value, days, path, domain, secure) {
+		//--
+		SmartJS_BrowserUtils.setCookie(name, value, days, path, domain, secure);
+		//--
+		/*
+		if((typeof value == 'undefined') || (value == undefined) || (value == null)) {
+			return; // bug fix (avoid to set null cookie)
+		} //end if
+		//--
+		var d = new Date();
+		//--
+		if(days) {
+			d.setTime(d.getTime() + (days * 8.64e7)); // now + days in milliseconds
+		} //end if
+		//--
+		try {
+			document.cookie = String(name) + '=' + encodeURIComponent(value) + (days ? ('; expires=' + d.toGMTString()) : '') + '; path=' + (path || '/') + (domain ? ('; domain=' + domain) : '') + (secure ? '; secure' : '');
+		} catch(err){
+			console.error('NOTICE: Failed to setCookie: ' + err);
+		} //end try catch
+		*/
+		//--
+	} //END FUNCTION
+
+
+	var deleteCookie = function(name, path, domain, secure) {
+		//--
+		SmartJS_BrowserUtils.deleteCookie(name, path, domain, secure);
+		//--
+		/*
+		setCookie(name, '', -1, path, domain, secure); // sets expiry to now - 1 day
+		*/
 		//--
 	} //END FUNCTION
 

@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170906.r11
+// v.170908
 
 // Depends on: codebird.js, SmartJS_BrowserUtils
 
@@ -17,6 +17,19 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.init = function(kKey, kSecret, proxyUrl, theBaseDomain) { // always !!
 
+		if(!kKey) {
+			alert('Twitter Api: Empty CB Key !');
+			return false;
+		} //end if
+		if(!kSecret) {
+			alert('Twitter Api: Empty CB Secret !');
+			return false;
+		} //end if
+		if(!proxyUrl) {
+			alert('Twitter Api: Empty CB Proxy !');
+			return false;
+		} //end if
+
 		storageBaseDomain = theBaseDomain ? String(theBaseDomain) : null;
 
 		cb = new Codebird;
@@ -26,16 +39,18 @@ var TwitterApiHandler = new function() { // START CLASS
 		} //end if
 		cb.setConsumerKey(String(kKey), String(kSecret));
 
+		return true;
+
 	} //END FUNCTION
 
 
 	this.unauthorize = function(fxLogout) {
 
-		storageSetItem('smarttwittjsapi_data', '');
+		storageSetItem('smarttwittjsapi_data', '', true);
+		storageSetItem('smarttwittjsapi_auth', '');
 		storageSetItem('smarttwittjsapi_vf', '');
 		storageSetItem('smarttwittjsapi_sk', '');
 		storageSetItem('smarttwittjsapi_token', '');
-		storageSetItem('smarttwittjsapi_auth', '');
 
 		if(typeof fxLogout === 'function') {
 			fxLogout();
@@ -46,13 +61,10 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.authorize = function(callbackUrl, fxResponseOk, fxResponseNotOk) { // for main window
 
-		var oauth_token = storageGetItem('smarttwittjsapi_token');
-		var oauth_token_secret = storageGetItem('smarttwittjsapi_sk');
-		var oauth_verifier = storageGetItem('smarttwittjsapi_vf');
-		var oauth_data = storageGetItem('smarttwittjsapi_data');
+		var oauth_data = _class.getLoginData();
 
-		if(oauth_token && oauth_token_secret && oauth_verifier && oauth_data) {
-			cb.setToken(String(oauth_token), String(oauth_token_secret));
+		if(oauth_data && oauth_data.token && oauth_data.secret && oauth_data.uid) {
+			cb.setToken(String(oauth_data.token), String(oauth_data.secret));
 			if(typeof fxResponseOk === 'function') {
 				fxResponseOk();
 			} else {
@@ -68,11 +80,13 @@ var TwitterApiHandler = new function() { // START CLASS
 	this.finalizeauth = function(fxFinalizeOk, fxFinalizeNotOk) { // for redirection popup
 
 		var urlParams = parseUrlParams();
+		var oauth_secret = String(storageGetItem('smarttwittjsapi_sk'));
 
+		// get new token from URL
 		var oauth_token = '';
-		if(urlParams.oauth_token) {
+		if(urlParams.oauth_token && oauth_secret) {
 			oauth_token = String(urlParams.oauth_token);
-			cb.setToken(oauth_token, String(storageGetItem('smarttwittjsapi_sk'))); // oauth_token_secret
+			cb.setToken(oauth_token, oauth_secret); // oauth_token_secret
 		} else {
 			console.error('Twitter Js Api FinalizeAuth: No oAuth Token in URL');
 			return;
@@ -93,7 +107,16 @@ var TwitterApiHandler = new function() { // START CLASS
 			{
 				oauth_verifier: String(oauth_verifier)
 			},
-			function (reply) {
+			function(reply) {
+				//-- unset these, no more need
+				storageSetItem('smarttwittjsapi_token', '');
+				storageSetItem('smarttwittjsapi_sk', '');
+				storageSetItem('smarttwittjsapi_vf', '');
+				//--
+				if(!reply || !reply.oauth_token || !reply.oauth_token_secret) {
+					console.error('Twitter Js/Api: Failed to get New Twitter Token/Secret ...');
+					return;
+				} //end if
 				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
 				var twData = {};
 				try {
@@ -115,25 +138,30 @@ var TwitterApiHandler = new function() { // START CLASS
 							include_email: 'true'
 						},
 						function(reply) {
-							console.log(reply);
-							if(reply && reply.httpstatus === 200 && reply.id && reply.id == twData.user_id) {
+							//console.log(reply);
+							if(reply && reply.httpstatus === 200 && reply.id && reply.id == twData.user_id && reply.id_str && reply.id_str == twData.user_id) {
 								//--
-								twData.httpstatus = 'OK:' + String(twData.httpstatus) + '/' + String(reply.httpstatus);
-								twData.email = reply.email || '';
-								twData.name = reply.name || '';
-								twData.description = reply.description || '';
-								twData.lang = reply.lang || '';
-								twData.location = reply.location || '';
-								twData.time_zone = reply.time_zone || '';
-								twData.utc_offset = reply.utc_offset || 0;
-								twData.verified = reply.verified || false;
-								twData.has_extended_profile = reply.has_extended_profile || false;
-								twData.default_profile = reply.default_profile || false;
-								//twData.default_profile_image = reply.default_profile_image || false;
-								twData.profile_image_url = reply.profile_image_url_https || reply.profile_image_url || '';
+								loginData = {}; // {{{SYNC-TWITT-DATA}}}
 								//--
-								storageSetItem('smarttwittjsapi_data', String(JSON.stringify(twData)));
-								storageSetItem('smarttwittjsapi_auth', 'yes');
+								loginData.httpstatus = String(twData.httpstatus) + '/' + String(reply.httpstatus);
+								//--
+								loginData.token = String(twData.oauth_token) || '';
+								loginData.secret = String(twData.oauth_token_secret) || '';
+								//--
+								loginData.uid = String(reply.id_str) || ''; // When consuming the API using JSON, it is important to always use the field id_str instead of id. This is due to the way Javascript and other languages that consume JSON evaluate large integers (https://dev.twitter.com/overview/api/twitter-ids-json-and-snowflake)
+								loginData.email = reply.email || '';
+								loginData.name = reply.name || '';
+								loginData.timezone = Math.round(reply.utc_offset / 60) || 0;
+								loginData.location = reply.location || '';
+								//--
+								loginData.locale = reply.lang || '';
+								loginData.imgurl = reply.profile_image_url_https || '';
+								//--
+								loginData.verified = reply.verified ? 1 : 0;
+								loginData.permissions = [];
+								//--
+								storageSetItem('smarttwittjsapi_data', String(JSON.stringify(loginData)), true);
+								storageSetItem('smarttwittjsapi_auth', 'Y');
 								//--
 								if(typeof fxFinalizeOk === 'function') {
 									fxFinalizeOk(reply); // be sure to call popup close in fxFinalizeOk()
@@ -145,7 +173,7 @@ var TwitterApiHandler = new function() { // START CLASS
 								//--
 							} else {
 								//--
-								storageSetItem('smarttwittjsapi_data', '');
+								storageSetItem('smarttwittjsapi_data', '', true);
 								//--
 								if(typeof fxFinalizeNotOk === 'function') {
 									fxFinalizeNotOk(reply); // be sure to call popup close in fxFinalizeOk()
@@ -160,7 +188,7 @@ var TwitterApiHandler = new function() { // START CLASS
 					);
 				} else {
 					//--
-					storageSetItem('smarttwittjsapi_data', '');
+					storageSetItem('smarttwittjsapi_data', '', true);
 					//--
 					if(typeof fxFinalizeNotOk === 'function') {
 						fxFinalizeNotOk(reply); // be sure to call popup close in fxFinalizeOk()
@@ -179,7 +207,8 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.closepopup = function() {
 
-		if(window.opener) {
+		//if(window.opener) {
+		if(SmartJS_BrowserUtils.WindowIsPopup()) {
 			try {
 				self.close();
 			} catch(err){}
@@ -190,7 +219,7 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	this.getLoginData = function() {
 
-		var oauth_data = String(storageGetItem('smarttwittjsapi_data'));
+		var oauth_data = String(storageGetItem('smarttwittjsapi_data', true));
 		//console.log(oauth_data);
 		if(!oauth_data) {
 			return false;
@@ -209,7 +238,7 @@ var TwitterApiHandler = new function() { // START CLASS
 			return false;
 		} //end if
 
-		if((!oauth_data.hasOwnProperty('oauth_token')) || (!oauth_data.hasOwnProperty('oauth_token_secret')) || (!oauth_data.hasOwnProperty('user_id')) || (!oauth_data.hasOwnProperty('httpstatus')) || (oauth_data.httpstatus !== 'OK:200/200')) {
+		if((!oauth_data.hasOwnProperty('token')) || (!oauth_data.hasOwnProperty('secret')) || (!oauth_data.hasOwnProperty('uid')) || (!oauth_data.hasOwnProperty('httpstatus')) || (oauth_data.httpstatus !== '200/200')) {
 			return false;
 		} //end if
 
@@ -222,7 +251,7 @@ var TwitterApiHandler = new function() { // START CLASS
 
 		var oauth_data = _class.getLoginData();
 
-		if(!oauth_data) {
+		if(!oauth_data || !oauth_data.token || !oauth_data.secret || !oauth_data.uid) {
 			if(typeof fxFail === 'function') {
 				fxFail(null, null, 'ERROR: Invalid Twitter Data');
 			} else {
@@ -231,8 +260,8 @@ var TwitterApiHandler = new function() { // START CLASS
 			return;
 		} //end if
 
-		var oauth_token = String(oauth_data.oauth_token);
-		var oauth_token_secret = String(oauth_data.oauth_token_secret);
+		var oauth_token = String(oauth_data.token);
+		var oauth_token_secret = String(oauth_data.secret);
 		//console.log(oauth_token, oauth_token_secret);
 		cb.setToken(oauth_token, oauth_token_secret);
 
@@ -251,11 +280,20 @@ var TwitterApiHandler = new function() { // START CLASS
 							'status': String(postMessage)
 						},
 						function(reply) {
-							if(typeof fxDone === 'function') {
-								fxDone(reply, rate, err);
+							if(!reply.errors) {
+								if(typeof fxDone === 'function') {
+									fxDone(reply, rate, err);
+								} else {
+									console.log('OK, media posted on Twitter ...')
+									console.log(reply, rate, err);
+								} //end if else
 							} else {
-								console.log('OK, media posted on Twitter ...')
-								console.log(reply, rate, err);
+								if(typeof fxFail === 'function') {
+									fxFail(reply, rate, err);
+								} else {
+									console.log('NOTOK, media was NOT posted on Twitter ...')
+									console.log(reply, rate, err);
+								} //end if else
 							} //end if else
 						} //end function
 					);
@@ -277,6 +315,8 @@ var TwitterApiHandler = new function() { // START CLASS
 
 
 	var requestPermissions = function(callbackUrl, fxResponseOk, fxResponseNotOk) {
+
+		var wndPopUp = window.open('', '_blank', 'location=no,width=600,height=400,top=10,left=10');
 
 		cb.__call(
 			'oauth_requestToken',
@@ -307,12 +347,13 @@ var TwitterApiHandler = new function() { // START CLASS
 						{},
 						function(auth_url) {
 							try {
-								var wndPopUp = window.open(String(auth_url), '_blank', 'location=no,width=600,height=400,top=10,left=10');
+								//var wndPopUp = window.open(String(auth_url), '_blank', 'location=no,width=600,height=400,top=10,left=10');
+								wndPopUp.location = String(auth_url);
 							} catch(err){
-								console.error('ERROR when trying to raise a new PopUp Window for Twitter CallBack: ' + err);
+								console.error('ERROR when trying to raise and redirect a new PopUp Window for Twitter CallBack: ' + err);
 							} //end try catch
 							if(!wndPopUp) { // popup may be blocked
-								alert('Twitter Api requires a PopUp to be opened. If you blocked PopUps you may allow this one in order to continue ...');
+								alert('Twitter Js Api requires a PopUp to be opened. If you blocked PopUps you may allow this one in order to continue ...');
 								return;
 							} //end if
 							var pollTimer = setInterval(function() {
@@ -324,7 +365,8 @@ var TwitterApiHandler = new function() { // START CLASS
 									} else {
 										auth_ok = null;
 									} //end if else
-									if(auth_ok === 'yes') {
+									storageSetItem('smarttwittjsapi_auth', '');
+									if(auth_ok === 'Y') {
 										if(typeof fxResponseOk === 'function') {
 											fxResponseOk();
 										} else {
@@ -344,7 +386,12 @@ var TwitterApiHandler = new function() { // START CLASS
 						} //end function
 					);
 				} else {
-					console.error('Twitter Request: Invalid / Incomplete Reply ...');
+					if(typeof fxResponseNotOk === 'function') {
+						fxResponseNotOk(reply);
+					} else {
+						console.error('Twitter Request: Invalid / Incomplete Reply ...');
+						console.error(reply);
+					} //end if
 				} //end if
 			} //end function
 		);
@@ -355,14 +402,28 @@ var TwitterApiHandler = new function() { // START CLASS
 	//##### Data Model
 
 
-	var storageGetItem = function(key) {
+	var storageGetItem = function(key, archive) {
 		//--
-		return getCookie(key);
+		var value = getCookie(key);
+		//--
+		if(archive) {
+			if(value) {
+				value = String(SmartJS_Archiver_LZS.decompressFromBase64(String(value)));
+			} //end if
+		} //end if
+		//--
+		return value;
 		//--
 	} //END FUNCTION
 
 
-	var storageSetItem = function(key, value) {
+	var storageSetItem = function(key, value, archive) {
+		//--
+		if(archive) {
+			if(value) {
+				value = String(SmartJS_Archiver_LZS.compressToBase64(String(value)));
+			} //end if
+		} //end if
 		//--
 		if(value) {
 			setCookie(key, value, null, '/', storageBaseDomain);
@@ -378,7 +439,7 @@ var TwitterApiHandler = new function() { // START CLASS
 
 	var parseUrlParams = function() {
 		//--
-		return SmartJS_BrowserUtils.parseCurrentUrlGetParams()
+		return SmartJS_BrowserUtils.parseCurrentUrlGetParams();
 		//--
 		/*
 		var result = {};
