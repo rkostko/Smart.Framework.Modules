@@ -155,7 +155,7 @@ var TwitterApiHandler = new function() { // START CLASS
 								loginData.location = reply.location || '';
 								//--
 								loginData.locale = reply.lang || '';
-								loginData.username = reply.username || '';
+								loginData.username = reply.screen_name || '';
 								//--
 								loginData.verified = reply.verified ? 1 : 0;
 								loginData.permissions = [];

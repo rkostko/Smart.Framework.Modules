@@ -143,7 +143,7 @@ final class TwitterApi {
 			'location' 		=> (string) $data['location'],
 			//--
 			'locale' 		=> (string) $data['lang'],
-			'username'		=> (string) $data['username'],
+			'username'		=> (string) $data['screen_name'],
 			//--
 			'verified'		=> (int) 	$data['verified'] ? 1 : 0,
 			'permissions' 	=> (array)  []
