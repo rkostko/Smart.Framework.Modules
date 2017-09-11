@@ -2,7 +2,7 @@
 // Controller: SmTwitter/CodebirdProxy
 // Route: ?page=sm-twitter.codebird-proxy
 // Author: Radu I.
-// v.170908
+// v.170911
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -15,7 +15,7 @@ define('SMART_APP_MODULE_AREA', 'SHARED');
 
 // This class is based on the Codebird Twitter Proxy,
 // Proxy to the Twitter API, adding CORS headers to replies.
-// version 1.5.0.uxm.170831
+// version 1.5.0
 // author Jublo Solutions <support@jublo.net>
 // copyright 2013-2015 Jublo Solutions <support@jublo.net>
 // license: GPL
@@ -39,6 +39,22 @@ class SmartAppIndexController extends SmartAbstractAppController {
 	public function Run() {
 
 		$this->PageViewSetCfg('rawpage', true);
+
+		if(strpos((string)strtolower((string)$_SERVER['HTTP_REFERER']), (string)$this->ControllerGetParam('url-addr')) !== 0) { // check referer
+			$this->PageViewSetErrorStatus(403, 'ERROR: Proxy Invalid Referer.');
+			return;
+		} //end if
+
+		if((string)$_SERVER['HTTP_Z_SFK'] == '') {
+			$this->PageViewSetErrorStatus(403, 'ERROR: Proxy Empty Token.');
+			return;
+		} //end if
+		$crr_req_url = (string) $this->ControllerGetParam('url-proto-addr').$this->ControllerGetParam('url-domain').$this->ControllerGetParam('url-port-addr').$this->ControllerGetParam('url-path').$this->ControllerGetParam('url-script').$this->ControllerGetParam('uri-path').$this->ControllerGetParam('url-query');
+		$crr_req_ua = (string) SmartUtils::get_os_browser_ip('signature');
+		if((string)SmartHashCrypto::sha512((string)$crr_req_url.'^'.(string)$crr_req_ua) !== (string)$_SERVER['HTTP_Z_SFK']) {
+			$this->PageViewSetErrorStatus(403, 'ERROR: Proxy Invalid Token.');
+			return;
+		} //end if
 
 		if(!is_dir('tmp/cache/codebird-proxy')) {
 			SmartFileSystem::dir_recursive_create('tmp/cache/codebird-proxy');

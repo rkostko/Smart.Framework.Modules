@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170908
+// v.170911
 
 // Depends on: codebird.js, SmartJS_BrowserUtils
 
@@ -327,6 +327,11 @@ var TwitterApiHandler = new function() { // START CLASS
 			},
 			function(reply, rate, err) {
 				if(err) {
+					if(wndPopUp) {
+						try {
+							wndPopUp.close();
+						} catch(err){}
+					} //end if
 					console.error('TwitterApiHandler: Error response or timeout exceeded' + err.error);
 					return;
 				} //end if
@@ -388,6 +393,11 @@ var TwitterApiHandler = new function() { // START CLASS
 						} //end function
 					);
 				} else {
+					if(wndPopUp) {
+						try {
+							wndPopUp.close();
+						} catch(err){}
+					} //end if
 					if(typeof fxResponseNotOk === 'function') {
 						fxResponseNotOk(reply);
 					} else {

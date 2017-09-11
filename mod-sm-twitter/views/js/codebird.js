@@ -9,7 +9,8 @@
  * @link      https://github.com/jublonet/codebird-php
  */
 
-// v.170908
+// modified by unixman v.170911
+// 		* security feature: connect with the proxy by using a special hash in header
 
 /* jshint curly: true,
 		eqeqeq: true,
@@ -572,6 +573,16 @@ var Codebird = function () {
 		);
 	};
 
+	var sf_auth = function(xml, url) { // unixman
+		var ua = '';
+		try {
+			ua = String(navigator.userAgent);
+		} catch(err){}
+		//console.log(url+'^'+ua);
+		var data = SmartJS_CryptoHash.sha512(String(url+'^'+ua));
+		xml.setRequestHeader('Z-Sfk', String(data));
+	};
+
 	/**
 	 * Gets the OAuth authenticate URL for the current request token
 	 *
@@ -654,6 +665,7 @@ var Codebird = function () {
 			return;
 		}
 		xml.open("POST", url, true);
+		sf_auth(xml, url); // unixman
 		xml.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xml.setRequestHeader(
 			(_use_proxy ? "X-" : "") + "Authorization",
@@ -1348,6 +1360,7 @@ var Codebird = function () {
 				);
 			}
 			xml.open(httpmethod, url_with_params, true);
+			sf_auth(xml, url_with_params); // unixman
 		} else {
 			if (_use_jsonp) {
 				console.warn("Sending POST requests is not supported for IE7-9.");
@@ -1375,6 +1388,7 @@ var Codebird = function () {
 				);
 			}
 			xml.open(httpmethod, url, true);
+			sf_auth(xml, url); // unixman
 			if (multipart) {
 				xml.setRequestHeader("Content-Type", "multipart/form-data; boundary="
 					+ post_fields.split("\r\n")[0].substring(2));
