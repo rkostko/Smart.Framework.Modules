@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Twitter Api
- * @version 	v.170907
+ * @version 	v.170911
  * @package 	SocialMedia:Twitter
  *
  */
@@ -56,7 +56,15 @@ final class TwitterApi {
 			(string) $this->app_id, // consumer key
 			(string) $this->app_secret // consumer secret
 		);
+		//--
 		$this->twitt = \Codebird\Codebird::getInstance();
+		//--
+	} //END FUNCTION
+
+
+	public function getApiObject() {
+		//--
+		return $this->twitt; // object or null
 		//--
 	} //END FUNCTION
 

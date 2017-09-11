@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Facebook Graph Api
- * @version 	v.170908
+ * @version 	v.170911
  * @package 	SocialMedia:Facebook
  *
  */
@@ -60,6 +60,13 @@ final class FacebookApi {
 			'default_graph_version' => (string) $this->api_version,
 			'fileUpload' 			=> (bool) 	$this->file_upload
 		]);
+		//--
+	} //END FUNCTION
+
+
+	public function getApiObject() {
+		//--
+		return $this->fb; // object or null
 		//--
 	} //END FUNCTION
 
