@@ -1,7 +1,7 @@
 
 // Facebook JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170908
+// v.170911
 
 // Depends on: jQuery
 // Depends on: SmartJS_Base64, SmartJS_Archiver_LZS, SmartJS_BrowserUtils
@@ -217,14 +217,25 @@ var FacebookApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	this.postImage = function(imgB64Data, postMessage, fxDone, fxFail) {
+	this.postMedia = function(mB64Data, postMessage, fxDone, fxFail) {
 		//--
-		var mimeType = imgB64Data.split(',')[0];
+		if(!mB64Data) {
+			if(typeof fxFail === 'function') {
+				fxFail(null, null, 'Empty media sent to Facebook');
+			} else {
+				console.error('ERROR: Media / Empty Media');
+			} //end if
+			return;
+		} //end if
+		//--
+		mB64Data = String(mB64Data);
+		//--
+		var mimeType = mB64Data.split(',')[0];
 		mimeType = mimeType.split(';')[0];
 		mimeType = mimeType.split(':')[1];
 		//console.log(mimeType);
-		var imB64 = imgB64Data.split(',')[1];
-		imgB64Data = null; // free mem
+		var imB64 = mB64Data.split(',')[1];
+		mB64Data = null; // free mem
 		//console.log(imB64);
 		//--
 		var blob;
@@ -264,10 +275,16 @@ var FacebookApiHandler = new function() { // START CLASS
 					}).done(function(data){
 						if(typeof fxDone === 'function') {
 							fxDone(data);
+						} else {
+							console.log('OK: Media uploaded on Facebook');
 						} //end if
 					}).fail(function(xhr, status, data){
 						if(typeof fxFail === 'function') {
 							fxFail(xhr, status, data);
+						} else {
+							console.error('ERROR: Media / Invalid Data');
+							console.log(status);
+							console.log(data);
 						} //end if
 					});
 				} //end if

@@ -99,7 +99,7 @@ var Codebird = function () {
 	/**
 	 * API proxy endpoint
 	 */
-	var _endpoint_proxy = "https://api.jublo.net/codebird/";
+	var _endpoint_proxy = ''; // "https://api.jublo.net/codebird/"; // disabled by unixman, this is not safe, there is no security implemented !!!
 
 	/**
 	 * The API endpoint to use for old requests

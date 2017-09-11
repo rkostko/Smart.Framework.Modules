@@ -56,6 +56,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			return;
 		} //end if
 
+		/* fix by unixman: avoid save on disk
 		if(!is_dir('tmp/cache/codebird-proxy')) {
 			SmartFileSystem::dir_recursive_create('tmp/cache/codebird-proxy');
 		} //end if
@@ -63,8 +64,8 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			$this->PageViewSetErrorStatus(500, 'ERROR: Cannot find media folder ...');
 			return;
 		} //end if
+		*/
 
-	//	$url = (string) $this->RequestPathGet(); // this does not works OK ...
 		$url = (string) $_SERVER['REQUEST_URI']; // (original) this works with both: ApacheRewrite and SmartFramework crafted PathInfo
 		$method = (string) $_SERVER['REQUEST_METHOD'];
 
@@ -110,30 +111,36 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			// check for media parameter
 			// for uploading multiple medias, use media_data, see
 			// https://dev.twitter.com/docs/api/multiple-media-extended-entities
+
 			if(isset($_POST['media']) && is_array($_POST['media'])) {
 
 				$body = (array) $_POST;
 
-				// write media file to temp
-				$this->media_file = 'tmp/cache/codebird-proxy/media-'.Smart::uuid_10_num().'-'.Smart::uuid_10_str().'-'.Smart::uuid_10_seq();
+				/* fix by unixman: avoid save on disk
+				$this->media_file = 'tmp/cache/codebird-proxy/media-'.Smart::uuid_10_num().'-'.Smart::uuid_10_str().'-'.Smart::uuid_10_seq(); // write media file to temp
 				SmartFileSystem::write($this->media_file, (string)base64_decode((string)$_POST['media'][0]));
-
-				// add file to uploads
 				unset($body['media']);
-				$body['media[]'] = '@'.$this->media_file;
+				$body['media[]'] = '@'.$this->media_file; // add file to uploads
+				*/
+
+				// fix by unixman: avoid save on disk
+				if(base64_decode((string)$_POST['media'][0], true) !== false) {
+					$body['media[]'] = (string) base64_decode((string)$_POST['media'][0]);
+					unset($body['media']);
+				} //end if
+
 
 			} //end if
 
 			// check for other base64 parameters
+			$possible_files = [
+				// media[] is checked above
+				'image',
+				'banner'
+			];
 			foreach((array)$_POST as $key => $value) {
 
-				$possible_files = [
-					// media[] is checked above
-					'image',
-					'banner'
-				];
-
-				if(!in_array($key, $possible_files)) {
+				if(!in_array((string)$key, (array)$possible_files)) {
 					continue;
 				} //end if
 
@@ -143,11 +150,14 @@ class SmartAppIndexController extends SmartAbstractAppController {
 				} //end if
 
 				// check if valid base64
-				if(base64_decode((string)$mystring, true) === false) {
+				if(base64_decode((string)$value, true) === false) {
 					continue;
 				} //end if
 
-				$body[$key] = (string) base64_decode((string)$value);
+				if(!is_array($body)) {
+					$body = array();
+				} //end if
+				$body[(string)$key] = (string) base64_decode((string)$value);
 
 			} //end foreach
 
@@ -268,10 +278,12 @@ class SmartAppIndexController extends SmartAbstractAppController {
 
 
 	public function ShutDown() {
-		//-- delete media file, if any
+		//--
+		/* fix by unixman: avoid save on disk
 		if(((string)$this->media_file != '') AND (strpos((string)$this->media_file, 'tmp/cache/codebird-proxy/media-') === 0) AND file_exists((string)$this->media_file) AND is_file((string)$this->media_file)) {
-			SmartFileSystem::delete((string)$this->media_file);
+			SmartFileSystem::delete((string)$this->media_file); delete media file, if any
 		} //end if
+		*/
 		//--
 	} //END FUNCTION
 

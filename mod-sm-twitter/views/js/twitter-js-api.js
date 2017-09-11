@@ -249,15 +249,15 @@ var TwitterApiHandler = new function() { // START CLASS
 	} //END FUNCTION
 
 
-	this.postImage = function(imgB64Data, postMessage, fxDone, fxFail) {
+	this.postMedia = function(mB64Data, postMessage, fxDone, fxFail) {
 
 		var oauth_data = _class.getLoginData();
 
-		if(!oauth_data || !oauth_data.token || !oauth_data.secret || !oauth_data.uid) {
+		if(!oauth_data || !oauth_data.token || !oauth_data.secret || !oauth_data.uid || !mB64Data) {
 			if(typeof fxFail === 'function') {
-				fxFail(null, null, 'ERROR: Invalid Twitter Data');
+				fxFail(null, null, 'ERROR: Media / Invalid Twitter Data');
 			} else {
-				console.log('ERROR: Invalid Twitter Data');
+				console.error('ERROR: Media / Invalid Twitter Data');
 			} //end if else
 			return;
 		} //end if
@@ -270,7 +270,7 @@ var TwitterApiHandler = new function() { // START CLASS
 		cb.__call(
 			'media_upload',
 			{
-				'media': imgB64Data.split(',')[1]
+				'media': String(mB64Data.split(',')[1])
 			},
 			function(reply, rate, err) {
 				//console.log(reply, rate, err);
@@ -293,7 +293,7 @@ var TwitterApiHandler = new function() { // START CLASS
 								if(typeof fxFail === 'function') {
 									fxFail(reply, rate, err);
 								} else {
-									console.log('NOTOK, media was NOT posted on Twitter ...')
+									console.error('NOTOK, media was NOT posted on Twitter ...')
 									console.log(reply, rate, err);
 								} //end if else
 							} //end if else
@@ -303,7 +303,7 @@ var TwitterApiHandler = new function() { // START CLASS
 					if(typeof fxFail === 'function') {
 						fxFail(reply, rate, err);
 					} else {
-						console.log('NOTOK, media was NOT posted on Twitter ...')
+						console.error('NOTOK, media was NOT posted on Twitter ...')
 						console.log(reply, rate, err);
 					} //end if else
 				} //end if else
