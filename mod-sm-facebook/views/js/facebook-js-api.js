@@ -1,12 +1,16 @@
 
 // Facebook JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170911
+// v.170912
 
 // Depends on: jQuery
 // Depends on: SmartJS_Base64, SmartJS_Archiver_LZS, SmartJS_BrowserUtils
 
 var FacebookApiHandler = new function() { // START CLASS
+
+	// :: static
+
+	var _class = this; // self referencing
 
 
 	var FbSettings = {

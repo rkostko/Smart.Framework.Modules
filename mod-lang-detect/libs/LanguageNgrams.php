@@ -54,7 +54,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @hints		By default will use the 1-3-930 NGrams. To use extended NGrams (Ex: 1-4-15k) see the local code examples.
  *
  * @depends 	classes: Smart, SmartUnicode, SmartFileSysUtils
- * @version 	v.170622
+ * @version 	v.170913
  * @package 	LanguageDetection
  *
  */
@@ -115,7 +115,7 @@ final class LanguageNgrams {
 			for($i=0; $i<\Smart::array_size($lang); $i++) {
 				$json_file = (string) \SmartFileSysUtils::add_dir_last_slash((string)$ngrams_path.\Smart::safe_filename((string)$lang[$i])).\Smart::safe_filename((string)$lang[$i]).'.json';
 				if(is_file($json_file)) {
-					$json = (string) \SmartFileSystem::staticread((string)$json_file);
+					$json = (string) \SmartFileSystem::read((string)$json_file);
 					if((string)$json != '') {
 						$json = \Smart::json_decode((string)$json);
 						if(\Smart::array_size($json) > 0) {
@@ -410,7 +410,7 @@ final class LanguageNgrams {
 //--
 $lndet = new \SmartModExtLib\LangDetect\LanguageNgrams();
 $lndet->setMaxNgrams(20000);
-$arr = $lndet->detect(SmartFileSystem::staticread('ngrams-res/en/en.txt'));
+$arr = $lndet->detect(SmartFileSystem::read('ngrams-res/en/en.txt'));
 print_r($arr); die();
 //--
 
@@ -438,7 +438,7 @@ if(\Smart::array_size($lang) > 0) {
 		$lndet->setMaxNgrams(15000);
 		$lndet->setMinLength(1);
 		$lndet->setMaxLength(4);
-		$json_data = (string) $lndet->train((string)$lang[$i], \SmartFileSystem::staticread($txt_file));
+		$json_data = (string) $lndet->train((string)$lang[$i], \SmartFileSystem::read($txt_file));
 		//--
 		\SmartFileSystem::write($json_file, $json_data);
 		$jsons[] = $json_file;

@@ -14,7 +14,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 define('SMART_APP_MODULE_AREA', 'SHARED'); // INDEX, ADMIN, SHARED
 
 /**
- * Index Controller :: v.170911
+ * Index Controller :: v.170912
  *
  * Test PHP-Api (run on localhost): 	?/page/sm-facebook.test/app_id/{the-app-id-goes-here}/app_secret/{the-app-secret-goes-here}
  *

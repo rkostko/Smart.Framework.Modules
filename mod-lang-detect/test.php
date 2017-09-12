@@ -45,7 +45,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		//--
 
 		//--
-		$text = SmartFileSystem::staticread($this->ControllerGetParam('module-path').'libs/data-1-3-930/en/en.txt');
+		$text = SmartFileSystem::read($this->ControllerGetParam('module-path').'libs/data-1-3-930/en/en.txt');
 		//$arr = $lndet->detect($text);
 		$arr = $lndet->getLanguageConfidence($text);
 		//--

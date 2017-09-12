@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Facebook Graph Api
- * @version 	v.170911
+ * @version 	v.170912
  * @package 	SocialMedia:Facebook
  *
  */
