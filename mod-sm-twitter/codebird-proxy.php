@@ -58,7 +58,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 
 		/* fix by unixman: avoid save on disk
 		if(!is_dir('tmp/cache/codebird-proxy')) {
-			SmartFileSystem::dir_recursive_create('tmp/cache/codebird-proxy');
+			SmartFileSystem::dir_create('tmp/cache/codebird-proxy', true); // recursive
 		} //end if
 		if(!is_dir('tmp/cache/codebird-proxy')) {
 			$this->PageViewSetErrorStatus(500, 'ERROR: Cannot find media folder ...');
