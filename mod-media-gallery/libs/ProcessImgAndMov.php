@@ -292,7 +292,7 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 			//--
 		} //end if
 		//--
-		if((is_file($y_file)) AND (!\SmartFileSystem::file_or_link_exists($y_newfile)) AND (!\SmartFileSystem::file_or_link_exists($lock_file))) {
+		if((is_file($y_file)) AND (!\SmartFileSystem::path_exists($y_newfile)) AND (!\SmartFileSystem::path_exists($lock_file))) {
 			//--
 			@chmod($y_file, SMART_FRAMEWORK_CHMOD_FILES); //mark chmod
 			//--
@@ -542,7 +542,7 @@ public static function mov_pw_process($y_mov_file, $y_mov_img_preview, $y_qualit
 			} //end if
 		} //end if
 		//--
-		if((is_file($y_mov_file)) AND (!\SmartFileSystem::file_or_link_exists($y_mov_img_preview)) AND (!\SmartFileSystem::file_or_link_exists($lock_file))) {
+		if((is_file($y_mov_file)) AND (!\SmartFileSystem::path_exists($y_mov_img_preview)) AND (!\SmartFileSystem::path_exists($lock_file))) {
 			//--
 			@chmod($y_mov_file, SMART_FRAMEWORK_CHMOD_FILES); //mark chmod
 			//--

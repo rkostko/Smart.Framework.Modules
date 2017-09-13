@@ -280,7 +280,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 	public function ShutDown() {
 		//--
 		/* fix by unixman: avoid save on disk
-		if(((string)$this->media_file != '') AND (strpos((string)$this->media_file, 'tmp/cache/codebird-proxy/media-') === 0) AND file_exists((string)$this->media_file) AND is_file((string)$this->media_file)) {
+		if(((string)$this->media_file != '') AND (strpos((string)$this->media_file, 'tmp/cache/codebird-proxy/media-') === 0) AND SmartFileSystem::path_exists((string)$this->media_file) AND is_file((string)$this->media_file)) {
 			SmartFileSystem::delete((string)$this->media_file); delete media file, if any
 		} //end if
 		*/
