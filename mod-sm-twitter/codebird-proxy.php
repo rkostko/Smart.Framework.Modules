@@ -2,7 +2,7 @@
 // Controller: SmTwitter/CodebirdProxy
 // Route: ?page=sm-twitter.codebird-proxy
 // Author: Radu I.
-// v.170911
+// v.170914
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application

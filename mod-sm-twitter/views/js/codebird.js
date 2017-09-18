@@ -9,7 +9,7 @@
  * @link      https://github.com/jublonet/codebird-php
  */
 
-// modified by unixman v.170911
+// modified by unixman v.170914
 // 		* security feature: connect with the proxy by using a special hash in header
 
 /* jshint curly: true,

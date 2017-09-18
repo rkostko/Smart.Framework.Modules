@@ -37,7 +37,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Twig Base
- * @version 	v.160215
+ * @version 	v.170917
  * @package 	Templating:Engines
  *
  */
@@ -90,7 +90,7 @@ final class Templating {
 			$arr_vars = array();
 		} //end if
 		//--
-		if(!\SmartFileSysUtils::check_file_or_dir_name($this->dir.$file)) {
+		if(!\SmartFileSysUtils::check_if_safe_path($this->dir.$file)) {
 			throw new \Exception('Twig Templating / Render File / The file name / path contains invalid characters: '.$this->dir.$file);
 			return;
 		} //end if

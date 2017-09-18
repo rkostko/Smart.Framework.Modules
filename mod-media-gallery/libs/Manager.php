@@ -38,7 +38,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP GD Extension (w. TrueColor support) ; executables: imageMagick Utility (can replace PHP GD), FFMpeg (for movies) ; classes: Smart, SmartUtils, SmartFileSystem
- * @version 	v.170518
+ * @version 	v.170917
  * @package 	Media:Gallery
  *
  */
@@ -162,7 +162,7 @@ public function draw($y_title, $y_dir, $y_process_previews_and_images='no', $y_r
 	//--
 
 	//--
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_dir)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_dir)) {
 		return '<h1>ERROR: Invalid Folder for Media Gallery ...</h1>';
 	} //end if
 	//--

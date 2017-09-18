@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Twitter Api
- * @version 	v.170911
+ * @version 	v.170914
  * @package 	SocialMedia:Twitter
  *
  */

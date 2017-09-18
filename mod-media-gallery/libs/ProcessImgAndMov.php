@@ -75,7 +75,7 @@ if(!defined('SMART_FRAMEWORK_MEDIAGALLERY_PDF_EXTRACTOR')) {
  * @internal
  *
  * @depends 	extensions: plugins: \SmartModExtLib\MediaGallery\ImgProcImagick:: OR \SmartModExtLib\MediaGallery\ImgProcGd:: ;
- * @version 	v.170518
+ * @version 	v.170917
  * @package 	Media:Gallery
  *
  */
@@ -154,12 +154,12 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 	//--
 
 	//--
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_file)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_file)) {
 		\Smart::log_warning(__METHOD__.' :: img_process // Unsafe Path: SRC='.$y_file);
 		return '';
 	} //end if
 	//--
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_newfile)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_newfile)) {
 		\Smart::log_warning(__METHOD__.' :: img_process // Unsafe Path: DEST='.$y_newfile);
 		return '';
 	} //end if
@@ -170,7 +170,7 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 	} //end if
 	//--
 	if((string)$y_watermark != '') {
-		if(!\SmartFileSysUtils::check_file_or_dir_name($y_watermark)) {
+		if(!\SmartFileSysUtils::check_if_safe_path($y_watermark)) {
 			$y_watermark = '';
 			\Smart::log_warning(__METHOD__.' :: img_process // Unsafe Path: WATERMARK='.$y_watermark);
 		} //end if
@@ -296,7 +296,7 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 			//--
 			@chmod($y_file, SMART_FRAMEWORK_CHMOD_FILES); //mark chmod
 			//--
-			if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER == '@gd') OR (((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER != '@gd') AND (is_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER)))) {
+			if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER == '@gd') OR (((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER != '@gd') AND (\SmartFileSystem::have_access_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER)))) {
 				//--
 				$out .= '<table width="550" bgcolor="#FFCC00">';
 				//--
@@ -306,7 +306,7 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 				//--
 				$exitcode = 0;
 				//--
-				if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER != '@gd') AND (is_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER))) {
+				if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER != '@gd') AND (\SmartFileSystem::have_access_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER))) {
 					//-- generate preview by ImageMagick
 					if((string)$y_mode == 'preview') {
 						$exec = (string) \SmartModExtLib\MediaGallery\ImgProcImagick::create_preview((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_CONVERTER, $y_file, $y_newfile, $y_width, $y_height, $y_quality);
@@ -352,7 +352,7 @@ public static function img_process($y_mode, $iflowerpreserve, $y_file, $y_newfil
 					//--
 					if((is_file($y_newfile)) AND (is_file($y_watermark))) {
 						//--
-						if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_COMPOSITE != '@gd') AND (is_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_COMPOSITE))) {
+						if(((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_COMPOSITE != '@gd') AND (\SmartFileSystem::have_access_executable(SMART_FRAMEWORK_MEDIAGALLERY_IMG_COMPOSITE))) {
 							//--
 							$exec = (string) \SmartModExtLib\MediaGallery\ImgProcImagick::apply_watermark((string)SMART_FRAMEWORK_MEDIAGALLERY_IMG_COMPOSITE, $y_newfile, $y_watermark, $y_quality, $y_waterlocate);
 							@exec($exec, $arr_result, $exitcode);
@@ -430,7 +430,7 @@ public static function mov_pw_process($y_mov_file, $y_mov_img_preview, $y_qualit
 	if((string)$y_mov_blank_img_preview == '') {
 		$y_mov_blank_img_preview = (string) $blank_mov_pw;
 	} //end if
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_mov_blank_img_preview)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_mov_blank_img_preview)) {
 		$y_mov_blank_img_preview = (string) $blank_mov_pw;
 	} //end if
 	if(!is_file($y_mov_blank_img_preview)) {
@@ -444,12 +444,12 @@ public static function mov_pw_process($y_mov_file, $y_mov_img_preview, $y_qualit
 	//--
 
 	//--
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_mov_file)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_mov_file)) {
 		\Smart::log_warning(__METHOD__.' :: mov_pw_process // Unsafe Path: SRC='.$y_mov_file);
 		return '';
 	} //end if
 	//--
-	if(!\SmartFileSysUtils::check_file_or_dir_name($y_mov_img_preview)) {
+	if(!\SmartFileSysUtils::check_if_safe_path($y_mov_img_preview)) {
 		\Smart::log_warning(__METHOD__.' :: mov_pw_process // Unsafe Path: DEST='.$y_mov_img_preview);
 		return '';
 	} //end if
@@ -460,7 +460,7 @@ public static function mov_pw_process($y_mov_file, $y_mov_img_preview, $y_qualit
 	} //end if
 	//--
 	if((string)$y_watermark != '') {
-		if(!\SmartFileSysUtils::check_file_or_dir_name($y_watermark)) {
+		if(!\SmartFileSysUtils::check_if_safe_path($y_watermark)) {
 			$y_watermark = '';
 			\Smart::log_warning(__METHOD__.' :: mov_pw_process // Unsafe Path: WATERMARK='.$y_watermark);
 		} //end if
@@ -551,7 +551,7 @@ public static function mov_pw_process($y_mov_file, $y_mov_img_preview, $y_qualit
 			//-- create a lock file
 			\SmartFileSystem::write($lock_file, time());
 			//-- generate preview (jpeg)
-			if(is_executable(SMART_FRAMEWORK_MEDIAGALLERY_MOV_THUMBNAILER)) { // generate a max preview of 240x240 which will be later converted below
+			if(\SmartFileSystem::have_access_executable(SMART_FRAMEWORK_MEDIAGALLERY_MOV_THUMBNAILER)) { // generate a max preview of 240x240 which will be later converted below
 				$exec = SMART_FRAMEWORK_MEDIAGALLERY_MOV_THUMBNAILER.' -y -i '.'"'.$y_mov_file.'"'.' -s 240x240 -vframes 60 -f image2 -vcodec mjpeg -deinterlace '.'"'.$temporary_pw.'"';
 				@exec($exec, $arr_result, $exitcode);
 			} else {

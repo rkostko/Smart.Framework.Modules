@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170911
+// v.170914
 
 // Depends on: codebird.js, SmartJS_BrowserUtils
 
@@ -472,9 +472,9 @@ var TwitterApiHandler = new function() { // START CLASS
 				result[String(item[0])] = String(decodeURIComponent(String(item[1])));
 			} //end if
 		});
-		*/
 		//--
 		return result; // Object
+		*/
 		//--
 	} //END FUNCTION
 
