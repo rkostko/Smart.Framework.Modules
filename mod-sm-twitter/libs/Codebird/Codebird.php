@@ -6,7 +6,7 @@ namespace Codebird;
  * A Twitter library in PHP.
  *
  * @package   codebird
- * @version   3.1.0.uxm.170914
+ * @version   3.1.0.uxm.170919
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2010-2016 Jublo Solutions <support@jublo.net>
  * @license   https://opensource.org/licenses/GPL-3.0 GNU General Public License 3.0

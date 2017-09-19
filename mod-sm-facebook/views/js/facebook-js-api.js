@@ -1,7 +1,7 @@
 
 // Facebook JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170912
+// v.170919
 
 // Depends on: jQuery
 // Depends on: SmartJS_Base64, SmartJS_Archiver_LZS, SmartJS_BrowserUtils
