@@ -29,7 +29,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP CURL, PHP OpenSSL (optional, just for HTTPS) ; classes: Smart
- * @version 	v.170613
+ * @version 	v.170920
  * @package 	Network:CURL
  *
  */
@@ -105,7 +105,7 @@ final class SmartCurlHttpFtpClient {
 		//--
 
 		//-- signature
-		$this->useragent = 'Mozilla/5.0 PHP.CURL.SFM ('.php_uname().')';
+		$this->useragent = 'Mozilla/5.0 PHP.CURL.SFM ('.SMART_APP_MODULES_EXTRALIBS_VER.'/'.php_uname().')';
 		//--
 
 		//-- option

@@ -1,4 +1,4 @@
-/* OpenMaps v.2012.09.15.23.59 */
+/* OpenMaps v.2012.09.15.23.59 w. fixes by unixman */
 
 div.olMap {
 	z-index: 0;
@@ -455,12 +455,12 @@ div.olControlZoom a {
 	height: 22px;
 	width:22px;
 	line-height: 19px;
-	background: #130085; /* fallback for IE - IE6 requires background shorthand*/
+	/* @alternate */ background: #130085; /* fallback for IE - IE6 requires background shorthand */
 	background: rgba(0, 60, 136, 0.5);
 	filter: alpha(opacity=80);
 }
 div.olControlZoom a:hover {
-	background: #130085; /* fallback for IE */
+	/* @alternate */ background: #130085; /* fallback for IE */
 	background: rgba(0, 60, 136, 0.7);
 	filter: alpha(opacity=100);
 }

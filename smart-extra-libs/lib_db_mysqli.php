@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170411
+ * @version 	v.170920
  * @package 	Database:MySQL
  *
  */
@@ -190,7 +190,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|slow-time', number_format(self::$slow_time, 7, '.', ''), '=');
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'metainfo',
-			'data' => 'Database Server: MySQLi ('.$y_type.') / App Connector Version: '.SMART_FRAMEWORK_MODULES_VERSION.' / Connection Charset: '.SMART_FRAMEWORK_DBSQL_CHARSET
+			'data' => 'Database Server: MySQLi ('.$y_type.') / App Connector Version: '.SMART_APP_MODULES_EXTRALIBS_VER.' / Connection Charset: '.SMART_FRAMEWORK_DBSQL_CHARSET
 		]);
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'metainfo',
@@ -1709,7 +1709,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170411
+ * @version 	v.170920
  * @package 	Database:MySQL
  *
  */

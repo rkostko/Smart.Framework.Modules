@@ -54,7 +54,7 @@ $configs['langid']['auth-pass']		= '';										// LangId.Py Service Auth Pass
  * @hints		If the DEFAULT settings are not available will simply fallback for not using any service.
  *
  * @depends 	classes: Smart, SmartHttpClient
- * @version 	v.170622
+ * @version 	v.170920
  * @package 	LanguageDetection
  *
  */
@@ -173,10 +173,11 @@ final class SmartLangIdClient {
 	private function formatLanguageConfidenceAnswer($langid, $score, $errmsg='') {
 		//--
 		return (array) [
+			'service-version' 	=> (string) SMART_APP_MODULES_EXTRALIBS_VER,
 			'service-available' => (bool) $this->is_service_available,
 			'lang-id' 			=> (string) substr((string)strtolower((string)trim((string)$langid)), 0, 2),
 			'confidence-score' 	=> (string) Smart::format_number_dec((float)$score, 5, '.', ''),
-			'error-message' 	=> (string) trim((string)$errmsg)
+			'error-message' 	=> (string) trim((string)$errmsg),
 		];
 		//--
 	} //END FUNCTION

@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170713
+ * @version 	v.170920
  * @package 	Database:Solr
  *
  */
@@ -194,7 +194,7 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 			'type' => 'metainfo',
-			'data' => 'Solr App Connector Version: '.SMART_FRAMEWORK_MODULES_VERSION
+			'data' => 'Solr App Connector Version: '.SMART_APP_MODULES_EXTRALIBS_VER
 		]);
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
