@@ -15,7 +15,6 @@ div.olControlZoom a {
 	padding: 0;
 	color: white;
 	font-size: 28px;
-	font-family: sans-serif;
 	font-weight: bold;
 	text-decoration: none;
 	text-align: center;
@@ -23,7 +22,7 @@ div.olControlZoom a {
 	width: 32px;
 	line-height: 28px;
 	text-shadow: 0 0 3px rgba(0,0,0,0.8);
-	background: #130085; /* fallback for IE - IE6 requires background shorthand*/
+	/* @alternate */ background: #130085; /* fallback for IE - IE6 requires background shorthand*/
 	background: rgba(0, 60, 136, 0.5);
 	filter: alpha(opacity=80);
 }
@@ -34,7 +33,7 @@ a.olControlZoomOut {
 	border-radius: 0 0 4px 4px;
 }
 div.olControlZoom a:hover {
-	background: #130085; /* fallback for IE */
+	/* @alternate */ background: #130085; /* fallback for IE */
 	background: rgba(0, 60, 136, 0.7);
 	filter: alpha(opacity=100);
 }

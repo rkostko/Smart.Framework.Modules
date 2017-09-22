@@ -377,7 +377,6 @@ Assigned to tile images in a tiled background
 	z-index: 100001;
 	display: none;
 	background-color: white;
-	font-family: "Open Sans", sans-serif;
 	padding: 7px;
 	box-shadow: 0 0 5px gray;
 	overflow: hidden;

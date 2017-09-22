@@ -25,7 +25,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 /* Editable regions */
 .cke_source
 {
-	font-family: 'Courier New' , Monospace;
+	font-family: monospace;
 	font-size: small;
 	background-color: #fff;
 	white-space: pre;
