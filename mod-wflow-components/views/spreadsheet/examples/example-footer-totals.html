@@ -1,11 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>Footer Row with Totals</title>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
   .totals {
     font-weight: bold;
@@ -32,12 +39,6 @@
         <li><A href="https://github.com/6pac/SlickGrid/blob/master/examples/example-footer-totals.html" target="_sourcewindow"> View the source for this example on Github</a></li>
     </ul>
 </div>
-
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../slick.editors.js"></script>
@@ -75,7 +76,7 @@
 
   function UpdateTotal(cell, grid) {
     var columnId = grid.getColumns()[cell].id;
-    
+
     var total = 0;
     var i = data.length;
     while (i--) {
@@ -103,7 +104,7 @@
 
     grid.onColumnsReordered.subscribe(function(e, args) {
       UpdateAllTotals(args.grid);
-    });    
+    });
   })
 </script>
 </body>

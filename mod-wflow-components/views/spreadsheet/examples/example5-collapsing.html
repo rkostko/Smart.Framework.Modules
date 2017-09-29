@@ -1,12 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example 5: Collapsing</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
     .cell-title {
       font-weight: bold;
@@ -64,12 +70,6 @@
   </tr>
 </table>
 
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
-
 <script src="../slick.core.js"></script>
 <script src="../slick.formatters.js"></script>
 <script src="../slick.editors.js"></script>
@@ -88,7 +88,7 @@ function requiredFieldValidator(value) {
 
 var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
   if (value == null || value == undefined || dataContext === undefined) { return ""; }
-  
+
   value = value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
   var idx = dataView.getIdxById(dataContext.id);
@@ -168,8 +168,8 @@ $(function () {
     } else if (Math.random() < 0.3 && indent > 0) {
       indent--;
       parents.pop();
-    } 
-	
+    }
+
     if (parents.length > 0) {
       parent = parents[parents.length - 1];
     } else {

@@ -1,12 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example 2: Formatters</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../../lib/js/jquery/ui-interract/jquery.ui-interract.css" type="text/css">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/ui-interract/jquery.ui-interract.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
     .cell-title {
       font-weight: bold;
@@ -18,13 +24,13 @@
 
     .green {
       background-color: #aaffaa;
-    }      
+    }
     .red {
       background-color: #ff7777;
-    }      
+    }
     .orange {
       background-color: #ffbb66;
-    }      
+    }
   </style>
 </head>
 <body>
@@ -50,18 +56,12 @@
 
 <input type=text>
 
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
-
 <script src="../slick.core.js"></script>
 <script src="../slick.formatters.js"></script>
 <script src="../slick.grid.js"></script>
 
 <script>
-   // a standard formatter returns a string 
+   // a standard formatter returns a string
   function formatter(row, cell, value, columnDef, dataContext) {
       return value;
   }
@@ -94,7 +94,7 @@
     {id: "effort-driven", name: "Effort Driven", sortable: false, width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark}
   ];
 
-  
+
   var options = {
     editable: false,
     enableAddRow: false,

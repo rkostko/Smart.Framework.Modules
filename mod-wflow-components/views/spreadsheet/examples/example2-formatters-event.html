@@ -1,12 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example 2a: Formatters with onBeforeAppendCell event</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../../lib/js/jquery/ui-interract/jquery.ui-interract.css" type="text/css">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/ui-interract/jquery.ui-interract.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
     .cell-title {
       font-weight: bold;
@@ -18,13 +24,13 @@
 
     .green {
       background-color: green;
-    }      
+    }
     .red {
       background-color: red;
-    }      
+    }
     .orange {
       background-color: orange;
-    }      
+    }
   </style>
 </head>
 <body>
@@ -52,12 +58,6 @@
 </table>
 
 <input type=text>
-
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../slick.formatters.js"></script>
@@ -96,16 +96,16 @@
     }
 
     grid = new Slick.Grid("#myGrid", data, columns, options);
-    
-    // The onBeforeAppendCell event returns text corresponding to the css class to add to the cell. 
+
+    // The onBeforeAppendCell event returns text corresponding to the css class to add to the cell.
     // It is called when first rendering the cell or when redrawing invalidated rows, so it can't respond to cell updates like a formatter.
-    // It was intended to be a general formatting tool rather then being tied to a particular column, for example to allow validation formatting 
+    // It was intended to be a general formatting tool rather then being tied to a particular column, for example to allow validation formatting
     // of cells. The idea was that formatting should remain in place until a subsequent validation.
     // Note that onBeforeAppendCell requires explicitInitialization: true so that the event can be wired up before the first render.
-    
+
     grid.onBeforeAppendCell.subscribe(function (e, args) {
       if (grid.getColumns()[args.cell].id !== 'status') return null;
-  
+
       if (args.value == null || args.value === "") {
         return null;
       } else if (args.value < 33) {
@@ -116,8 +116,8 @@
         return "green";
       }
       return null;
-    }); 
-    
+    });
+
     grid.init();
   })
 </script>

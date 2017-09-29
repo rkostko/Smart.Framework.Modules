@@ -1,21 +1,27 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example: 'Select2' javascript dropdown editor</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/select2.css" type="text/css"/>
-   <style>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+  <link rel="stylesheet" href="../extra/select2.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
+  <style>
 	.select2-container {
 		top: -3px;
 		left: -6px;
 	}
     .select2-container .select2-selection--single {
 		height: 26px;
-	}  
+	}
 </style>
 </head>
 <body>
@@ -42,12 +48,6 @@
   </div>
 </div>
 
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
-
 <script src="../slick.core.js"></script>
 <script src="../plugins/slick.cellrangedecorator.js"></script>
 <script src="../plugins/slick.cellrangeselector.js"></script>
@@ -55,7 +55,7 @@
 <script src="../slick.formatters.js"></script>
 <script src="../slick.editors.js"></script>
 <script src="../slick.grid.js"></script>
-<script src="../lib/select2.js"></script>
+<script src="../extra/select2.js"></script>
 <script>
 var countryIsoAndNameList = {
   AF:'Afghanistan',
@@ -331,7 +331,7 @@ var countryIsoAndNameList = {
 
             $input.appendTo(args.container);
             $input.focus().select();
-			
+
             $input.select2({
                 placeholder: '-',
 				allowClear: true
@@ -385,10 +385,10 @@ var countryIsoAndNameList = {
 
         this.init();
     }
-	
+
     function Select2Formatter(row, cell, value, columnDef, dataContext) {
         return columnDef.dataSource[value] || '-';
-    }	
+    }
 </script>
 <script>
   // stackoverflow.com/questions/2532218
@@ -400,7 +400,7 @@ var countryIsoAndNameList = {
 		   result = prop;
 	return result;
   }
-	
+
   function requiredFieldValidator(value) {
     if (value == null || value == undefined || !value.length) {
       return {valid: false, msg: "This is a required field"};
@@ -416,7 +416,7 @@ var countryIsoAndNameList = {
     {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
     {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
     {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
-	{id: "CountryOfOrigin", name: "Country Of Origin", field: "country", minWidth: 200, formatter: Select2Formatter, 
+	{id: "CountryOfOrigin", name: "Country Of Origin", field: "country", minWidth: 200, formatter: Select2Formatter,
 		editor: Select2Editor, dataSource: countryIsoAndNameList }
   ];
   var options = {

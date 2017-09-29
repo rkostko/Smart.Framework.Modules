@@ -1,12 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
-  <link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css"/>
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+  <link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
     .slick-cell-checkboxsel {
       background: #f0f0f0;
@@ -45,12 +51,6 @@
 
   </div>
 </div>
-
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../plugins/slick.checkboxselectcolumn.js"></script>
@@ -103,15 +103,15 @@
     grid.registerPlugin(checkboxSelector);
 
     var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-    
+
     grid.onSelectedRowsChanged.subscribe(function (e, args) {
         // debugging to see the active row in response to questions
         // active row has no correlation to the selected rows
         // it will remain null until a row is clicked and made active
         // selecting and deselecting rows via checkboxes will not change the active row
-        var rtn = args.grid.getActiveCell(); 
+        var rtn = args.grid.getActiveCell();
         var x = args.rows;
-    });    
+    });
   })
 </script>
 </body>

@@ -1,12 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example 10: Async post render</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
+  <script src="../../../../../lib/js/jquery/jquery.sparkline.js"></script>
+
   <style>
     .cell-title {
       font-weight: bold;
@@ -63,13 +71,6 @@
     </ul>
 </div>
 
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
-<script src="../lib/jquery.sparkline-2-1-2.min.js"></script>
-
 <script src="../slick.core.js"></script>
 <script src="../slick.editors.js"></script>
 <script src="../slick.grid.js"></script>
@@ -108,14 +109,14 @@
       // correctly. Slickgrid does not use it, so turn it off with 'disableHiddenCheck'.
       $(cellNode).empty().sparkline(vals, {width: "100%", disableHiddenCheck: true});
 
-      console.log('rendered: R' + rowIdx + '-C' + colDef.name + (cleanupBeforeRender ? ' (re-render)' : ''));
+//      console.log('rendered: R' + rowIdx + '-C' + colDef.name + (cleanupBeforeRender ? ' (re-render)' : ''));
   }
 
   // this cleanup function must clean up resources and remove the node
   function cleanupSparkline(cellNode, rowIdx, colDef) {
       $(cellNode).remove();
 
-      console.log('cleaned: R' + rowIdx + '-C' + colDef.name);
+//      console.log('cleaned: R' + rowIdx + '-C' + colDef.name);
   }
 
   var grid;

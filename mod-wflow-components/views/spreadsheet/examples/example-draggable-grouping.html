@@ -9,14 +9,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example: Droppable Grouping</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../controls/slick.pager.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
-  <link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="../controls/slick.pager.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+  <link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
+
   <style>
 
   	.slick-groupby {
@@ -52,7 +58,7 @@
     .slick-groupby-remove {
       background: url(../images/delete.png) no-repeat center right;
       padding-right: 20px;
-    } 
+    }
 
     .slick-placeholder {
       height: 25px;
@@ -107,13 +113,6 @@
     </ul>
   </div>
 </div>
-
-
-<script src="../lib/firebugx.js"></script>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery-ui-1.11.3.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../slick.formatters.js"></script>
@@ -173,7 +172,7 @@ var columns = [
       collapsed: false
     }
   },
-  
+
   {id: "start", name: "Start", field: "start", minWidth: 60, sortable: true,
     grouping: {
       getter: "start",
@@ -319,7 +318,7 @@ function clearGroupings() {
    draggableGrouping.clearDroppedGroups();
    $(".slick-dropped-grouping").remove();
    grid.invalidate();
-   grid.render();  
+   grid.render();
 }
 
 

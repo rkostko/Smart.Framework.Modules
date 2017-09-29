@@ -1,12 +1,17 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico">
   <title>SlickGrid example: Explicit grid initialization</title>
-  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.11.3.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css">
+  <link rel="stylesheet" href="examples.css" type="text/css">
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="../../../../mod-ui-jqueryui/toolkit/themes/default/jquery-ui.css" type="text/css">
+  <script type="text/javascript" src="../../../../mod-ui-jqueryui/toolkit/jquery-ui.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drag.js"></script>
+  <script type="text/javascript" src="../../../../../lib/js/jquery/jquery.event.drop.js"></script>
 </head>
 <body>
 <table width="100%" cellpadding="20">
@@ -18,7 +23,7 @@
       <p>
           The container which the grid is being created in needs to be in the DOM and participate in layout
           (can be 'visibility:hidden' but not 'display:none') in order for SlickGrid to be able to make certain
-          measurements and initialize event listeners.  Normally, this is done when a SlickGrid instance is 
+          measurements and initialize event listeners.  Normally, this is done when a SlickGrid instance is
           being created.  Optionally, you can defer the initialization until the above condition is met and call
           the <b>grid.init()</b> method explicitly.  To use explicit initialization, set the <b>explicitInitialization</b>
           option to true.
@@ -33,9 +38,6 @@
     </td>
   </tr>
 </table>
-
-<script src="../lib/jquery-1.11.2.min.js"></script>
-<script src="../lib/jquery.event.drag-2.3.0.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../slick.grid.js"></script>
