@@ -1,4 +1,4 @@
-/*! decimal.js v7.2.1 https://github.com/MikeMcl/decimal.js/LICENCE */
+/** decimal.js v7.2.1 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 

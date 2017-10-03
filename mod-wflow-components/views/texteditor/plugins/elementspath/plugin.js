@@ -1,10 +1,10 @@
 /**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
 /**
- * @fileOverview The "elementspath" plugin. It shows all elements in the DOM
+ * fileOverview The "elementspath" plugin. It shows all elements in the DOM
  *		parent tree relative to the current selection in the editing area.
  */
 

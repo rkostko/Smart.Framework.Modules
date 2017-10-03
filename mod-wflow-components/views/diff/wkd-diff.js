@@ -3,12 +3,12 @@
 // r. 160309 v.1.2.4.1
 
 // ==UserScript==
-// @name        wikEd diff
-// @description improved word-based diff library with block move detection
-// @homepage    https://en.wikipedia.org/wiki/User:Cacycle/diff
-// @source      https://en.wikipedia.org/wiki/User:Cacycle/diff.js
-// @author      Cacycle (https://en.wikipedia.org/wiki/User:Cacycle)
-// @license     released into the public domain
+// name        wikEd diff
+// description improved word-based diff library with block move detection
+// homepage    https://en.wikipedia.org/wiki/User:Cacycle/diff
+// source      https://en.wikipedia.org/wiki/User:Cacycle/diff.js
+// author      Cacycle (https://en.wikipedia.org/wiki/User:Cacycle)
+// license     released into the public domain
 // ==/UserScript==
 
 /**

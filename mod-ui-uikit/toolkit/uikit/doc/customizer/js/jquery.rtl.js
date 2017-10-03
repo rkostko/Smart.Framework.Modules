@@ -1,4 +1,4 @@
-/*!
+/**
   * A CSS LTR 2 RTL converter, part of UIkit and WARP framework.
   * http://getuikit.com/
   * http://www.yootheme.com/warp

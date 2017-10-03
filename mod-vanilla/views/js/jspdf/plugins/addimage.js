@@ -1,4 +1,4 @@
-/** @preserve
+/**
  * jsPDF addImage plugin
  * Copyright (c) 2012 Jason Siefken, https://github.com/siefkenj/
  *               2013 Chris Dowling, https://github.com/gingerchris

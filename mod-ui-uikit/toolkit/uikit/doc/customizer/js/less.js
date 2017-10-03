@@ -1,4 +1,4 @@
-/*!
+/**
  * Less - Leaner CSS v1.7.5
  * http://lesscss.org
  *
@@ -6,11 +6,6 @@
  * Licensed under the Apache v2 License.
  *
  */
-
- /** * @license Apache v2
- */
-
-
 
 (function (window, undefined) {//
 // Stub out `require` in the browser

@@ -1,188 +1,188 @@
 (function(addon) {
 
-    var component;
+	var component;
 
-    if (window.UIkit) {
-        component = addon(UIkit);
-    }
+	if (window.UIkit) {
+		component = addon(UIkit);
+	}
 
-    if (typeof define == 'function' && define.amd) {
-        define('uikit-notify', ['uikit'], function(){
-            return component || addon(UIkit);
-        });
-    }
+	if (typeof define == 'function' && define.amd) {
+		define('uikit-notify', ['uikit'], function(){
+			return component || addon(UIkit);
+		});
+	}
 
 })(function(UI){
 
-    "use strict";
+	"use strict";
 
-    var containers = {},
-        messages   = {},
+	var containers = {},
+		messages   = {},
 
-        notify     =  function(options){
+		notify     =  function(options){
 
-            if (UI.$.type(options) == 'string') {
-                options = { message: options };
-            }
+			if (UI.$.type(options) == 'string') {
+				options = { message: options };
+			}
 
-            if (arguments[1]) {
-                options = UI.$.extend(options, UI.$.type(arguments[1]) == 'string' ? {status:arguments[1]} : arguments[1]);
-            }
+			if (arguments[1]) {
+				options = UI.$.extend(options, UI.$.type(arguments[1]) == 'string' ? {status:arguments[1]} : arguments[1]);
+			}
 
-            return (new Message(options)).show();
-        },
-        closeAll  = function(group, instantly){
+			return (new Message(options)).show();
+		},
+		closeAll  = function(group, instantly){
 
-            var id;
+			var id;
 
-            if (group) {
-                for(id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
-            } else {
-                for(id in messages) { messages[id].close(instantly); }
-            }
-        };
+			if (group) {
+				for(id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
+			} else {
+				for(id in messages) { messages[id].close(instantly); }
+			}
+		};
 
-    var Message = function(options){
+	var Message = function(options){
 
-        this.options = UI.$.extend({}, Message.defaults, options);
+		this.options = UI.$.extend({}, Message.defaults, options);
 
-        this.uuid    = UI.Utils.uid('notifymsg');
-        this.element = UI.$([
+		this.uuid    = UI.Utils.uid('notifymsg');
+		this.element = UI.$([
 
-            '<div class="uk-notify-message">',
-                '<a class="uk-close"></a>',
-                '<div></div>',
-            '</div>'
+			'<div class="uk-notify-message">',
+				'<a class="uk-close"></a>',
+				'<div></div>',
+			'</div>'
 
-        ].join('')).data("notifyMessage", this);
+		].join('')).data("notifyMessage", this);
 
-        this.content(this.options.message);
+		this.content(this.options.message);
 
-        // status
-        if (this.options.status) {
-            this.element.addClass('uk-notify-message-'+this.options.status);
-            this.currentstatus = this.options.status;
-        }
+		// status
+		if (this.options.status) {
+			this.element.addClass('uk-notify-message-'+this.options.status);
+			this.currentstatus = this.options.status;
+		}
 
-        this.group = this.options.group;
+		this.group = this.options.group;
 
-        messages[this.uuid] = this;
+		messages[this.uuid] = this;
 
-        if(!containers[this.options.pos]) {
-            containers[this.options.pos] = UI.$('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on("click", ".uk-notify-message", function(){
+		if(!containers[this.options.pos]) {
+			containers[this.options.pos] = UI.$('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on("click", ".uk-notify-message", function(){
 
-                var message = UI.$(this).data('notifyMessage');
+				var message = UI.$(this).data('notifyMessage');
 
-                message.element.trigger('manualclose.uk.notify', [message]);
-                message.close();
-            });
-        }
-    };
+				message.element.trigger('manualclose.uk.notify', [message]);
+				message.close();
+			});
+		}
+	};
 
 
-    UI.$.extend(Message.prototype, {
+	UI.$.extend(Message.prototype, {
 
-        uuid: false,
-        element: false,
-        timout: false,
-        currentstatus: "",
-        group: false,
+		uuid: false,
+		element: false,
+		timout: false,
+		currentstatus: "",
+		group: false,
 
-        show: function() {
+		show: function() {
 
-            if (this.element.is(':visible')) return;
+			if (this.element.is(':visible')) return;
 
-            var $this = this;
+			var $this = this;
 
-            containers[this.options.pos].show().prepend(this.element);
+			containers[this.options.pos].show().prepend(this.element);
 
-            var marginbottom = parseInt(this.element.css('margin-bottom'), 10);
+			var marginbottom = parseInt(this.element.css('margin-bottom'), 10);
 
-            this.element.css({opacity:0, marginTop: -1*this.element.outerHeight(), marginBottom:0}).animate({opacity:1, marginTop:0, marginBottom:marginbottom}, function(){
+			this.element.css({opacity:0, marginTop: -1*this.element.outerHeight(), marginBottom:0}).animate({opacity:1, marginTop:0, marginBottom:marginbottom}, function(){
 
-                if ($this.options.timeout) {
+				if ($this.options.timeout) {
 
-                    var closefn = function(){ $this.close(); };
+					var closefn = function(){ $this.close(); };
 
-                    $this.timeout = setTimeout(closefn, $this.options.timeout);
+					$this.timeout = setTimeout(closefn, $this.options.timeout);
 
-                    $this.element.hover(
-                        function() { clearTimeout($this.timeout); },
-                        function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
-                    );
-                }
+					$this.element.hover(
+						function() { clearTimeout($this.timeout); },
+						function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
+					);
+				}
 
-            });
+			});
 
-            return this;
-        },
+			return this;
+		},
 
-        close: function(instantly) {
+		close: function(instantly) {
 
-            var $this    = this,
-                finalize = function(){
-                    $this.element.remove();
+			var $this    = this,
+				finalize = function(){
+					$this.element.remove();
 
-                    if (!containers[$this.options.pos].children().length) {
-                        containers[$this.options.pos].hide();
-                    }
+					if (!containers[$this.options.pos].children().length) {
+						containers[$this.options.pos].hide();
+					}
 
-                    $this.options.onClose.apply($this, []);
-                    $this.element.trigger('close.uk.notify', [$this]);
+					$this.options.onClose.apply($this, []);
+					$this.element.trigger('close.uk.notify', [$this]);
 
-                    delete messages[$this.uuid];
-                };
+					delete messages[$this.uuid];
+				};
 
-            if (this.timeout) clearTimeout(this.timeout);
+			if (this.timeout) clearTimeout(this.timeout);
 
-            if (instantly) {
-                finalize();
-            } else {
-                this.element.animate({opacity:0, marginTop: -1* this.element.outerHeight(), marginBottom:0}, function(){
-                    finalize();
-                });
-            }
-        },
+			if (instantly) {
+				finalize();
+			} else {
+				this.element.animate({opacity:0, marginTop: -1* this.element.outerHeight(), marginBottom:0}, function(){
+					finalize();
+				});
+			}
+		},
 
-        content: function(html){
+		content: function(html){
 
-            var container = this.element.find(">div");
+			var container = this.element.find(">div");
 
-            if(!html) {
-                return container.html();
-            }
+			if(!html) {
+				return container.html();
+			}
 
-            container.html(html);
+			container.html(html);
 
-            return this;
-        },
+			return this;
+		},
 
-        status: function(status) {
+		status: function(status) {
 
-            if (!status) {
-                return this.currentstatus;
-            }
+			if (!status) {
+				return this.currentstatus;
+			}
 
-            this.element.removeClass('uk-notify-message-'+this.currentstatus).addClass('uk-notify-message-'+status);
+			this.element.removeClass('uk-notify-message-'+this.currentstatus).addClass('uk-notify-message-'+status);
 
-            this.currentstatus = status;
+			this.currentstatus = status;
 
-            return this;
-        }
-    });
+			return this;
+		}
+	});
 
-    Message.defaults = {
-        message: "",
-        status: "",
-        timeout: 5000,
-        group: null,
-        pos: 'top-center',
-        onClose: function() {}
-    };
+	Message.defaults = {
+		message: "",
+		status: "",
+		timeout: 5000,
+		group: null,
+		pos: 'top-center',
+		onClose: function() {}
+	};
 
-    UI.notify          = notify;
-    UI.notify.message  = Message;
-    UI.notify.closeAll = closeAll;
+	UI.notify          = notify;
+	UI.notify.message  = Message;
+	UI.notify.closeAll = closeAll;
 
-    return notify;
+	return notify;
 });

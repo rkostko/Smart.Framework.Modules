@@ -1,21 +1,21 @@
 /**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
 /**
- * @fileOverview Defines the {@link CKEDITOR_Adapters.jQuery jQuery Adapter}.
+ * fileOverview Defines the {@link CKEDITOR_Adapters.jQuery jQuery Adapter}.
  */
 
 /**
- * @class CKEDITOR_Adapters.jQuery
- * @singleton
+ * class CKEDITOR_Adapters.jQuery
+ * singleton
  *
  * The jQuery Adapter allows for easy use of basic CKEditor functions and access to the internal API.
  * To find more information about the jQuery Adapter, go to the [jQuery Adapter section](#!/guide/dev_jquery)
  * of the Developer's Guide or see the "Create Editors with jQuery" sample.
  *
- * @aside guide dev_jquery
+ * aside guide dev_jquery
  */
 
 ( function( $ ) {

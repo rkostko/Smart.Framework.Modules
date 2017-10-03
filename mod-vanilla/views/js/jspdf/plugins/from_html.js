@@ -1,7 +1,7 @@
 
 // fixed by unixman 170505
 
-/** @preserve
+/**
  * jsPDF fromHTML plugin. BETA stage. API subject to change. Needs browser
  * Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
  *               2014 Juan Pablo Gaviria, https://github.com/juanpgaviria

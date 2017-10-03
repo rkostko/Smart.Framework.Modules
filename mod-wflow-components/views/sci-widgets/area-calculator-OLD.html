@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- JX Area Calculator v.2017.05.02 -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta name="viewport" content="initial-scale=0.75">
+	<title>Area Calculator</title>
+	<link rel="stylesheet" type="text/css" href="jx-widgets.css">
+	<script type="text/javascript" src="area-calculator-OLD.js"></script>
+</head>
+<body>
+<!-- JX Area Calculator START -->
+<div align="center" id="JX_Area_Workshop" title="JX Area Calculator (c) 2006-2017 - unix-world.org">
+<table width="550" cellpadding="8" cellspacing="0" bgcolor="#F3F3F3" border="1" bordercolor="#CCCCCC" style="border-style: solid; border-collapse: collapse;"><tr><td align="center">
+<h1>AREA Calculator</h1>
+<select id="JX_Area_Calc_Selector" size="1" style="width: 180px;">
+	<option value="" selected></option>
+	<option value="square">Square</option>
+	<option value="rectangle">Rectangle</option>
+	<option value="rhombus">Rhombus</option>
+	<option value="parallelogram">Parallelogram</option>
+	<option value="trapezoid">Trapezoid</option>
+	<option value="triangle">Triangle (by Base and Height)</option>
+	<option value="triangle_heron">Triangle (by Each Side - Heron)</option>
+	<option value="ellipse">Ellipse</option>
+	<option value="circle">Circle</option>
+	<option value="sphere">Sphere</option>
+	<option value="rcilinder_lateral">Right Cilinder, Lateral Area</option>
+	<option value="rcircle_cone_lateral">Right Circle Cone, Lateral Area</option>
+	<option value="square_pyramide_lateral">Square Pyramid, Lateral Area</option>
+</select>
+&nbsp;
+<input type="button" value="Calculate" class="bttny" onclick="JX_Area_Calculator.Calculate('JX_Area_Calc_Selector', 'JX_Area_Calc_DIV', 'JX_Area_TOTAL_DIV');">
+&nbsp;
+<input type="button" value="Reset" class="bttnx" onclick="self.location=self.location;">
+&nbsp;
+<input type="button" value="Print" onclick="if(confirm('Do you want to PRINT this ? (after PRINTING, no more changes can be done ...)')) { var jx_bttn_print = document.getElementById('JX_Area_Workshop'); jx_bttn_print.innerHTML='NetVision // Area Calculator'; self.print(); }">
+<br>
+<br>
+</td></tr></table>
+</div>
+<br>
+<div align="center">
+<table width="550" cellpadding="8" cellspacing="0" bgcolor="#F3F3F3" border="1" bordercolor="#CCCCCC" style="border-style: solid; border-collapse: collapse;"><tr><td>
+<div id="JX_Area_Calc_DIV"><br></div>
+<div id="JX_Area_TOTAL_DIV"></div>
+</td></tr></table>
+</div>
+<br>
+<br>
+<!-- JX Area Calculator END -->
+</body>
+</html>

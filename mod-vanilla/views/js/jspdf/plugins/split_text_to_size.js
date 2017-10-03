@@ -1,4 +1,4 @@
-/** @preserve
+/**
  * jsPDF split_text_to_size plugin - MIT license.
  * Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
  *               2014 Diego Casorran, https://github.com/diegocr

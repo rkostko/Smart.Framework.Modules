@@ -1,4 +1,4 @@
-/*!
+/**
  * g.Raphael 0.51 - Charting library, based on Raphaël
  *
  * Copyright (c) 2009-2012 Dmitry Baranovskiy (http://g.raphaeljs.com)

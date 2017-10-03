@@ -1,10 +1,10 @@
 /**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
 /**
- * @fileOverview The "show border" plugin. The command display visible outline
+ * fileOverview The "show border" plugin. The command display visible outline
  * border line around all table elements if table doesn't have a none-zero 'border' attribute specified.
  */
 

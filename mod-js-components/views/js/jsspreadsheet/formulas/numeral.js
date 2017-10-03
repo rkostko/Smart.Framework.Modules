@@ -1,4 +1,4 @@
-/*!
+/**
  * numeral.js
  * version : 1.5.3
  * author : Adam Draper

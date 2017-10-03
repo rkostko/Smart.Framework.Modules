@@ -1,4 +1,4 @@
-/*! UIkit 2.27.2 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/* UIkit 2.27.2 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
 	var component;
@@ -413,7 +413,7 @@
 	}
 
 	/**!
-	 * @preserve Color animation 1.6.0
+	 * Color animation 1.6.0
 	 * http://www.bitstorm.org/jquery/color-animation/
 	 * Copyright 2011, 2013 Edwin Martin <edwin@bitstorm.org>
 	 * Released under the MIT and GPL licenses.

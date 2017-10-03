@@ -1,4 +1,4 @@
-/*!
+/**
  * numbro.js language configuration
  * language : Czech
  * locale: Czech Republic
@@ -49,7 +49,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Danish
  * locale: Denmark
@@ -99,7 +99,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : German
  * locale: Austria
@@ -139,7 +139,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : German
  * locale: Switzerland
@@ -189,7 +189,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : German
  * locale: Germany
@@ -242,7 +242,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : German
  * locale: Liechtenstein
@@ -292,7 +292,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : English
  * locale: Australia
@@ -346,7 +346,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : English
  * locale: United Kingdom of Great Britain and Northern Ireland
@@ -400,7 +400,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
 + * numbro.js language configuration
  * language : English
  * locale: Ireland
@@ -444,7 +444,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : English
  * locale: New Zealand
@@ -498,7 +498,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : English
  * locale: South Africa
@@ -552,7 +552,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Spanish
  * locale: Argentina
@@ -607,7 +607,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Spanish
  * locale: Spain
@@ -662,7 +662,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Estonian
  * locale: Estonia
@@ -715,7 +715,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Farsi
  * locale: Iran
@@ -755,7 +755,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Finnish
  * locale: Finland
@@ -805,7 +805,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Filipino (Pilipino)
  * locale: Philippines
@@ -849,7 +849,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : French
  * locale: Canada
@@ -900,7 +900,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : French
  * locale: Switzerland
@@ -950,7 +950,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : French
  * locale: France
@@ -1000,7 +1000,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Hebrew
  * locale : IL
@@ -1048,7 +1048,7 @@
 }.call(typeof window === 'undefined' ? this : window));
 
 
-/*!
+/**
  * numbro.js language configuration
  * language : Hungarian
  * locale: Hungary
@@ -1098,7 +1098,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Italian
  * locale: Switzerland
@@ -1138,7 +1138,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Italian
  * locale: Italy
@@ -1188,7 +1188,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Japanese
  * locale: Japan
@@ -1238,7 +1238,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Korean
  * author (numbro.js Version): Randy Wilander : https://github.com/rocketedaway
@@ -1278,7 +1278,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Latvian
  * locale: Latvia
@@ -1327,7 +1327,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language: Norwegian Bokmål
  * locale: Norway
@@ -1374,7 +1374,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Dutch
  * locale: Belgium
@@ -1425,7 +1425,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Dutch
  * locale: Netherlands
@@ -1476,7 +1476,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Polish
  * locale : Poland
@@ -1526,7 +1526,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Portuguese
  * locale : Brazil
@@ -1576,7 +1576,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Portuguese
  * locale : Portugal
@@ -1626,7 +1626,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numeral.js language configuration
  * language : Romanian
  * author : Andrei Alecu https://github.com/andreialecu
@@ -1675,7 +1675,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Russian
  * locale : Russsia
@@ -1728,7 +1728,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Russian
  * locale : Ukraine
@@ -1781,7 +1781,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Slovak
  * locale : Slovakia
@@ -1832,7 +1832,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Swedish
  * locale : Sweden
@@ -1879,7 +1879,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Thai
  * locale : Thailand
@@ -1929,7 +1929,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Turkish
  * locale : Turkey
@@ -2014,7 +2014,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Ukrainian
  * locale : Ukraine
@@ -2067,7 +2067,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : simplified chinese
  * locale : China
@@ -2117,7 +2117,7 @@
 	}
 }.call(typeof window === 'undefined' ? this : window));
 
-/*!
+/**
  * numbro.js language configuration
  * language : Chinese (Taiwan)
  * author (numbro.js Version): Randy Wilander : https://github.com/rocketedaway

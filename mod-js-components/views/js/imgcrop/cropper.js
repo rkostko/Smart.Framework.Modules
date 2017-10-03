@@ -1,4 +1,4 @@
-/*!
+/**
  * Cropper v3.0.0-rc
  * https://github.com/fengyuanchen/cropper
  *

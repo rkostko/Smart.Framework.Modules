@@ -19,7 +19,7 @@
 	}
 }(function ($, undefined) {
 	"use strict";
-/*!
+/*
  * jsTree 3.3.4
  * http://jstree.com/
  *
@@ -28,7 +28,7 @@
  * Licensed same as jquery - under the terms of the MIT License
  *   http://www.opensource.org/licenses/mit-license.php
  */
-/*!
+/*
  * if using jslint please allow for the jQuery global and use following options:
  * jslint: loopfunc: true, browser: true, ass: true, bitwise: true, continue: true, nomen: true, plusplus: true, regexp: true, unparam: true, todo: true, white: true
  */
@@ -707,7 +707,7 @@
 								break;
 							default:
 								break;
-							/*!
+							/*
 							// delete
 							case 46:
 								e.preventDefault();
@@ -3371,7 +3371,7 @@
 						'left' : this.element.scrollLeft(),
 						'top' : this.element.scrollTop()
 					},
-					/*!
+					/*
 					'themes' : {
 						'name' : this.get_theme(),
 						'icons' : this._data.core.themes.icons,
@@ -4405,7 +4405,7 @@
 			this._data.core.focused = tmp.id;
 			a  = obj.children('.jstree-anchor').focus();
 			s  = $('<span>');
-			/*!
+			/*
 			oi = obj.children("i:visible"),
 			ai = a.children("i:visible"),
 			w1 = oi.width() * oi.length,
@@ -5920,7 +5920,7 @@
 					"separator_after"	: false,
 					"_disabled"			: false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
 					"label"				: "Rename",
-					/*!
+					/*
 					"shortcut"			: 113,
 					"shortcut_label"	: 'F2',
 					"icon"				: "glyphicon glyphicon-leaf",
@@ -6058,7 +6058,7 @@
 						}
 					});
 
-			/*!
+			/*
 			if(!('oncontextmenu' in document.body) && ('ontouchstart' in document.body)) {
 				var el = null, tm = null;
 				this.element
@@ -8347,7 +8347,7 @@
 							$(e.currentTarget).closest(".jstree-node").children(".jstree-anchor").first().trigger(tmp);
 						}
 					}, this))
-				/*!
+				/*
 				.on("mousedown.jstree touchstart.jstree", ".jstree-wholerow", function (e) {
 						if(e.target === e.currentTarget) {
 							var a = $(e.currentTarget).closest(".jstree-node").children(".jstree-anchor");

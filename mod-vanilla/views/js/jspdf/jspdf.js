@@ -175,7 +175,7 @@ var set$1 = function set$1(object, property, value, receiver) {
   return value;
 };
 
-/** @preserve
+/**
  * jsPDF - PDF Document creation from JavaScript
  * Version 1.3.4 Built on 2017-04-10T14:14:44.483Z
  *                           CommitID cf4827d221
@@ -4101,7 +4101,7 @@ AcroForm.internal.setBitPosition = function (variable, position, value) {
 	};
 })(jsPDF.API);
 
-/** @preserve
+/**
  * jsPDF addImage plugin
  * Copyright (c) 2012 Jason Siefken, https://github.com/siefkenj/
  *               2013 Chris Dowling, https://github.com/gingerchris
@@ -7143,7 +7143,7 @@ AcroForm.internal.setBitPosition = function (variable, position, value) {
 	return this;
 })(jsPDF.API);
 
-/** @preserve
+/**
  * jsPDF fromHTML plugin. BETA stage. API subject to change. Needs browser
  * Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
  *               2014 Juan Pablo Gaviria, https://github.com/juanpgaviria
@@ -8389,7 +8389,7 @@ AcroForm.internal.setBitPosition = function (variable, position, value) {
 	return this;
 })(jsPDF.API);
 
-/**@preserve
+/**
  *  ====================================================================
  * jsPDF PNG PlugIn
  * Copyright (c) 2014 James Robb, https://github.com/jamesbrobb
@@ -8930,7 +8930,7 @@ AcroForm.internal.setBitPosition = function (variable, position, value) {
   };
 })(jsPDF.API);
 
-/** @preserve
+/**
  * jsPDF split_text_to_size plugin - MIT license.
  * Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
  *               2014 Diego Casorran, https://github.com/diegocr
@@ -9234,7 +9234,7 @@ AcroForm.internal.setBitPosition = function (variable, position, value) {
 	};
 })(jsPDF.API);
 
-/** @preserve
+/**
 jsPDF standard_fonts_metrics plugin
 Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 MIT license.
@@ -9591,7 +9591,7 @@ MIT license.
 	}]); // end of adding event handler
 })(jsPDF.API);
 
-/** @preserve
+/**
 jsPDF SVG plugin
 Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 */
@@ -9845,7 +9845,7 @@ Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 /*jslint bitwise: true, regexp: true, confusion: true, es5: true, vars: true, white: true,
   plusplus: true */
 
-/*! @source http://purl.eligrey.com/github/Blob.js/blob/master/Blob.js */
+/* source http://purl.eligrey.com/github/Blob.js/blob/master/Blob.js */
 
 (function (view) {
 	"use strict";
@@ -10051,7 +10051,7 @@ Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 /*global self */
 /*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
 
-/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
+/* source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 
 var saveAs = saveAs || (function(view) {
 	"use strict";

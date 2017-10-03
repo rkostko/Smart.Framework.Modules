@@ -1,7 +1,7 @@
 
 // NetVision JS - JX Calculator
 // (c) 2006-2017 unix-world.org
-// v.2017.05.02
+// v.2017.10.01
 
 
 var JXCalculator = new function() { // START CLASS

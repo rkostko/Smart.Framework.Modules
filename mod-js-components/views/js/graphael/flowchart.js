@@ -74,22 +74,22 @@
 		return __webpack_require__.m = modules, __webpack_require__.c = installedModules,
 		__webpack_require__.p = "", __webpack_require__(0);
 	}([ /* 0 */
-	/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
+	/*******************
+	**** ./index.js ****
+	******************/
 	/***/
 	function(module, exports, __webpack_require__) {
-		__webpack_require__(/*! ./src/flowchart.shim */ 8);
-		var parse = __webpack_require__(/*! ./src/flowchart.parse */ 4);
-		__webpack_require__(/*! ./src/jquery-plugin */ 14);
+		__webpack_require__(8); /* ./src/flowchart.shim */
+		var parse = __webpack_require__(4); /* ./src/flowchart.parse */
+		__webpack_require__(14); /* ./src/jquery-plugin */
 		var FlowChart = {
 			parse: parse
 		};
 		"undefined" != typeof window && (window.flowchart = FlowChart), module.exports = FlowChart;
 	}, /* 1 */
-	/*!**********************************!*\
-  !*** ./src/flowchart.helpers.js ***!
-  \**********************************/
+	/**********************************
+	*** ./src/flowchart.helpers.js ****
+	**********************************/
 	/***/
 	function(module, exports) {
 		function _defaults(options, defaultOptions) {
@@ -122,9 +122,9 @@
 			inherits: _inherits
 		};
 	}, /* 2 */
-	/*!*********************************!*\
-  !*** ./src/flowchart.symbol.js ***!
-  \*********************************/
+	/*********************************
+	*** ./src/flowchart.symbol.js ***
+	*********************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function Symbol(chart, options, symbol) {
@@ -170,7 +170,8 @@
 				}), this.initialize();
 			}
 		}
-		var drawAPI = __webpack_require__(/*! ./flowchart.functions */ 3), drawLine = drawAPI.drawLine, checkLineIntersection = drawAPI.checkLineIntersection;
+		var drawAPI = __webpack_require__(3), /* ./flowchart.functions */
+		drawLine = drawAPI.drawLine, checkLineIntersection = drawAPI.checkLineIntersection;
 		/* Gets the attribute based on Flowstate, Symbol-Name and default, first found wins */
 		Symbol.prototype.getAttr = function(attName) {
 			if (this.chart) {
@@ -408,9 +409,9 @@
 			(!this.chart.maxXFromLine || this.chart.maxXFromLine && maxX > this.chart.maxXFromLine) && (this.chart.maxXFromLine = maxX);
 		}, module.exports = Symbol;
 	}, /* 3 */
-	/*!************************************!*\
-  !*** ./src/flowchart.functions.js ***!
-  \************************************/
+	/************************************
+	*** ./src/flowchart.functions.js ***
+	************************************/
 	/***/
 	function(module, exports) {
 		function drawPath(chart, location, points) {
@@ -503,9 +504,9 @@
 			checkLineIntersection: checkLineIntersection
 		};
 	}, /* 4 */
-	/*!********************************!*\
-  !*** ./src/flowchart.parse.js ***!
-  \********************************/
+	/*******************************
+	*** ./src/flowchart.parse.js ***
+	********************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function parse(input) {
@@ -627,12 +628,18 @@
 			}
 			return chart;
 		}
-		var FlowChart = __webpack_require__(/*! ./flowchart.chart */ 6), Start = __webpack_require__(/*! ./flowchart.symbol.start */ 12), End = __webpack_require__(/*! ./flowchart.symbol.end */ 9), Operation = __webpack_require__(/*! ./flowchart.symbol.operation */ 11), InputOutput = __webpack_require__(/*! ./flowchart.symbol.inputoutput */ 10), Subroutine = __webpack_require__(/*! ./flowchart.symbol.subroutine */ 13), Condition = __webpack_require__(/*! ./flowchart.symbol.condition */ 5);
+		var FlowChart = __webpack_require__(6), 	/* ./flowchart.chart */
+		Start = __webpack_require__(12), 			/* ./flowchart.symbol.start */
+		End = __webpack_require__(9), 				/* ./flowchart.symbol.end */
+		Operation = __webpack_require__(11), 		/* ./flowchart.symbol.operation */
+		InputOutput = __webpack_require__(10), 		/* ./flowchart.symbol.inputoutput */
+		Subroutine = __webpack_require__(13), 		/* ./flowchart.symbol.subroutine */
+		Condition = __webpack_require__(5); 		/* ./flowchart.symbol.condition */
 		module.exports = parse;
 	}, /* 5 */
-	/*!*******************************************!*\
-  !*** ./src/flowchart.symbol.condition.js ***!
-  \*******************************************/
+	/*******************************************
+	*** ./src/flowchart.symbol.condition.js ***
+	*******************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function Condition(chart, options) {
@@ -681,7 +688,10 @@
 				y: symbol.getBBox().height / 2
 			}), this.group.push(symbol), symbol.insertBefore(this.text), this.initialize();
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits, drawAPI = __webpack_require__(/*! ./flowchart.functions */ 3), drawPath = drawAPI.drawPath;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits, /* ./flowchart.helpers */
+		drawAPI = __webpack_require__(3), 			/* ./flowchart.functions */
+		drawPath = drawAPI.drawPath;
 		inherits(Condition, Symbol), Condition.prototype.render = function() {
 			this.yes_direction && (this[this.yes_direction + "_symbol"] = this.yes_symbol),
 			this.no_direction && (this[this.no_direction + "_symbol"] = this.no_symbol);
@@ -716,16 +726,19 @@
 			this.no_symbol && this.drawLineTo(this.no_symbol, this.getAttr("no-text"), this.no_direction);
 		}, module.exports = Condition;
 	}, /* 6 */
-	/*!********************************!*\
-  !*** ./src/flowchart.chart.js ***!
-  \********************************/
+	/*******************************
+	*** ./src/flowchart.chart.js ***
+	********************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function FlowChart(container, options) {
 			options = options || {}, this.paper = new Raphael(container), this.options = defaults(options, defaultOptions),
 			this.symbols = [], this.lines = [], this.start = null;
 		}
-		var Raphael = __webpack_require__(/*! raphael */ 15), defaults = __webpack_require__(/*! ./flowchart.helpers */ 1).defaults, defaultOptions = __webpack_require__(/*! ./flowchart.defaults */ 7), Condition = __webpack_require__(/*! ./flowchart.symbol.condition */ 5);
+		var Raphael = __webpack_require__(15), 			/* raphael */
+		defaults = __webpack_require__(1).defaults, 	/* ./flowchart.helpers */
+		defaultOptions = __webpack_require__(7), 		/* ./flowchart.defaults */
+		Condition = __webpack_require__(5); 			/* ./flowchart.symbol.condition */
 		FlowChart.prototype.handle = function(symbol) {
 			this.symbols.indexOf(symbol) <= -1 && this.symbols.push(symbol);
 			var flowChart = this;
@@ -772,9 +785,9 @@
 			}
 		}, module.exports = FlowChart;
 	}, /* 7 */
-	/*!***********************************!*\
-  !*** ./src/flowchart.defaults.js ***!
-  \***********************************/
+	/**********************************
+	*** ./src/flowchart.defaults.js ***
+	***********************************/
 	/***/
 	function(module, exports) {
 		// defaults
@@ -807,9 +820,9 @@
 			}
 		};
 	}, /* 8 */
-	/*!*******************************!*\
-  !*** ./src/flowchart.shim.js ***!
-  \*******************************/
+	/******************************
+	*** ./src/flowchart.shim.js ***
+	*******************************/
 	/***/
 	function(module, exports) {
 		// add indexOf to non ECMA-262 standard compliant browsers
@@ -838,21 +851,22 @@
 			return this.replace(/^\s+|\s+$/g, "");
 		});
 	}, /* 9 */
-	/*!*************************************!*\
-  !*** ./src/flowchart.symbol.end.js ***!
-  \*************************************/
+	/************************************
+	*** ./src/flowchart.symbol.end.js ***
+	*************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function End(chart, options) {
 			var symbol = chart.paper.rect(0, 0, 0, 0, 20);
 			options = options || {}, options.text = options.text || "End", Symbol.call(this, chart, options, symbol);
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits; /* ./flowchart.helpers */
 		inherits(End, Symbol), module.exports = End;
 	}, /* 10 */
-	/*!*********************************************!*\
-  !*** ./src/flowchart.symbol.inputoutput.js ***!
-  \*********************************************/
+	/********************************************
+	*** ./src/flowchart.symbol.inputoutput.js ***
+	*********************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function InputOutput(chart, options) {
@@ -889,7 +903,10 @@
 				y: symbol.getBBox().height / 2
 			}), this.group.push(symbol), symbol.insertBefore(this.text), this.initialize();
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits, drawAPI = __webpack_require__(/*! ./flowchart.functions */ 3), drawPath = drawAPI.drawPath;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits, /* ./flowchart.helpers */
+		drawAPI = __webpack_require__(3), 			/* ./flowchart.functions */
+		drawPath = drawAPI.drawPath;
 		inherits(InputOutput, Symbol), InputOutput.prototype.getLeft = function() {
 			var y = this.getY() + this.group.getBBox().height / 2, x = this.getX() + this.textMargin;
 			return {
@@ -904,33 +921,35 @@
 			};
 		}, module.exports = InputOutput;
 	}, /* 11 */
-	/*!*******************************************!*\
-  !*** ./src/flowchart.symbol.operation.js ***!
-  \*******************************************/
+	/******************************************
+	*** ./src/flowchart.symbol.operation.js ***
+	*******************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function Operation(chart, options) {
 			var symbol = chart.paper.rect(0, 0, 0, 0);
 			options = options || {}, Symbol.call(this, chart, options, symbol);
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits; /* ./flowchart.helpers */
 		inherits(Operation, Symbol), module.exports = Operation;
 	}, /* 12 */
-	/*!***************************************!*\
-  !*** ./src/flowchart.symbol.start.js ***!
-  \***************************************/
+	/**************************************
+	*** ./src/flowchart.symbol.start.js ***
+	***************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function Start(chart, options) {
 			var symbol = chart.paper.rect(0, 0, 0, 0, 20);
 			options = options || {}, options.text = options.text || "Start", Symbol.call(this, chart, options, symbol);
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits; /* ./flowchart.helpers */
 		inherits(Start, Symbol), module.exports = Start;
 	}, /* 13 */
-	/*!********************************************!*\
-  !*** ./src/flowchart.symbol.subroutine.js ***!
-  \********************************************/
+	/*******************************************
+	*** ./src/flowchart.symbol.subroutine.js ***
+	********************************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		function Subroutine(chart, options) {
@@ -959,16 +978,17 @@
 			}), options.link && innerWrap.attr("href", options.link), options.target && innerWrap.attr("target", options.target),
 			this.group.push(innerWrap), innerWrap.insertBefore(this.text), this.initialize();
 		}
-		var Symbol = __webpack_require__(/*! ./flowchart.symbol */ 2), inherits = __webpack_require__(/*! ./flowchart.helpers */ 1).inherits;
+		var Symbol = __webpack_require__(2), 		/* ./flowchart.symbol */
+		inherits = __webpack_require__(1).inherits; /* ./flowchart.helpers */
 		inherits(Subroutine, Symbol), module.exports = Subroutine;
 	}, /* 14 */
-	/*!******************************!*\
-  !*** ./src/jquery-plugin.js ***!
-  \******************************/
+	/*****************************
+	*** ./src/jquery-plugin.js ***
+	******************************/
 	/***/
 	function(module, exports, __webpack_require__) {
 		if ("undefined" != typeof jQuery) {
-			var parse = __webpack_require__(/*! ./flowchart.parse */ 4);
+			var parse = __webpack_require__(4); /* ./flowchart.parse */
 			!function($) {
 				$.fn.flowChart = function(options) {
 					return this.each(function() {
@@ -979,9 +999,9 @@
 			}(jQuery);
 		}
 	}, /* 15 */
-	/*!**************************!*\
-  !*** external "Raphael" ***!
-  \**************************/
+	/*************************
+	*** external "Raphael" ***
+	**************************/
 	/***/
 	function(module, exports) {
 		module.exports = __WEBPACK_EXTERNAL_MODULE_15__;

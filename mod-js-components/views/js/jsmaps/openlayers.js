@@ -59765,7 +59765,7 @@ OpenLayers.Format.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Format.XML, {
    ====================================================================== */
 
 /**
- * @license Apache 2
+ * license Apache 2
  *
  * Contains portions of Rico <http://openrico.org/>
  *

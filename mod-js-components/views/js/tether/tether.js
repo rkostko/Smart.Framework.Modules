@@ -1,4 +1,4 @@
-/*! tether 1.4.0 */
+/** tether JS 1.4.0 */
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -1809,3 +1809,5 @@ TetherBase.modules.push({
 return Tether;
 
 }));
+
+// #END

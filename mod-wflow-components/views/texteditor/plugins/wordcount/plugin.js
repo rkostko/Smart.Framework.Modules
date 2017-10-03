@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 

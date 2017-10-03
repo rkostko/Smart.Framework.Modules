@@ -1,10 +1,10 @@
-/*
-*  The "codemirror" plugin. It's indented to enhance the
-*  "sourcearea" editing mode, which displays the xhtml source code with
-*  syntax highlight and line numbers.
-* Licensed under the MIT license
-* CodeMirror Plugin: http://codemirror.net/ (MIT License)
-*/
+/**
+ *  The "codemirror" plugin. It's indented to enhance the
+ *  "sourcearea" editing mode, which displays the xhtml source code with
+ *  syntax highlight and line numbers.
+ * Licensed under the MIT license
+ * CodeMirror Plugin: http://codemirror.net/ (MIT License)
+ */
 
 // modified by unixman to remove codemirror from inclusion and load code mirror from external source !
 

@@ -3,7 +3,7 @@
 // https://github.com/kangax/fabric.js/
 
  /* build: `node build.js modules=ALL exclude=json,gestures minifier=uglifyjs` */
- /*! Fabric.js Copyright 2008-2015, Printio (Juriy Zaytsev, Maxim Chernyak) */
+ /** Fabric.js Copyright 2008-2015, Printio (Juriy Zaytsev, Maxim Chernyak) */
 
 var fabric = fabric || { version: "1.7.11" };
 if (typeof exports !== 'undefined') {

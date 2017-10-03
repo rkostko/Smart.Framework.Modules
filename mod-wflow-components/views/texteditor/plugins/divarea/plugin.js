@@ -1,10 +1,10 @@
 /**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
 /**
- * @fileOverview The "divarea" plugin. It registers the "wysiwyg" editing
+ * fileOverview The "divarea" plugin. It registers the "wysiwyg" editing
  *		mode using a DIV element.
  */
 

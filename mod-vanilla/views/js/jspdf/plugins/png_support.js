@@ -1,4 +1,4 @@
-/**@preserve
+/**
  *  ====================================================================
  * jsPDF PNG PlugIn
  * Copyright (c) 2014 James Robb, https://github.com/jamesbrobb

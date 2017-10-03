@@ -1,4 +1,4 @@
-/*!
+/**
  * numbro.js
  * version : 1.10.1
  * author : Företagsplatsen AB

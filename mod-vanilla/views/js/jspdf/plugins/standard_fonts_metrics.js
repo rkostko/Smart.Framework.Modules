@@ -1,4 +1,4 @@
-/** @preserve 
+/**
 jsPDF standard_fonts_metrics plugin
 Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 MIT license.
@@ -11,10 +11,10 @@ MIT license.
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -64,7 +64,7 @@ def compress(data):
 				raise Exception("Don't know what to do with value type %s" % type(value))
 
 		vals.append(keystring+valuestring)
-	
+
 	return '{' + ''.join(vals) + '}'
 
 def uncompress(data):
@@ -157,7 +157,7 @@ def uncompress(data):
 */
 
 /**
-Uncompresses data compressed into custom, base16-like format. 
+Uncompresses data compressed into custom, base16-like format.
 @public
 @function
 @param
@@ -177,7 +177,7 @@ var uncompress = function(data){
 	, output = {}
 	, sign = 1
 	, stringparts // undef. will be [] in string mode
-	
+
 	, activeobject = output
 	, parentchain = []
 	, parent_key_pair
@@ -188,7 +188,7 @@ var uncompress = function(data){
 	, ch
 
 	i = 1 // stripping starting {
-	
+
 	while (i != datalen){
 		// - { } ' are special.
 
@@ -199,10 +199,10 @@ var uncompress = function(data){
 			if (stringparts){
 				// end of string mode
 				key = stringparts.join('')
-				stringparts = undef				
+				stringparts = undef
 			} else {
 				// start of string mode
-				stringparts = []				
+				stringparts = []
 			}
 		} else if (stringparts){
 			stringparts.push(ch)
@@ -238,7 +238,7 @@ var uncompress = function(data){
 					key = undef
 					valueparts = ''
 				} else {
-					valueparts += ch					
+					valueparts += ch
 				}
 			}
 		}
@@ -247,7 +247,7 @@ var uncompress = function(data){
 	return output
 }
 
-// encoding = 'Unicode' 
+// encoding = 'Unicode'
 // NOT UTF8, NOT UTF16BE/LE, NOT UCS2BE/LE. NO clever BOM behavior
 // Actual 16bit char codes used.
 // no multi-byte logic here
@@ -256,8 +256,8 @@ var uncompress = function(data){
 // {402: 131, 8211: 150, 8212: 151, 8216: 145, 8217: 146, 8218: 130, 8220: 147, 8221: 148, 8222: 132, 8224: 134, 8225: 135, 8226: 149, 8230: 133, 8364: 128, 8240:137, 8249: 139, 8250: 155, 710: 136, 8482: 153, 338: 140, 339: 156, 732: 152, 352: 138, 353: 154, 376: 159, 381: 142, 382: 158}
 // as you can see, all Unicode chars are outside of 0-255 range. No char code conflicts.
 // this means that you can give Win cp1252 encoded strings to jsPDF for rendering directly
-// as well as give strings with some (supported by these fonts) Unicode characters and 
-// these will be mapped to win cp1252 
+// as well as give strings with some (supported by these fonts) Unicode characters and
+// these will be mapped to win cp1252
 // for example, you can send char code (cp1252) 0x80 or (unicode) 0x20AC, getting "Euro" glyph displayed in both cases.
 
 var encodingBlock = {
@@ -280,7 +280,7 @@ var encodingBlock = {
 //	, 'Symbol'
 //	, 'ZapfDingbats'
 }}
-/** 
+/**
 Resources:
 Font metrics data is reprocessed derivative of contents of
 "Font Metrics for PDF Core 14 Fonts" package, which exhibits the following copyright and license:
@@ -333,7 +333,7 @@ char codes to StandardEncoding character codes. The encoding table is to be used
 somewhere around "pdfEscape" call.
 */
 
-API.events.push([ 
+API.events.push([
 	'addFont'
 	,function(font) {
 		var metrics

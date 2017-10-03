@@ -1,4 +1,4 @@
-/*!
+/**
  * jQuery Templates Plugin 1.0.0pre
  * http://github.com/jquery/jquery-tmpl
  * Requires jQuery 1.4.2

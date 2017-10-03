@@ -1,4 +1,4 @@
-/*!
+/**
 (The MIT License)
 
 Copyright (c) 2012-2014 Marcin Warpechowski
@@ -1090,7 +1090,7 @@ thead .htCollapseButton:after {
 	animation-fill-mode: forwards;
 	-webkit-animation-fill-mode: forwards;
 }
-/*!
+/*
  * Handsontable ContextMenu
  */
 

@@ -1,5 +1,5 @@
 /*
- * @file audio plugin for CKEditor
+ * file audio plugin for CKEditor
  * Copyright (C) 2011 Alfonso Martínez de Lizarrondo
  *
  * == BEGIN LICENSE ==

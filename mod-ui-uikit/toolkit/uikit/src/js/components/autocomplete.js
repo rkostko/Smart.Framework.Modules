@@ -1,339 +1,339 @@
 (function(addon) {
 
-    var component;
+	var component;
 
-    if (window.UIkit) {
-        component = addon(UIkit);
-    }
+	if (window.UIkit) {
+		component = addon(UIkit);
+	}
 
-    if (typeof define == 'function' && define.amd) {
-        define('uikit-autocomplete', ['uikit'], function(){
-            return component || addon(UIkit);
-        });
-    }
+	if (typeof define == 'function' && define.amd) {
+		define('uikit-autocomplete', ['uikit'], function(){
+			return component || addon(UIkit);
+		});
+	}
 
 })(function(UI){
 
-    "use strict";
-
-    var active;
-
-    UI.component('autocomplete', {
-
-        defaults: {
-            minLength: 3,
-            param: 'search',
-            method: 'post',
-            delay: 300,
-            loadingClass: 'uk-loading',
-            flipDropdown: false,
-            skipClass: 'uk-skip',
-            hoverClass: 'uk-active',
-            source: null,
-            renderer: null,
-
-            // template
+	"use strict";
+
+	var active;
+
+	UI.component('autocomplete', {
+
+		defaults: {
+			minLength: 3,
+			param: 'search',
+			method: 'post',
+			delay: 300,
+			loadingClass: 'uk-loading',
+			flipDropdown: false,
+			skipClass: 'uk-skip',
+			hoverClass: 'uk-active',
+			source: null,
+			renderer: null,
+
+			// template
 
-            template: '<ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">{{~items}}<li data-value="{{$item.value}}"><a>{{$item.value}}</a></li>{{/items}}</ul>'
-        },
+			template: '<ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">{{~items}}<li data-value="{{$item.value}}"><a>{{$item.value}}</a></li>{{/items}}</ul>'
+		},
 
-        visible  : false,
-        value    : null,
-        selected : null,
+		visible  : false,
+		value    : null,
+		selected : null,
 
-        boot: function() {
+		boot: function() {
 
-            // init code
-            UI.$html.on('focus.autocomplete.uikit', '[data-uk-autocomplete]', function(e) {
+			// init code
+			UI.$html.on('focus.autocomplete.uikit', '[data-uk-autocomplete]', function(e) {
 
-                var ele = UI.$(this);
+				var ele = UI.$(this);
 
-                if (!ele.data('autocomplete')) {
-                    UI.autocomplete(ele, UI.Utils.options(ele.attr('data-uk-autocomplete')));
-                }
-            });
+				if (!ele.data('autocomplete')) {
+					UI.autocomplete(ele, UI.Utils.options(ele.attr('data-uk-autocomplete')));
+				}
+			});
 
-            // register outer click for autocompletes
-            UI.$html.on('click.autocomplete.uikit', function(e) {
-                if (active && e.target!=active.input[0]) active.hide();
-            });
-        },
+			// register outer click for autocompletes
+			UI.$html.on('click.autocomplete.uikit', function(e) {
+				if (active && e.target!=active.input[0]) active.hide();
+			});
+		},
 
-        init: function() {
+		init: function() {
 
-            var $this   = this,
-                select  = false,
-                trigger = UI.Utils.debounce(function(e) {
+			var $this   = this,
+				select  = false,
+				trigger = UI.Utils.debounce(function(e) {
 
-                    if (select) {
-                        return (select = false);
-                    }
+					if (select) {
+						return (select = false);
+					}
 
-                    $this.handle();
-                }, this.options.delay);
+					$this.handle();
+				}, this.options.delay);
 
 
-            this.dropdown = this.find('.uk-dropdown');
-            this.template = this.find('script[type="text/autocomplete"]').html();
-            this.template = UI.Utils.template(this.template || this.options.template);
-            this.input    = this.find("input:first").attr("autocomplete", "off");
+			this.dropdown = this.find('.uk-dropdown');
+			this.template = this.find('script[type="text/autocomplete"]').html();
+			this.template = UI.Utils.template(this.template || this.options.template);
+			this.input    = this.find("input:first").attr("autocomplete", "off");
 
-            if (!this.dropdown.length) {
-               this.dropdown = UI.$('<div class="uk-dropdown"></div>').appendTo(this.element);
-            }
+			if (!this.dropdown.length) {
+			   this.dropdown = UI.$('<div class="uk-dropdown"></div>').appendTo(this.element);
+			}
 
-            if (this.options.flipDropdown) {
-                this.dropdown.addClass('uk-dropdown-flip');
-            }
+			if (this.options.flipDropdown) {
+				this.dropdown.addClass('uk-dropdown-flip');
+			}
 
-            this.dropdown.attr('aria-expanded', 'false');
+			this.dropdown.attr('aria-expanded', 'false');
 
-            this.input.on({
+			this.input.on({
 
-                keydown: function(e) {
+				keydown: function(e) {
 
-                    if (e && e.which && !e.shiftKey && $this.visible) {
+					if (e && e.which && !e.shiftKey && $this.visible) {
 
-                        switch (e.which) {
-                            case 13: // enter
-                                select = true;
+						switch (e.which) {
+							case 13: // enter
+								select = true;
 
-                                if ($this.selected) {
-                                    e.preventDefault();
-                                    $this.select();
-                                }
-                                break;
-                            case 38: // up
-                                e.preventDefault();
-                                $this.pick('prev', true);
-                                break;
-                            case 40: // down
-                                e.preventDefault();
-                                $this.pick('next', true);
-                                break;
-                            case 27:
-                            case 9: // esc, tab
-                                $this.hide();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+								if ($this.selected) {
+									e.preventDefault();
+									$this.select();
+								}
+								break;
+							case 38: // up
+								e.preventDefault();
+								$this.pick('prev', true);
+								break;
+							case 40: // down
+								e.preventDefault();
+								$this.pick('next', true);
+								break;
+							case 27:
+							case 9: // esc, tab
+								$this.hide();
+								break;
+							default:
+								break;
+						}
+					}
 
-                },
+				},
 
-                keyup: trigger
-            });
+				keyup: trigger
+			});
 
-            this.dropdown.on('click', '.uk-autocomplete-results > *', function(){
-                $this.select();
-            });
+			this.dropdown.on('click', '.uk-autocomplete-results > *', function(){
+				$this.select();
+			});
 
-            this.dropdown.on('mouseover', '.uk-autocomplete-results > *', function(){
-                $this.pick(UI.$(this));
-            });
+			this.dropdown.on('mouseover', '.uk-autocomplete-results > *', function(){
+				$this.pick(UI.$(this));
+			});
 
-            this.triggercomplete = trigger;
-        },
+			this.triggercomplete = trigger;
+		},
 
-        handle: function() {
+		handle: function() {
 
-            var $this = this, old = this.value;
+			var $this = this, old = this.value;
 
-            this.value = this.input.val();
+			this.value = this.input.val();
 
-            if (this.value.length < this.options.minLength) return this.hide();
+			if (this.value.length < this.options.minLength) return this.hide();
 
-            if (this.value != old) {
-                $this.request();
-            }
+			if (this.value != old) {
+				$this.request();
+			}
 
-            return this;
-        },
+			return this;
+		},
 
-        pick: function(item, scrollinview) {
+		pick: function(item, scrollinview) {
 
-            var $this    = this,
-                items    = UI.$(this.dropdown.find('.uk-autocomplete-results').children(':not(.'+this.options.skipClass+')')),
-                selected = false;
+			var $this    = this,
+				items    = UI.$(this.dropdown.find('.uk-autocomplete-results').children(':not(.'+this.options.skipClass+')')),
+				selected = false;
 
-            if (typeof item !== "string" && !item.hasClass(this.options.skipClass)) {
-                selected = item;
-            } else if (item == 'next' || item == 'prev') {
+			if (typeof item !== "string" && !item.hasClass(this.options.skipClass)) {
+				selected = item;
+			} else if (item == 'next' || item == 'prev') {
 
-                if (this.selected) {
-                    var index = items.index(this.selected);
+				if (this.selected) {
+					var index = items.index(this.selected);
 
-                    if (item == 'next') {
-                        selected = items.eq(index + 1 < items.length ? index + 1 : 0);
-                    } else {
-                        selected = items.eq(index - 1 < 0 ? items.length - 1 : index - 1);
-                    }
+					if (item == 'next') {
+						selected = items.eq(index + 1 < items.length ? index + 1 : 0);
+					} else {
+						selected = items.eq(index - 1 < 0 ? items.length - 1 : index - 1);
+					}
 
-                } else {
-                    selected = items[(item == 'next') ? 'first' : 'last']();
-                }
+				} else {
+					selected = items[(item == 'next') ? 'first' : 'last']();
+				}
 
-                selected = UI.$(selected);
-            }
+				selected = UI.$(selected);
+			}
 
-            if (selected && selected.length) {
-                this.selected = selected;
-                items.removeClass(this.options.hoverClass);
-                this.selected.addClass(this.options.hoverClass);
+			if (selected && selected.length) {
+				this.selected = selected;
+				items.removeClass(this.options.hoverClass);
+				this.selected.addClass(this.options.hoverClass);
 
-                // jump to selected if not in view
-                if (scrollinview) {
+				// jump to selected if not in view
+				if (scrollinview) {
 
-                    var top       = selected.position().top,
-                        scrollTop = $this.dropdown.scrollTop(),
-                        dpheight  = $this.dropdown.height();
+					var top       = selected.position().top,
+						scrollTop = $this.dropdown.scrollTop(),
+						dpheight  = $this.dropdown.height();
 
-                    if (top > dpheight ||  top < 0) {
-                        $this.dropdown.scrollTop(scrollTop + top);
-                    }
-                }
-            }
-        },
+					if (top > dpheight ||  top < 0) {
+						$this.dropdown.scrollTop(scrollTop + top);
+					}
+				}
+			}
+		},
 
-        select: function() {
+		select: function() {
 
-            if(!this.selected) return;
+			if(!this.selected) return;
 
-            var data = this.selected.data();
+			var data = this.selected.data();
 
-            this.trigger('selectitem.uk.autocomplete', [data, this]);
+			this.trigger('selectitem.uk.autocomplete', [data, this]);
 
-            if (data.value) {
-                this.input.val(data.value).trigger('change');
-            }
+			if (data.value) {
+				this.input.val(data.value).trigger('change');
+			}
 
-            this.hide();
-        },
+			this.hide();
+		},
 
-        show: function() {
+		show: function() {
 
-            if (this.visible) return;
+			if (this.visible) return;
 
-            this.visible = true;
-            this.element.addClass('uk-open');
+			this.visible = true;
+			this.element.addClass('uk-open');
 
-            if (active && active!==this) {
-                active.hide();
-            }
+			if (active && active!==this) {
+				active.hide();
+			}
 
-            active = this;
+			active = this;
 
-            // Update aria
-            this.dropdown.attr('aria-expanded', 'true');
+			// Update aria
+			this.dropdown.attr('aria-expanded', 'true');
 
-            return this;
-        },
+			return this;
+		},
 
-        hide: function() {
-            if (!this.visible) return;
-            this.visible = false;
-            this.element.removeClass('uk-open');
+		hide: function() {
+			if (!this.visible) return;
+			this.visible = false;
+			this.element.removeClass('uk-open');
 
-            if (active === this) {
-                active = false;
-            }
+			if (active === this) {
+				active = false;
+			}
 
-            // Update aria
-            this.dropdown.attr('aria-expanded', 'false');
+			// Update aria
+			this.dropdown.attr('aria-expanded', 'false');
 
-            return this;
-        },
+			return this;
+		},
 
-        request: function() {
+		request: function() {
 
-            var $this   = this,
-                release = function(data) {
+			var $this   = this,
+				release = function(data) {
 
-                    if(data) {
-                        $this.render(data);
-                    }
+					if(data) {
+						$this.render(data);
+					}
 
-                    $this.element.removeClass($this.options.loadingClass);
-                };
+					$this.element.removeClass($this.options.loadingClass);
+				};
 
-            this.element.addClass(this.options.loadingClass);
+			this.element.addClass(this.options.loadingClass);
 
-            if (this.options.source) {
+			if (this.options.source) {
 
-                var source = this.options.source;
+				var source = this.options.source;
 
-                switch(typeof(this.options.source)) {
-                    case 'function':
+				switch(typeof(this.options.source)) {
+					case 'function':
 
-                        this.options.source.apply(this, [release]);
+						this.options.source.apply(this, [release]);
 
-                        break;
+						break;
 
-                    case 'object':
+					case 'object':
 
-                        if(source.length) {
+						if(source.length) {
 
-                            var items = [];
+							var items = [];
 
-                            source.forEach(function(item){
-                                if(item.value && item.value.toLowerCase().indexOf($this.value.toLowerCase())!=-1) {
-                                    items.push(item);
-                                }
-                            });
+							source.forEach(function(item){
+								if(item.value && item.value.toLowerCase().indexOf($this.value.toLowerCase())!=-1) {
+									items.push(item);
+								}
+							});
 
-                            release(items);
-                        }
+							release(items);
+						}
 
-                        break;
+						break;
 
-                    case 'string':
+					case 'string':
 
-                        var params ={};
+						var params ={};
 
-                        params[this.options.param] = this.value;
+						params[this.options.param] = this.value;
 
-                        UI.$.ajax({
-                            url: this.options.source,
-                            data: params,
-                            type: this.options.method,
-                            dataType: 'json'
-                        }).done(function(json) {
-                            release(json || []);
-                        });
+						UI.$.ajax({
+							url: this.options.source,
+							data: params,
+							type: this.options.method,
+							dataType: 'json'
+						}).done(function(json) {
+							release(json || []);
+						});
 
-                        break;
+						break;
 
-                    default:
-                        release(null);
-                }
+					default:
+						release(null);
+				}
 
-            } else {
-                this.element.removeClass($this.options.loadingClass);
-            }
-        },
+			} else {
+				this.element.removeClass($this.options.loadingClass);
+			}
+		},
 
-        render: function(data) {
+		render: function(data) {
 
-            this.dropdown.empty();
+			this.dropdown.empty();
 
-            this.selected = false;
+			this.selected = false;
 
-            if (this.options.renderer) {
+			if (this.options.renderer) {
 
-                this.options.renderer.apply(this, [data]);
+				this.options.renderer.apply(this, [data]);
 
-            } else if(data && data.length) {
+			} else if(data && data.length) {
 
-                this.dropdown.append(this.template({items:data}));
-                this.show();
+				this.dropdown.append(this.template({items:data}));
+				this.show();
 
-                this.trigger('show.uk.autocomplete');
-            }
+				this.trigger('show.uk.autocomplete');
+			}
 
-            return this;
-        }
-    });
+			return this;
+		}
+	});
 
-    return UI.autocomplete;
+	return UI.autocomplete;
 });

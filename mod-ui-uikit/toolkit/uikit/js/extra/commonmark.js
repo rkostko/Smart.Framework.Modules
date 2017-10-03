@@ -982,7 +982,7 @@ module.exports = { unescapeString: unescapeString,
 "use strict";
 
 // derived from https://github.com/mathiasbynens/String.fromCodePoint
-/*! http://mths.be/fromcodepoint v0.2.1 by @mathias */
+/* http://mths.be/fromcodepoint v0.2.1 by mathias */
 if (String.fromCodePoint) {
     module.exports = function (_) {
         try {
@@ -3293,7 +3293,7 @@ encode.componentChars = "-_.!~*'()";
 module.exports = encode;
 
 },{}],21:[function(require,module,exports){
-/*! http://mths.be/repeat v0.2.0 by @mathias */
+/* http://mths.be/repeat v0.2.0 by mathias */
 if (!String.prototype.repeat) {
 	(function() {
 		'use strict'; // needed to support `apply`/`call` with `undefined`/`null`

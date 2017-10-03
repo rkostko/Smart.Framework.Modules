@@ -23,7 +23,7 @@
 		//-- code replaced end
 	} //end if
 
-	/*!
+	/**
 	 * START code from jQuery UI
 	 *
 	 * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)

@@ -1,12 +1,12 @@
 /**
  * A Twitter library in JavaScript
  *
- * @package   codebird
- * @version   2.6.0
- * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2010-2015 Jublo Solutions <support@jublo.net>
- * @license   http://opensource.org/licenses/GPL-3.0 GNU Public License 3.0
- * @link      https://github.com/jublonet/codebird-php
+ * package   codebird
+ * version   2.6.0
+ * author    Jublo Solutions <support@jublo.net>
+ * copyright 2010-2015 Jublo Solutions <support@jublo.net>
+ * license   http://opensource.org/licenses/GPL-3.0 GNU Public License 3.0
+ * link      https://github.com/jublonet/codebird-php
  */
 
 // modified by unixman v.170919

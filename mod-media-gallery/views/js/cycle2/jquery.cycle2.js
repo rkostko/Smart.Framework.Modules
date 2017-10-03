@@ -1,4 +1,4 @@
-/*!
+/**
 * jQuery Cycle2; version: 2.1.6 build: 20141007
 * http://jquery.malsup.com/cycle2/
 * Copyright (c) 2014 M. Alsup; Dual licensed: MIT/GPL
@@ -689,7 +689,7 @@ $(document).ready(function() {
 
 })(jQuery);
 
-/*! Cycle2 autoheight plugin; Copyright (c) M.Alsup, 2012; version: 20130913 */
+/* Cycle2 autoheight plugin; Copyright (c) M.Alsup, 2012; version: 20130913 */
 (function($) {
 "use strict";
 
@@ -821,7 +821,7 @@ function onDestroy( e, opts ) {
 
 })(jQuery);
 
-/*! caption plugin for Cycle2;  version: 20130306 */
+/* caption plugin for Cycle2;  version: 20130306 */
 (function($) {
 "use strict";
 
@@ -864,7 +864,7 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
 
 })(jQuery);
 
-/*! command plugin for Cycle2;  version: 20140415 */
+/* command plugin for Cycle2;  version: 20140415 */
 (function($) {
 "use strict";
 
@@ -1051,7 +1051,7 @@ $(document).on('click.cycle', '[data-cycle-cmd]', function(e) {
 
 })(jQuery);
 
-/*! hash plugin for Cycle2;  version: 20130905 */
+/* hash plugin for Cycle2;  version: 20130905 */
 (function($) {
 "use strict";
 
@@ -1104,7 +1104,7 @@ function onHashChange( opts, setStartingSlide ) {
 
 })(jQuery);
 
-/*! loader plugin for Cycle2;  version: 20131121 */
+/* loader plugin for Cycle2;  version: 20131121 */
 (function($) {
 "use strict";
 
@@ -1210,7 +1210,7 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
 
 })(jQuery);
 
-/*! pager plugin for Cycle2;  version: 20140415 */
+/* pager plugin for Cycle2;  version: 20140415 */
 (function($) {
 "use strict";
 
@@ -1306,7 +1306,7 @@ function page( pager, target ) {
 
 })(jQuery);
 
-/*! prevnext plugin for Cycle2;  version: 20140408 */
+/* prevnext plugin for Cycle2;  version: 20140408 */
 (function($) {
 "use strict";
 
@@ -1374,7 +1374,7 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
 
 })(jQuery);
 
-/*! progressive loader plugin for Cycle2;  version: 20130315 */
+/* progressive loader plugin for Cycle2;  version: 20130315 */
 (function($) {
 "use strict";
 
@@ -1506,7 +1506,7 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
 
 })(jQuery);
 
-/*! tmpl plugin for Cycle2;  version: 20121227 */
+/* tmpl plugin for Cycle2;  version: 20121227 */
 (function($) {
 "use strict";
 

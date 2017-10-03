@@ -1,5 +1,4 @@
 /**
- * @license
  * (c) 2009-2016 Michael Leibman
  * michael{dot}leibman{at}gmail{dot}com
  * http://github.com/mleibman/slickgrid

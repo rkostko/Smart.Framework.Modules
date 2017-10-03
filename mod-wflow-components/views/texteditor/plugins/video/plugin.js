@@ -1,4 +1,4 @@
-/*
+/**
  * @file Video plugin for CKEditor
  * Copyright (C) 2011 Alfonso Martínez de Lizarrondo
  *

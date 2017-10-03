@@ -1,4 +1,4 @@
-/*! bignumber.js v4.0.2 https://github.com/MikeMcl/bignumber.js/LICENCE */
+/** bignumber.js v4.0.2 https://github.com/MikeMcl/bignumber.js/LICENCE */
 
 ;(function (globalObj) {
 	'use strict';

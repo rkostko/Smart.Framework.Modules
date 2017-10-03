@@ -1,4 +1,4 @@
-/*!
+/**
 (The MIT License)
 
 Copyright (c) 2012-2014 Marcin Warpechowski
@@ -24587,7 +24587,7 @@ CopyPasteClass.prototype.hasBeenDestroyed = function() {
 
 
 },{}],"es6collections":[function(_dereq_,module,exports){
-/*!
+/**
  * Copyright (C) 2011 by Andrea Giammarchi, @WebReflection
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24841,7 +24841,7 @@ CopyPasteClass.prototype.hasBeenDestroyed = function() {
 })(typeof exports != 'undefined' && typeof global != 'undefined' ? global : window);
 
 },{}],"jsonpatch":[function(_dereq_,module,exports){
-/*!
+/**
  * https://github.com/Starcounter-Jack/JSON-Patch
  * json-patch-duplex.js version: 0.5.7
  * (c) 2013 Joachim Wester

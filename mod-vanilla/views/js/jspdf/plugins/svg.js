@@ -1,4 +1,4 @@
-/** @preserve
+/**
 jsPDF SVG plugin
 Copyright (c) 2012 Willow Systems Corporation, willow-systems.com
 */

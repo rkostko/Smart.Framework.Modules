@@ -1,4 +1,4 @@
-/*
+/**
  * Base64Image Plugin for CKEditor (http://github.com/nmmf/base64image)
  * Created by ALL-INKL.COM - Neue Medien M�nnich - 04. Feb 2014
  * Licensed under the terms of GPL, LGPL and MPL licenses.
