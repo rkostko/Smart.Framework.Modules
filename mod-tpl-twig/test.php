@@ -35,7 +35,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		//--
 
 		//--
-		$tpl = $this->ControllerGetParam('module-path').'views/sample.twig.inc.htm';
+		$tpl = $this->ControllerGetParam('module-view-path').'sample.twig.inc.htm';
 		//--
 
 		//--
@@ -51,9 +51,9 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		$data = [
 			'hello' => '<h1>Demo Twig TPL, rendered using the Twig Templating</h1>',
 			'navigation' => [
-				array('href' => '#link1', 'caption' => 'Sample Link 1'),
-				array('href' => '#link2', 'caption' => 'Sample Link 2'),
-				array('href' => '#link3', 'caption' => 'Sample Link 3')
+				array('href' => '#link1', 'caption' => 'Sample Link <1>'),
+				array('href' => '#link2', 'caption' => 'Sample Link <2>'),
+				array('href' => '#link3', 'caption' => 'Sample Link <3>')
 			],
 			'tbl' => [
 				['a1' => '1.1', 'a2' => '1.2', 'a3' => '1.3'],
@@ -63,25 +63,25 @@ class SmartAppIndexController extends SmartAbstractAppController {
 		];
 		//--
 
-		//-- render using only this module
-		$this->PageViewSetVars([
-			'title' => 'Sample Twig Templating',
-			'main' => (string) (new \SmartModExtLib\TplTwig\Templating())->render(
-				(string) $tpl,
-				(array)  $data
-			)
-		]);
 		//-- or alternate (better) rendering, using the smart-extra-libs
-		/*
+		//require_once('modules/smart-extra-libs/autoload.php');
 		if(class_exists('SmartTwigTemplating')) {
-			$this->PageViewAppendVar(
-				'main', (string) SmartTwigTemplating::render_file_template(
+			$this->PageViewSetVars([
+				'title' => 'Sample Twig Templating (static)',
+				'main' => (string) SmartTwigTemplating::render_file_template(
 					(string) $tpl,
 					(array)  $data
 				)
-			);
+			]);
+		} else {
+			$this->PageViewSetVars([
+				'title' => 'Sample Twig Templating',
+				'main' => (string) (new \SmartModExtLib\TplTwig\Templating())->render(
+					(string) $tpl,
+					(array)  $data
+				)
+			]);
 		} //end if
-		*/
 		//--
 
 	} //END FUNCTION

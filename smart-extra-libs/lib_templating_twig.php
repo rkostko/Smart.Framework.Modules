@@ -9,8 +9,13 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 } //end if
 //-----------------------------------------------------
 
+
+//=====================================================================================
+//===================================================================================== CLASS START
+//=====================================================================================
+
 /**
- * Provides connector for Twig Templating inside the Smart.Framework.
+ * Provides an easy to use connector for Twig Templating inside the Smart.Framework.
  *
  * <code>
  *
@@ -32,15 +37,16 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  *
  * @access 		PUBLIC
  * @depends 	classes: Twig, \SmartModExtLib\TplTwig\Templating
- * @version 	v.170920
+ * @version 	v.171005
  * @package 	Templating:Engines
  *
  */
-class SmartTwigTemplating {
+final class SmartTwigTemplating {
 
 	// ::
 
 	public static $twig = null;
+
 
 	public static function render_file_template($file, $arr_vars=array()) {
 		//--
@@ -56,7 +62,14 @@ class SmartTwigTemplating {
 		//--
 	} //END FUNCTION
 
+
 } //END CLASS
+
+
+//=====================================================================================
+//===================================================================================== CLASS END
+//=====================================================================================
+
 
 //end of php code
 ?>
