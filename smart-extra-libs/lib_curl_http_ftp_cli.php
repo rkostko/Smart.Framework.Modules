@@ -29,7 +29,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @usage  		dynamic object: (new Class())->method() - This class provides only DYNAMIC methods
  *
  * @depends 	extensions: PHP CURL, PHP OpenSSL (optional, just for HTTPS) ; classes: Smart
- * @version 	v.170920
+ * @version 	v.171007
  * @package 	Network:CURL
  *
  */
@@ -181,15 +181,17 @@ final class SmartCurlHttpFtpClient {
 		//--
 
 		//-- separations
-		$this->url_parts = (array) Smart::separe_url_parts($url);
+		$this->url_parts = (array) Smart::url_parse($url);
 		$protocol = (string) $this->url_parts['protocol'];
-		$server = (string) $this->url_parts['server'];
+		$host = (string) $this->url_parts['host'];
 		$port = (string) $this->url_parts['port'];
-		$path = (string) $this->url_parts['path'];
+		$path = (string) $this->url_parts['suffix']; // path + query
 		//--
 		if($this->debug) {
 			$this->log .= '[INF] Analize of the URL: '.@print_r($this->url_parts,1)."\n";
 		} //end if
+		//--
+
 		//--
 		$is_ftp = false;
 		$use_ssl_tls = false;
@@ -370,7 +372,7 @@ final class SmartCurlHttpFtpClient {
 					$this->log .= '[ERR] PHP OpenSSL Extension is required to perform SSL requests'."\n";
 				} //end if
 				//--
-				Smart::log_warning('LibCurlHttp(s)Ftp // GetFromURL ('.$browser_protocol.$server.':'.$port.$path.') // PHP OpenSSL Extension not installed ...');
+				Smart::log_warning('LibCurlHttp(s)Ftp // GetFromURL ('.$browser_protocol.$host.':'.$port.$path.') // PHP OpenSSL Extension not installed ...');
 				//--
 				return (array) $this->answer(0, $url, $ssl_version, $user);
 				//--
