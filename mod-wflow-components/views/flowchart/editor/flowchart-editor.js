@@ -1,7 +1,7 @@
 
 // jsPlumb Flowchart Editor
 // (c) 2017 unix-world.org
-// v.170830
+// v.171011
 
 function flowchartEditorInit(flwcDataObj, flwcIsReadonly, fxAddDialogHelper, fxSaveDataHelper, fxExportDataHelper) {
 
@@ -11,7 +11,7 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly, fxAddDialogHelper, fxS
 	} //end if
 
 	if(typeof flwcIsReadonly == 'undefined') {
-		var flwcIsReadonly = true;
+		flwcIsReadonly = true;
 	} //end if
 
 	jsPlumb.ready(function () {
@@ -238,7 +238,7 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly, fxAddDialogHelper, fxS
 			if(typeof fxSaveOrExportFunction == 'function') {
 				fxSaveOrExportFunction(flowchartSave);
 			} else {
-				console.log(flowchartSave);
+				console.log(JSON.stringify(flowchartSave));
 			} //end if
 
 		}
