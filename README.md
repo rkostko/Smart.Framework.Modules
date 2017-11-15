@@ -12,6 +12,7 @@ License: BSD
 	* JS Components: a collection of Javascript components and utils
 	* Wflow Components: another collection of Javascript components and utils
 	* Twig Templating Engine: integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup, just copy into smart-framework/modules/
+	* CSS and JS Minify (MatthiasMullie)
 
 ## Extra Libs:
 	* MySQLi: connector for MySQL: 5.0, 5.1, 5.5, 5.6, 5.7 / MariaDB: 5.x, 10.x / Percona Server: 5.1 / 5.5 / 5.6 / 5.7
