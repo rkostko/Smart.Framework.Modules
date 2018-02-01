@@ -13,18 +13,18 @@ var demo_tasks = {
 		{"id":9, "text":"Task #3.2", "start_date":"2017-05-14", "duration":"4", "parent":"4", "progress": 0.5, "open": true},
 		{"id":10, "text":"Milestone #1", "start_date":"2017-05-14", "parent":"4", "progress": 0.5, "open": true, "type":'milestone'},
 
-		{"id":11, "text":"Project #2", "start_date":"2017-05-02", "duration":"11", "progress": 0.6, "open": true, "type":'project'},
+		{"id":11, "text":"Project #2", "start_date":"2017-05-02", "duration":"11", "progress": 0.6, "open": true, "type":'project', "color":"#5C996B"},
 		{"id":12, "text":"Task #1", "start_date":"2017-05-03", "duration":"5", "parent":"11", "progress": 1, "open": true},
-		{"id":13, "text":"Task #2", "start_date":"2017-05-02", "duration":"7", "parent":"11", "progress": 0.5, "open": true},
+		{"id":13, "text":"Task #2", "start_date":"2017-05-02", "duration":"7", "parent":"11", "progress": 0.5, "open": true, "color":"#FF3300"},
 		{"id":17, "text":"Task #2.1", "start_date":"2017-05-03", "duration":"2", "parent":"13", "progress": 1, "open": true},
 		{"id":18, "text":"Task #2.2", "start_date":"2017-05-06", "duration":"3", "parent":"13", "progress": 0.8, "open": true},
 		{"id":19, "text":"Task #2.3", "start_date":"2017-05-10", "duration":"4", "parent":"13", "progress": 0.2, "open": true},
 		{"id":20, "text":"Task #2.4", "start_date":"2017-05-10", "duration":"4", "parent":"13", "progress": 0, "open": true},
 		{"id":14, "text":"Task #3", "start_date":"2017-05-02", "duration":"6", "parent":"11", "progress": 0.8, "open": true},
 		{"id":15, "text":"Task #4", "start_date":"2017-05-02", "duration":"5", "parent":"11", "progress": 0.2, "open": true},
-		{"id":21, "text":"Task #4.1", "start_date":"2017-05-03", "duration":"4", "parent":"15", "progress": 0.5, "open": true},
-		{"id":22, "text":"Task #4.2", "start_date":"2017-05-03", "duration":"4", "parent":"15", "progress": 0.1, "open": true},
-		{"id":'X23', "text":"Task #4.3", "start_date":"2017-05-03", "duration":"5", "parent":"15", "progress": 0, "open": true},
+		{"id":21, "text":"Task #4.1", "start_date":"2017-05-03", "duration":"4", "parent":"15", "progress": 0.5, "open": true, "color":"#29487D"},
+		{"id":22, "text":"Task #4.2", "start_date":"2017-05-03", "duration":"4", "parent":"15", "progress": 0.1, "open": true, "color":"#666699"},
+		{"id":'X23', "text":"Task #4.3", "start_date":"2017-05-03", "duration":"5", "parent":"15", "progress": 0, "open": true, "color":"#FFCC00"},
 		{"id":16, "text":"Task #5", "start_date":"2017-05-02", "duration":"7", "parent":"11", "progress": 0, "open": true}
 	],
 	"links":[

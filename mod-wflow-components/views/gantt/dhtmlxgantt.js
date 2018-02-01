@@ -1,13 +1,14 @@
 
-// dhtmlxGantt v.3.2.1.uxm.170715
+// dhtmlxGantt v.3.2.1.uxm.180201
 // License: GPL v2
 // (c) 2015 Dinamenta, UAB.
-// (c) 2015-2017 unix-world.org
+// (c) 2015-2018 unix-world.org
 /*
 modified by unixman:
 	- add types: project, milestone
 	- removed all unusable (garbage) code
 	- enhanced task add / edit
+	- hide + buttons on readonly mode
 */
 
 if (typeof(window.dhx4) == "undefined") {
@@ -1132,7 +1133,9 @@ gantt._init_grid = function () {
 			return;
 
 		if (column == "add") {
-			this._click.gantt_add(e, this.config.root_id);
+			if(!this.config.readonly) { // unixman
+				this._click.gantt_add(e, this.config.root_id);
+			}
 		} else if (this.config.sort) {
 			var sort = (this._sort && this._sort.direction && this._sort.name == column) ? this._sort.direction : "desc";
 			// invert sort direction
@@ -1224,14 +1227,23 @@ gantt._render_grid_header = function () {
 	for (var i = 0; i < columns.length; i++) {
 		var last = i == columns.length - 1;
 		var col = columns[i];
-		if (last && this._get_grid_width() > width + col.width)
+		if(last && this._get_grid_width() > width + col.width) {
 			col.width = this._get_grid_width() - width;
+		}
 		width += col.width;
 		var sort = (this._sort && col.name == this._sort.name) ? ("<div class='gantt_sort gantt_" + this._sort.direction + "'></div>") : "";
-		var cssClass = ["gantt_grid_head_cell",
-			("gantt_grid_head_" + col.name),
+		var real_colname = String(col.name);
+		if(this.config.readonly) { // unixman
+			if(real_colname == 'add') {
+				real_colname = 'xadd';
+			}
+		} //end if
+		var cssClass = [
+			"gantt_grid_head_cell",
+			("gantt_grid_head_" + String(real_colname)), // unixman
 			(last ? "gantt_last_cell" : ""),
-			this.templates.grid_header_class(col.name, col)].join(" ");
+			this.templates.grid_header_class(col.name, col)
+		].join(" ");
 
 		var style = "width:" + (col.width - (last ? 1 : 0)) + "px;";
 		var label = (col.label || labels["column_" + col.name]);
@@ -1260,7 +1272,11 @@ gantt._render_grid_item = function (item) {
 
 		var value;
 		if (col.name == "add") {
-			value = "<div class='gantt_add'></div>";
+			if(this.config.readonly) { // unixman
+				value = "<div class='gantt_xadd'></div>";
+			} else {
+				value = "<div class='gantt_add'></div>";
+			}
 		} else {
 			if (col.template)
 				value = col.template(item);

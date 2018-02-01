@@ -16,7 +16,7 @@
 			margin-top: 10px;
 			text-align: center;
 			font-size: 13px;
-			font-family: Tahoma,Verdana,Arial,sans-serif;
+			font-family: tahoma,verdana,arial,sans-serif;
 		}
 		.weekend {
 			background: #F4F7F4;
@@ -42,15 +42,15 @@
 	<div id="mygantt"></div>
 	<script type="text/javascript">
 
-//-- test marker extension
-var markerId = gantt.addMarker({
-	start_date: new Date(2017, 4, 7), //a Date object that sets the marker's date
-	css: "today", //a CSS class applied to the marker
-	text: "Now", //the marker title
-	title: 'Today' // the marker's tooltip
-});
-gantt.getMarker(markerId);
-//--
+		//-- test marker extension
+		var markerId = gantt.addMarker({
+			start_date: new Date(2017, 4, 7), //a Date object that sets the marker's date
+			css: "today", //a CSS class applied to the marker
+			text: "Now", //the marker title
+			title: 'Today' // the marker's tooltip
+		});
+		gantt.getMarker(markerId);
+		//--
 
 		gantt.templates.rightside_text = function(start, end, task){
 			if(task.type == gantt.config.types.milestone){
@@ -108,6 +108,7 @@ gantt.getMarker(markerId);
 			start_date: new Date(2017, 5-1, 1),
 			end_date: new Date(2017, 6-1, 1),
 			scale_unit: 'day', // day, week, month
+		//	readonly: true,
 			//grid_width: 0, // disable right grid
 			//scale_unit: "week",
 			//step:1,
