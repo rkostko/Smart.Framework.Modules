@@ -1,4 +1,5 @@
 <?php
+// [@[#[!SF.DEV-ONLY!]#]@]
 // Controller: Twig Templating Debug
 // Route: ?/page/tpl-twig.debug (?page=tpl-twig.debug)
 // Author: unix-world.org
