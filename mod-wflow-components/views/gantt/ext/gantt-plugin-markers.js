@@ -68,7 +68,7 @@ function SmartGanttPluginMarkers(gantt) {
 			}
 
 			if(marker.text){
-				div.innerHTML = "<div class='gantt_marker_content' >" + marker.text + "</div>";
+				div.innerHTML = "<div class='gantt_marker_content' >" + SmartJS_CoreUtils.escape_html(marker.text) + "</div>";
 			}
 
 			return div;

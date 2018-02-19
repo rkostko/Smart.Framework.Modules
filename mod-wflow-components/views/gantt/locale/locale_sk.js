@@ -26,6 +26,8 @@ gantt.locale = {
 		section_description: "Poznámky",
 		section_time: "Doba platnosti",
 		section_type:"Type",
+		section_details:"Details",
+		section_parent : "Parent",
 		/* grid columns */
 
 		column_text : "Task name",

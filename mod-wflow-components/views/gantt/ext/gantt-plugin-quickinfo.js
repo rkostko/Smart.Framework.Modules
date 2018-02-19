@@ -29,8 +29,8 @@ function SmartGanttPluginQuickinfo(gantt) {
 			gantt.attachEvent(events[i], hiding_function);
 	})();
 
-	gantt.templates.quick_info_title = function(start, end, ev){ return ev.text.substr(0,50); };
-	gantt.templates.quick_info_content = function(start, end, ev){ return ev.details || ev.text; };
+	gantt.templates.quick_info_title = function(start, end, ev){ return SmartJS_CoreUtils.escape_html(ev.text.substr(0,50)); };
+	gantt.templates.quick_info_content = function(start, end, ev){ return SmartJS_CoreUtils.escape_html(ev.details); }; // || SmartJS_CoreUtils.escape_html(ev.text)
 	gantt.templates.quick_info_date = function(start, end, ev){
 			return gantt.templates.task_time(start, end, ev);
 	};

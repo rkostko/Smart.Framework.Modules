@@ -23,7 +23,8 @@ gantt.locale = {
 		section_description:"Description",
 		section_time:"Période",
 		section_type:"Type",
-
+		section_details:"Details",
+		section_parent : "Parent",
 		/* grid columns */
 
 		column_text : "Nom de la tâche",

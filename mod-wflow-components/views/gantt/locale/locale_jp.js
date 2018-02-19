@@ -26,6 +26,8 @@ gantt.locale = {
 		section_description: "デスクリプション",
 		section_time: "期間",
 		section_type:"Type",
+		section_details:"Details",
+		section_parent : "Parent",
 		/* grid columns */
 
 		column_text : "Task name",

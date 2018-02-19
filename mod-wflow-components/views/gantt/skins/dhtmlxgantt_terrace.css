@@ -77,6 +77,9 @@ This software is covered by GPL license.
 /*
 	lightbox
 */
+.gantt_cal_light  * {
+	text-align:left;
+}
 .buttonBg {
 	background: #fff;
 }

@@ -790,26 +790,29 @@ dhtmlxEventable = function(obj) {
 
 dhtmlx.copy = function(object) {
 	var i, t, result; // iterator, types array, result
-
 	if (object && typeof object == "object") {
 		result = {};
 		t = [Array,Date,Number,String,Boolean];
 		for (i=0; i<t.length; i++) {
-			if (object instanceof t[i])
+			if (object instanceof t[i]) {
 				result = i ? new t[i](object) : new t[i](); // first one is array
+			}
 		}
-
 		for (i in object) {
-			if (Object.prototype.hasOwnProperty.apply(object, [i]))
+			if (Object.prototype.hasOwnProperty.apply(object, [i])) {
 				result[i] = dhtmlx.copy(object[i]);
+			}
 		}
 	}
 	return result || object;
 };
 
 dhtmlx.mixin = function(target, source, force){
-	for (var f in source)
-		if ((!target[f] || force)) target[f]=source[f];
+	for(var f in source) {
+		if((!target[f] || force)) {
+			target[f]=source[f];
+		}
+	}
 	return target;
 };
 

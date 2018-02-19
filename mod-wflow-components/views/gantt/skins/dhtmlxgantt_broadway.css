@@ -134,6 +134,9 @@ This software is covered by GPL license.
 /*
 	lightbox
 */
+.gantt_cal_light  * {
+	text-align:left;
+}
 .gantt_cal_light {
 	background-color: #ffffff;
 	border: none !important;

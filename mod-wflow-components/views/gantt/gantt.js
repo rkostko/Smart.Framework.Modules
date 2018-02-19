@@ -203,8 +203,9 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 			var scroll = dhtmlx.bind(function(e) { return this.dragScroll(obj, e); }, this);
 			var limited_mousemove = dhtmlx.bind(function(e) {
 				if(dhtmlx.defined(this.config.updates_per_second)) {
-					if(!gantt._checkTimeout(this, this.config.updates_per_second))
+					if(!gantt._checkTimeout(this, this.config.updates_per_second)) {
 						return true;
+					}
 				}
 				return mousemove(e);
 			}, this);
@@ -454,7 +455,16 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 				if(value instanceof Date) {
 					value = this.templates.date_grid(value);
 				}
-				value = "<div class='gantt_tree_content'>" + value + "</div>";
+				if(col.name == "duration") {
+					if(item.type == gantt.config.types.flextask) {
+						value = 'n/a';
+					} else if(item.type == gantt.config.types.project) {
+						value = '*';
+					} else if(item.type == gantt.config.types.milestone) {
+						value = '-';
+					}
+				}
+				value = "<div class='gantt_tree_content'>" + SmartJS_CoreUtils.escape_html(value) + "</div>";
 			}
 			var css = "gantt_cell" + (last ? " gantt_last_cell" : "");
 			var tree = "";
@@ -3835,6 +3845,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 	gantt.createTask = function(item, parent) {
 		item = item || {};
 		item.id = dhtmlx.uid();
+		item.open = true;
 		if(!item.start_date) {
 			item.start_date = gantt._default_task_date(item, parent);
 		}
@@ -4224,6 +4235,13 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 			}
 			if((child.end_date && !child.$no_end) && (!max || max < child.end_date.valueOf())) {
 				max = child.end_date.valueOf();
+			}
+			if(child.type == gantt.config.types.flextask) {
+				if(gantt.config.end_date) {
+					max = gantt.config.end_date;
+				} else {
+					max = gantt.calculateEndDate(child.start_date, 365);
+				}
 			}
 		}, root);
 		return {
@@ -4746,8 +4764,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 
 	gantt.skins = {};
 
-	gantt._lightbox_methods = {};
-	gantt._lightbox_template="<div class='gantt_cal_ltitle'><span class='gantt_mark'>&nbsp;</span><span class='gantt_time'></span><span class='gantt_title'></span></div><div class='gantt_cal_larea'></div>";
+	gantt._lightbox_template = "<div class='gantt_cal_ltitle'><span class='gantt_mark'>&nbsp;</span><span class='gantt_time'></span><span class='gantt_title'></span></div><div class='gantt_cal_larea'></div>";
 
 	gantt.showLightbox=function(id) {
 		if(!id || gantt._is_readonly(this.getTask(id))) {
@@ -4894,9 +4911,11 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 			var scroll_left = window.pageXOffset||document.body.scrollLeft||document.documentElement.scrollLeft;
 			var view_height = window.innerHeight||document.documentElement.clientHeight;
 			if(scroll_top) { // if vertical scroll on window
-				box.style.top=Math.round(scroll_top+Math.max((view_height-box.offsetHeight)/2, 0))+"px";
+			//	box.style.top=Math.round(scroll_top+Math.max((view_height-box.offsetHeight)/2, 0))+"px";
+				box.style.top=Math.round(scroll_top+50)+'px';
 			} else { // vertical scroll on body
 				box.style.top=Math.round(Math.max(((view_height-box.offsetHeight)/2), 0) + 9)+"px"; // +9 for compatibility with auto tests
+				box.style.top='50px';
 			}
 			// not quite accurate but used for compatibility reasons
 			if(document.documentElement.scrollWidth > document.body.offsetWidth) { // if horizontal scroll on the window
@@ -5096,7 +5115,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 		for(var i = 0; i < sns.length; i++) {
 			var section = sns[i];
 			if(!this.form_blocks[section.type]) {
-				continue;//skip incorrect sections, same check is done during rendering
+				continue; //skip incorrect sections, same check is done during rendering
 			}
 			var node = document.getElementById(section.id).nextSibling;
 			var block = this.form_blocks[section.type];
@@ -5115,59 +5134,6 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 	gantt._fill_lightbox = function(id, box) {
 		var task = this.getTask(id);
 		this._set_lightbox_values(task, box);
-	};
-
-
-	gantt.getLightboxSection = function(name) {
-		var config = this._get_typed_lightbox_config();
-		var i =0;
-		for(i; i < config.length; i++) {
-			if(config[i].name == name) {
-				break;
-			}
-		}
-		var section = config[i];
-		if(!section) {
-			return null;
-		}
-		if(!this._lightbox) {
-			this.getLightbox();
-		}
-		var header = document.getElementById(section.id);
-		var node = header.nextSibling;
-		var result = {
-			section: section,
-			header: header,
-			node: node,
-			getValue: function(ev) {
-				return gantt.form_blocks[section.type].get_value.call(gantt, node, (ev||{}), section);
-			},
-			setValue: function(value, ev) {
-				return gantt.form_blocks[section.type].set_value.call(gantt, node, value, (ev||{}), section);
-			}
-		};
-		var handler = this._lightbox_methods["get_"+section.type+"_control"];
-		return handler?handler(result):result;
-	};
-
-	gantt._lightbox_methods.get_template_control = function(result) {
-		result.control = result.node;
-		return result;
-	};
-
-	gantt._lightbox_methods.get_select_control = function(result) {
-		result.control = result.node.getElementsByTagName('select')[0];
-		return result;
-	};
-
-	gantt._lightbox_methods.get_textarea_control = function(result) {
-		result.control = result.node.getElementsByTagName('textarea')[0];
-		return result;
-	};
-
-	gantt._lightbox_methods.get_time_control = function(result) {
-		result.control = result.node.getElementsByTagName('select'); // array
-		return result;
 	};
 
 	gantt._init_dnd_events = function() {
@@ -5346,8 +5312,8 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 
 		textarea:{
 			render:function(sns) {
-				var height=(sns.height||"130")+"px";
-				return "<div class='gantt_cal_ltext' style='height:"+height+";'><textarea maxlength='255'></textarea></div>";
+				var height=(sns.height||"70")+"px";
+				return "<div class='gantt_cal_ltext' style='height:"+height+";'><textarea maxlength='1024'></textarea></div>";
 			},
 			set_value:function(node,value,ev) {
 				node.firstChild.value=value||"";
@@ -5361,6 +5327,23 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 		},
 
 		//-- uxm
+
+		inputarea:{
+			render:function(sns) {
+				var height="23px";
+				return "<div class='gantt_cal_ltext'><input style='height:"+height+";width:96%;' type='text' maxlength='255'></div>";
+			},
+			set_value:function(node,value,ev) {
+				node.firstChild.value=value||"";
+			},
+			get_value:function(node,ev) {
+				return node.firstChild.value;
+			},
+			focus:function(node) {
+				var a=node.firstChild; gantt._focus(a, true);
+			}
+		},
+
 		tasktype:{
 			render:function(sns) {
 				var height="23px";
@@ -5385,6 +5368,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 				var a=node.firstChild; gantt._focus(a, true);
 			}
 		},
+
 		//-- #uxm
 
 		select:{
@@ -6864,25 +6848,29 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 			],
 			lightbox: {
 				sections: [
-					{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+					{name: "description", map_to: "text", type: "inputarea", focus: true},
+					{name: "details", height: 70, map_to: "details", type: "textarea"},
 					{name: "type", type: "tasktype", map_to: "type"},
 					{name: "parent", type: "parent", map_to: "parent"},
 					{name: "time", type: "duration", map_to: "auto"},
 				],
 				flextask_sections: [
-					{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+					{name: "description", map_to: "text", type: "inputarea", focus: true},
+					{name: "details", height: 70, map_to: "details", type: "textarea"},
 					{name: "type", type: "tasktype", map_to: "type"},
 					{name: "parent", type: "parent", map_to: "parent"},
 					{name: "time", type: "duration", single_date:true, map_to: "auto"},
 				],
 				milestone_sections: [
-					{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+					{name: "description", map_to: "text", type: "inputarea", focus: true},
+					{name: "details", height: 70, map_to: "details", type: "textarea"},
 					{name: "type", type: "tasktype", map_to: "type"},
 					{name: "parent", type: "parent", map_to: "parent"},
 					{name: "time", type: "duration", single_date:true, map_to: "auto"},
 				],
 				project_sections: [
-					{name: "description", height: 70, map_to: "text", type: "textarea", focus: true},
+					{name: "description", map_to: "text", type: "inputarea", focus: true},
+					{name: "details", height: 70, map_to: "details", type: "textarea"},
 					{name: "type", type: "typeselect", map_to: "type"},
 					{name: "time", type: "duration", readonly:true, map_to: "auto"},
 				]
@@ -6949,7 +6937,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 					return "";
 				},
 				task_text:function(start, end, task) {
-					return task.text;
+					return SmartJS_CoreUtils.escape_html(task.text);
 				},
 				task_class:function(start, end, task) {return "";},
 				grid_row_class:function(start, end, task) {
@@ -6977,7 +6965,13 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 					return "<div class='gantt_tree_icon gantt_blank'></div>";
 				},
 				task_time:function(start,end,ev) {
-					return gantt.templates.task_date(start)+" - "+gantt.templates.task_date(end);
+					var endTxt = '';
+					if(ev.type == 'flextask') {
+						endTxt = 'n/a';
+					} else {
+						endTxt = gantt.templates.task_date(end);
+					}
+					return gantt.templates.task_date(start) + " - " + endTxt;
 				},
 				time_picker:d(c.time_picker),
 				link_class : function(link) {
@@ -6986,15 +6980,15 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 				link_description : function(link) {
 					var from = gantt.getTask(link.source),
 						to = gantt.getTask(link.target);
-					return "<b>" + from.text + "</b> &ndash;  <b>" + to.text+"</b>";
+					return "<b>" + SmartJS_CoreUtils.escape_html(from.text) + "</b> &ndash;  <b>" + SmartJS_CoreUtils.escape_html(to.text) + "</b>";
 				},
 				drag_link : function(from, from_start, to, to_start) {
 					from = gantt.getTask(from);
 					var labels = gantt.locale.labels;
-					var text = "<b>" + from.text + "</b> " + (from_start ? labels.link_start : labels.link_end)+"<br/>";
+					var text = "<b>" + SmartJS_CoreUtils.escape_html(from.text) + "</b> " + (from_start ? labels.link_start : labels.link_end)+"<br/>";
 					if(to) {
 						to = gantt.getTask(to);
-						text += "<b> " + to.text + "</b> "+ (to_start ? labels.link_start : labels.link_end)+"<br/>";
+						text += "<b> " + SmartJS_CoreUtils.escape_html(to.text) + "</b> "+ (to_start ? labels.link_start : labels.link_end)+"<br/>";
 					}
 					return text;
 				},
@@ -7087,6 +7081,7 @@ var SmartGanttInstance = function(gObjId) { // START CLASS
 			confirm_closing:"",//Your changes will be lost, are your sure ?
 			confirm_deleting:"Task will be deleted permanently, are you sure?",
 			section_description:"Description",
+			section_details:"Details",
 			section_time:"Time period",
 			section_type:"Type",
 			section_parent : "Parent",

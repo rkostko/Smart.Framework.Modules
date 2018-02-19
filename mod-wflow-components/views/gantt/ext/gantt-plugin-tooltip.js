@@ -170,10 +170,16 @@ function SmartGanttPluginTooltip(gantt) {
 	// });
 
 
-	/* Could be redifined */
+	/* Could be redefined */
 	gantt.templates.tooltip_date_format = gantt.date.date_to_str("%Y-%m-%d");
 	gantt.templates.tooltip_text = function(start, end, event) {
-		return "<b>Title:</b> " + event.text + "<br/><b>Start date:</b> " + gantt.templates.tooltip_date_format(start) + "<br/><b>End date:</b> " + gantt.templates.tooltip_date_format(end);
+		var endTxt = '';
+		if(event.type == 'flextask') {
+			endTxt = 'n/a';
+		} else {
+			endTxt = gantt.templates.tooltip_date_format(end);
+		}
+		return "<b>Title:</b> " + SmartJS_CoreUtils.escape_html(event.text) + "<br/><b>Start date:</b> " + gantt.templates.tooltip_date_format(start) + "<br/><b>End date:</b> " + endTxt;
 	}; // fix by unixman
 
 	return gantt;

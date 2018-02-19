@@ -26,6 +26,8 @@ gantt.locale = {
 		section_description: "Kuvaus",
 		section_time: "Aikajakso",
 		section_type:"Type",
+		section_details:"Details",
+		section_parent : "Parent",
 		/* grid columns */
 
 		column_text : "Task name",

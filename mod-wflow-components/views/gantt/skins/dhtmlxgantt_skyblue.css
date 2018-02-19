@@ -41,6 +41,9 @@ This software is covered by GPL license.
 	task resizers
 */
 /*lightbox*/
+.gantt_cal_light  * {
+	text-align:left;
+}
 /*
 	Message
 */

@@ -65,6 +65,9 @@ This software is covered by GPL license.
 /*
 	lightbox
 */
+.gantt_cal_light  * {
+	text-align:left;
+}
 .gantt_cal_light .gantt_cal_ltitle {
 	padding: 7px 10px;
 }

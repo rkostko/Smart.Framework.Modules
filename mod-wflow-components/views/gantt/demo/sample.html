@@ -3,6 +3,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>Gantt Chart - Demo</title>
 	<script src="../../../../../lib/js/jquery/jquery.js" type="text/javascript"></script>
+	<script src="../../../../../lib/js/framework/src/core_utils.js" type="text/javascript"></script>
 
 	<link rel="stylesheet" href="../skins/dhtmlxgantt_terrace.css" type="text/css" media="screen">
 	<script type="text/javascript" src="../dhtmlx-init.js"></script>
@@ -61,7 +62,7 @@
 
 		gntArea1.templates.rightside_text = function(start, end, task){
 			if(task.type == gntArea1.config.types.milestone){
-				return task.text;
+				return SmartJS_CoreUtils.escape_html(task.text);
 			}
 			return "";
 		}
