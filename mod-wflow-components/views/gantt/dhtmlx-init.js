@@ -819,9 +819,9 @@ dhtmlx.defined = function(obj) {
 };
 
 dhtmlx.uid = function() {
-	if (!this._seed)
+	if(!this._seed) {
 		this._seed = (new Date()).valueOf();
-
+	}
 	this._seed++;
 	return this._seed;
 };

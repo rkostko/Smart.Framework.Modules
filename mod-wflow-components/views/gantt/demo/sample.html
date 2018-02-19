@@ -114,7 +114,7 @@
 		$('#'+gID).dhx_gantt(gntArea1, {
 			data: demo_tasks,
 			start_date: new Date(2017, 5-1, 1),
-			end_date: new Date(2017, 6-1, 1),
+			end_date: new Date(2017, 6-1, 1), // IMPORTANT: when no end date, flex tasks will fill all available space !!!
 			scale_unit: 'day', // day, week, month
 		//	readonly: true,
 			//grid_width: 0, // disable right grid
@@ -136,5 +136,5 @@
 		drawGantt('mygantt');
 	</script>
 </div>
-<button onClick="console.log(JSON.stringify(gntArea1.serialize()));" style="position:fixed; top:15px; right:105px;">Save Data (view console)</button>
+<button onClick="if(gntArea1){console.log(JSON.stringify(gntArea1.serialize()));}" style="position:fixed; top:15px; right:105px;">Save Data (view console)</button>
 </body>
