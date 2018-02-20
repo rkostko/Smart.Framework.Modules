@@ -1,5 +1,5 @@
 
-// dhtmlxGantt - QuickInfo Extension v.3.2.0.uxm.180219
+// dhtmlxGantt - QuickInfo Extension v.3.2.0.uxm.180221
 // (c) 2015 Dinamenta, UAB.
 // License: GPL v2
 // (c) 2015-2018 unix-world.org

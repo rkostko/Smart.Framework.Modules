@@ -1,7 +1,8 @@
 /*
-dhtmlxGantt v.3.2.0 Stardard
+dhtmlxGantt Stardard Theme :: v.3.2.0.uxm.180221
 This software is covered by GPL license.
 (c) Dinamenta, UAB.
+(c) unix-world.org
 */
 /* colors for items with inline styles assigned (task.color, link.color)*/
 .gridHoverStyle {
@@ -1002,7 +1003,17 @@ div.dhx_modal_cover {
 	box-sizing: border-box;
 	border: 1px solid #cecece;
 	height: 100%;
-	width: 100%;
+	width: 100% !important;
+	outline: none !important;
+	resize: none;
+}
+.gantt_cal_ltext input[type=text] {
+	font-size: 13px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 1px solid #cecece;
+	width: 100% !important;
 	outline: none !important;
 	resize: none;
 }
