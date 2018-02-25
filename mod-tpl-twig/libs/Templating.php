@@ -42,7 +42,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: \SmartModExtLib\TplTwig\SmartTwigEnvironment, Twig
- * @version 	v.171005
+ * @version 	v.180225
  * @package 	Templating:Engines
  *
  */
@@ -251,7 +251,7 @@ final class Templating {
 			//--
 			//$content .= '<hr><pre>'.\Smart::escape_html(print_r((array)$dbgarr,1)).'</pre><hr>';
 			//-- source highlight
-			$content .= (string) \SmartComponents::js_code_highlightsyntax('div#tpl-twig-display-for-highlight',['web','tpl']).'</div><h2 style="display:inline;background:#003366;color:#FFFFFF;padding:3px;">Twig-TPL Source</h2><div id="tpl-twig-display-for-highlight"><pre id="'.'__twig__template__debug-tpl_'.\Smart::escape_html(sha1((string)$dbg_tpl['dbg-file-name'])).'"><code class="twig">'.\Smart::escape_html($dbg_tpl['dbg-file-contents']).'</code></pre></div><hr>'."\n";
+			$content .= (string) \SmartComponents::js_code_highlightsyntax('div#tpl-twig-display-for-highlight',['web','tpl']).'<script type="text/javascript" src="modules/mod-js-components/views/js/highlightjs-extra/syntax/tpl/twig.js"></script>'.'</div><h2 style="display:inline;background:#003366;color:#FFFFFF;padding:3px;">Twig-TPL Source</h2><div id="tpl-twig-display-for-highlight"><pre id="'.'__twig__template__debug-tpl_'.\Smart::escape_html(sha1((string)$dbg_tpl['dbg-file-name'])).'"><code class="twig">'.\Smart::escape_html($dbg_tpl['dbg-file-contents']).'</code></pre></div><hr>'."\n";
 			//-- ending
 			$content .= '<!-- #END: Twig-TPL Debug Analysis @ '.\Smart::escape_html((string)$dbg_tpl['dbg-file-name']).' -->';
 			//--

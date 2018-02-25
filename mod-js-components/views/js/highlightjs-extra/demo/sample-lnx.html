@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>highlight.js - Linux / Unix Scripting Demo</title>
+
+  <link rel="stylesheet" href="../css/solarized-dark.css">
+  <script type="text/javascript" src="../../../../../../lib/js/jshighlight/highlight.js"></script>
+
+  <script type="text/javascript" src="../syntax/lnx/awk.js"></script>
+  <script type="text/javascript" src="../syntax/lnx/bash.js"></script>
+
+  <script type="text/javascript" src="../../../../../../lib/js/jquery/jquery.js"></script>
+  <script>
+  jQuery(document).ready(function() {
+    jQuery('div pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
+  });
+  </script>
+
+  <link rel="stylesheet" href="sample.css">
+
+</head>
+<body>
+
+<h1>Highlight.Js Demo: Linux / Unix Scripting</h1>
+<hr>
+
+<!-- AWK -->
+
+<div>
+<h2>Awk</h2>
+<pre><code class="awk">
+awk 'length($0) > 80' data
+
+awk '{ if (length($0) > max) max = length($0) }
+     END { print max }' data
+
+</code></pre>
+</div>
+
+<!-- Bash -->
+
+<div>
+<h2>Shell Script - Bash</h2>
+<pre><code class="bash">#!/bin/bash
+
+###### CONFIG
+ACCEPTED_HOSTS=&quot;/root/.hag_accepted.conf&quot;
+BE_VERBOSE=false
+
+if [ &quot;$UID&quot; -ne 0 ]
+then
+ echo &quot;Superuser rights required&quot;
+ exit 2
+fi
+
+genApacheConf(){
+ echo -e &quot;# Host ${HOME_DIR}$1/$2 :&quot;
+}
+</code></pre>
+</div>
+
+<!-- #END -->
+<br>
+<hr>
+<br>
+
+</body>
+</html>
