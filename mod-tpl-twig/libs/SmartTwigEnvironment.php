@@ -1,7 +1,7 @@
 <?php
 // Twig Templating Advanced Environment for Smart.Framework
 // Module Library
-// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
+// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
 
 namespace SmartModExtLib\TplTwig;
 

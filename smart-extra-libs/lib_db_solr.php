@@ -1,10 +1,10 @@
 <?php
 // [LIB - SmartFramework / ExtraLibs / Solr Database Client]
-// (c) 2006-2017 unix-world.org - all rights reserved
-// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
+// (c) 2006-2018 unix-world.org - all rights reserved
+// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.5')) {
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.7')) {
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.170920
+ * @version 	v.180309
  * @package 	Database:Solr
  *
  */
@@ -796,7 +796,7 @@ $out = SmartComponents::app_error_message(
 	'Apache-Solr',
 	'FTS',
 	'Server',
-	'modules/smart-extra-libs/img/solr_logo_trans.png',
+	'modules/smart-extra-libs/img/solr-logo.svg',
 	$width, // width
 	$the_area, // area
 	$the_error_message, // err msg
@@ -805,7 +805,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#SOLR-DB# :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Stetement:'."\n".$y_query,
+	'#SOLR-DB# :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Statement:'."\n".$y_query,
 	$out // msg to display
 );
 die(''); // just in case

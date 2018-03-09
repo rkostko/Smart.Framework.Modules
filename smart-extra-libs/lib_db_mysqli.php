@@ -1,10 +1,10 @@
 <?php
 // [LIB - SmartFramework / ExtraLibs / MySQLi Database Client]
-// (c) 2006-2017 unix-world.org - all rights reserved
-// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
+// (c) 2006-2018 unix-world.org - all rights reserved
+// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
-if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.5')) {
+if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.7')) {
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
@@ -17,7 +17,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 //		* thus the Smart.Framework implements a separate mechanism to control the connections re-use, to avoid break transactions while mixing (re)connections
 
 //======================================================
-// Smart-Framework - MySQLi Database Client
+// Smart-Framework - MySQLi Database Client for MariaDB / MySQLDB Server
 // DEPENDS:
 //	* Smart::
 //	* SmartUnicode::
@@ -26,16 +26,16 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 //======================================================
 // Tested and Stable on MySQL versions:
 // 5.0.x / 5.1.x / 5.5.x / 5.6.x
-// Tested and Stable with (MySQL compatible) MariaDB versions:
+// Tested and Stable with MariaDB versions:
 // 5.1.x / 5.5.x / 10.x
-// Tested and Stable with (MySQL compatible) Percona Server versions:
+// Tested and Stable with Percona Server versions:
 // 5.5.x / 5.6.x
 //======================================================
-// NOTICE: For MySQLi all queries are using MYSQLI_STORE_RESULT (buffered queries)
-// NEVER use UNBUFFERED QUERIES (MYSQLI_USE_RESULT) because for unbuffered result sets there is no 100% guarantee all happens as planned !!!
+// NOTICE: For MySQLi driver all queries are using MYSQLI_STORE_RESULT (buffered queries) which is the best for data safety
+// NOTICE: YOU SHOULD NEVER use UNBUFFERED QUERIES (MYSQLI_USE_RESULT) because for unbuffered result sets there is no 100% guarantee all happens as planned !!!
 //======================================================
 // NOTICE OF POSSIBLE ERRORS WHEN USING THE CLASS FUNCTIONS IN A WRONG WAY:
-//  mysqli_num_rows() will not return the correct number of rows until all the rows in the result have been retrieved
+// 	mysqli_num_rows() will not return the correct number of rows until all the rows in the result have been retrieved
 // The below errors will appear when using ::read_*data() instead of ::write_data() in a wrong way:
 //		* mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given
 //		* mysqli_num_fields() expects parameter 1 to be mysqli_result, boolean given
@@ -63,14 +63,14 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
 //=====================================================================================
 
 /**
- * Class: SmartMysqliDb - provides a Static MySQL DB Server Client that can be used just with the DEFAULT connection from configs.
+ * Class: SmartMysqliDb - provides a Static MariaDB / MySQLDB Server Client that can be used just with the DEFAULT connection from configs.
  *
  * This class can be used just with the DEFAULT connection which must be set in etc/config.php: $configs['mysqli'].
  * It connects automatically, when needed (the connection is lazy, and is made just when is needed to avoid permanent connections to MySQL which slower down the app and takes busy the slots).
  *
  * <code>
  *
- * // The connection to the DEFAULT MySQL Server will be done automatically, when needed, using the config parameters
+ * // The connection to the DEFAULT MariaDB / MySQLDB Server will be done automatically, when needed, using the config parameters
  * $count = (int) SmartMysqliDb::count_data('SELECT COUNT(`id`) FROM `table` WHERE (`active` = \''.SmartMysqliDb::escape_str('1').'\')');
  * $non_associative_read_multi_records = (array) SmartMysqliDb::read_data('SELECT * FROM `table` WHERE `id` = ?', array(3));
  * $associative_read_multi_records = (array) SmartMysqliDb::read_adata('SELECT * FROM `table` WHERE `id` = ?', array('some-id'));
@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170920
+ * @version 	v.180307
  * @package 	Database:MySQL
  *
  */
@@ -102,9 +102,9 @@ final class SmartMysqliDb {
 
 //======================================================
 /**
- * Pre-connects manually to the Default MySQL Server.
- * This function is OPTIONAL as the connection on the DEFAULT MySQL Server will be done automatically when needed.
- * Anyway, if there is a need to create an explicit connection to the DEFAULT MySQL server earlier, this function can be used by example in App Bootstrap.
+ * Pre-connects manually to the Default MariaDB / MySQLDB Server.
+ * This function is OPTIONAL as the connection on the DEFAULT MariaDB / MySQLDB Server will be done automatically when needed.
+ * Anyway, if there is a need to create an explicit connection to the DEFAULT MariaDB / MySQLDB Server earlier, this function can be used by example in App Bootstrap.
  *
  */
 public static function default_connect() {
@@ -117,7 +117,7 @@ public static function default_connect() {
 
 //======================================================
 /**
- * Create a MySQL Server Custom Connection.
+ * Create a MariaDB / MySQLDB Server Custom Connection.
  * This MUST NOT be used with the default connection ... as that is handled automatically.
  *
  * @param STRING $yhost 						:: db host
@@ -208,29 +208,29 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 	//--
 
 	//-- {{{SYNC-CONNECTIONS-IDS}}}
-	$the_conn_key = (string)$yhost.':'.$yport.'@'.$ydb.'#'.$yuser.'>'.trim(strtoupper(str_replace(' ','',(string)$y_transact_mode))).'.';
+	$the_conn_key = (string)$yhost.':'.$yport.'@'.$ydb.'#'.$yuser;
 	//--
 	$connection = @mysqli_init();
 	@mysqli_options($connection, MYSQLI_OPT_LOCAL_INFILE, false);
 	if(!@mysqli_real_connect($connection, (string)$yhost, (string)$yuser, (string)$password, false, (int)$yport)) {
 		// @mysqli_close($y_connection) if object ; but reusing connections policy dissalow disconnects
-		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connect', 'Connect to MySQL Server (1)', 'CONNECTION FAILED !!!', 'Connection Failed to MySQL Server !');
+		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connect', 'Connect to MariaDB / MySQLDB Server (1)', 'CONNECTION FAILED !!!', 'Connection Failed to MariaDB / MySQLDB Server !');
 		return;
 	} //end if
 	//--
 	if(!is_object($connection)) {
-		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connection', 'Connect to MySQL Server (2)', 'NO CONNECTION !!!', 'Connection Failed to MySQL Server !');
+		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connection', 'Connect to MariaDB / MySQLDB Server (2)', 'NO CONNECTION !!!', 'Connection Failed to MariaDB / MySQLDB Server !');
 		return;
 	} //end if
 	if((string)$connection->thread_id == '') {
-		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connection', 'Connect to MySQL Server (3)', 'INVALID CONNECTION !!!', 'Connection Failed to MySQL Server !');
+		self::error($yhost.':'.$yport.'@'.$ydb.'#'.$yuser, 'Connection', 'Connect to MariaDB / MySQLDB Server (3)', 'INVALID CONNECTION !!!', 'Connection Failed to MariaDB / MySQLDB Server !');
 		return;
 	} //end if
 	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'open-close',
-			'data' => 'Connected to MySQLi Server: '.$the_conn_key,
+			'data' => 'Connected to MariaDB / MySQLDB Server: '.$the_conn_key,
 			'connection' => (string) self::get_connection_id($connection)
 		]);
 	} //end if
@@ -241,7 +241,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 		//--
 		@mysqli_query($connection, "SET CHARACTER SET 'utf8'", MYSQLI_STORE_RESULT);
 		if(@mysqli_errno($connection) !== 0) {
-			self::error(self::get_connection_id($connection), 'Encoding-Charset', 'Failed to set Encoding on MySQL Server', 'Error='.@mysqli_error($connection), 'Set=utf8');
+			self::error(self::get_connection_id($connection), 'Encoding-Charset', 'Failed to set Encoding on MariaDB / MySQLDB Server', 'Error='.@mysqli_error($connection), 'Set=utf8');
 			return;
 		} //end if else
 		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
@@ -255,7 +255,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 		//--
 		@mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8_bin'", MYSQLI_STORE_RESULT);
 		if(@mysqli_errno($connection) !== 0) {
-			self::error(self::get_connection_id($connection), 'Encoding-Collation', 'Failed to set Collation on MySQL Server', 'Error='.@mysqli_error($connection), 'Set=utf8_bin');
+			self::error(self::get_connection_id($connection), 'Encoding-Collation', 'Failed to set Collation on MariaDB / MySQLDB Server', 'Error='.@mysqli_error($connection), 'Set=utf8_bin');
 			return;
 		} //end if else
 		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
@@ -269,7 +269,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 		//--
 	} else {
 		//--
-		self::error(self::get_connection_id($connection), 'Encoding-Charset', 'Wrong Client Encoding for MySQL Server', 'Server=UTF8', 'Client='.SMART_FRAMEWORK_DBSQL_CHARSET);
+		self::error(self::get_connection_id($connection), 'Encoding-Charset', 'Wrong Client Encoding for MariaDB / MySQLDB Server', 'Server=UTF8', 'Client='.SMART_FRAMEWORK_DBSQL_CHARSET);
 		return;
 		//--
 	} //end if
@@ -285,6 +285,14 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 				self::error(self::get_connection_id($connection), 'Set-Session-Transaction-Level', 'Failed to Set Session Transaction Level as '.$transact, 'Error='.@mysqli_error($connection), 'DB='.$ydb);
 				return;
 			} //end if else
+			if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+				SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
+					'type' => 'set',
+					'data' => 'SET Session Transaction Isolation Level to: '.$transact,
+					'connection' => (string) self::get_connection_id($connection),
+					'skip-count' => 'yes'
+				]);
+			} //end if
 			break;
 		default:
 			// LEAVE THE SESSION TRANSACTION AS SET IN CFG
@@ -303,7 +311,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 	//--
 
 	//-- export only at the end (after all settings)
-	SmartFrameworkRegistry::$Connections['mysqli'][(string)$the_conn_key]  = &$connection; // export connection
+	SmartFrameworkRegistry::$Connections['mysqli'][(string)$the_conn_key] = &$connection; // export connection
 	//--
 
 	//-- OUTPUT
@@ -351,7 +359,7 @@ public static function escape_str($y_string, $y_connection='DEFAULT') {
  * Check if a Table Exists in the current Database.
  *
  * @param STRING $y_table 						:: The Table Name
- * @param RESOURCE $y_connection				:: The connection to MySQL server
+ * @param RESOURCE $y_connection				:: The connection to MariaDB / MySQLDB Server
  * @return 0/1									:: 1 if exists ; 0 if not
  *
  */
@@ -1059,7 +1067,7 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
  *
  * @param ARRAY $arrdata 						:: associative array: array of form data as $arr=array(); $arr['field1'] = 'a string'; $arr['field2'] = 100; | non-associative array $arr[] = 'some value'; $arr[] = 'other-value', ...
  * @param ENUM $mode							:: mode: 'insert' | 'update' | 'in-select'
- * @param RESOURCE $y_connection 				:: the connection to mysql server
+ * @param RESOURCE $y_connection 				:: the connection to MariaDB / MySQLDB Server
  * @return STRING								:: The SQL partial Statement
  */
 public static function prepare_statement($arrdata, $mode, $y_connection='DEFAULT') {
@@ -1199,7 +1207,7 @@ public static function prepare_statement($arrdata, $mode, $y_connection='DEFAULT
  *
  * @param STRING $query							:: SQL Statement to process like '   WHERE ("id" = ?)'
  * @param ARRAY $arrdata 						:: The non-associative array as of: $arr=array('a');
- * @param RESOURCE $y_connection 				:: the connection to mysql server
+ * @param RESOURCE $y_connection 				:: the connection to MariaDB / MySQLDB Server
  * @return STRING								:: The SQL processed (partial/full) Statement
  */
 public static function prepare_param_query($query, $replacements_arr, $y_connection='DEFAULT') { // {{{SYNC-SQL-PARAM-QUERY}}}
@@ -1282,7 +1290,7 @@ public static function prepare_param_query($query, $replacements_arr, $y_connect
  * @param ENUM $y_mode 							:: mode: uid10str | uid10num | uid36 | uid45
  * @param STRING $y_field_name 					:: the field name
  * @param STRING $y_table_name 					:: the table name
- * @param RESOURCE $y_connection 				:: the connection to mysql server
+ * @param RESOURCE $y_connection 				:: the connection to MariaDB / MySQLDB Server
  * @return STRING 								:: the generated Unique ID
  *
  */
@@ -1357,7 +1365,7 @@ public static function new_safe_id($y_mode, $y_id_field, $y_table_name, $y_conne
 
 //======================================================
 /**
- * Check and Return the MySQL Server Version
+ * Check and Return the MariaDB / MySQLDB Server Version
  *
  * @access 		private
  * @internal
@@ -1412,7 +1420,7 @@ public static function check_server_version($y_connection='DEFAULT') {
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'set',
-			'data' => 'Detect MySQL Server Version: '.$mysql_num_version,
+			'data' => 'Detect MariaDB / MySQLDB Server Version: '.$mysql_num_version,
 			'connection' => (string) self::get_connection_id($y_connection),
 			'skip-count' => 'yes'
 		]);
@@ -1421,7 +1429,7 @@ public static function check_server_version($y_connection='DEFAULT') {
 
 	//--
 	if(version_compare(self::major_version($minimum_mysql_version_for_smartframework), self::major_version($mysql_num_version)) > 0) {
-		self::error($y_connection, 'Server-Version', 'MySQL Server Version not supported', $mysql_num_version, 'MySQL.version='.self::major_version($minimum_mysql_version_for_smartframework).' or later is required to run this software !');
+		self::error($y_connection, 'Server-Version', 'MariaDB / MySQLDB Server Version not supported', $mysql_num_version, 'MariaDB/MySQLDB.version='.self::major_version($minimum_mysql_version_for_smartframework).' or later is required to run this software !');
 		return '';
 	} //end if
 	//--
@@ -1476,7 +1484,7 @@ public static function get_connection_id($y_connection) {
 /**
  * Check the connection to MySQL if Active
  *
- * @param RESOURCE 	$y_connection 	:: The Connection to MySQL Server
+ * @param RESOURCE 	$y_connection 	:: The Connection to MariaDB / MySQLDB Server
  * @param STRING 	$y_description	:: The Description of Where it is Checked (for having a clue where it fails)
  * @return HALT EXECUTION IF NO CONNECTION OR CONNECTION BUSY AFTER SEVERAL RETRIES
  *
@@ -1490,15 +1498,15 @@ private static function check_connection($y_connection, $y_description) {
 		if(!defined('SMART_FRAMEWORK_DB_LINK_MySQL')) { // MySQL default connection constant to avoid re-connection which can break transactions
 			//--
 			if(!is_array($configs['mysqli'])) {
-				self::error('', 'CHECK-DEFAULT-MYSQL-CONFIGS', 'The Default MySQL Configs not detected !', 'The configs[mysqli] is not an array !', $y_description);
+				self::error('', 'CHECK-DEFAULT-MYSQLI-CONFIGS', 'The Default MySQLi Configs not detected !', 'The configs[mysqli] is not an array !', $y_description);
 				return null;
 			} //end if
 			if(((string)$configs['mysqli']['server-host'] == '') OR ((string)$configs['mysqli']['server-port'] == '') OR ((string)$configs['mysqli']['dbname'] == '') OR ((string)$configs['mysqli']['username'] == '')) {
-				self::error('', 'CHECK-DEFAULT-MYSQL-CONFIGS', 'The Default MySQL Configs are not complete !', 'Some of the configs[mysqli] parameters are missing !', $y_description);
+				self::error('', 'CHECK-DEFAULT-MYSQLI-CONFIGS', 'The Default MySQLi Configs are not complete !', 'Some of the configs[mysqli] parameters are missing !', $y_description);
 				return null;
 			} //end if
 			//-- {{{SYNC-CONNECTIONS-IDS}}}
-			$the_conn_key = (string) $configs['mysqli']['server-host'].':'.$configs['mysqli']['server-port'].'@'.$configs['mysqli']['dbname'].'#'.$configs['mysqli']['username'].'>'.trim(strtoupper(str_replace(' ','',(string)$configs['mysqli']['transact']))).'.';
+			$the_conn_key = (string) $configs['mysqli']['server-host'].':'.$configs['mysqli']['server-port'].'@'.$configs['mysqli']['dbname'].'#'.$configs['mysqli']['username'];
 			if(array_key_exists((string)$the_conn_key, (array)SmartFrameworkRegistry::$Connections['mysqli'])) { // if the connection was made before using the SmartMysqliExtDb
 				//--
 				$y_connection = &SmartFrameworkRegistry::$Connections['mysqli'][(string)$the_conn_key];
@@ -1508,7 +1516,7 @@ private static function check_connection($y_connection, $y_description) {
 				if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 					SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 						'type' => 'open-close',
-						'data' => 'Re-Using Connection to MySQLi Server as DEFAULT: '.$the_conn_key,
+						'data' => 'Re-Using Connection to MariaDB / MySQLDB Server as DEFAULT: '.$the_conn_key,
 						'connection' => (string) self::get_connection_id($y_connection)
 					]);
 				} //end if
@@ -1613,8 +1621,8 @@ private static function error($y_connection_id, $y_area, $y_error_message, $y_qu
 $err_log = $y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Params / Title:'."\n".print_r($y_params_or_title,1)."\n".'*** Query:'."\n".$y_query;
 //--
 if(defined('SMART_SOFTWARE_SQLDB_FATAL_ERR') AND (SMART_SOFTWARE_SQLDB_FATAL_ERR === false)) {
-	Smart::log_warning('#MYSQL-DB@'.$y_connection_id.'# :: Q# // MySQL :: WARNING :: '.$err_log);
-	throw new Exception('#MYSQL-DB@'.$y_connection_id.'# :: Q# // MySQL :: EXCEPTION :: '.$y_area."\n".$y_error_message);
+	Smart::log_warning('#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: WARNING :: '.$err_log);
+	throw new Exception('#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: EXCEPTION :: '.$y_area."\n".$y_error_message);
 	return;
 } //end if
 //--
@@ -1648,10 +1656,10 @@ if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 //--
 $out = SmartComponents::app_error_message(
 	'MySQLi Client',
-	'MySQL',
+	'MariaDB / MySQLDB',
 	'SQL/DB',
 	'Server',
-	'modules/smart-extra-libs/img/mysql_logo_trans.png',
+	'modules/smart-extra-libs/img/mysql-logo.svg',
 	$width, // width
 	$the_area, // area
 	$the_error_message, // err msg
@@ -1660,7 +1668,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#MYSQL-DB@'.$y_connection_id.'# :: Q# // MySQL :: ERROR :: '.$err_log, // err to register
+	'#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: ERROR :: '.$err_log, // err to register
 	$out // msg to display
 );
 die(''); // just in case
@@ -1683,9 +1691,9 @@ die(''); // just in case
 
 
 /**
- * Class: SmartMysqliExtDb - provides a Dynamic (Extended) MySQL DB Server Client that can be used with custom made connections.
+ * Class: SmartMysqliExtDb - provides a Dynamic (Extended) MariaDB / MySQLDB Server Client that can be used with custom made connections.
  *
- * This class is made to be used with custom made MySQL connections (other servers than default).
+ * This class is made to be used with custom made MySQLi connections (other servers than default).
  *
  * <code>
  * // Sample config array for this class constructor:
@@ -1709,7 +1717,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.170920
+ * @version 	v.180307
  * @package 	Database:MySQL
  *
  */
@@ -1724,7 +1732,7 @@ private $connection;
 
 
 /**
- * Class Constructor - will initiate also the custom connection for a MySQL Server specified as parameters of this function.
+ * Class Constructor - will initiate also the custom connection for a MariaDB / MySQLDB Server specified as parameters of this function.
  *
  * @param ARRAY $y_configs_arr 					:: The Array of Configuration parameters - the ARRAY STRUCTURE should be identical with the default config.php: $configs['mysqli'].
  *
@@ -1733,7 +1741,7 @@ public function __construct($y_configs_arr) {
 	//--
 	$y_configs_arr = (array) $y_configs_arr;
 	//-- {{{SYNC-CONNECTIONS-IDS}}}
-	$the_conn_key = (string) $y_configs_arr['server-host'].':'.$y_configs_arr['server-port'].'@'.$y_configs_arr['dbname'].'#'.$y_configs_arr['username'].'>'.trim(strtoupper(str_replace(' ','',(string)$y_configs_arr['transact']))).'.';
+	$the_conn_key = (string) $y_configs_arr['server-host'].':'.$y_configs_arr['server-port'].'@'.$y_configs_arr['dbname'].'#'.$y_configs_arr['username'];
 	if(array_key_exists((string)$the_conn_key, (array)SmartFrameworkRegistry::$Connections['mysqli'])) {
 		//-- try to reuse the connection :: only check if array key exists, not if it is a valid resource ; this should be as so to avoid mismatching connection mixings (if by example will re-use the connection of another server, and connection is broken in the middle of a transaction, it will fail ugly ;) and out of any control !
 		$this->connection = &SmartFrameworkRegistry::$Connections['mysqli'][(string)$the_conn_key];
@@ -1741,7 +1749,7 @@ public function __construct($y_configs_arr) {
 		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 			SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 				'type' => 'open-close',
-				'data' => 'Re-Using Connection to MySQLi Server: '.$the_conn_key,
+				'data' => 'Re-Using Connection to MariaDB / MySQLDB Server: '.$the_conn_key,
 				'connection' => (string) SmartMysqliDb::get_connection_id($this->connection)
 			]);
 		} //end if
@@ -1771,7 +1779,7 @@ public function __construct($y_configs_arr) {
 
 
 /**
- * Returns the connection resource of the current MySQL Server.
+ * Returns the connection resource of the current MariaDB / MySQLDB Server.
  */
 public function getConnection() {
 	//--
@@ -1941,7 +1949,7 @@ public function new_safe_id($y_mode, $y_id_field, $y_table_name) {
 
 
 /**
- * Check and Return the MySQL Server Version
+ * Check and Return the MariaDB / MySQLDB Server Version
  *
  * @access 		private
  * @internal

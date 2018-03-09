@@ -3,7 +3,7 @@
 // Controller: Twitter Api Test Sample
 // Route: ?/page/sm-twitter.test (?page=sm-twitter.test)
 // Author: unix-world.org
-// v.3.5.7 r.2017.09.05 / smart.framework.v.3.5
+// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
