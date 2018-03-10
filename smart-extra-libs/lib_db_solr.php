@@ -805,7 +805,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#SOLR-DB# :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Statement:'."\n".$y_query,
+	'#SOLR-DB@ :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Statement:'."\n".$y_query,
 	$out // msg to display
 );
 die(''); // just in case

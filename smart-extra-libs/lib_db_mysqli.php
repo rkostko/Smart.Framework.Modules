@@ -1668,7 +1668,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: ERROR :: '.$err_log, // err to register
+	'#MYSQLi-DB@'.$y_connection_id.' :: Q# // MySQLi :: ERROR :: '.$err_log, // err to register
 	$out // msg to display
 );
 die(''); // just in case
