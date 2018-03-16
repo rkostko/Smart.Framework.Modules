@@ -17,7 +17,7 @@ Applies to all other files: css, html
 .octicon is optimized for 16px.
 .mega-octicon is optimized for 32px but can be used larger.
 */
-.octicon, .mega-octicon {
+.octicon, .xtra-octicon, .super-octicon, .mega-octicon {
   font: normal normal normal 14px/1 octicons;
   display: inline-block;
   text-decoration: none;
@@ -29,6 +29,9 @@ Applies to all other files: css, html
   -ms-user-select: none;
   user-select: none;
 }
+
+.xtra-octicon { font-size: 1.125em !important; }
+.super-octicon { font-size: 1.35em !important; }
 .mega-octicon { font-size: 2em !important; }
 
 .octicon-alert:before { content: '\f02d'}

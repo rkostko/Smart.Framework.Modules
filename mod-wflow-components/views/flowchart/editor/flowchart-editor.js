@@ -335,7 +335,7 @@ function flowchartEditorInit(flwcDataObj, flwcIsReadonly, fxAddDialogHelper, fxS
 
 			jQuery('body').on('click', 'div.jtk-node > span', function(el) {
 				var tgtP = jQuery(this);
-				var eClass = tgtP.attr('class') ? tgtP.attr('class') : 'fa fa-';
+				var eClass = tgtP.attr('class') ? tgtP.attr('class') : '';
 				var label = prompt("Box Icon", eClass);
 				if(label) {
 					tgtP.parent().attr('data-fa-icon', label);

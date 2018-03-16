@@ -69,7 +69,7 @@
 	});
 
 	if (iniframe) {
-		document.writeln('<link id="data-uikit-theme" rel="stylesheet" href="'+base+'../../../../lib/framework/css/fonts/fontawesome.css">');
+		document.writeln('<link id="data-uikit-theme" rel="stylesheet" href="'+base+'../../../../lib/core/plugins/fonts/icons/fontawesome.css">');
 		document.writeln('<style data-compiled-css>@import url("'+base+'css/themes/default/uikit.css"); </style>');
 	}
 

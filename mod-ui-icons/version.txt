@@ -1,6 +1,0 @@
-
-# Smart.Framework.Modules / Icons #
-
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
-
-###

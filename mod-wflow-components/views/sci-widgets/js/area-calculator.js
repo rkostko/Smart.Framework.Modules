@@ -1,7 +1,7 @@
 
 // Area Calculator
-// (c) 2006-2017 unix-world.org
-// v.2017.10.02
+// (c) 2006-2018 unix-world.org
+// v.2018.03.15
 
 // DEPENDS: bc-math.js
 
