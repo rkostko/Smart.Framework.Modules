@@ -54,7 +54,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @hints		By default will use the 1-3-930 NGrams. To use extended NGrams (Ex: 1-4-15k) see the local code examples.
  *
  * @depends 	classes: Smart, SmartUnicode, SmartFileSysUtils
- * @version 	v.170913
+ * @version 	v.180320
  * @package 	LanguageDetection
  *
  */
@@ -177,17 +177,25 @@ final class LanguageNgrams {
 	 */
 	public function detect($str) {
 
+		//$arx = [];
 		$ngrams = (array) $this->getNgrams($str);
-
+		//print_r($ngrams);
+		//print_r($this->tokens);
 		$result = [];
 		if(count($ngrams) > 0) {
 			foreach($this->tokens as $lang => $value) {
-				$index = $sum = 0;
+				$index = 0;
+				$sum = 0;
 				$value = array_flip($value);
 				foreach($ngrams as $k => $v) {
 					if(isset($value[$v])) {
-						$x = $index++ - $value[$v];
-						$y = $x >> (PHP_INT_SIZE * 8);
+						$index++;
+						$x = $index - $value[$v];
+						//-- fix by unixman (make compatible with both PHP 5.x and 7.x): Prior to PHP 7.0, shifting integers by values greater than or equal to the system long integer width, or by negative numbers, results in undefined behavior. In other words, if you're using PHP 5.x, don't shift more than 31 bits on a 32-bit system, and don't shift more than 63 bits on 64-bit system.
+						//$y = $x >> ((PHP_INT_SIZE * 8));
+						$y = $x >> ((PHP_INT_SIZE * 8) - 1);
+						//$arx[] = $index.' @ '.$x.' # '.$y;
+						//-- # end fix
 						$sum += ($x + $y) ^ $y;
 						continue;
 					} //end if
@@ -202,8 +210,12 @@ final class LanguageNgrams {
 				} //end if else
 				$result[$lang] = 1 - $calc;
 			} //end foreach
-			arsort($result, SORT_NUMERIC); // reverse sort array, numeric
+			//-- fix by unixman: to have the same results on PHP 5.x and 7.x
+			//arsort($result, SORT_NUMERIC); // reverse sort array, numeric
+			array_multisort(array_values($result), SORT_DESC, array_keys($result), SORT_ASC, $result);
+			//-- #end fix
 		} //end if
+		//print_r($arx);
 
 		return (array) $result;
 
@@ -283,12 +295,17 @@ final class LanguageNgrams {
 		foreach($this->tokenize($str) as $k => $word) {
 			$l = \SmartUnicode::str_len($word);
 			for($i=$this->minLength; $i<=$this->maxLength; ++$i) {
-				for($j=0; ($i+$j-1) < $l; ++$j, ++$tmp) {
+				//-- fix by unixman: this is more efficient on PHP than passing by reference ...
+			/*	for($j=0; ($i+$j-1) < $l; ++$j, ++$tmp) {
 					$tmp =& $tokens[$i][(string)\SmartUnicode::sub_str($word, $j, $i)];
+				} //end for */
+				for($j=0; ($i+$j-1) < $l; ++$j) {
+					$tokens[$i][(string)\SmartUnicode::sub_str($word, $j, $i)]++;
 				} //end for
+				//--
 			} //end for
 		} //end foreach
-
+		//print_r($tokens);
 		if(!count($tokens)) {
 			return [];
 		} //end if
@@ -309,11 +326,13 @@ final class LanguageNgrams {
 			} //end if
 		} //end foreach
 		$tkns = array(); // free mem
-
 		unset($tokens['_']); // the tokenizer word limit char itself must be unset
 
-		arsort($tokens, SORT_NUMERIC);
-		//print_r($tokens); die();
+		//-- fix by unixman: to have the same results on PHP 5.x and 7.x
+		//arsort($tokens, SORT_NUMERIC);
+		array_multisort(array_values($tokens), SORT_DESC, array_keys($tokens), SORT_ASC, $tokens);
+		//print_r($tokens); //die();
+		//-- #end fix
 
 		return (array) array_slice(
 			array_keys($tokens),
