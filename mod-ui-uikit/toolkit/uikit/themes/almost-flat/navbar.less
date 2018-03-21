@@ -47,8 +47,8 @@
 // ========================================================================
 
 .hook-navbar() {
-    border: 1px solid @navbar-border;
-    border-radius: @global-border-radius;
+	border: 1px solid @navbar-border;
+	border-radius: @global-border-radius;
 }
 
 
@@ -61,11 +61,11 @@
 //
 
 .hook-navbar-nav() {
-    margin-top: -1px; // 1
-    margin-left: -1px; // 2
-    border: 1px solid transparent;
-    border-bottom-width: 0;
-    text-shadow: 0 1px 0 @navbar-text-shadow;
+	margin-top: -1px; // 1
+	margin-left: -1px; // 2
+	border: 1px solid transparent;
+	border-bottom-width: 0;
+	text-shadow: 0 1px 0 @navbar-text-shadow;
 }
 
 //
@@ -76,25 +76,25 @@
 
 // Hover
 .hook-navbar-nav-hover() {
-    position: relative; // 1
-    z-index: 1; // 2
-    border-left-color: @navbar-nav-hover-border;
-    border-right-color: @navbar-nav-hover-border;
-    border-top-color: @navbar-nav-hover-border-top;
+	position: relative; // 1
+	z-index: 1; // 2
+	border-left-color: @navbar-nav-hover-border;
+	border-right-color: @navbar-nav-hover-border;
+	border-top-color: @navbar-nav-hover-border-top;
 }
 
 // OnClick
 .hook-navbar-nav-onclick() {
-    border-left-color: @navbar-nav-hover-border;
-    border-right-color: @navbar-nav-hover-border;
-    border-top-color: @navbar-nav-onclick-border-top;
+	border-left-color: @navbar-nav-hover-border;
+	border-right-color: @navbar-nav-hover-border;
+	border-top-color: @navbar-nav-onclick-border-top;
 }
 
 // Active
 .hook-navbar-nav-active() {
-    border-left-color: @navbar-nav-hover-border;
-    border-right-color: @navbar-nav-hover-border;
-    border-top-color: @navbar-nav-hover-border-top;
+	border-left-color: @navbar-nav-hover-border;
+	border-right-color: @navbar-nav-hover-border;
+	border-top-color: @navbar-nav-hover-border-top;
 }
 
 
@@ -106,8 +106,8 @@
 //
 
 .hook-navbar-content() {
-    margin-top: -1px; // 1
-    text-shadow: 0 1px 0 @navbar-text-shadow;
+	margin-top: -1px; // 1
+	text-shadow: 0 1px 0 @navbar-text-shadow;
 }
 
 
@@ -116,47 +116,47 @@
 
 .hook-navbar-misc() {
 
-    /*
-     * Apply same `border-radius` as `uk-navbar`
-     */
+	/*
+	 * Apply same `border-radius` as `uk-navbar`
+	 */
 
-    .uk-navbar-nav:first-child > li:first-child > a {
-        border-top-left-radius: @global-border-radius;
-        border-bottom-left-radius: @global-border-radius;
-    }
+	.uk-navbar-nav:first-child > li:first-child > a {
+		border-top-left-radius: @global-border-radius;
+		border-bottom-left-radius: @global-border-radius;
+	}
 
-    /*
-     * Sub-modifier `uk-navbar-flip`
-     */
+	/*
+	 * Sub-modifier `uk-navbar-flip`
+	 */
 
-    /* Collapse border */
-    .uk-navbar-flip .uk-navbar-nav > li > a {
-        margin-left: 0;
-        margin-right: -1px;
-    }
+	/* Collapse border */
+	.uk-navbar-flip .uk-navbar-nav > li > a {
+		margin-left: 0;
+		margin-right: -1px;
+	}
 
-    /* Apply same `border-radius` as `uk-navbar` */
-    .uk-navbar-flip .uk-navbar-nav:first-child > li:first-child > a {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+	/* Apply same `border-radius` as `uk-navbar` */
+	.uk-navbar-flip .uk-navbar-nav:first-child > li:first-child > a {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
 
-    .uk-navbar-flip .uk-navbar-nav:last-child > li:last-child > a {
-        border-top-right-radius: @global-border-radius;
-        border-bottom-right-radius: @global-border-radius;
-    }
+	.uk-navbar-flip .uk-navbar-nav:last-child > li:last-child > a {
+		border-top-right-radius: @global-border-radius;
+		border-bottom-right-radius: @global-border-radius;
+	}
 
-    /*
-     * Sub-modifier `uk-navbar-attached`
-     */
+	/*
+	 * Sub-modifier `uk-navbar-attached`
+	 */
 
-    .uk-navbar-attached {
-        border-top-color: transparent;
-        border-left-color: transparent;
-        border-right-color: transparent;
-        border-radius: 0;
-    }
+	.uk-navbar-attached {
+		border-top-color: transparent;
+		border-left-color: transparent;
+		border-right-color: transparent;
+		border-radius: 0;
+	}
 
-    .uk-navbar-attached .uk-navbar-nav > li > a { border-radius: 0 !important; }
+	.uk-navbar-attached .uk-navbar-nav > li > a { border-radius: 0 !important; }
 
 }

@@ -56,13 +56,13 @@
  */
 
 .uk-notify {
-    position: fixed;
-    top: @notify-position;
-    left: @notify-position;
-    z-index: @notify-z-index;
-    box-sizing: border-box;
-    width: @notify-width;
-    .hook-notify;
+	position: fixed;
+	top: @notify-position;
+	left: @notify-position;
+	z-index: @notify-z-index;
+	box-sizing: border-box;
+	width: @notify-width;
+	.hook-notify;
 }
 
 
@@ -71,21 +71,21 @@
 
 .uk-notify-top-right,
 .uk-notify-bottom-right  {
-    left: auto;
-    right: @notify-position;
+	left: auto;
+	right: @notify-position;
 }
 
 .uk-notify-top-center,
 .uk-notify-bottom-center {
-    left: 50%;
-    margin-left: (@notify-width / -2);
+	left: 50%;
+	margin-left: (@notify-width / -2);
 }
 
 .uk-notify-bottom-left,
 .uk-notify-bottom-right,
 .uk-notify-bottom-center {
-    top: auto;
-    bottom: @notify-position;
+	top: auto;
+	bottom: @notify-position;
 }
 
 
@@ -95,16 +95,16 @@
 /* Phones portrait and smaller */
 @media (max-width: @breakpoint-mini-max) {
 
-    /*
-     * Fit in small screen
-     */
+	/*
+	 * Fit in small screen
+	 */
 
-    .uk-notify {
-        left: 10px;
-        right: 10px;
-        width: auto;
-        margin: 0;
-    }
+	.uk-notify {
+		left: 10px;
+		right: 10px;
+		width: auto;
+		margin: 0;
+	}
 
 }
 
@@ -113,15 +113,15 @@
 ========================================================================== */
 
 .uk-notify-message {
-    position: relative;
-    margin-bottom: @notify-message-margin-bottom;
-    padding: @notify-message-padding;
-    background: @notify-message-background;
-    color: @notify-message-color;
-    font-size: @notify-message-font-size;
-    line-height: @notify-message-line-height;
-    cursor: pointer;
-    .hook-notify-message;
+	position: relative;
+	margin-bottom: @notify-message-margin-bottom;
+	padding: @notify-message-padding;
+	background: @notify-message-background;
+	color: @notify-message-color;
+	font-size: @notify-message-font-size;
+	line-height: @notify-message-line-height;
+	cursor: pointer;
+	.hook-notify-message;
 }
 
 
@@ -129,30 +129,30 @@
  ========================================================================== */
 
 .uk-notify-message > .uk-close {
-    visibility: hidden;
-    float: right;
+	visibility: hidden;
+	float: right;
 }
 
 .uk-notify-message:hover > .uk-close { visibility: visible; }
 
 
-/* Modifier: `uk-alert-info`
+/* Modifier: `uk-notify-message-primary`
  ========================================================================== */
 
 .uk-notify-message-primary {
-    background: @notify-message-primary-background;
-    color: @notify-message-primary-color;
-    .hook-notify-message-primary;
+	background: @notify-message-primary-background;
+	color: @notify-message-primary-color;
+	.hook-notify-message-primary;
 }
 
 
-/* Modifier: `uk-alert-success`
+/* Modifier: `uk-notify-message-success`
  ========================================================================== */
 
 .uk-notify-message-success {
-    background: @notify-message-success-background;
-    color: @notify-message-success-color;
-    .hook-notify-message-success;
+	background: @notify-message-success-background;
+	color: @notify-message-success-color;
+	.hook-notify-message-success;
 }
 
 
@@ -160,9 +160,9 @@
  ========================================================================== */
 
 .uk-notify-message-warning {
-    background: @notify-message-warning-background;
-    color: @notify-message-warning-color;
-    .hook-notify-message-warning;
+	background: @notify-message-warning-background;
+	color: @notify-message-warning-color;
+	.hook-notify-message-warning;
 }
 
 
@@ -170,9 +170,9 @@
  ========================================================================== */
 
 .uk-notify-message-danger {
-    background: @notify-message-danger-background;
-    color: @notify-message-danger-color;
-    .hook-notify-message-danger;
+	background: @notify-message-danger-background;
+	color: @notify-message-danger-color;
+	.hook-notify-message-danger;
 }
 
 

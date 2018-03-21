@@ -1,196 +1,199 @@
+/* UIkit 2.27.5 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(UI) {
 
-    "use strict";
+	"use strict";
 
-    var scrollpos = {x: window.scrollX, y: window.scrollY},
-        $win      = UI.$win,
-        $doc      = UI.$doc,
-        $html     = UI.$html,
-        Offcanvas = {
+	var scrollpos = {x: window.scrollX, y: window.scrollY},
+		$win      = UI.$win,
+		$doc      = UI.$doc,
+		$html     = UI.$html,
+		Offcanvas = {
 
-        show: function(element, options) {
+		show: function(element, options) {
 
-            element = UI.$(element);
+			element = UI.$(element);
 
-            if (!element.length) return;
+			if (!element.length) return;
 
-            options = UI.$.extend({mode: 'push'}, options);
+			options = UI.$.extend({mode: 'push'}, options);
 
-            var $body     = UI.$('body'),
-                bar       = element.find('.uk-offcanvas-bar:first'),
-                rtl       = (UI.langdirection == 'right'),
-                flip      = bar.hasClass('uk-offcanvas-bar-flip') ? -1:1,
-                dir       = flip * (rtl ? -1 : 1),
+			var $body     = UI.$('body'),
+				bar       = element.find('.uk-offcanvas-bar:first'),
+				rtl       = (UI.langdirection == 'right'),
+				flip      = bar.hasClass('uk-offcanvas-bar-flip') ? -1:1,
+				dir       = flip * (rtl ? -1 : 1),
 
-                scrollbarwidth =  window.innerWidth - $body.width();
+				scrollbarwidth =  window.innerWidth - $body.width();
 
-            scrollpos = {x: window.pageXOffset, y: window.pageYOffset};
+			scrollpos = {x: window.pageXOffset, y: window.pageYOffset};
 
-            bar.attr('mode', options.mode);
-            element.addClass('uk-active');
+			bar.attr('mode', options.mode);
+			element.addClass('uk-active');
 
-            $body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('uk-offcanvas-page');
+			$body.css({width: window.innerWidth - scrollbarwidth, height: window.innerHeight}).addClass('uk-offcanvas-page');
 
-            if (options.mode == 'push' || options.mode == 'reveal') {
-                $body.css((rtl ? 'margin-right' : 'margin-left'), (rtl ? -1 : 1) * (bar.outerWidth() * dir));
-            }
+			if (options.mode == 'push' || options.mode == 'reveal') {
+				$body.css((rtl ? 'margin-right' : 'margin-left'), (rtl ? -1 : 1) * (bar.outerWidth() * dir));
+			}
 
-            if (options.mode == 'reveal') {
-                bar.css('clip', 'rect(0, '+bar.outerWidth()+'px, 100vh, 0)');
-            }
+			if (options.mode == 'reveal') {
+				bar.css('clip', 'rect(0, '+bar.outerWidth()+'px, 100vh, 0)');
+			}
 
-            $html.css('margin-top', scrollpos.y * -1).width(); // .width() - force redraw
+			$html.css('margin-top', scrollpos.y * -1).width(); // .width() - force redraw
 
 
-            bar.addClass('uk-offcanvas-bar-show');
+			bar.addClass('uk-offcanvas-bar-show');
 
-            this._initElement(element);
+			this._initElement(element);
 
-            bar.trigger('show.uk.offcanvas', [element, bar]);
+			bar.trigger('show.uk.offcanvas', [element, bar]);
 
-            // Update ARIA
-            element.attr('aria-hidden', 'false');
-        },
+			// Update ARIA
+			element.attr('aria-hidden', 'false');
+		},
 
-        hide: function(force) {
+		hide: function(force) {
 
-            var $body = UI.$('body'),
-                panel = UI.$('.uk-offcanvas.uk-active'),
-                rtl   = (UI.langdirection == 'right'),
-                bar   = panel.find('.uk-offcanvas-bar:first'),
-                finalize = function() {
-                    $body.removeClass('uk-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
-                    panel.removeClass('uk-active');
+			var $body = UI.$('body'),
+				panel = UI.$('.uk-offcanvas.uk-active'),
+				rtl   = (UI.langdirection == 'right'),
+				bar   = panel.find('.uk-offcanvas-bar:first'),
+				finalize = function() {
+					$body.removeClass('uk-offcanvas-page').css({width: '', height: '', marginLeft: '', marginRight: ''});
+					panel.removeClass('uk-active');
 
-                    bar.removeClass('uk-offcanvas-bar-show');
-                    $html.css('margin-top', '');
-                    window.scrollTo(scrollpos.x, scrollpos.y);
-                    bar.trigger('hide.uk.offcanvas', [panel, bar]);
+					bar.removeClass('uk-offcanvas-bar-show');
+					$html.css('margin-top', '');
+					window.scrollTo(scrollpos.x, scrollpos.y);
+					bar.trigger('hide.uk.offcanvas', [panel, bar]);
 
-                    // Update ARIA
-                    panel.attr('aria-hidden', 'true');
-                };
+					// Update ARIA
+					panel.attr('aria-hidden', 'true');
+				};
 
-            if (!panel.length) return;
-            if (bar.attr('mode') == 'none') force = true;
+			if (!panel.length) return;
+			if (bar.attr('mode') == 'none') force = true;
 
-            if (UI.support.transition && !force) {
+			if (UI.support.transition && !force) {
 
-                $body.one(UI.support.transition.end, function() {
-                    finalize();
-                }).css((rtl ? 'margin-right' : 'margin-left'), '');
+				$body.one(UI.support.transition.end, function() {
+					finalize();
+				}).css((rtl ? 'margin-right' : 'margin-left'), '');
 
-                if (bar.attr('mode') == 'reveal') {
-                    bar.css('clip', '');
-                }
+				if (bar.attr('mode') == 'reveal') {
+					bar.css('clip', '');
+				}
 
-                setTimeout(function(){
-                    bar.removeClass('uk-offcanvas-bar-show');
-                }, 0);
+				setTimeout(function(){
+					bar.removeClass('uk-offcanvas-bar-show');
+				}, 0);
 
-            } else {
-                finalize();
-            }
-        },
+			} else {
+				finalize();
+			}
+		},
 
-        _initElement: function(element) {
+		_initElement: function(element) {
 
-            if (element.data('OffcanvasInit')) return;
+			if (element.data('OffcanvasInit')) return;
 
-            element.on('click.uk.offcanvas swipeRight.uk.offcanvas swipeLeft.uk.offcanvas', function(e) {
+			element.on('click.uk.offcanvas swipeRight.uk.offcanvas swipeLeft.uk.offcanvas', function(e) {
 
-                var target = UI.$(e.target);
+				var target = UI.$(e.target);
 
-                if (!e.type.match(/swipe/)) {
+				if (e.type.match(/swipe/)) {
+					if (target.parents('.uk-offcanvas-bar:first').length) return;
+				} else {
 
-                    if (!target.hasClass('uk-offcanvas-close')) {
-                        if (target.hasClass('uk-offcanvas-bar')) return;
-                        if (target.parents('.uk-offcanvas-bar:first').length) return;
-                    }
-                }
+					if (!target.hasClass('uk-offcanvas-close')) {
+						if (target.hasClass('uk-offcanvas-bar')) return;
+						if (target.parents('.uk-offcanvas-bar:first').length) return;
+					}
+				}
 
-                e.stopImmediatePropagation();
-                Offcanvas.hide();
-            });
+				e.stopImmediatePropagation();
+				Offcanvas.hide();
+			});
 
-            element.on('click', 'a[href*="#"]', function(e){
+			element.on('click', 'a[href*="#"]', function(e){
 
-                var link = UI.$(this),
-                    href = link.attr('href');
+				var link = UI.$(this),
+					href = link.attr('href');
 
-                if (href == '#') {
-                    return;
-                }
+				if (href == '#') {
+					return;
+				}
 
-                UI.$doc.one('hide.uk.offcanvas', function() {
+				UI.$doc.one('hide.uk.offcanvas', function() {
 
-                    var target;
+					var target;
 
-                    try {
-                        target = UI.$(link[0].hash);
-                    } catch (e){
-                        target = '';
-                    }
+					try {
+						target = UI.$(link[0].hash);
+					} catch (e){
+						target = '';
+					}
 
-                    if (!target.length) {
-                        target = UI.$('[name="'+link[0].hash.replace('#','')+'"]');
-                    }
+					if (!target.length) {
+						target = UI.$('[name="'+link[0].hash.replace('#','')+'"]');
+					}
 
-                    if (target.length && UI.Utils.scrollToElement) {
-                        UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-uk-smooth-scroll') || '{}'));
-                    } else {
-                        window.location.href = href;
-                    }
-                });
+					if (target.length && UI.Utils.scrollToElement) {
+						UI.Utils.scrollToElement(target, UI.Utils.options(link.attr('data-uk-smooth-scroll') || '{}'));
+					} else {
+						window.location.href = href;
+					}
+				});
 
-                Offcanvas.hide();
-            });
+				Offcanvas.hide();
+			});
 
-            element.data('OffcanvasInit', true);
-        }
-    };
+			element.data('OffcanvasInit', true);
+		}
+	};
 
-    UI.component('offcanvasTrigger', {
+	UI.component('offcanvasTrigger', {
 
-        boot: function() {
+		boot: function() {
 
-            // init code
-            $html.on('click.offcanvas.uikit', '[data-uk-offcanvas]', function(e) {
+			// init code
+			$html.on('click.offcanvas.uikit', '[data-uk-offcanvas]', function(e) {
 
-                e.preventDefault();
+				e.preventDefault();
 
-                var ele = UI.$(this);
+				var ele = UI.$(this);
 
-                if (!ele.data('offcanvasTrigger')) {
-                    var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-uk-offcanvas')));
-                    ele.trigger("click");
-                }
-            });
+				if (!ele.data('offcanvasTrigger')) {
+					var obj = UI.offcanvasTrigger(ele, UI.Utils.options(ele.attr('data-uk-offcanvas')));
+					ele.trigger("click");
+				}
+			});
 
-            $html.on('keydown.uk.offcanvas', function(e) {
+			$html.on('keydown.uk.offcanvas', function(e) {
 
-                if (e.keyCode === 27) { // ESC
-                    Offcanvas.hide();
-                }
-            });
-        },
+				if (e.keyCode === 27) { // ESC
+					Offcanvas.hide();
+				}
+			});
+		},
 
-        init: function() {
+		init: function() {
 
-            var $this = this;
+			var $this = this;
 
-            this.options = UI.$.extend({
-                target: $this.element.is('a') ? $this.element.attr('href') : false,
-                mode: 'push'
-            }, this.options);
+			this.options = UI.$.extend({
+				target: $this.element.is('a') ? $this.element.attr('href') : false,
+				mode: 'push'
+			}, this.options);
 
-            this.on('click', function(e) {
-                e.preventDefault();
-                Offcanvas.show($this.options.target, $this.options);
-            });
-        }
-    });
+			this.on('click', function(e) {
+				e.preventDefault();
+				Offcanvas.show($this.options.target, $this.options);
+			});
+		}
+	});
 
-    UI.offcanvas = Offcanvas;
+	UI.offcanvas = Offcanvas;
 
-})(UIkit);
+})(UIkit2);

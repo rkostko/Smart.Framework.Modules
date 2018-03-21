@@ -49,18 +49,18 @@
  */
 
 .uk-dotnav {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-    /* 1 */
-    margin-left: -@dotnav-margin-horizontal;
-    margin-top: -@dotnav-margin-vertical;
-    /* 2 */
-    padding: 0;
-    list-style: none;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	/* 1 */
+	margin-left: -@dotnav-margin-horizontal;
+	margin-top: -@dotnav-margin-vertical;
+	/* 2 */
+	padding: 0;
+	list-style: none;
 }
 
 /*
@@ -69,13 +69,13 @@
  */
 
 .uk-dotnav > * {
-    /* 1 */
-    -ms-flex: none;
-    -webkit-flex: none;
-    flex: none;
-    /* 2 */
-    padding-left: @dotnav-margin-horizontal;
-    margin-top: @dotnav-margin-vertical;
+	/* 1 */
+	-ms-flex: none;
+	-webkit-flex: none;
+	flex: none;
+	/* 2 */
+	padding-left: @dotnav-margin-horizontal;
+	margin-top: @dotnav-margin-vertical;
 }
 
 /*
@@ -84,9 +84,9 @@
 
 .uk-dotnav:before,
 .uk-dotnav:after {
-    content: "";
-    display: block;
-    overflow: hidden;
+	content: "";
+	display: block;
+	overflow: hidden;
 }
 
 .uk-dotnav:after { clear: both; }
@@ -103,17 +103,17 @@
  */
 
 .uk-dotnav > * > * {
-    display: block;
-    box-sizing: content-box;
-    width: @dotnav-width;
-    height: @dotnav-height;
-    border-radius: 50%;
-    background: @dotnav-background;
-    /* 1 */
-    text-indent: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-    .hook-dotnav-item;
+	display: block;
+	box-sizing: content-box;
+	width: @dotnav-width;
+	height: @dotnav-height;
+	border-radius: 50%;
+	background: @dotnav-background;
+	/* 1 */
+	text-indent: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	.hook-dotnav-item;
 }
 
 /*
@@ -124,22 +124,22 @@
 
 .uk-dotnav > * > :hover,
 .uk-dotnav > * > :focus { // 1
-    background: @dotnav-hover-background;
-    /* 2 */
-    outline: none;
-    .hook-dotnav-item-hover;
+	background: @dotnav-hover-background;
+	/* 2 */
+	outline: none;
+	.hook-dotnav-item-hover;
 }
 
 /* OnClick */
 .uk-dotnav > * > :active {
-    background: @dotnav-onclick-background;
-    .hook-dotnav-item-onclick;
+	background: @dotnav-onclick-background;
+	.hook-dotnav-item-onclick;
 }
 
 /* Active */
 .uk-dotnav > .uk-active > * {
-    background: @dotnav-active-background;
-    .hook-dotnav-item-active;
+	background: @dotnav-active-background;
+	.hook-dotnav-item-active;
 }
 
 
@@ -147,8 +147,8 @@
  ========================================================================== */
 
 .uk-dotnav-contrast > * > * {
-    background: @dotnav-contrast-background;
-    .hook-dotnav-contrast-item;
+	background: @dotnav-contrast-background;
+	.hook-dotnav-contrast-item;
 }
 
 /*
@@ -158,20 +158,20 @@
 
 .uk-dotnav-contrast > * > :hover,
 .uk-dotnav-contrast > * > :focus { // 1
-    background: @dotnav-contrast-hover-background;
-    .hook-dotnav-contrast-item-hover;
+	background: @dotnav-contrast-hover-background;
+	.hook-dotnav-contrast-item-hover;
 }
 
 /* OnClick */
 .uk-dotnav-contrast > * > :active {
-    background: @dotnav-contrast-onclick-background;
-    .hook-dotnav-contrast-item-onclick;
+	background: @dotnav-contrast-onclick-background;
+	.hook-dotnav-contrast-item-onclick;
 }
 
 /* Active */
 .uk-dotnav-contrast > .uk-active > * {
-    background: @dotnav-contrast-active-background;
-    .hook-dotnav-contrast-item-active;
+	background: @dotnav-contrast-active-background;
+	.hook-dotnav-contrast-item-active;
 }
 
 
@@ -183,9 +183,9 @@
  */
 
 .uk-dotnav-vertical {
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+	-ms-flex-direction: column;
+	-webkit-flex-direction: column;
+	flex-direction: column;
 }
 
 /*

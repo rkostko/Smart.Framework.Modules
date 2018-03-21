@@ -32,8 +32,8 @@
 //
 
 .hook-tab() {
-    border-radius: @global-border-radius @global-border-radius 0 0;
-    text-shadow: 0 1px 0 @tab-text-shadow;
+	border-radius: @global-border-radius @global-border-radius 0 0;
+	text-shadow: 0 1px 0 @tab-text-shadow;
 }
 
 // Hover
@@ -51,30 +51,30 @@
 
 .hook-tab-misc() {
 
-    /* Modifier: `uk-tab-bottom'
-     ========================================================================== */
+	/* Modifier: `uk-tab-bottom'
+	 ========================================================================== */
 
-    .uk-tab-bottom > li > a { border-radius: 0 0 @global-border-radius @global-border-radius; }
+	.uk-tab-bottom > li > a { border-radius: 0 0 @global-border-radius @global-border-radius; }
 
 
-    /* Modifier: `uk-tab-left', `uk-tab-right'
-    ========================================================================== */
+	/* Modifier: `uk-tab-left', `uk-tab-right'
+	========================================================================== */
 
-    /* Tablet and bigger */
-    @media (min-width: @breakpoint-medium) {
+	/* Tablet and bigger */
+	@media (min-width: @breakpoint-medium) {
 
-        /*
-         * Modifier: `uk-tab-left'
-         */
+		/*
+		 * Modifier: `uk-tab-left'
+		 */
 
-        .uk-tab-left > li > a { border-radius: @global-border-radius 0 0 @global-border-radius; }
+		.uk-tab-left > li > a { border-radius: @global-border-radius 0 0 @global-border-radius; }
 
-        /*
-         * Modifier: `uk-tab-right'
-         */
+		/*
+		 * Modifier: `uk-tab-right'
+		 */
 
-        .uk-tab-right > li > a { border-radius: 0 @global-border-radius @global-border-radius 0; }
+		.uk-tab-right > li > a { border-radius: 0 @global-border-radius @global-border-radius 0; }
 
-    }
+	}
 
 }

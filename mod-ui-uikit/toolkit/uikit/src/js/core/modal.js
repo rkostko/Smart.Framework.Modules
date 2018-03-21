@@ -1,386 +1,391 @@
+/* UIkit 2.27.5 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(UI) {
 
-    "use strict";
+	"use strict";
 
-    var active = false, activeCount = 0, $html = UI.$html, body;
+	var active = false, activeCount = 0, $html = UI.$html, body;
 
-    UI.$win.on('resize orientationchange', UI.Utils.debounce(function(){
-        UI.$('.uk-modal.uk-open').each(function(){
-            return UI.$(this).data('modal') && UI.$(this).data('modal').resize();
-        });
-    }, 150));
+	UI.$win.on('resize orientationchange', UI.Utils.debounce(function(){
+		UI.$('.uk-modal.uk-open').each(function(){
+			return UI.$(this).data('modal') && UI.$(this).data('modal').resize();
+		});
+	}, 150));
 
-    UI.component('modal', {
+	UI.component('modal', {
 
-        defaults: {
-            keyboard: true,
-            bgclose: true,
-            minScrollHeight: 150,
-            center: false,
-            modal: true
-        },
+		defaults: {
+			keyboard: true,
+			bgclose: true,
+			minScrollHeight: 150,
+			center: false,
+			modal: true
+		},
 
-        scrollable: false,
-        transition: false,
-        hasTransitioned: true,
+		scrollable: false,
+		transition: false,
+		hasTransitioned: true,
 
-        init: function() {
+		init: function() {
 
-            if (!body) body = UI.$('body');
+			if (!body) body = UI.$('body');
 
-            if (!this.element.length) return;
+			if (!this.element.length) return;
 
-            var $this = this;
+			var $this = this;
 
-            this.paddingdir = 'padding-' + (UI.langdirection == 'left' ? 'right':'left');
-            this.dialog     = this.find('.uk-modal-dialog');
+			this.paddingdir = 'padding-' + (UI.langdirection == 'left' ? 'right':'left');
+			this.dialog     = this.find('.uk-modal-dialog');
 
-            this.active     = false;
+			this.active     = false;
 
-            // Update ARIA
-            this.element.attr('aria-hidden', this.element.hasClass('uk-open'));
+			// Update ARIA
+			this.element.attr('aria-hidden', this.element.hasClass('uk-open'));
 
-            this.on('click', '.uk-modal-close', function(e) {
-                e.preventDefault();
-                $this.hide();
-            }).on('click', function(e) {
+			this.on('click', '.uk-modal-close', function(e) {
 
-                var target = UI.$(e.target);
+				e.preventDefault();
 
-                if (target[0] == $this.element[0] && $this.options.bgclose) {
-                    $this.hide();
-                }
-            });
+				var modal = UI.$(e.target).closest('.uk-modal');
+				if (modal[0] === $this.element[0]) $this.hide();
 
-            UI.domObserve(this.element, function(e) { $this.resize(); });
-        },
+			}).on('click', function(e) {
 
-        toggle: function() {
-            return this[this.isActive() ? 'hide' : 'show']();
-        },
+				var target = UI.$(e.target);
 
-        show: function() {
+				if (target[0] == $this.element[0] && $this.options.bgclose) {
+					$this.hide();
+				}
+			});
 
-            if (!this.element.length) return;
+			UI.domObserve(this.element, function(e) { $this.resize(); });
+		},
 
-            var $this = this;
+		toggle: function() {
+			return this[this.isActive() ? 'hide' : 'show']();
+		},
 
-            if (this.isActive()) return;
+		show: function() {
 
-            if (this.options.modal && active) {
-                active.hide(true);
-            }
+			if (!this.element.length) return;
 
-            this.element.removeClass('uk-open').show();
-            this.resize(true);
+			var $this = this;
 
-            if (this.options.modal) {
-                active = this;
-            }
+			if (this.isActive()) return;
 
-            this.active = true;
+			if (this.options.modal && active) {
+				active.hide(true);
+			}
 
-            activeCount++;
+			this.element.removeClass('uk-open').show();
+			this.resize(true);
 
-            if (UI.support.transition) {
-                this.hasTransitioned = false;
-                this.element.one(UI.support.transition.end, function(){
-                    $this.hasTransitioned = true;
-                    UI.Utils.focus($this.dialog, 'a[href]');
-                }).addClass('uk-open');
-            } else {
-                this.element.addClass('uk-open');
-                UI.Utils.focus(this.dialog, 'a[href]');
-            }
+			if (this.options.modal) {
+				active = this;
+			}
 
-            $html.addClass('uk-modal-page').height(); // force browser engine redraw
+			this.active = true;
 
-            // Update ARIA
-            this.element.attr('aria-hidden', 'false');
+			activeCount++;
 
-            this.element.trigger('show.uk.modal');
+			if (UI.support.transition) {
+				this.hasTransitioned = false;
+				this.element.one(UI.support.transition.end, function(){
+					$this.hasTransitioned = true;
+					UI.Utils.focus($this.dialog, 'a[href]');
+				}).addClass('uk-open');
+			} else {
+				this.element.addClass('uk-open');
+				UI.Utils.focus(this.dialog, 'a[href]');
+			}
 
-            UI.Utils.checkDisplay(this.dialog, true);
+			$html.addClass('uk-modal-page').height(); // force browser engine redraw
 
-            return this;
-        },
+			// Update ARIA
+			this.element.attr('aria-hidden', 'false');
 
-        hide: function(force) {
+			this.element.trigger('show.uk.modal');
 
-            if (!force && UI.support.transition && this.hasTransitioned) {
+			UI.Utils.checkDisplay(this.dialog, true);
 
-                var $this = this;
+			return this;
+		},
 
-                this.one(UI.support.transition.end, function() {
-                    $this._hide();
-                }).removeClass('uk-open');
+		hide: function(force) {
 
-            } else {
+			if (!force && UI.support.transition && this.hasTransitioned) {
 
-                this._hide();
-            }
+				var $this = this;
 
-            return this;
-        },
+				this.one(UI.support.transition.end, function() {
+					$this._hide();
+				}).removeClass('uk-open');
 
-        resize: function(force) {
+			} else {
 
-            if (!this.isActive() && !force) return;
+				this._hide();
+			}
 
-            var bodywidth  = body.width();
+			return this;
+		},
 
-            this.scrollbarwidth = window.innerWidth - bodywidth;
+		resize: function(force) {
 
-            body.css(this.paddingdir, this.scrollbarwidth);
+			if (!this.isActive() && !force) return;
 
-            this.element.css('overflow-y', this.scrollbarwidth ? 'scroll' : 'auto');
+			var bodywidth  = body.width();
 
-            if (!this.updateScrollable() && this.options.center) {
+			this.scrollbarwidth = window.innerWidth - bodywidth;
 
-                var dh  = this.dialog.outerHeight(),
-                pad = parseInt(this.dialog.css('margin-top'), 10) + parseInt(this.dialog.css('margin-bottom'), 10);
+			body.css(this.paddingdir, this.scrollbarwidth);
 
-                if ((dh + pad) < window.innerHeight) {
-                    this.dialog.css({top: (window.innerHeight/2 - dh/2) - pad });
-                } else {
-                    this.dialog.css({top: ''});
-                }
-            }
-        },
+			this.element.css('overflow-y', this.scrollbarwidth ? 'scroll' : 'auto');
 
-        updateScrollable: function() {
+			if (!this.updateScrollable() && this.options.center) {
 
-            // has scrollable?
-            var scrollable = this.dialog.find('.uk-overflow-container:visible:first');
+				var dh  = this.dialog.outerHeight(),
+				pad = parseInt(this.dialog.css('margin-top'), 10) + parseInt(this.dialog.css('margin-bottom'), 10);
 
-            if (scrollable.length) {
+				if ((dh + pad) < window.innerHeight) {
+					this.dialog.css({top: (window.innerHeight/2 - dh/2) - pad });
+				} else {
+					this.dialog.css({top: ''});
+				}
+			}
+		},
 
-                scrollable.css('height', 0);
+		updateScrollable: function() {
 
-                var offset = Math.abs(parseInt(this.dialog.css('margin-top'), 10)),
-                dh     = this.dialog.outerHeight(),
-                wh     = window.innerHeight,
-                h      = wh - 2*(offset < 20 ? 20:offset) - dh;
+			// has scrollable?
+			var scrollable = this.dialog.find('.uk-overflow-container:visible:first');
 
-                scrollable.css({
-                    maxHeight: (h < this.options.minScrollHeight ? '':h),
-                    height:''
-                });
+			if (scrollable.length) {
 
-                return true;
-            }
+				scrollable.css('height', 0);
 
-            return false;
-        },
+				var offset = Math.abs(parseInt(this.dialog.css('margin-top'), 10)),
+				dh     = this.dialog.outerHeight(),
+				wh     = window.innerHeight,
+				h      = wh - 2*(offset < 20 ? 20:offset) - dh;
 
-        _hide: function() {
+				scrollable.css({
+					maxHeight: (h < this.options.minScrollHeight ? '':h),
+					height:''
+				});
 
-            this.active = false;
-            if (activeCount > 0) activeCount--;
-            else activeCount = 0;
+				return true;
+			}
 
-            this.element.hide().removeClass('uk-open');
+			return false;
+		},
 
-            // Update ARIA
-            this.element.attr('aria-hidden', 'true');
+		_hide: function() {
 
-            if (!activeCount) {
-                $html.removeClass('uk-modal-page');
-                body.css(this.paddingdir, "");
-            }
+			this.active = false;
+			if (activeCount > 0) activeCount--;
+			else activeCount = 0;
 
-            if (active===this) active = false;
+			this.element.hide().removeClass('uk-open');
 
-            this.trigger('hide.uk.modal');
-        },
+			// Update ARIA
+			this.element.attr('aria-hidden', 'true');
 
-        isActive: function() {
-            return this.element.hasClass('uk-open');
-        }
+			if (!activeCount) {
+				$html.removeClass('uk-modal-page');
+				body.css(this.paddingdir, "");
+			}
 
-    });
+			if (active===this) active = false;
 
-    UI.component('modalTrigger', {
+			this.trigger('hide.uk.modal');
+		},
 
-        boot: function() {
+		isActive: function() {
+			return this.element.hasClass('uk-open');
+		}
 
-            // init code
-            UI.$html.on('click.modal.uikit', '[data-uk-modal]', function(e) {
+	});
 
-                var ele = UI.$(this);
+	UI.component('modalTrigger', {
 
-                if (ele.is('a')) {
-                    e.preventDefault();
-                }
+		boot: function() {
 
-                if (!ele.data('modalTrigger')) {
-                    var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-uk-modal')));
-                    modal.show();
-                }
+			// init code
+			UI.$html.on('click.modal.uikit', '[data-uk-modal]', function(e) {
 
-            });
+				var ele = UI.$(this);
 
-            // close modal on esc button
-            UI.$html.on('keydown.modal.uikit', function (e) {
+				if (ele.is('a')) {
+					e.preventDefault();
+				}
 
-                if (active && e.keyCode === 27 && active.options.keyboard) { // ESC
-                    e.preventDefault();
-                    active.hide();
-                }
-            });
-        },
+				if (!ele.data('modalTrigger')) {
+					var modal = UI.modalTrigger(ele, UI.Utils.options(ele.attr('data-uk-modal')));
+					modal.show();
+				}
 
-        init: function() {
+			});
 
-            var $this = this;
+			// close modal on esc button
+			UI.$html.on('keydown.modal.uikit', function (e) {
 
-            this.options = UI.$.extend({
-                target: $this.element.is('a') ? $this.element.attr('href') : false
-            }, this.options);
+				if (active && e.keyCode === 27 && active.options.keyboard) { // ESC
+					e.preventDefault();
+					active.hide();
+				}
+			});
+		},
 
-            this.modal = UI.modal(this.options.target, this.options);
+		init: function() {
 
-            this.on("click", function(e) {
-                e.preventDefault();
-                $this.show();
-            });
+			var $this = this;
 
-            //methods
-            this.proxy(this.modal, 'show hide isActive');
-        }
-    });
+			this.options = UI.$.extend({
+				target: $this.element.is('a') ? $this.element.attr('href') : false
+			}, this.options);
 
-    UI.modal.dialog = function(content, options) {
+			this.modal = UI.modal(this.options.target, this.options);
 
-        var modal = UI.modal(UI.$(UI.modal.dialog.template).appendTo('body'), options);
+			this.on("click", function(e) {
+				e.preventDefault();
+				$this.show();
+			});
 
-        modal.on('hide.uk.modal', function(){
-            if (modal.persist) {
-                modal.persist.appendTo(modal.persist.data('modalPersistParent'));
-                modal.persist = false;
-            }
-            modal.element.remove();
-        });
+			//methods
+			this.proxy(this.modal, 'show hide isActive');
+		}
+	});
 
-        setContent(content, modal);
+	UI.modal.dialog = function(content, options) {
 
-        return modal;
-    };
+		var modal = UI.modal(UI.$(UI.modal.dialog.template).appendTo('body'), options);
 
-    UI.modal.dialog.template = '<div class="uk-modal"><div class="uk-modal-dialog" style="min-height:0;"></div></div>';
+		modal.on('hide.uk.modal', function(){
+			if (modal.persist) {
+				modal.persist.appendTo(modal.persist.data('modalPersistParent'));
+				modal.persist = false;
+			}
+			modal.element.remove();
+		});
 
-    UI.modal.alert = function(content, options) {
+		setContent(content, modal);
 
-        options = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
+		return modal;
+	};
 
-        var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-primary uk-modal-close">'+options.labels.Ok+'</button></div>'
-        ]).join(""), options);
+	UI.modal.dialog.template = '<div class="uk-modal"><div class="uk-modal-dialog" style="min-height:0;"></div></div>';
 
-        modal.on('show.uk.modal', function(){
-            setTimeout(function(){
-                modal.element.find('button:first').focus();
-            }, 50);
-        });
+	UI.modal.alert = function(content, options) {
 
-        return modal.show();
-    };
+		options = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
-    UI.modal.confirm = function(content, onconfirm, oncancel) {
+		var modal = UI.modal.dialog(([
+			'<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+			'<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-primary uk-modal-close">'+options.labels.Ok+'</button></div>'
+		]).join(""), options);
 
-        var options = arguments.length > 1 && arguments[arguments.length-1] ? arguments[arguments.length-1] : {};
+		modal.on('show.uk.modal', function(){
+			setTimeout(function(){
+				modal.element.find('button:first').focus();
+			}, 50);
+		});
 
-        onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
-        oncancel  = UI.$.isFunction(oncancel) ? oncancel : function(){};
-        options   = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, UI.$.isFunction(options) ? {}:options);
+		return modal.show();
+	};
 
-        var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
-        ]).join(""), options);
+	UI.modal.confirm = function(content, onconfirm, oncancel) {
 
-        modal.element.find(".js-modal-confirm, .js-modal-confirm-cancel").on("click", function(){
-            UI.$(this).is('.js-modal-confirm') ? onconfirm() : oncancel();
-            modal.hide();
-        });
+		var options = arguments.length > 1 && arguments[arguments.length-1] ? arguments[arguments.length-1] : {};
 
-        modal.on('show.uk.modal', function(){
-            setTimeout(function(){
-                modal.element.find('.js-modal-confirm').focus();
-            }, 50);
-        });
+		onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
+		oncancel  = UI.$.isFunction(oncancel) ? oncancel : function(){};
+		options   = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, UI.$.isFunction(options) ? {}:options);
 
-        return modal.show();
-    };
+		var modal = UI.modal.dialog(([
+			'<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+			'<div class="uk-modal-footer uk-text-right"><button class="uk-button js-modal-confirm-cancel">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-confirm">'+options.labels.Ok+'</button></div>'
+		]).join(""), options);
 
-    UI.modal.prompt = function(text, value, onsubmit, options) {
+		modal.element.find(".js-modal-confirm, .js-modal-confirm-cancel").on("click", function(){
+			UI.$(this).is('.js-modal-confirm') ? onconfirm() : oncancel();
+			modal.hide();
+		});
 
-        onsubmit = UI.$.isFunction(onsubmit) ? onsubmit : function(value){};
-        options  = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
+		modal.on('show.uk.modal', function(){
+			setTimeout(function(){
+				modal.element.find('.js-modal-confirm').focus();
+			}, 50);
+		});
 
-        var modal = UI.modal.dialog(([
-            text ? '<div class="uk-modal-content uk-form">'+String(text)+'</div>':'',
-            '<div class="uk-margin-small-top uk-modal-content uk-form"><p><input type="text" class="uk-width-1-1"></p></div>',
-            '<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-modal-close">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
-        ]).join(""), options),
+		return modal.show();
+	};
 
-        input = modal.element.find("input[type='text']").val(value || '').on('keyup', function(e){
-            if (e.keyCode == 13) {
-                modal.element.find('.js-modal-ok').trigger('click');
-            }
-        });
+	UI.modal.prompt = function(text, value, onsubmit, options) {
 
-        modal.element.find('.js-modal-ok').on('click', function(){
-            if (onsubmit(input.val())!==false){
-                modal.hide();
-            }
-        });
+		onsubmit = UI.$.isFunction(onsubmit) ? onsubmit : function(value){};
+		options  = UI.$.extend(true, {bgclose:false, keyboard:false, modal:false, labels:UI.modal.labels}, options);
 
-        return modal.show();
-    };
+		var modal = UI.modal.dialog(([
+			text ? '<div class="uk-modal-content uk-form">'+String(text)+'</div>':'',
+			'<div class="uk-margin-small-top uk-modal-content uk-form"><p><input type="text" class="uk-width-1-1"></p></div>',
+			'<div class="uk-modal-footer uk-text-right"><button class="uk-button uk-modal-close">'+options.labels.Cancel+'</button> <button class="uk-button uk-button-primary js-modal-ok">'+options.labels.Ok+'</button></div>'
+		]).join(""), options),
 
-    UI.modal.blockUI = function(content, options) {
+		input = modal.element.find("input[type='text']").val(value || '').on('keyup', function(e){
+			if (e.keyCode == 13) {
+				modal.element.find('.js-modal-ok').trigger('click');
+			}
+		});
 
-        var modal = UI.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content || '<div class="uk-text-center">...</div>')+'</div>'
-        ]).join(""), UI.$.extend({bgclose:false, keyboard:false, modal:false}, options));
+		modal.element.find('.js-modal-ok').on('click', function(){
+			if (onsubmit(input.val())!==false){
+				modal.hide();
+			}
+		});
 
-        modal.content = modal.element.find('.uk-modal-content:first');
+		return modal.show();
+	};
 
-        return modal.show();
-    };
+	UI.modal.blockUI = function(content, options) {
 
-    UI.modal.labels = {
-        Ok: 'Ok',
-        Cancel: 'Cancel'
-    };
+		var modal = UI.modal.dialog(([
+			'<div class="uk-margin uk-modal-content">'+String(content || '<div class="uk-text-center">...</div>')+'</div>'
+		]).join(""), UI.$.extend({bgclose:false, keyboard:false, modal:false}, options));
 
-    // helper functions
-    function setContent(content, modal){
+		modal.content = modal.element.find('.uk-modal-content:first');
 
-        if(!modal) return;
+		return modal.show();
+	};
 
-        if (typeof content === 'object') {
+	UI.modal.labels = {
+		Ok: 'Ok',
+		Cancel: 'Cancel'
+	};
 
-            // convert DOM object to a jQuery object
-            content = content instanceof jQuery ? content : UI.$(content);
+	// helper functions
+	function setContent(content, modal){
 
-            if(content.parent().length) {
-                modal.persist = content;
-                modal.persist.data('modalPersistParent', content.parent());
-            }
-        }else if (typeof content === 'string' || typeof content === 'number') {
-                // just insert the data as innerHTML
-                content = UI.$('<div></div>').html(content);
-        }else {
-                // unsupported data type!
-                content = UI.$('<div></div>').html('UIkit.modal Error: Unsupported data type: ' + typeof content);
-        }
+		if(!modal) return;
 
-        content.appendTo(modal.element.find('.uk-modal-dialog'));
+		if (typeof content === 'object') {
 
-        return modal;
-    }
+			// convert DOM object to a jQuery object
+			content = content instanceof jQuery ? content : UI.$(content);
 
-})(UIkit);
+			if(content.parent().length) {
+				modal.persist = content;
+				modal.persist.data('modalPersistParent', content.parent());
+			}
+		}else if (typeof content === 'string' || typeof content === 'number') {
+				// just insert the data as innerHTML
+				content = UI.$('<div></div>').html(content);
+		}else {
+				// unsupported data type!
+				content = UI.$('<div></div>').html('UIkit2.modal Error: Unsupported data type: ' + typeof content);
+		}
+
+		content.appendTo(modal.element.find('.uk-modal-dialog'));
+
+		return modal;
+	}
+
+})(UIkit2);

@@ -56,13 +56,13 @@
  */
 
 .uk-pagination {
-    /* 1 */
-    padding: 0;
-    list-style: none;
-    /* 2 */
-    text-align: center;
-    /* 3 */
-    font-size: 0.001px;
+	/* 1 */
+	padding: 0;
+	list-style: none;
+	/* 2 */
+	text-align: center;
+	/* 3 */
+	font-size: 0.001px;
 }
 
 /*
@@ -72,8 +72,8 @@
 
 .uk-pagination:before,
 .uk-pagination:after {
-    content: "";
-    display: table;
+	content: "";
+	display: table;
 }
 
 .uk-pagination:after { clear: both; }
@@ -88,11 +88,11 @@
  */
 
 .uk-pagination > li {
-    display: inline-block;
-    /* 1 */
-    font-size: @pagination-font-size;
-    /* 2 */
-    vertical-align: top;
+	display: inline-block;
+	/* 1 */
+	font-size: @pagination-font-size;
+	/* 2 */
+	vertical-align: top;
 }
 
 .uk-pagination > li:nth-child(n+2) { margin-left: @pagination-margin-left; }
@@ -104,16 +104,16 @@
 
 .uk-pagination > li > a,
 .uk-pagination > li > span {
-    display: inline-block;
-    min-width: @pagination-line-height + (2 * @pagination-padding-vertical) - (2 * @pagination-padding-horizontal);
-    padding: @pagination-padding-vertical @pagination-padding-horizontal;
-    line-height: @pagination-line-height;
-    text-decoration: none;
-    /* 1 */
-    box-sizing: content-box;
-    /* 2 */
-    text-align: center;
-    .hook-pagination-item;
+	display: inline-block;
+	min-width: @pagination-line-height + (2 * @pagination-padding-vertical) - (2 * @pagination-padding-horizontal);
+	padding: @pagination-padding-vertical @pagination-padding-horizontal;
+	line-height: @pagination-line-height;
+	text-decoration: none;
+	/* 1 */
+	box-sizing: content-box;
+	/* 2 */
+	text-align: center;
+	.hook-pagination-item;
 }
 
 /*
@@ -121,9 +121,9 @@
  */
 
 .uk-pagination > li > a {
-    background: @pagination-background;
-    color: @pagination-color;
-    .hook-pagination-link;
+	background: @pagination-background;
+	color: @pagination-color;
+	.hook-pagination-link;
 }
 
 /*
@@ -134,18 +134,18 @@
 
 .uk-pagination > li > a:hover,
 .uk-pagination > li > a:focus { // 1
-    background-color: @pagination-hover-background;
-    color: @pagination-hover-color;
-    /* 2 */
-    outline: none;
-    .hook-pagination-link-hover;
+	background-color: @pagination-hover-background;
+	color: @pagination-hover-color;
+	/* 2 */
+	outline: none;
+	.hook-pagination-link-hover;
 }
 
 /* OnClick */
 .uk-pagination > li > a:active {
-    background-color: @pagination-onclick-background;
-    color: @pagination-onclick-color;
-    .hook-pagination-link-active;
+	background-color: @pagination-onclick-background;
+	color: @pagination-onclick-color;
+	.hook-pagination-link-active;
 }
 
 /*
@@ -153,9 +153,9 @@
  */
 
 .uk-pagination > .uk-active > span {
-    background: @pagination-active-background;
-    color: @pagination-active-color;
-    .hook-pagination-active;
+	background: @pagination-active-background;
+	color: @pagination-active-color;
+	.hook-pagination-active;
 }
 
 /*
@@ -163,9 +163,9 @@
  */
 
 .uk-pagination > .uk-disabled > span {
-    background-color: @pagination-disabled-background;
-    color: @pagination-disabled-color;
-    .hook-pagination-disabled;
+	background-color: @pagination-disabled-background;
+	color: @pagination-disabled-color;
+	.hook-pagination-disabled;
 }
 
 

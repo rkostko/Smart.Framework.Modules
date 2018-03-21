@@ -1,14 +1,15 @@
+/* UIkit 2.27.5 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
 	var component;
 
-	if (window.UIkit) {
-		component = addon(UIkit);
+	if (window.UIkit2) {
+		component = addon(UIkit2);
 	}
 
 	if (typeof define == 'function' && define.amd) {
 		define('uikit-parallax', ['uikit'], function(){
-			return component || addon(UIkit);
+			return component || addon(UIkit2);
 		});
 	}
 
@@ -412,7 +413,7 @@
 	}
 
 	/**!
-	 * Color animation 1.6.0
+	 * @preserve Color animation 1.6.0
 	 * http://www.bitstorm.org/jquery/color-animation/
 	 * Copyright 2011, 2013 Edwin Martin <edwin@bitstorm.org>
 	 * Released under the MIT and GPL licenses.

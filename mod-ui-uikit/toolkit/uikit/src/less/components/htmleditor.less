@@ -54,7 +54,7 @@
  ========================================================================== */
 
 .uk-htmleditor {
-    .hook-htmleditor;
+	.hook-htmleditor;
 }
 
 
@@ -62,8 +62,8 @@
  ========================================================================== */
 
 .uk-htmleditor-navbar {
-    background: @htmleditor-navbar-background;
-    .hook-htmleditor-navbar;
+	background: @htmleditor-navbar-background;
+	.hook-htmleditor-navbar;
 }
 
 /*
@@ -72,8 +72,8 @@
 
 .uk-htmleditor-navbar:before,
 .uk-htmleditor-navbar:after {
-    content: "";
-    display: table;
+	content: "";
+	display: table;
 }
 
 .uk-htmleditor-navbar:after { clear: both; }
@@ -83,10 +83,10 @@
  ========================================================================== */
 
 .uk-htmleditor-navbar-nav {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    float: left;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	float: left;
 }
 
 .uk-htmleditor-navbar-nav > li { float: left; }
@@ -97,18 +97,18 @@
  */
 
 .uk-htmleditor-navbar-nav > li > a {
-    display: block;
-    box-sizing: border-box;
-    text-decoration: none;
-    /* 1 */
-    height: @htmleditor-navbar-nav-height;
-    padding: 0 @htmleditor-navbar-nav-padding-horizontal;
-    line-height: @htmleditor-navbar-nav-line-height;
-    /* 2 */
-    color: @htmleditor-navbar-nav-color;
-    font-size: 11px;
-    cursor: pointer;
-    .hook-htmleditor-navbar-nav;
+	display: block;
+	box-sizing: border-box;
+	text-decoration: none;
+	/* 1 */
+	height: @htmleditor-navbar-nav-height;
+	padding: 0 @htmleditor-navbar-nav-padding-horizontal;
+	line-height: @htmleditor-navbar-nav-line-height;
+	/* 2 */
+	color: @htmleditor-navbar-nav-color;
+	font-size: 11px;
+	cursor: pointer;
+	.hook-htmleditor-navbar-nav;
 }
 
 /*
@@ -119,24 +119,24 @@
 
 .uk-htmleditor-navbar-nav > li:hover > a,
 .uk-htmleditor-navbar-nav > li > a:focus { // 1
-    background-color: @htmleditor-navbar-nav-hover-background;
-    color: @htmleditor-navbar-nav-hover-color;
-    outline: none; /* 2 */
-    .hook-htmleditor-navbar-nav-hover;
+	background-color: @htmleditor-navbar-nav-hover-background;
+	color: @htmleditor-navbar-nav-hover-color;
+	outline: none; /* 2 */
+	.hook-htmleditor-navbar-nav-hover;
 }
 
 /* OnClick */
 .uk-htmleditor-navbar-nav > li > a:active {
-    background-color: @htmleditor-navbar-nav-onclick-background;
-    color: @htmleditor-navbar-nav-onclick-color;
-    .hook-htmleditor-navbar-nav-onclick;
+	background-color: @htmleditor-navbar-nav-onclick-background;
+	color: @htmleditor-navbar-nav-onclick-color;
+	.hook-htmleditor-navbar-nav-onclick;
 }
 
 /* Active */
 .uk-htmleditor-navbar-nav > li.uk-active > a {
-    background-color: @htmleditor-navbar-nav-active-background;
-    color: @htmleditor-navbar-nav-active-color;
-    .hook-htmleditor-navbar-nav-active;
+	background-color: @htmleditor-navbar-nav-active-background;
+	color: @htmleditor-navbar-nav-active-color;
+	.hook-htmleditor-navbar-nav-active;
 }
 
 
@@ -157,11 +157,11 @@
  ========================================================================== */
 
 .uk-htmleditor-content {
-    border-left: 1px solid @htmleditor-content-border;
-    border-right: 1px solid @htmleditor-content-border;
-    border-bottom: 1px solid @htmleditor-content-border;
-    background: @htmleditor-content-background;
-    .hook-htmleditor-content;
+	border-left: 1px solid @htmleditor-content-border;
+	border-right: 1px solid @htmleditor-content-border;
+	border-bottom: 1px solid @htmleditor-content-border;
+	background: @htmleditor-content-background;
+	.hook-htmleditor-content;
 }
 
 /*
@@ -170,8 +170,8 @@
 
 .uk-htmleditor-content:before,
 .uk-htmleditor-content:after {
-    content: "";
-    display: table;
+	content: "";
+	display: table;
 }
 
 .uk-htmleditor-content:after { clear: both; }
@@ -181,20 +181,20 @@
  ========================================================================== */
 
 .uk-htmleditor-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: @htmleditor-fullscreen-z-index;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: @htmleditor-fullscreen-z-index;
 }
 
 .uk-htmleditor-fullscreen .uk-htmleditor-content {
-    position: absolute;
-    top: @htmleditor-fullscreen-content-top;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	position: absolute;
+	top: @htmleditor-fullscreen-content-top;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 
@@ -208,9 +208,9 @@
 .uk-htmleditor-preview { box-sizing: border-box; }
 
 .uk-htmleditor-preview {
-    padding: @htmleditor-content-padding;
-    overflow-y: scroll;
-    position: relative;
+	padding: @htmleditor-content-padding;
+	overflow-y: scroll;
+	position: relative;
 }
 
 /*
@@ -226,8 +226,8 @@
 
 [data-mode='split'] .uk-htmleditor-code,
 [data-mode='split'] .uk-htmleditor-preview {
-    float: left;
-    width: 50%;
+	float: left;
+	width: 50%;
 }
 
 [data-mode='split'] .uk-htmleditor-code { border-right: 1px solid @htmleditor-content-split-border; }
@@ -237,11 +237,11 @@
  ========================================================================== */
 
 .uk-htmleditor-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 
@@ -249,8 +249,8 @@
  ========================================================================== */
 
 .uk-htmleditor .CodeMirror {
-    padding: 10px;
-    box-sizing: border-box;
+	padding: 10px;
+	box-sizing: border-box;
 }
 
 

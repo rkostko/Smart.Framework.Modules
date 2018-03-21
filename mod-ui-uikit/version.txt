@@ -1,5 +1,5 @@
 
-# Smart.Framework.Modules / UI UiKit 2.27.2.r1 #
+# Smart.Framework.Modules / UI UiKit 2.27.5.r1 #
 
 // v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
 

@@ -44,22 +44,21 @@
  */
 
 .uk-tooltip {
-    /* 1 */
-    display: none;
-    /* 2 */
-    position: absolute;
-    z-index: @tooltip-z-index;
-    /* 3 */
-    box-sizing: border-box;
-    max-width: @tooltip-max-width;
-    padding: @tooltip-padding-vertical @tooltip-padding-horizontal;
-    /* 4 */
-    background: @tooltip-background;
-    color: @tooltip-color;
-    font-size: @tooltip-font-size;
-    line-height: @tooltip-line-height;
-    word-break: break-all;
-    .hook-tooltip;
+	/* 1 */
+	display: none;
+	/* 2 */
+	position: absolute;
+	z-index: @tooltip-z-index;
+	/* 3 */
+	box-sizing: border-box;
+	max-width: @tooltip-max-width;
+	padding: @tooltip-padding-vertical @tooltip-padding-horizontal;
+	/* 4 */
+	background: @tooltip-background;
+	color: @tooltip-color;
+	font-size: @tooltip-font-size;
+	line-height: @tooltip-line-height;
+	.hook-tooltip;
 }
 
 
@@ -71,13 +70,13 @@
  */
 
 .uk-tooltip:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 0;
-    height: 0;
-    /* 1 */
-    border: @tooltip-triangle-size dashed @tooltip-background;
+	content: "";
+	display: block;
+	position: absolute;
+	width: 0;
+	height: 0;
+	/* 1 */
+	border: @tooltip-triangle-size dashed @tooltip-background;
 }
 
 
@@ -91,12 +90,12 @@
 .uk-tooltip-top:after,
 .uk-tooltip-top-left:after,
 .uk-tooltip-top-right:after {
-    bottom: -@tooltip-triangle-size;
-    border-top-style: solid;
-    border-bottom: none;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: @tooltip-background;
+	bottom: -@tooltip-triangle-size;
+	border-top-style: solid;
+	border-bottom: none;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	border-top-color: @tooltip-background;
 }
 
 /*
@@ -106,12 +105,12 @@
 .uk-tooltip-bottom:after,
 .uk-tooltip-bottom-left:after,
 .uk-tooltip-bottom-right:after {
-    top: -@tooltip-triangle-size;
-    border-bottom-style: solid;
-    border-top: none;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: @tooltip-background;
+	top: -@tooltip-triangle-size;
+	border-bottom-style: solid;
+	border-top: none;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	border-bottom-color: @tooltip-background;
 }
 
 /*
@@ -120,8 +119,8 @@
 
 .uk-tooltip-top:after,
 .uk-tooltip-bottom:after {
-    left: 50%;
-    margin-left: -@tooltip-triangle-size;
+	left: 50%;
+	margin-left: -@tooltip-triangle-size;
 }
 
 /*
@@ -143,14 +142,14 @@
  */
 
 .uk-tooltip-left:after {
-    right: -@tooltip-triangle-size;
-    top: 50%;
-    margin-top: -@tooltip-triangle-size;
-    border-left-style: solid;
-    border-right: none;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: @tooltip-background;
+	right: -@tooltip-triangle-size;
+	top: 50%;
+	margin-top: -@tooltip-triangle-size;
+	border-left-style: solid;
+	border-right: none;
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: @tooltip-background;
 }
 
 /*
@@ -158,14 +157,14 @@
  */
 
 .uk-tooltip-right:after {
-    left: -@tooltip-triangle-size;
-    top: 50%;
-    margin-top: -@tooltip-triangle-size;
-    border-right-style: solid;
-    border-left: none;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    border-right-color: @tooltip-background;
+	left: -@tooltip-triangle-size;
+	top: 50%;
+	margin-top: -@tooltip-triangle-size;
+	border-right-style: solid;
+	border-left: none;
+	border-top-color: transparent;
+	border-bottom-color: transparent;
+	border-right-color: @tooltip-background;
 }
 
 
