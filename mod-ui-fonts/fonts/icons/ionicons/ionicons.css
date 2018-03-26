@@ -9,6 +9,8 @@
   Material Design Icons: https://github.com/google/material-design-icons
   used under CC BY http://creativecommons.org/licenses/by/4.0/
   Modified icons to fit ionicon’s grid from original.
+
+  @modified by: unixman: r.180326
 */
 
 @font-face {
@@ -25,7 +27,7 @@
 	font-variant: normal !important;
 	display: inline-block;
 	font-size: 14px;
-	line-height: 1;
+	line-height: inherit; /* fix: original line height was 1, but use inherit is better for most of the situations */
 	text-decoration: none;
 	text-rendering: auto;
 	-webkit-font-smoothing: antialiased;
@@ -37,25 +39,25 @@
 }
 
 .ion-sm {
-	font-size: 0.93em !important;
+	font-size: 12px !important;
 }
 .ion-lg {
-	font-size: 1.125em !important;
+	font-size: 18px !important;
 }
 .ion-xl {
-	font-size: 1.5em !important;
+	font-size: 24px !important;
 }
 .ion-2x {
-	font-size: 2em !important;
+	font-size: 28px !important;
 }
 .ion-3x {
-	font-size: 3em !important;
+	font-size: 42px !important;
 }
 .ion-4x {
-	font-size: 4em !important;
+	font-size: 56px !important;
 }
 .ion-5x {
-	font-size: 5em !important;
+	font-size: 70px !important;
 }
 
 .ion-alert:before { content: "\f101"; }

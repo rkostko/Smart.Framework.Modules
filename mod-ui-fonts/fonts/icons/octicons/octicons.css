@@ -1,4 +1,5 @@
 /*
+Octicons v.3.5.0
 (c) 2012-2016 GitHub
 Font License: SIL OFL 1.1 (http://scripts.sil.org/OFL)
 Applies to all font files
@@ -8,12 +9,13 @@ Applies to all other files: css, html
 
 @font-face {
   font-family: 'octicons';
-  src: url('octicons.woff') format('woff'), url('octicons.ttf') format('truetype');
+  src: url('octicons.woff?v=3.5.0') format('woff'), url('octicons.ttf?v=3.5.0') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 /*
+@modified by: unixman: r.180326
 .octicon is optimized for 16px.
 .mega-octicon is optimized for 32px but can be used larger.
 */
@@ -24,7 +26,7 @@ Applies to all other files: css, html
 	font-variant: normal !important;
 	display: inline-block;
 	font-size: 14px;
-	line-height: 1;
+	line-height: inherit; /* fix: original line height was 1, but use inherit is better for most of the situations */
 	text-decoration: none;
 	text-rendering: auto;
 	-webkit-font-smoothing: antialiased;
@@ -35,9 +37,18 @@ Applies to all other files: css, html
 	user-select: none;
 }
 
-.xtra-octicon { font-size: 1.125em !important; }
-.super-octicon { font-size: 1.35em !important; }
-.mega-octicon { font-size: 2em !important; }
+.small-octicon {
+	font-size: 12px !important;
+}
+.xtra-octicon {
+	font-size: 18px !important;
+}
+.super-octicon {
+	font-size: 28px !important;
+}
+.mega-octicon {
+	font-size: 32px !important;
+}
 
 .octicon-alert:before { content: '\f02d'}
 .octicon-arrow-down:before { content: '\f03f'}
