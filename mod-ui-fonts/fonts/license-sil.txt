@@ -2,7 +2,9 @@
 =================================================================================
 This license (SIL OPEN FONT LICENSE Version 1.1) aplies for the following fonts:
 * Exo2					https://fonts.google.com/attribution
-* Source Sans Pro 		https://fonts.google.com/attribution
+* Source Sans Pro		https://fonts.google.com/attribution
+* Lato					https://fonts.google.com/attribution
+* Raleway				https://fonts.google.com/attribution
 =================================================================================
 
 Font: Exo
@@ -11,7 +13,15 @@ with Reserved Font Name Exo.
 
 Font: Source Sans Pro
 Copyright (c) 2010, 2012, 2014 Adobe Systems Incorporated (http://www.adobe.com/),
-with Reserved Font Name Source
+with Reserved Font Name Source.
+
+Font: Lato
+Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com),
+with Reserved Font Name "Lato".
+
+Font: Raleway
+Copyright (c) 2010 - 2013, Matt McInerney (matt@pixelspread.com), Pablo Impallari (impallari@gmail.com), Rodrigo Fuenzalida (hello@rfuenzalida.com),
+with Reserved Font Name "Raleway".
 
 
 =================================================================================
