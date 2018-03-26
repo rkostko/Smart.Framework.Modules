@@ -18,16 +18,21 @@ Applies to all other files: css, html
 .mega-octicon is optimized for 32px but can be used larger.
 */
 .octicon, .xtra-octicon, .super-octicon, .mega-octicon {
-  font: normal normal normal 14px/1 octicons;
-  display: inline-block;
-  text-decoration: none;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	font-family: 'octicons' !important;
+	font-style: normal !important;
+	font-weight: normal !important;
+	font-variant: normal !important;
+	display: inline-block;
+	font-size: 14px;
+	line-height: 1;
+	text-decoration: none;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .xtra-octicon { font-size: 1.125em !important; }
