@@ -29,7 +29,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180329
+ * @version 	v.180402
  * @package 	PageBuilder
  *
  */
@@ -459,7 +459,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 		//--
 		$data_arr['mode']  = (string) $arr['mode'];
-		$data_arr['title'] = (string) $arr['title'];
+		$data_arr['name'] = (string) $arr['name'];
 		//--
 		if($is_settings_segment === true) {
 			//--
@@ -828,7 +828,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		} //end if
 		//--
 
-		//print_r($data_arr); die(); // aaa
+	//	print_r($data_arr); die(); // aaa
 
 		//--
 		$arr_replacements = [];
@@ -861,13 +861,13 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 							if(((string)$plugin_part_d != '') AND ((string)$plugin_part_f != '')) {
 								//--
 								$plugin_path 	= (string) \Smart::safe_pathname((string)'modules/mod-'.$plugin_part_d.'/plugins/'.$plugin_part_f.'.php');
-								$plugin_class 	= (string) 'PageBuilderFrontendPlugin'.$this->composePluginClassName($plugin_part_d).$this->composePluginClassName($plugin_part_f);
+								$plugin_class 	= (string) 'PageBuilderFrontendPlugin'.\SmartModExtLib\PageBuilder\Utils::composePluginClassName($plugin_part_d).\SmartModExtLib\PageBuilder\Utils::composePluginClassName($plugin_part_f);
 								//--
-								if((\SmartFileSysUtils::check_if_safe_path((string)$plugin_path)) AND (\SmartFileSystem::is_type_file((string)$plugin_path))) {
+								if(((string)$plugin_path != '') AND (\SmartFileSysUtils::check_if_safe_path((string)$plugin_path)) AND (\SmartFileSystem::is_type_file((string)$plugin_path))) {
 									//--
 									require_once((string)$plugin_path);
 									//--
-									if(class_exists((string)$plugin_class)) {
+									if(((string)$plugin_class != 'PageBuilderFrontendPlugin') AND (class_exists((string)$plugin_class))) {
 										//--
 										if(is_subclass_of((string)$plugin_class, '\\SmartModExtLib\\PageBuilder\\AbstractFrontendPlugin')) {
 											//--
@@ -908,10 +908,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 													$this->PageViewSetErrorStatus((int)$plugin_page_settings['status-code'], (string)$plugin_page_settings['error']);
 												} //end if
 												//--
-												$plugin_exec['content'] = ''; 			// reset
-												$plugin_exec['title'] = ''; 			// reset
+												$plugin_exec['meta-title'] = ''; 		// reset
 												$plugin_exec['meta-description'] = ''; 	// reset
 												$plugin_exec['meta-keywords'] = ''; 	// reset
+												$plugin_exec['content'] = ''; 			// reset
 												//--
 											} elseif(((int)$plugin_page_settings['status-code'] == 301) OR ((int)$plugin_page_settings['status-code'] == 302)) {
 												//--
@@ -962,8 +962,8 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 												$this->PageViewSetCfg('modified', (int)$plugin_page_settings['modified']);
 											} //end if
 											//--
-											if((string)$plugin_exec['title'] != '') {
-												$data_arr['@title'] = (string) $plugin_exec['title'];
+											if((string)$plugin_exec['meta-title'] != '') {
+												$data_arr['@meta-title'] = (string) $plugin_exec['meta-title'];
 											} //end if
 											if((string)$plugin_exec['meta-description'] != '') {
 												$data_arr['@meta-description'] = (string) $plugin_exec['meta-description'];
@@ -1109,10 +1109,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			//--
 		} //end if
 		//--
-		if((string)$data_arr['@title'] != '') {
-			$data_arr['smart-markers']['TITLE'] = (string) $data_arr['@title'];
+		if((string)$data_arr['@meta-title'] != '') {
+			$data_arr['smart-markers']['TITLE'] = (string) $data_arr['@meta-title'];
 		} //end if
-		unset($data_arr['@title']);
+		unset($data_arr['@meta-title']);
 		if((string)$data_arr['@meta-description'] != '') {
 			$data_arr['smart-markers']['META-DESCRIPTION'] = (string) $data_arr['@meta-description'];
 		} //end if
@@ -1131,33 +1131,6 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		} //end if else
 		//--
 
-	} //END FUNCTION
-
-
-	private function composePluginClassName($str) {
-		//--
-		$arr = (array) explode('-', (string)$str);
-		//--
-		$class = '';
-		//--
-		for($i=0; $i<\Smart::array_size($arr); $i++) {
-			//--
-			$arr[$i] = (string) trim((string)$arr[$i]);
-			//--
-			if((string)$arr[$i] != '') {
-				//--
-				$arr[$i] = (string) \Smart::safe_varname((string)$arr[$i]);
-				//--
-				if((string)$arr[$i] != '') {
-					$class .= (string) ucfirst((string)$arr[$i]);
-				} //end if
-				//--
-			} //end if
-			//--
-		} //end for
-		//--
-		return (string) $class;
-		//--
 	} //END FUNCTION
 
 

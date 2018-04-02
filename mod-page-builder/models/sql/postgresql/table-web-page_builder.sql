@@ -1,5 +1,5 @@
 
--- START :: PostgreSQL Table: web / page_builder r.180329 #####
+-- START :: PostgreSQL Table: web / page_builder r.180402 #####
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -28,7 +28,7 @@ CREATE TABLE page_builder (
     active smallint DEFAULT 0 NOT NULL,
     auth smallint DEFAULT 0 NOT NULL,
     special smallint DEFAULT 0 NOT NULL,
-    title character varying(255) DEFAULT ''::character varying NOT NULL,
+    name character varying(255) DEFAULT ''::character varying NOT NULL,
     mode character varying(8) NOT NULL,
     data text DEFAULT ''::text NOT NULL,
     code text DEFAULT ''::text NOT NULL,
@@ -55,7 +55,7 @@ COMMENT ON COLUMN page_builder.ctrl IS 'Reference Controller ID, Optional';
 COMMENT ON COLUMN page_builder.active IS 'Active Status: 0=inactive ; 1=active';
 COMMENT ON COLUMN page_builder.auth IS 'Auth Status: 0 = no auth ; 1 = requires auth';
 COMMENT ON COLUMN page_builder.special IS 'Special Status: 0 = normal ; 1 = special';
-COMMENT ON COLUMN page_builder.title IS 'Record Title (for management only)';
+COMMENT ON COLUMN page_builder.name IS 'Record Name (for management only)';
 COMMENT ON COLUMN page_builder.mode IS 'Render Mode: html / markdown / text / raw / settings';
 COMMENT ON COLUMN page_builder.data IS 'Render Active Runtime';
 COMMENT ON COLUMN page_builder.code IS 'Render Code';

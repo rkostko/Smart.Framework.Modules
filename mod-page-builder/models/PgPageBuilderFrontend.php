@@ -30,7 +30,7 @@ final class PgPageBuilderFrontend {
 		} //end if
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "title", "mode", "auth", "layout", "data", "code", "meta_title", "meta_description", "meta_keywords" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0',
+			'SELECT "id", "name", "mode", "auth", "layout", "data", "code", "meta_title", "meta_description", "meta_keywords" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -47,7 +47,7 @@ final class PgPageBuilderFrontend {
 		} //end if
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "title", "mode", 0 AS "auth", \'\' AS "layout", "data", "code", \'\' AS "meta_title", \'\' AS "meta_description", \'\' AS "meta_keywords" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+			'SELECT "id", "name", "mode", 0 AS "auth", \'\' AS "layout", "data", "code", \'\' AS "meta_title", \'\' AS "meta_description", \'\' AS "meta_keywords" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]

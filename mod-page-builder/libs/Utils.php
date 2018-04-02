@@ -25,7 +25,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @access 		private
  * @internal
  *
- * @version 	v.180329
+ * @version 	v.180402
  * @package 	PageBuilder
  *
  */
@@ -49,6 +49,33 @@ final class Utils {
 	public static function renderMarkdown($markdown_code) {
 		//--
 		return (string) self::fixSafeCode((new \SmartMarkdownToHTML(true, true, true, false))->text((string)$markdown_code)); // Breaks=1,Markup=0,Links=1,Entities=1
+		//--
+	} //END FUNCTION
+
+
+	public static function composePluginClassName($str) {
+		//--
+		$arr = (array) explode('-', (string)$str);
+		//--
+		$class = '';
+		//--
+		for($i=0; $i<\Smart::array_size($arr); $i++) {
+			//--
+			$arr[$i] = (string) trim((string)$arr[$i]);
+			//--
+			if((string)$arr[$i] != '') {
+				//--
+				$arr[$i] = (string) \Smart::safe_varname((string)$arr[$i]);
+				//--
+				if((string)$arr[$i] != '') {
+					$class .= (string) ucfirst((string)$arr[$i]);
+				} //end if
+				//--
+			} //end if
+			//--
+		} //end for
+		//--
+		return (string) $class;
 		//--
 	} //END FUNCTION
 

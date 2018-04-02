@@ -1,13 +1,13 @@
-<!-- Pagebuilder/Manage @ Form / Add Record :: v.180330 -->
+<!-- Pagebuilder/Manage @ Form / Add Record :: v.180402 -->
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td align="center">[####BUTTONS.CLOSE####]</td>
+		<td align="center">[####BUTTONS-CLOSE####]</td>
 	</tr>
 </table>
 <br>
 <div id="tabs" style="width: 99%;">
 	<ul>
-		<li><a id="nolink" href="#tabs-all">[####TITLE####]</a></li>
+		<li><a id="nolink" href="#tabs-all">[####THE-TTL####]</a></li>
 	</ul>
 	<div id="tabs-all">
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -16,43 +16,36 @@
 				<td align="right">&nbsp;</td>
 			</tr>
 		</table>
-		[####REFRESH.PARENT####]
-		<form class="ux-form" method="post" name="[####FORM.NAME####]" id="[####FORM.NAME####]" action="#" onsubmit="return false;">
+		[####REFRESH-PARENT####]
+		<form class="ux-form" method="post" name="[####FORM-NAME####]" id="[####FORM-NAME####]" action="#" onsubmit="return false;">
 			<table width="100%" border="0" cellpadding="1" cellspacing="0">
 				<!-- add -->
 				<tr>
-					<td><b>[####LABELS.TYPE####]:</b></td>
+					<td><b>[####LABELS-TYPE####]:</b></td>
 					<td>&nbsp;</td>
 					<td>
-						[####CONTROLS.TYPE####]
+						[####CONTROLS-TYPE####]
 					</td>
 				</tr>
 				<tr>
-					<td><b>[####LABELS.ID####]:</b></td>
+					<td><b>[####LABELS-ID####]:</b></td>
 					<td>&nbsp;</td>
 					<td>
-						<input type="text" name="frm[id]" value="" size="65" maxlength="63" autocomplete="off" placeholder="Unique Page Slug: [a-z0-9_-]" required>
+						<input type="text" name="frm[id]" value="" size="65" maxlength="63" autocomplete="off" placeholder="Unique Object Slug: [a-z0-9_-]" required>
 					</td>
 				</tr>
 				<tr>
-					<td><b>[####LABELS.TITLE####]:</b></td>
+					<td><b>[####LABELS-NAME####]:</b></td>
 					<td>&nbsp;</td>
 					<td>
-						<input type="text" name="frm[title]" value="" size="70" maxlength="150" autocomplete="off" placeholder="Internal Page Title" required>
-					</td>
-				</tr>
-				<tr>
-					<td><b>[####LABELS.CTRL####]:</b></td>
-					<td>&nbsp;</td>
-					<td>
-						[####CONTROLS.CTRL####]
+						<input type="text" name="frm[name]" value="" size="70" maxlength="150" autocomplete="off" placeholder="Internal Object Name" required>
 					</td>
 				</tr>
 				<!-- end -->
 			</table>
 			<hr>
 			<div align="center">
-				[####BUTTONS.SUBMIT####]
+				[####BUTTONS-SUBMIT####]
 			</div>
 		</form>
 	</div>

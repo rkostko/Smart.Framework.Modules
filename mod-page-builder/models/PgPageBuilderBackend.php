@@ -50,7 +50,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordDetailsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "title", "mode" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+			'SELECT "id", "ref", "special", "name", "mode" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -86,7 +86,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordPropsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "title", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -220,7 +220,7 @@ final class PgPageBuilderBackend {
 		switch((string)strtolower((string)$y_sort)) {
 			case 'id':
 			case 'ref':
-			case 'title':
+			case 'name':
 			case 'special':
 			case 'active':
 			case 'class':
@@ -242,7 +242,7 @@ final class PgPageBuilderBackend {
 		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src);
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "title", "mode", "ref", "active", "auth", "special", "modified", (char_length("data") + char_length("code")) AS "total_size" FROM "web"."page_builder" '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
+			'SELECT "id", "name", "mode", "ref", "active", "auth", "special", "modified", (char_length("data") + char_length("code")) AS "total_size" FROM "web"."page_builder" '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
 		);
 		//--
 	} //END FUNCTION
@@ -297,8 +297,8 @@ final class PgPageBuilderBackend {
 				case 'id-ref':
 					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
 					break;
-				case 'title':
-					$where = 'WHERE ('.$wh_stat.'("title" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
+				case 'name':
+					$where = 'WHERE ('.$wh_stat.'("name" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'code':
 					$where = 'WHERE ('.$wh_stat.'(smart_str_striptags("code") ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\'))';

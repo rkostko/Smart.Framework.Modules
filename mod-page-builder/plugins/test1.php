@@ -1,6 +1,8 @@
 <?php
+// [@[#[!SF.DEV-ONLY!]#]@]
 // (c) 2006-2018 unix-world.org - all rights reserved
 // Author: Radu Ovidiu I.
+// r.180402
 
 //----------------------------------------------------- PREVENT DIRECT EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -13,7 +15,12 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 //===================================================================================== CLASS START
 //=====================================================================================
 
-
+/**
+ * PageBuilder Plugin
+ *
+ * @ignore
+ *
+ */
 final class PageBuilderFrontendPluginPageBuilderTest1 extends \SmartModExtLib\PageBuilder\AbstractFrontendPlugin {
 
 
@@ -23,7 +30,7 @@ final class PageBuilderFrontendPluginPageBuilderTest1 extends \SmartModExtLib\Pa
 		//$this->PageViewSetCfg('rawpage', true);
 		//--
 		$this->PageViewSetVars([
-			'title' 			=> 'Title (override) comes from Plugin1',
+			'meta-title' 		=> 'Title (override) comes from Plugin1',
 			'meta-description' 	=> 'Meta desc. comes from Plugin1',
 			'meta-keywords' 	=> 'meta, keywords, come, from, plugin1',
 			'content' 			=> '<div>this is Plugin1 Test</div>',

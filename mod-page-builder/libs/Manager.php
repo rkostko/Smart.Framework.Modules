@@ -45,7 +45,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180330
+ * @version 	v.180402
  * @package 	PageBuilder
  *
  */
@@ -68,7 +68,7 @@ final class Manager {
 		$text = array();
 		//--
 
-		//-- titles
+		//-- ttls
 		$text['ttl_list'] 			= 'Objects List';
 		$text['ttl_add'] 			= 'Add New Object';
 		$text['ttl_edt'] 			= 'Edit Object Properties';
@@ -113,7 +113,7 @@ final class Manager {
 		$text['err_3'] 				= 'ID already in use !';
 		$text['err_4'] 				= 'Invalid ID';
 		$text['err_5'] 				= 'An error occured. Please try again !';
-		$text['err_6'] 				= 'Invalid Title for Object';
+		$text['err_6'] 				= 'Invalid Name for Object';
 		$text['err_7'] 				= 'Some Edit Fields are not allowed here !';
 		$text['err_8']				= 'Required Objects cannot be deleted !';
 		//-- messages
@@ -131,7 +131,7 @@ final class Manager {
 		$text['meta_ttl'] 			= 'Meta Title';
 		$text['meta_desc'] 			= 'Meta Description';
 		$text['meta_key'] 			= 'Meta Keywords';
-		$text['title'] 				= 'Title';
+		$text['name'] 				= 'Name';
 		$text['active']				= 'Active';
 		$text['lst_pg_active']		= 'Active Pages';
 		$text['lst_pg_inactive']	= 'Inactive Pages';
@@ -195,9 +195,9 @@ final class Manager {
 		} //end switch
 		//--
 		if(self::testIsSegmentPage($query['id'])) {
-			$draw_title = '<font color="#003399">'.\Smart::escape_html($query['title']).'<font>';
+			$draw_name = '<font color="#003399">'.\Smart::escape_html($query['name']).'<font>';
 		} else {
-			$draw_title = \Smart::escape_html($query['title']);
+			$draw_name = \Smart::escape_html($query['name']);
 		} //end if else
 		//--
 		$translator_window = \SmartTextTranslations::getTranslator('@core', 'window');
@@ -207,20 +207,20 @@ final class Manager {
 		$out .= \SmartComponents::html_jsload_editarea();
 		$out .= '<script>'.\SmartComponents::js_code_init_away_page('The changes will be lost !').'</script>';
 		$out .= \SmartMarkersTemplating::render_file_template(
-			self::$ModulePath.'libs/views/manager/view-record.mtpl.htm',
+			(string) self::$ModulePath.'libs/views/manager/view-record.mtpl.htm',
 			[
-				'TITLE.id'			=> \Smart::escape_html($query['id']),
-				'TITLE.title' 		=> $draw_title,
-				'BUTTONS.close' 	=> '<input type="button" value="'.\Smart::escape_html($translator_window->text('button_close')).'" class="ux-button" onClick="SmartJS_BrowserUtils.CloseModalPopUp(); return false;">',
-				'TAB.Title.props'	=> '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/props.svg'.'" alt="'.self::text('tab_props').'" title="'.self::text('tab_props').'">'.'&nbsp;'.self::text('tab_props'),
-				'TAB.Link.props'	=> self::composeUrl('op=record-view-tab-props&id='.\Smart::escape_url($query['id'])),
-				'TAB.Title.code'	=> self::getImgForCodeType($query['id'], $query['mode']).'&nbsp;'.self::text('tab_code'),
-				'TAB.Link.code'		=> self::composeUrl('op='.$action_code.'&id='.\Smart::escape_url($query['id'])),
-				'TAB.Title.data'	=> self::getImgForCodeType('#', 'settings').'&nbsp;'.self::text('tab_data'),
-				'TAB.Link.data'		=> self::composeUrl('op=record-view-tab-data&id='.\Smart::escape_url($query['id'])),
-				'TAB.Title.info'	=> '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/info.svg'.'" alt="'.self::text('tab_info').'" title="'.self::text('tab_info').'">'.'&nbsp;'.self::text('tab_info'),
-				'TAB.Link.info'		=> self::composeUrl('op=record-view-tab-info&id='.\Smart::escape_url($query['id'])),
-				'JS-TABS'			=> '<script type="text/javascript">SmartJS_BrowserUIUtils.Tabs_Init(\'tabs\', '.(int)$selected_tab.', false);</script>'
+				'RECORD-ID'			=> (string) \Smart::escape_html($query['id']),
+				'RECORD-NAME' 		=> (string) $draw_name,
+				'BUTTONS-CLOSE' 	=> (string) '<input type="button" value="'.\Smart::escape_html($translator_window->text('button_close')).'" class="ux-button" onClick="SmartJS_BrowserUtils.CloseModalPopUp(); return false;">',
+				'TAB-TXT-PROPS'		=> (string) '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/props.svg'.'" alt="'.self::text('tab_props').'" title="'.self::text('tab_props').'">'.'&nbsp;'.self::text('tab_props'),
+				'TAB-LNK-PROPS'		=> (string) self::composeUrl('op=record-view-tab-props&id='.\Smart::escape_url($query['id'])),
+				'TAB-TXT-CODE'		=> (string) self::getImgForCodeType($query['id'], $query['mode']).'&nbsp;'.self::text('tab_code'),
+				'TAB-LNK-CODE'		=> (string) self::composeUrl('op='.$action_code.'&id='.\Smart::escape_url($query['id'])),
+				'TAB-TXT-DATA'		=> (string) '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/syntax-data.svg'.'" alt="'.self::text('tab_data').'" title="'.self::text('tab_data').'">'.'&nbsp;'.self::text('tab_data'),
+				'TAB-LNK-DATA'		=> (string) self::composeUrl('op=record-view-tab-data&id='.\Smart::escape_url($query['id'])),
+				'TAB-TXT-INFO'		=> (string) '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/info.svg'.'" alt="'.self::text('tab_info').'" title="'.self::text('tab_info').'">'.'&nbsp;'.self::text('tab_info'),
+				'TAB-LNK-INFO'		=> (string) self::composeUrl('op=record-view-tab-info&id='.\Smart::escape_url($query['id'])),
+				'JS-TABS'			=> (string) '<script type="text/javascript">SmartJS_BrowserUIUtils.Tabs_Init(\'tabs\', '.(int)$selected_tab.', false);</script>'
 			]
 		);
 		//--
@@ -256,7 +256,7 @@ final class Manager {
 			$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
 			//--
-			$fld_title = '<input type="text" name="frm[title]" value="'.\Smart::escape_html($query['title']).'" size="70" maxlength="150" autocomplete="off" placeholder="Internal Page Title" required>';
+			$fld_name = '<input type="text" name="frm[name]" value="'.\Smart::escape_html($query['name']).'" size="70" maxlength="150" autocomplete="off" placeholder="Internal Page Title" required>';
 			//--
 			if(((string)$query['mode'] == 'raw') OR ((string)$query['mode'] == 'settings')) { // raw or settings cannot be changed to other modes !
 				unset($arr_pmodes['html']);
@@ -269,7 +269,7 @@ final class Manager {
 				$fld_pmode = \SmartComponents::html_select_list_single('pmode', $query['mode'], 'form', $arr_pmodes, 'frm[mode]', '150/0', '', 'no', 'no');
 			} //end if else
 			//--
-			$fld_ctrl = self::drawListAreas($query['ctrl'], 'form', 'webpages', 'frm[ctrl]');
+			$fld_ctrl = self::drawListAreas($query['ctrl'], 'form', 'frm[ctrl]');
 			$fld_special = \SmartComponents::html_selector_true_false('frm[special]', $query['special']);
 			$fld_active = \SmartComponents::html_selector_true_false('frm[active]', $query['active']);
 			$fld_auth = \SmartComponents::html_selector_true_false('frm[auth]', $query['auth']);
@@ -296,9 +296,9 @@ final class Manager {
 				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/no-hash.svg'.'" alt="'.self::text('msg_invalid_cksum').'" title="'.self::text('msg_invalid_cksum').'" style="cursor:help;">';
 			} //end if
 			//--
-			$fld_title = \Smart::escape_html($query['title']);
+			$fld_name = \Smart::escape_html($query['name']);
 			$fld_pmode = \SmartComponents::html_select_list_single('pmode', $query['mode'], 'list', $arr_pmodes);
-			$fld_ctrl = self::drawListAreas($query['ctrl'], 'list', 'webpages');
+			$fld_ctrl = self::drawListAreas($query['ctrl'], 'list');
 			$fld_special = \SmartComponents::html_selector_true_false('', $query['special']);
 			$fld_active = \SmartComponents::html_selector_true_false('', $query['active']);
 			$fld_auth = \SmartComponents::html_selector_true_false('', $query['auth']);
@@ -332,31 +332,31 @@ final class Manager {
 		} //end if else
 		//--
 		$out = \SmartMarkersTemplating::render_file_template(
-			$the_template,
+			(string) $the_template,
 			[
-				'BUTTONS'					=> $bttns,
-				'CODE-TYPE'					=> $codetype,
-				'TEXT.title'				=> self::text('title'),
-				'FIELD.title' 				=> $fld_title,
-				'TEXT.ctrl'					=> self::text('ctrl'),
-				'FIELD.ctrl' 				=> $fld_ctrl,
-				'TEXT.pmode'				=> self::text('record_syntax'),
-				'FIELD.pmode' 				=> $fld_pmode,
-				'TEXT.special'				=> self::text('special'),
-				'FIELD.special' 			=> $fld_special,
-				'TEXT.active'				=> self::text('active'),
-				'FIELD.active'				=> $fld_active,
-				'TEXT.auth'					=> self::text('login'),
-				'FIELD.auth'				=> $fld_auth,
-				'TEXT.layout'				=> self::text('layout'),
-				'FIELD.layout'				=> $fld_layout,
-				'TEXT.meta-title'			=> self::text('meta_ttl'),
-				'FIELD.meta-title'			=> $fld_meta_ttl,
-				'TEXT.meta-description' 	=> self::text('meta_desc'),
-				'FIELD.meta-description' 	=> $fld_meta_desc,
-				'TEXT.meta-keywords'		=> self::text('meta_key'),
-				'FIELD.meta-keywords'		=> $fld_meta_key,
-				'MODE-PAGETYPE' 			=> $query['mode']
+				'BUTTONS'					=> (string) $bttns,
+				'CODE-TYPE'					=> (string) $codetype,
+				'TEXT-NAME'					=> (string) self::text('name'),
+				'FIELD-NAME' 				=> (string) $fld_name,
+				'TEXT-CTRL'					=> (string) self::text('ctrl'),
+				'FIELD-CTRL' 				=> (string) $fld_ctrl,
+				'TEXT-PMODE'				=> (string) self::text('record_syntax'),
+				'FIELD-PMODE' 				=> (string) $fld_pmode,
+				'TEXT-SPECIAL'				=> (string) self::text('special'),
+				'FIELD-SPECIAL'				=> (string) $fld_special,
+				'TEXT-ACTIVE'				=> (string) self::text('active'),
+				'FIELD-ACTIVE'				=> (string) $fld_active,
+				'TEXT-AUTH'					=> (string) self::text('login'),
+				'FIELD-AUTH'				=> (string) $fld_auth,
+				'TEXT-LAYOUT'				=> (string) self::text('layout'),
+				'FIELD-LAYOUT'				=> (string) $fld_layout,
+				'TEXT-META-TITLE'			=> (string) self::text('meta_ttl'),
+				'FIELD-META-TITLE'			=> (string) $fld_meta_ttl,
+				'TEXT-META-DESCRIPTION' 	=> (string) self::text('meta_desc'),
+				'FIELD-META-DESCRIPTION' 	=> (string) $fld_meta_desc,
+				'TEXT-META-KEYWORDS'		=> (string) self::text('meta_key'),
+				'FIELD-META-KEYWORDS'		=> (string) $fld_meta_key,
+				'MODE-PAGETYPE' 			=> (string) $query['mode']
 			]
 		);
 		//--
@@ -388,7 +388,7 @@ final class Manager {
 				//--
 				if((string)$query['mode'] == 'settings') {
 					//--
-					$out .= '<div align="center" title="'.\Smart::escape_html($query['code']).'"><img src="'.self::$ModulePath.'libs/views/manager/img/syntax-data-only.svg" width="256" height="256" alt="Settings Page" title="Settings Page" style="opacity:0.7"></div>';
+					$out .= '<div align="center" title="'.\Smart::escape_html($query['code']).'"><img src="'.self::$ModulePath.'libs/views/manager/img/syntax-settings.svg" width="256" height="256" alt="Settings Page" title="Settings Page" style="opacity:0.7"></div>';
 					//--
 				} else {
 					//-- EDITOR
@@ -442,7 +442,7 @@ final class Manager {
 				//--
 				if((string)$query['mode'] == 'settings') {
 					//--
-					$out .= '<div align="center" title="'.\Smart::escape_html($query['code']).'"><img src="'.self::$ModulePath.'libs/views/manager/img/syntax-data-only.svg" width="256" height="256" alt="Settings Page" title="Settings Page" style="opacity:0.7"></div>';
+					$out .= '<div align="center" title="'.\Smart::escape_html($query['code']).'"><img src="'.self::$ModulePath.'libs/views/manager/img/syntax-settings.svg" width="256" height="256" alt="Settings Page" title="Settings Page" style="opacity:0.7"></div>';
 					//--
 				} else {
 					//--
@@ -623,16 +623,16 @@ final class Manager {
 		} //end if else
 		//--
 		return (string) \SmartMarkersTemplating::render_file_template(
-			$the_template,
+			(string) $the_template,
 			[
-				'TEXT.views'		=> self::text('views'),
-				'FIELD.views' 		=> \Smart::escape_html($query['views']),
-				'TEXT.modified'		=> self::text('modified'),
-				'FIELD.modified' 	=> \Smart::escape_html($query['modified']),
-				'TEXT.admin'		=> self::text('admin'),
-				'FIELD.admin' 		=> \Smart::escape_html($query['admin']),
-				'TEXT.published'	=> self::text('published'),
-				'FIELD.published' 	=> \Smart::escape_html(date('Y-m-d H:i:s', $query['published']))
+				'TEXT-VIEWS'		=> (string) self::text('views'),
+				'FIELD-VIEWS' 		=> (string) \Smart::escape_html($query['views']),
+				'TEXT-MODIFIED'		=> (string) self::text('modified'),
+				'FIELD-MODIFIED' 	=> (string) \Smart::escape_html($query['modified']),
+				'TEXT-ADMIN'		=> (string) self::text('admin'),
+				'FIELD-ADMIN' 		=> (string) \Smart::escape_html($query['admin']),
+				'TEXT-PUBLISHED'	=> (string) self::text('published'),
+				'FIELD-PUBLISHED' 	=> (string) \Smart::escape_html(date('Y-m-d H:i:s', $query['published']))
 			]
 		);
 		//--
@@ -649,24 +649,22 @@ final class Manager {
 		//--
 		$out .= '<script>'.\SmartComponents::js_code_init_away_page('The changes will be lost !').'</script>';
 		$out .= \SmartMarkersTemplating::render_file_template(
-			self::$ModulePath.'libs/views/manager/view-record-frm-add.mtpl.htm',
+			(string) self::$ModulePath.'libs/views/manager/view-record-frm-add.mtpl.htm',
 			[
-				'BUTTONS.close' 	=> '<input type="button" value="'.\Smart::escape_html($translator_window->text('button_close')).'" class="ux-button" onClick="SmartJS_BrowserUtils.CloseModalPopUp(); return false;">',
-				'TITLE' 			=> self::text('ttl_add'),
-				'REFRESH.parent' 	=> '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>',
-				'FORM.name' 		=> 'web_pages_add',
-				'LABELS.type'		=> self::text('segment_page'),
-				'CONTROLS.type' 	=> \SmartComponents::html_select_list_single('ptype', '', 'form', array('html-page' => 'Page - HTML Syntax', 'markdown-page' => 'Page - Markdown Syntax', 'text-page' => 'Page - Text Syntax', 'raw-page' => 'Page - Raw', 'html-segment' => 'Segment Page - HTML Syntax', 'markdown-segment' => 'Segment Page - Markdown Syntax', 'text-segment' => 'Segment Page - Text Syntax', 'settings-segment' => 'Segment Page - Settings'), 'frm[ptype]', '275/0', '', 'no', 'no'),
-				'LABELS.id'			=> self::text('id'),
-				'LABELS.title'		=> self::text('title'),
-				'LABELS.ctrl'		=> self::text('ctrl'),
-				'CONTROLS.class'	=> self::drawListAreas('', 'form', 'webpages', 'frm[ctrl]'),
-				'BUTTONS.submit' 	=> '<button class="ux-button ux-button-highlight" type="button" onClick="'.\SmartComponents::js_ajax_submit_html_form('web_pages_add', self::composeUrl('op=record-add-do')).' return false;">'.' &nbsp; '.'<i class="fa fa-floppy-o"></i>'.' &nbsp; '.self::text('save').'</button>'
+				'BUTTONS-CLOSE' 	=> (string) '<input type="button" value="'.\Smart::escape_html($translator_window->text('button_close')).'" class="ux-button" onClick="SmartJS_BrowserUtils.CloseModalPopUp(); return false;">',
+				'THE-TTL' 			=> (string) '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/op-add.svg'.'" alt="'.self::text('ttl_add').'" title="'.self::text('ttl_add').'">'.'&nbsp;'.self::text('ttl_add'),
+				'REFRESH-PARENT' 	=> (string) '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>',
+				'FORM-NAME' 		=> (string) 'page_form_add',
+				'LABELS-TYPE'		=> (string) self::text('record_syntax'), // aaa aaa
+				'CONTROLS-TYPE' 	=> (string) \SmartComponents::html_select_list_single('ptype', '', 'form', array('html-page' => 'Page - HTML Syntax', 'markdown-page' => 'Page - Markdown Syntax', 'text-page' => 'Page - Text Syntax', 'raw-page' => 'Page - Raw', 'html-segment' => 'Segment Page - HTML Syntax', 'markdown-segment' => 'Segment Page - Markdown Syntax', 'text-segment' => 'Segment Page - Text Syntax', 'settings-segment' => 'Segment Page - Settings'), 'frm[ptype]', '275/0', '', 'no', 'no'),
+				'LABELS-ID'			=> (string) self::text('id'),
+				'LABELS-NAME'		=> (string) self::text('name'),
+				'BUTTONS-SUBMIT' 	=> (string) '<button class="ux-button ux-button-highlight" type="button" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_add', self::composeUrl('op=record-add-do')).' return false;">'.' &nbsp; '.'<i class="fa fa-floppy-o"></i>'.' &nbsp; '.self::text('save').'</button>'
 			],
 			'no'
 		);
 		//--
-		return $out;
+		return (string) $out;
 		//--
 	} //END FUNCTION
 	//==================================================================
@@ -703,8 +701,8 @@ final class Manager {
 						$data = array();
 						//--
 						$data['id'] = (string) $y_frm['id'];
-						$data['id'] = \Smart::safe_validname($data['id'], ''); // allow: [a-z0-9] _ - . @
-						$data['id'] = str_replace(array('.', '@'), array('-', '-'), $data['id']); // dissalow: . @ [@ is for special pages ; . will conflict with SmartFramework style pages like module.page when using Semantic URL Rules ; @ is reserved for special pages ]
+						$data['id'] = (string) \Smart::safe_validname($data['id'], ''); // allow: [a-z0-9] _ - . @
+						$data['id'] = (string) str_replace(array('.', '@'), array('-', '-'), (string)$data['id']); // dissalow: . @ [@ is for special pages ; . will conflict with SmartFramework style pages like module.page when using Semantic URL Rules ; @ is reserved for special pages ]
 						//--
 						switch((string)$y_frm['ptype']) {
 							case 'settings-segment':
@@ -740,9 +738,9 @@ final class Manager {
 						$redirect = self::composeUrl('op=record-view&id='.\Smart::escape_url($data['id']));
 						//--
 						$data['ref'] = ''; // reference parent, by default is empty
-						$data['title'] = (string) trim((string)$y_frm['title']);
+						$data['name'] = (string) trim((string)$y_frm['name']);
 						$data['active'] = '0'; // the page will be inactive at creation time
-						$data['ctrl'] = (string) trim((string)$y_frm['ctrl']);
+						$data['ctrl'] = '';
 						$data['published'] = time();
 						//--
 						if((string)$error == '') {
@@ -757,7 +755,7 @@ final class Manager {
 							} //end if
 						} //end if
 						if((string)$error == '') {
-							if((string)$data['title'] == '') {
+							if((string)$data['name'] == '') {
 								$error = self::text('err_6')."\n"; // invalid (empty) Title
 							} //end if
 						} //end if
@@ -798,14 +796,16 @@ final class Manager {
 						//--
 						$data = array();
 						//--
-						$data['title'] = trim($y_frm['title']);
+						$data['name'] = trim((string)$y_frm['name']);
 						if((string)$error == '') {
-							if((string)$data['title'] == '') {
+							if((string)$data['name'] == '') {
 								$error = self::text('err_6')."\n"; // invalid (empty) Title
 							} //end if
 						} //end if
 						//--
 						$data['ctrl'] = (string) trim((string)$y_frm['ctrl']);
+						$data['ctrl'] = (string) \Smart::safe_validname($data['ctrl'], ''); // allow: [a-z0-9] _ - . @
+						$data['ctrl'] = (string) str_replace('@', '', (string)$data['ctrl']); // dissalow: @ (this should allow valid controllers names)
 						//--
 						if(((\SmartAuth::test_login_privilege('superadmin') !== true) AND (\SmartAuth::test_login_privilege('pagebuilder_manager') !== true)) AND ((string)$query['special'] == '0') AND ((string)$y_frm['special'] == '1')) {
 							// avoid unprivileged admins to mark a page as special
@@ -860,6 +860,7 @@ final class Manager {
 							//--
 						} else {
 							//--
+							$data['ctrl'] = '';
 							$data['layout'] = '';
 							$data['mode'] = strtolower(trim($y_frm['mode']));
 							switch((string)$data['mode']) {
@@ -1075,7 +1076,7 @@ final class Manager {
 			//--
 		} else {
 			//-- aaa !!! TODO: finalize delete form !!!
-			$out .= '<br>'.self::deleteForm(self::text('ttl_del').' ?', $tmp_rd_arr['id'], self::composeUrl('op=record-delete'), '', '700', '', \Smart::escape_html($tmp_rd_arr['title']), 'yes');
+			$out .= '<br>'.self::deleteForm(self::text('ttl_del').' ?', $tmp_rd_arr['id'], self::composeUrl('op=record-delete'), '', '700', '', \Smart::escape_html($tmp_rd_arr['name']), 'yes');
 			//--
 		} //end if else
 		//--
@@ -1162,7 +1163,7 @@ final class Manager {
 			switch((string)$y_type) {
 				case 'settings':
 					$ttl = 'SETTINGS SEGMENT Page';
-					$img = self::$ModulePath.'libs/views/manager/img/syntax-data-only.svg';
+					$img = self::$ModulePath.'libs/views/manager/img/syntax-settings.svg';
 					break;
 				case 'text':
 					$ttl = 'TEXT SEGMENT Page';
@@ -1272,9 +1273,13 @@ final class Manager {
 
 
 	//==================================================================
-	private static function drawListAreas($y_id, $y_mode, $y_type, $y_var='', $y_width='350') {
+	private static function drawListAreas($y_id, $y_mode, $y_var='', $y_width='65') {
 		//--
-		return \SmartComponents::html_select_list_single('', $y_id, $y_mode, array('default', 'Default'), $y_var, $y_width);
+		if((string)$y_mode == 'form') {
+			return (string) '<input type="text" name="'.\Smart::escape_html((string)$y_var).'" value="'.\Smart::escape_html((string)$y_id).'" size="'.\Smart::format_number_int($y_width,'+').'" maxlength="63" autocomplete="off" placeholder="Unique Object Slug: [a-z0-9_-]" required>';
+		} else {
+			return (string) \Smart::escape_html($y_id);
+		} //end if else
 		//--
 	} //END FUNCTION
 	//==================================================================
@@ -1298,10 +1303,11 @@ private static function deleteForm() {
 	public static function ViewDisplayListTable() {
 		//--
 		return (string) \SmartMarkersTemplating::render_file_template(
-			self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
+			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
 			[
-				'TITLE' 			=> 'PageBuilder Objects',
+				'LIST-TTL' 			=> 'PageBuilder Objects',
 				'LIST-JSON-URL' 	=> (string) self::composeUrl('op=records-list-json&'),
+				'LIST-NEW-URL' 		=> (string) self::composeUrl('op=record-add-form'),
 				'LIST-RECORD-URL' 	=> (string) self::composeUrl('op=record-view&id='),
 			]
 		);

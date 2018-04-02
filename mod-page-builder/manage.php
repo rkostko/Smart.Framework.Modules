@@ -2,7 +2,7 @@
 // Controller: PageBuilder/Manage
 // Route: ?/page/page-builder.manage
 // Author: unix-world.org
-// r.2018.03.30
+// r.180402
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -18,6 +18,13 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 
 
 	public function Run() {
+
+		//-- test DB
+		if(Smart::array_size($this->ConfigParamGet('pgsql')) <= 0) {
+			$this->PageViewSetErrorStatus(503, 'ERROR: Service Unavailable, Database not set ...');
+			return;
+		} //end if
+		//--
 
 		//--
 		$this->PageViewSetCfg('template-path', 'default');

@@ -1,5 +1,5 @@
-<!-- Pagebuilder/Manage @ List / Records :: v.180330 -->
-<div style="margin-bottom:5px;"><h1 style="display:inline-block;">[####TITLE|html####]</h1></div>
+<!-- Pagebuilder/Manage @ List / Records :: v.180402 -->
+<div style="margin-bottom:5px;"><h1 style="display:inline-block;">[####LIST-TTL|html####]</h1></div>
 <style>
 	.smartGrid_AlignCenter {
 		text-align: center;
@@ -43,6 +43,7 @@
 	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="Search ..." value="" class="ux-input-def ux-input-1-3 "></span></td>
 	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">Filter &nbsp; <i class="fa fa-filter"></i></button></td>
 	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">Reset &nbsp; <i class="fa fa-times"></i></button></td>
+	<td><a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">Add New &nbsp; <i class="fa fa-plus"></i></a></td>
 	<td><div style="width:32px;">&nbsp;</div></td>
 	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">List / Records :: <span id="infoTotalRows"># / # @</span></span></td>
 	</tr></table>
@@ -60,7 +61,7 @@ jQuery(function() {
 	// Grid Data Defs
 	var columns = [
 		{id:'id', field:'id', name:'ID', sortable:true, width:100, cssClass:'smartGrid_Highlight', editor:TextCellSelector, formatter:displayID},
-		{id:'title', field:'title', name:'Title', sortable:true, defaultSortDir:1, width:110, cssClass:'smartGrid_Important', editor:TextCellSelector},
+		{id:'name', field:'name', name:'Name', sortable:true, defaultSortDir:1, width:110, cssClass:'smartGrid_Important', editor:TextCellSelector},
 		{id:'mode', field:'mode', name:'Syntax', sortable:true, defaultSortDir:1, width:110, editor:TextCellSelector},
 	];
 
