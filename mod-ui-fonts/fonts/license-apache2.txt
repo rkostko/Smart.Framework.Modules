@@ -2,6 +2,7 @@
 =========================================================================
 This license (Apache License 2.0) aplies for the following fonts:
 * Noto			https://fonts.google.com/attribution
+* OpenSans		https://fonts.google.com/attribution
 * Roboto 		https://fonts.google.com/attribution
 =================================================================================
 

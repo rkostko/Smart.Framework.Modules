@@ -1,0 +1,104 @@
+<!-- Pagebuilder/Manage @ List / Records :: v.180330 -->
+<div style="margin-bottom:5px;"><h1 style="display:inline-block;">[####TITLE|html####]</h1></div>
+<style>
+	.smartGrid_AlignCenter {
+		text-align: center;
+	}
+	.smartGrid_AlignRight {
+		text-align: right;
+	}
+	.smartGrid_Highlight {
+		font-weight: bold;
+	}
+	.smartGrid_Important {
+		font-weight: bold;
+	}
+	.smartGrid_column_UUID {
+		color: #999999;
+		text-align: center;
+	}
+	.smartGrid_HeadHighlight {
+		background-color: #999999 !important;
+		color: #FFFFFF !important;
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="lib/js/jquery/pager/simplePagination.css">
+<script type="text/javascript" src="lib/js/jquery/pager/jquery.simplePagination.js"></script>
+<script type="text/javascript" src="lib/js/jquery/jquery.event.drag.js"></script>
+<script type="text/javascript" src="lib/js/jquery/jquery.event.drop.js"></script>
+<script type="text/javascript" src="lib/js/jquery/jquery.simulate.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/js/jquery/slickgrid/slick.grid.css">
+<link rel="stylesheet" type="text/css" href="lib/js/jquery/slickgrid/slick.grid-fixes.css">
+<script type="text/javascript" src="lib/js/jquery/slickgrid/slick.grid.js"></script>
+<script type="text/javascript" src="lib/js/jquery/slickgrid/slick.editors.js"></script>
+<script type="text/javascript" src="lib/js/jquery/slickgrid/smart-grid.js"></script>
+<script type="text/javascript">
+	//--
+	var IdOfGrid = 'PageBuilderSlickGrid';
+	var TheGrid = new Smart_Grid(IdOfGrid, 'infoTotalRows', '[####LIST-JSON-URL|js####]', 'PageBuilder_Smart_Slickgrid_List', 'id', 'ASC', '', 'filtering');
+	//--
+</script>
+<form id="filtering" name="filtering" class="ux-form">
+	<table><tr>
+	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="Search ..." value="" class="ux-input-def ux-input-1-3 "></span></td>
+	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">Filter &nbsp; <i class="fa fa-filter"></i></button></td>
+	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">Reset &nbsp; <i class="fa fa-times"></i></button></td>
+	<td><div style="width:32px;">&nbsp;</div></td>
+	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">List / Records :: <span id="infoTotalRows"># / # @</span></span></td>
+	</tr></table>
+</form>
+<br>
+<div id="PageBuilderNavPager"></div>
+<form class="ux-form"><div id="PageBuilderSlickGrid" class="slickgrid-table" style="font-size:10px;width:100%;height:10px;"></div></form>
+<script type="text/javascript">
+jQuery(function() {
+
+	var displayID = function(row, cell, value, columnDef, dataContext) {
+		return '<a href="[####LIST-RECORD-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal">' + SmartJS_CoreUtils.escape_html(value) + '</a>';
+	} //END FUNCTION
+
+	// Grid Data Defs
+	var columns = [
+		{id:'id', field:'id', name:'ID', sortable:true, width:100, cssClass:'smartGrid_Highlight', editor:TextCellSelector, formatter:displayID},
+		{id:'title', field:'title', name:'Title', sortable:true, defaultSortDir:1, width:110, cssClass:'smartGrid_Important', editor:TextCellSelector},
+		{id:'mode', field:'mode', name:'Syntax', sortable:true, defaultSortDir:1, width:110, editor:TextCellSelector},
+	];
+
+	//-- Grid Options
+	var options = {
+		enableAddRow: false,
+		enableCellNavigation: true,
+		enableColumnReorder: false,
+		enableAsyncPostRender: true,
+		forceFitColumns: false,
+		asyncPostRenderDelay: 15,
+		rowHeight: 27,
+		editable: true,
+		autoEdit: false,
+	//	enableTextSelectionOnCells: false,
+		asyncEditorLoading: false
+	};
+
+	// Grid sizing
+	var winW = jQuery(window).width();
+	var winH = jQuery(window).height();
+	jQuery('#' + IdOfGrid).css({ 'width': parseInt(winW - 75), 'height': parseInt(winH - 275) });
+	jQuery(window).resize(function() {
+		winW = jQuery(window).width();
+		winH = jQuery(window).height();
+		jQuery('#' + IdOfGrid).css({ 'width': parseInt(winW - 75), 'height': parseInt(winH - 275) });
+		TheGrid.grid.resizeCanvas();
+		TheGrid.grid.autosizeColumns();
+	});
+
+	// Runtime
+	TheGrid.initNavPager('PageBuilderNavPager', 3);
+	TheGrid.initGrid(columns, options);
+	TheGrid.grid.resizeCanvas();
+	TheGrid.grid.autosizeColumns();
+	TheGrid.loadGridData(0);
+
+});
+//--
+</script>
+<!-- #END -->
