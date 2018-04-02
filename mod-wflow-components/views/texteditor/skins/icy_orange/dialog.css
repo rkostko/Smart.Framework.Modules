@@ -980,7 +980,7 @@ a.cke_smile
 	overflow: hidden;
 	display: block;
 	text-align: center;
-	padding: 0.3em 0;
+	padding: 0.3rem 0;
 }
 
 a.cke_smile img
@@ -992,8 +992,8 @@ a.cke_specialchar
 {
 	cursor: inherit;
 	display: block;
-	height: 1.25em;
-	padding: 0.2em 0.3em;
+	height: 1.25rem;
+	padding: 0.2rem 0.3rem;
 	text-align: center;
 }
 

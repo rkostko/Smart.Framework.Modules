@@ -5,7 +5,7 @@
 }
 
 #toolbar {
-	padding: 0em;
+	padding: 0px;
 	margin-top: 0px;
 	margin-right: 20px;
 	right: 0px;
@@ -16,14 +16,14 @@
 
 #toolbar button {
 	z-index: 9999;
-	padding: 0.2em;
+	padding: 0.2rem;
 	box-shadow: -2px -2px 2px rgba(0, 0, 0, 0.1) inset;
 	background: rgb(250, 250, 250) none repeat scroll 0% 0%;
-	height: 2em;
+	height: 2rem;
 	border: 1px solid rgb(169, 169, 169);
 	border-radius: 1px;
 	margin-top: 3px;
-	margin-right: 0.2em;
+	margin-right: 0.2rem;
 }
 
 #toolbar button:hover {
@@ -35,7 +35,7 @@
 }
 
 .mockElement input.plaintextinput { /*otherwise the input fields can be rather small*/
-	min-width:5em;
+	min-width:5rem;
 	box-sizing: border-box;
 }
 
@@ -84,7 +84,7 @@
 
 #widgetCollection>li {
 	list-style-type: none;
-	padding: 1em;
+	padding: 1rem;
 	border-bottom:1px solid silver;
 	overflow: hidden;
 	width: 100%;
@@ -118,7 +118,7 @@
 }
 
 .mockElement textarea{
-	height:8em;
+	height:8rem;
 }
 
 .drop-hover {

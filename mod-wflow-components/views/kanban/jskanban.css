@@ -50,9 +50,9 @@
 
 .jskanban_sorter li {
 	margin: 3px 3px 3px 3px;
-	padding: 0.4em;
-	padding-left: 1.5em;
-	font-size: 1em;
+	padding: 0.4rem;
+	padding-left: 1.5rem;
+	font-size: 1rem;
 	height: 18px;
 	white-space: nowrap;
 	overflow: hidden;
@@ -61,7 +61,7 @@
 
 .jskanban_sorter li span {
 	position: absolute;
-	margin-left: -1.3em;
+	margin-left: -1.3rem;
 }
 
 .jskanban_box{

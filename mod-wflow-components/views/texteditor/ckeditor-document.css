@@ -10,7 +10,7 @@ body.document-editor {
 }
 
 body.document-editor, body.document-editor td, body.document-editor th {
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 body.document-editor table {

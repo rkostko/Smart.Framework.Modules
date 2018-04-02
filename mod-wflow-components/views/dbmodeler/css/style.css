@@ -179,7 +179,7 @@
 .comment {
 	font-size: 80%;
 	font-weight: normal;
-	margin-right: 0.5em;
+	margin-right: 0.5rem;
 }
 
 .adding {
@@ -207,18 +207,18 @@
 #windowtitle {
 	border-bottom: 2px solid #CCCCCC;
 	padding: 2px;
-	padding-left: 1em;
+	padding-left: 1rem;
 	font-weight: bold;
 	color: #333333;
 	background-color: #FFFFFF;
 }
 
 #windowcontent {
-	padding: 1em;
+	padding: 1rem;
 }
 
 #windowok, #windowcancel {
-	margin: 0em 1em 1em;
+	margin: 0 1rem 1rem;
 }
 
 .small {

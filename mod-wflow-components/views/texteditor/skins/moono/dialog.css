@@ -36,7 +36,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 	width: 12px;
 	height: 12px;
 	overflow: hidden;
-	text-indent: -9999em;
+	text-indent: -9999rem;
 	border-top: 2px solid rgba(102, 102, 102, 0.2);
 	border-right: 2px solid rgba(102, 102, 102, 0.2);
 	border-bottom: 2px solid rgba(102, 102, 102, 0.2);
@@ -564,7 +564,7 @@ a.cke_smile {
 	overflow: hidden;
 	display: block;
 	text-align: center;
-	padding: .3em 0
+	padding: 0.3rem 0
 }
 a.cke_smile img {
 	vertical-align: middle
@@ -572,8 +572,8 @@ a.cke_smile img {
 a.cke_specialchar {
 	cursor: inherit;
 	display: block;
-	height: 1.25em;
-	padding: .2em .3em;
+	height: 1.25rem;
+	padding: 0.2rem 0.3rem;
 	text-align: center
 }
 a.cke_smile,

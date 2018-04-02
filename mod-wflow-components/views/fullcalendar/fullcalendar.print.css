@@ -64,13 +64,13 @@
 
 .fc tbody .fc-row .fc-content-skeleton tbody tr:last-child td {
   /* only works in newer browsers */
-  padding-bottom: 1em;
+  padding-bottom: 1rem;
   /* ...gives space within the skeleton. also ensures min height in a way */ }
 
 .fc tbody .fc-row .fc-content-skeleton table {
   /* provides a min-height for the row, but only effective for IE, which exaggerates this value,
-     making it look more like 3em. for other browers, it will already be this tall */
-  height: 1em; }
+     making it look more like 3rem. for other browers, it will already be this tall */
+  height: 1rem; }
 
 /* Undo month-view event limiting. Display all events and hide the "more" links
 --------------------------------------------------------------------------------------------------*/
@@ -111,7 +111,7 @@
 
 /* in case there are no events, we still want some height */
 .fc-time-grid .fc-content-skeleton table {
-  height: 4em; }
+  height: 4rem; }
 
 /* kill the horizontal spacing made by the event container. event margins will be done below */
 .fc-time-grid .fc-event-container {

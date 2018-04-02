@@ -1,8 +1,7 @@
-
 /*
 // jsPlumb Flowchart Editor
 // (c) 2017 unix-world.org
-// v.170830
+// v.180402
 */
 
 .flowchart-area * {
@@ -100,14 +99,15 @@ path, .jtk-endpoint {
 	display: block !important;
 	overflow: hidden;
 	padding: 0 !important;
-	font-size: 2em !important;
-	height: 2em !important;
-	width: 2em !important;
+	padding-top: 4px !important;
+	font-size: 18px !important;
+	height: 24px !important;
+	width: 24px !important;
 	position: absolute;
-	top: 12px;
-	left: 25px;
+	top: 10px;
+	left: 35px;
 	color: #778899;
-	border: 1px dotted #FAFAFA;
+	border: 1px dotted #CCCCCC;
 	opacity: 0.8;
 	cursor: context-menu;
 }
@@ -145,7 +145,7 @@ path, .jtk-endpoint {
 
 .oval span {
 	top: 5px;
-	left: 37px;
+	left: 47px;
 	color: #8D9D56;
 }
 
@@ -167,7 +167,7 @@ path, .jtk-endpoint {
 
 .parallelogram span {
 	top: 7px;
-	left: 32px;
+	left: 43px;
 	color: #D8AC61;
 }
 
