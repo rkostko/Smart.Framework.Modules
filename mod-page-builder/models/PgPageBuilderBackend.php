@@ -221,13 +221,15 @@ final class PgPageBuilderBackend {
 			case 'id':
 			case 'ref':
 			case 'name':
-			case 'special':
-			case 'active':
-			case 'class':
-			case 'auth':
+			case 'ctrl':
 			case 'modified':
 			case 'views':
 				$sort = 'ORDER BY '.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort;
+				break;
+			case 'special':
+			case 'active':
+			case 'auth':
+				$sort = 'ORDER BY '.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort.', "id" '.$xsort;
 				break;
 			case 'mode':
 				$sort = 'ORDER BY "mode" '.$xsort.', "id" DESC';

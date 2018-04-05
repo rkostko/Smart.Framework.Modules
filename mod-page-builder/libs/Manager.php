@@ -45,7 +45,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180402
+ * @version 	v.180405
  * @package 	PageBuilder
  *
  */
@@ -74,7 +74,7 @@ final class Manager {
 		$text['ttl_edt'] 			= 'Edit Object Properties';
 		$text['ttl_edtc'] 			= 'Edit Object Code';
 		$text['ttl_edtac'] 			= 'Edit Object Runtime';
-		$text['ttl_del'] 			= 'Delete Object';
+		$text['ttl_del'] 			= 'Delete this Object';
 		//-- buttons
 		$text['search']				= 'Search';
 		$text['reset']				= 'Reset';
@@ -117,6 +117,7 @@ final class Manager {
 		$text['err_7'] 				= 'Some Edit Fields are not allowed here !';
 		$text['err_8']				= 'Required Objects cannot be deleted !';
 		//-- messages
+		$text['msg_confirm_del'] 	= 'Please confirm you want to delete this object';
 		$text['msg_unsaved'] 	  	= 'NOTICE: Any unsaved change will be lost.';
 		$text['msg_no_priv_add']  	= 'WARNING: You have not enough privileges to Create New Objects !';
 		$text['msg_no_priv_read'] 	= 'WARNING: You have not enough privileges to READ this Object !';
@@ -410,14 +411,14 @@ final class Manager {
 					$out .= '<form name="page_form_html" id="page_form_html" method="post" action="#" onsubmit="return false;">';
 					$out .= '<input type="hidden" name="frm[form_mode]" value="code">';
 					if((string)$query['mode'] == 'raw') {
-						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'text', true, '785px', '400px');
+						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'text', true, '885px', '70vh');
 					} elseif((string)$query['mode'] == 'text') {
-						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'text', true, '785px', '400px');
+						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'text', true, '885px', '70vh');
 					} elseif((string)$query['mode'] == 'markdown') {
-						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'markdown', true, '785px', '525px');
+						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'markdown', true, '885px', '70vh');
 					} else {
-					//	$out .= \SmartComponents::html_js_htmlarea('pbld_code_htmleditor', 'frm[code]', $query['code'], '785px', '400px', true); // {{{SYNC-PAGEBUILDER-HTML-WYSIWYG}}}
-						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'html', true, '785px', '400px');
+					//	$out .= \SmartComponents::html_js_htmlarea('pbld_code_htmleditor', 'frm[code]', $query['code'], '885px', '70vh', true); // {{{SYNC-PAGEBUILDER-HTML-WYSIWYG}}}
+						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'html', true, '885px', '70vh');
 					} //end if else
 					$out .= "\n".'</form>'."\n";
 					$out .= '<div align="left">';
@@ -463,20 +464,20 @@ final class Manager {
 						//--
 						if((string)$query['mode'] == 'raw') {
 							$out .= '</div>'."\n";
-							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'text', false, '785px', '275px');
+							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'text', false, '885px', '70vh');
 						} elseif((string)$query['mode'] == 'text') {
 							$out .= '</div>'."\n";
-							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'text', false, '785px', '275px');
+							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'text', false, '885px', '70vh');
 						} elseif((string)$query['mode'] == 'markdown') {
 							$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 							$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-preview.svg'.'" alt="'.self::text('record_sytx_html').'" title="'.self::text('record_sytx_html').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-preview-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 							$out .= '</div>'."\n";
-							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'markdown', false, '785px', '375px');
+							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'markdown', false, '885px', '70vh');
 						} else { // html
 							$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 							$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-preview.svg'.'" alt="'.self::text('record_sytx_html').' Preview" title="'.self::text('record_sytx_html').' Preview" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-preview-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 							$out .= '</div>'."\n";
-							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'html', false, '785px', '375px');
+							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'html', false, '885px', '70vh');
 						} //end if else
 						//--
 					} else { // view
@@ -502,7 +503,7 @@ final class Manager {
 							} //end if else
 							//$the_website_styles = '<link rel="stylesheet" type="text/css" href="etc/templates/website/styles.css">';
 							$the_website_styles = '<style>* { font-family: tahoma,arial,sans-serif; font-smooth: always; } a, th, td, div, span, p, blockquote, pre, code { font-size:13px; }</style>';
-							$out .= \SmartComponents::html_js_preview_iframe('pbld_code_editor', '<!DOCTYPE html><html><head>'.$the_website_styles.$the_editor_styles.'</head><body style="background:#FFFFFF;">'.$query['code'].'</body></html></html>', $y_width='785px', $y_height='375px');
+							$out .= \SmartComponents::html_js_preview_iframe('pbld_code_editor', '<!DOCTYPE html><html><head>'.$the_website_styles.$the_editor_styles.'</head><body style="background:#FFFFFF;">'.$query['code'].'</body></html></html>', $y_width='885px', $y_height='70vh');
 						} //end if else
 						//--
 					} //end if else
@@ -561,7 +562,7 @@ final class Manager {
 			if((string)$y_mode == 'form') {
 				//-- CODE EDITOR
 				$out = '';
-				$out .= '<div align="left" id="yaml-editor"><font size="4" color="#003399"><b>&lt;<i>yaml</i>&gt;</b></font>';
+				$out .= '<div align="left" id="yaml-editor"><font size="4" color="#003399"><b>&lt;<i>yaml</i>&gt;</b>'.' - '.self::text('ttl_edtac').'</font>';
 				$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 				$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_yaml', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
 				$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -569,7 +570,7 @@ final class Manager {
 				$out .= '</div>'."\n";
 				$out .= '<form class="ux-form" name="page_form_yaml" id="page_form_yaml" method="post" action="#" onsubmit="return false;">';
 				$out .= '<input type="hidden" name="frm[form_mode]" value="yaml">';
-				$out .= \SmartComponents::html_js_editarea('record_sytx_yaml', 'frm[data]', $query['data'], 'yaml', true, '785px', '525px'); // OK.new
+				$out .= \SmartComponents::html_js_editarea('record_sytx_yaml', 'frm[data]', $query['data'], 'yaml', true, '885px', '70vh'); // OK.new
 				$out .= "\n".'</form>'."\n";
 				$out .= '<div align="left"><font size="4" color="#003399"><b>&lt;/<i>yaml</i>&gt;</b></font></div>'."\n";
 				$out .= '<script>SmartJS_BrowserUtils_PageAway = false; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
@@ -582,7 +583,7 @@ final class Manager {
 				$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 				$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-edit.svg'.'" alt="'.self::text('ttl_edtac').'" title="'.self::text('ttl_edtac').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#yaml-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-edit-tab-data&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 				$out .= '</div>'."\n";
-				$out .= \SmartComponents::html_js_editarea('record_sytx_yaml', '', $query['data'], 'yaml', false, '785px', '375px'); // OK.new
+				$out .= \SmartComponents::html_js_editarea('record_sytx_yaml', '', $query['data'], 'yaml', false, '885px', '70vh'); // OK.new
 				$out .= '<div align="left"><font size="4"><b>&lt;/yaml&gt;</b></font></div>'."\n";
 				$out .= '<script>SmartJS_BrowserUtils_PageAway = true; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", true);</script>';
 				//--
@@ -655,7 +656,7 @@ final class Manager {
 				'THE-TTL' 			=> (string) '<img height="16" src="'.self::$ModulePath.'libs/views/manager/img/op-add.svg'.'" alt="'.self::text('ttl_add').'" title="'.self::text('ttl_add').'">'.'&nbsp;'.self::text('ttl_add'),
 				'REFRESH-PARENT' 	=> (string) '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>',
 				'FORM-NAME' 		=> (string) 'page_form_add',
-				'LABELS-TYPE'		=> (string) self::text('record_syntax'), // aaa aaa
+				'LABELS-TYPE'		=> (string) self::text('record_syntax'),
 				'CONTROLS-TYPE' 	=> (string) \SmartComponents::html_select_list_single('ptype', '', 'form', array('html-page' => 'Page - HTML Syntax', 'markdown-page' => 'Page - Markdown Syntax', 'text-page' => 'Page - Text Syntax', 'raw-page' => 'Page - Raw', 'html-segment' => 'Segment Page - HTML Syntax', 'markdown-segment' => 'Segment Page - Markdown Syntax', 'text-segment' => 'Segment Page - Text Syntax', 'settings-segment' => 'Segment Page - Settings'), 'frm[ptype]', '275/0', '', 'no', 'no'),
 				'LABELS-ID'			=> (string) self::text('id'),
 				'LABELS-NAME'		=> (string) self::text('name'),
@@ -1075,8 +1076,9 @@ final class Manager {
 			} //end if else
 			//--
 		} else {
-			//-- aaa !!! TODO: finalize delete form !!!
-			$out .= '<br>'.self::deleteForm(self::text('ttl_del').' ?', $tmp_rd_arr['id'], self::composeUrl('op=record-delete'), '', '700', '', \Smart::escape_html($tmp_rd_arr['name']), 'yes');
+			//--
+			$out .= \SmartComponents::operation_question(self::text('ttl_del').' ?<div style="display:inline-block; margin-left:100px; min-width:200px;"><a class="ux-button ux-button-special" onClick="'.\Smart::escape_html(\SmartComponents::js_code_ui_confirm_dialog('<h1>'.self::text('msg_confirm_del').' !</h1>', 'self.location=\''.self::composeUrl('op=record-delete&delete=yes&id='.\Smart::escape_url($y_id)).'\';', '550', '250', self::text('dp').' ?')).'; return false;" href="#">Yes</a><a class="ux-button ux-button-primary" href="'.\Smart::escape_html(self::composeUrl('op=record-view&id='.\Smart::escape_url($y_id))).'">No</a></div>', '720');
+			$out .= self::ViewDisplayRecord((string)$y_id, 0);
 			//--
 		} //end if else
 		//--
@@ -1294,11 +1296,6 @@ final class Manager {
 	//==================================================================
 
 
-private static function deleteForm() {
-	return 'TO BE DONE ...';
-} //END FUNCTION
-
-
 
 	public static function ViewDisplayListTable() {
 		//--
@@ -1309,6 +1306,8 @@ private static function deleteForm() {
 				'LIST-JSON-URL' 	=> (string) self::composeUrl('op=records-list-json&'),
 				'LIST-NEW-URL' 		=> (string) self::composeUrl('op=record-add-form'),
 				'LIST-RECORD-URL' 	=> (string) self::composeUrl('op=record-view&id='),
+				'LIST-DELETE-URL' 	=> (string) self::composeUrl('op=record-delete&id='),
+				'PATH-MODULE' 		=> (string) self::$ModulePath
 			]
 		);
 		//--

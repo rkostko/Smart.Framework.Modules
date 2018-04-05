@@ -2,7 +2,7 @@
 // Controller: PageBuilder/Manage
 // Route: ?/page/page-builder.manage
 // Author: unix-world.org
-// r.180402
+// r.180405
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -49,11 +49,9 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				);
 				break;
 			case 'records-list-json':
-
 				$ofs = $this->RequestVarGet('ofs', 0, 'integer+');
 				$sortby = $this->RequestVarGet('sortby', 'id', 'string');
 				$sortdir = $this->RequestVarGet('sortdir', 'ASC', 'string');
-
 				$this->PageViewSetCfg('rawpage', true);
 				$this->PageViewSetVar(
 					'main',
