@@ -77,7 +77,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.180309
+ * @version 	v.180423
  * @package 	Database:Solr
  *
  */
@@ -120,6 +120,12 @@ private $instance;
 
 /** @var slow_time */
 private $slow_time = 0.3300;
+
+/** @var fatal_err */
+private $fatal_err = true;
+
+/** @var connid */
+private $connid = '';
 
 //======================================================
 /**
@@ -241,6 +247,24 @@ public function __destruct() {
 		Smart::log_warning('Solr ERROR # Disconnect # '.$e->getMessage());
 		//--
 	} //end try catch
+	//--
+} //END FUNCTION
+//======================================================
+
+
+//======================================================
+public function throwFatalErrors() {
+	//--
+	$this->fatal_err = false;
+	//--
+} //END FUNCTION
+//======================================================
+
+
+//======================================================
+public function raiseFatalErrors() {
+	//--
+	$this->fatal_err = true;
 	//--
 } //END FUNCTION
 //======================================================
@@ -723,6 +747,8 @@ private function solr_connect() {
 		//--
 		$options['wt'] = $this->mode;
 		//--
+		$this->connid = (string) $this->protocol.$this->host.':'.$this->port.'@'.$this->db.'('.$this->mode.')'.' # '.$this->user;
+		//--
 		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 			//--
 			SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
@@ -769,6 +795,11 @@ private function solr_connect() {
  */
 private function error($y_area, $y_error_message, $y_query='', $y_warning='') {
 //--
+if($this->fatal_err === false) {
+	throw new Exception('#SOLR-DB@'.$this->connid.'# :: Q# // Solr Client :: EXCEPTION :: '.$y_area."\n".$y_error_message);
+	return;
+} //end if
+//--
 $def_warn = 'Execution Halted !';
 $y_warning = (string) trim((string)$y_warning);
 if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
@@ -805,7 +836,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#SOLR-DB@ :: Q# // Solr :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Statement:'."\n".$y_query,
+	'#SOLR-DB@ '.$this->connid.' :: Q# // Solr Client :: ERROR :: '.$y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Statement:'."\n".$y_query,
 	$out // msg to display
 );
 die(''); // just in case

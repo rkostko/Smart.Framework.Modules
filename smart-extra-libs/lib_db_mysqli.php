@@ -89,7 +89,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.180307
+ * @version 	v.180423
  * @package 	Database:MySQL
  *
  */
@@ -483,7 +483,7 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 	//--
 	if(strlen($error) > 0) {
 		//--
-		self::error(self::get_connection_id($y_connection), 'COUNT', $error, $queryval, $params_or_title);
+		self::error(self::get_connection_id($y_connection), 'COUNT-DATA', $error, $queryval, $params_or_title);
 		return 0;
 		//--
 	} else {
@@ -1618,13 +1618,12 @@ private static function major_version($y_version) {
  */
 private static function error($y_connection_id, $y_area, $y_error_message, $y_query, $y_params_or_title, $y_warning='') {
 //--
-$err_log = $y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Params / Title:'."\n".print_r($y_params_or_title,1)."\n".'*** Query:'."\n".$y_query;
-//--
 if(defined('SMART_SOFTWARE_SQLDB_FATAL_ERR') AND (SMART_SOFTWARE_SQLDB_FATAL_ERR === false)) {
-	Smart::log_warning('#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: WARNING :: '.$err_log);
-	throw new Exception('#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi :: EXCEPTION :: '.$y_area."\n".$y_error_message);
+	throw new Exception('#MYSQLi-DB@'.$y_connection_id.'# :: Q# // MySQLi Client :: EXCEPTION :: '.$y_area."\n".$y_error_message);
 	return;
 } //end if
+//--
+$err_log = $y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Params / Title:'."\n".print_r($y_params_or_title,1)."\n".'*** Query:'."\n".$y_query;
 //--
 $def_warn = 'Execution Halted !';
 $y_warning = (string) trim((string)$y_warning);
@@ -1668,7 +1667,7 @@ $out = SmartComponents::app_error_message(
 );
 //--
 Smart::raise_error(
-	'#MYSQLi-DB@'.$y_connection_id.' :: Q# // MySQLi :: ERROR :: '.$err_log, // err to register
+	'#MYSQLi-DB@'.$y_connection_id.' :: Q# // MySQLi Client :: ERROR :: '.$err_log, // err to register
 	$out // msg to display
 );
 die(''); // just in case
@@ -1717,7 +1716,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.180307
+ * @version 	v.180423
  * @package 	Database:MySQL
  *
  */
