@@ -5,6 +5,7 @@
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.7')) {
+	@http_response_code(500);
 	die('Invalid Framework Version in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
@@ -141,10 +142,12 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 	//--
 	if(defined('SMART_FRAMEWORK_DBSQL_CHARSET')) {
 		if((string)SMART_FRAMEWORK_DBSQL_CHARSET != 'UTF8') {
-			die('The SMART_FRAMEWORK_DBSQL_CHARSET must be set as: UTF8');
+			self::error('[PRE-CONNECT]', 'PHP-MySQLi', 'Check App Configuration', 'The SMART_FRAMEWORK_DBSQL_CHARSET must be set as: UTF8', 'Invalid INI Settings');
+			return;
 		} //end if
 	} else {
-		die('The SMART_FRAMEWORK_DBSQL_CHARSET must be set ...');
+		self::error('[PRE-CONNECT]', 'PHP-MySQLi', 'Check App Configuration', 'The SMART_FRAMEWORK_DBSQL_CHARSET must be set', 'Invalid INI Settings');
+		return;
 	} //end if else
 	//--
 

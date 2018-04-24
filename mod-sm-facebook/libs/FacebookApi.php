@@ -9,6 +9,7 @@ namespace SmartModExtLib\SmFacebook;
 
 //----------------------------------------------------- PREVENT DIRECT EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
+	@http_response_code(500);
 	die('Invalid Runtime Status in PHP Script: '.@basename(__FILE__).' ...');
 } //end if
 //-----------------------------------------------------
@@ -21,7 +22,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: Facebook Graph Api
- * @version 	v.170912
+ * @version 	v.180424
  * @package 	SocialMedia:Facebook
  *
  */
@@ -30,7 +31,7 @@ final class FacebookApi {
 	// ->
 
 	private $fb = null;
-	private $api_version = 'v2.10';
+	private $api_version = '';
 	private $file_upload = true;
 
 	private $app_id = '';
@@ -40,7 +41,7 @@ final class FacebookApi {
 	private $usrdata = array();
 
 
-	public function __construct($app_id, $app_secret) {
+	public function __construct($app_id, $app_secret, $api_version='v2.10') {
 		//--
 		if((string)$app_id == '') {
 			$this->last_error = (string) 'ERROR: '.__METHOD__.'(): Empty App ID';
@@ -51,8 +52,10 @@ final class FacebookApi {
 			return;
 		} //end if
 		//--
-		$this->app_id = (string) $app_id;
-		$this->app_secret = (string) $app_secret;
+		$this->api_version = (string) $api_version;
+		//--
+		$this->app_id 		= (string) $app_id;
+		$this->app_secret 	= (string) $app_secret;
 		//--
 		$this->fb = new \Facebook\Facebook([
 			'app_id' 				=> (string) $this->app_id,
