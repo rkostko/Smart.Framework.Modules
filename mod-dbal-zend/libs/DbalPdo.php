@@ -37,8 +37,8 @@ final class DbalPdo {
 
 
 	// NOTE: The sense of this DBAL Driver is to serve the missing PDO Drivers of PDO/PgSQL, PDO/SQLite and PDO/MySQL from Smart.Framework that can make a project cross-DB
-	// The Zend/DBAL MySQLi and PgSQL are not compatible with cross DB queries such as parameter mode is different: ? :param $#
-	// For the DB direct access Drivers (Adapters) such as: PgSQL, SQlite3 and MySQLi the Smart.Framework provides them includded and more oprimized than Zend/DBAL
+	// The Zend/DBAL MySQLi, PgSQL and other Non-PDO drivers are not compatible with cross DB queries such as parameter mode is different: ? :param $#
+	// For the DB direct access Drivers (Adapters) such as: PgSQL, SQlite3 and MySQLi the Smart.Framework provides built-in / includded and more optimized libraries
 	public function __construct($cfg, $timeout=30) {
 		//--
 		$this->cfg = (array) $cfg;
