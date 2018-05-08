@@ -220,7 +220,7 @@ final class PgPageBuilderBackend {
 		} //end if
 		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
 			return -3; // invalid language
-		}
+		} //end if
 		if((string)$y_arr_data['id'] != '') {
 			return -4; // data must not contain the ID which cannot be changed on edit
 		} //end if

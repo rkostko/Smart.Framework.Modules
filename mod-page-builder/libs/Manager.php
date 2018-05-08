@@ -374,6 +374,10 @@ final class Manager {
 	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='') {
 		//--
 		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+			$y_lang = '';
+		} //end if
+		//--
+		if((string)$y_lang != '') {
 			$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getTranslationCodeById($y_id, $y_lang);
 		} else {
 			$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordCodeById($y_id);
@@ -415,7 +419,7 @@ final class Manager {
 					$out .= '</div>'."\n";
 					$out .= '<form name="page_form_html" id="page_form_html" method="post" action="#" onsubmit="return false;">';
 					$out .= '<input type="hidden" name="frm[form_mode]" value="code">';
-					if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+					if((string)$y_lang != '') {
 						$out .= '<input type="hidden" name="frm[language]" value="'.\Smart::escape_html((string)$y_lang).'">';
 					} //end if
 					if((string)$query['mode'] == 'raw') {
