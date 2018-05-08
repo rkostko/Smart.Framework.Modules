@@ -373,7 +373,11 @@ final class Manager {
 	// $y_mode :: 'list' | 'form'
 	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='') {
 		//--
-		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordCodeById($y_id);
+		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+			$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getTranslationCodeById($y_id, $y_lang);
+		} else {
+			$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordCodeById($y_id);
+		} //end if else
 		if((string)$query['id'] == '') {
 			return \SmartComponents::operation_error('FormView Code // Invalid ID');
 		} //end if
