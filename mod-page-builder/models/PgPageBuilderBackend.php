@@ -226,6 +226,7 @@ final class PgPageBuilderBackend {
 		} //end if
 		//--
 		$y_arr_data['id'] = (string) $y_id;
+		$y_arr_data['lang'] = (string) $y_lang;
 		//--
 		\SmartPgsqlDb::write_data('BEGIN');
 		\SmartPgsqlDb::write_data(
