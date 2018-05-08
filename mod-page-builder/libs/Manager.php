@@ -371,7 +371,7 @@ final class Manager {
 	//==================================================================
 	// view or display form entry for Markup Code
 	// $y_mode :: 'list' | 'form'
-	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='') {
+	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='', $y_custom_buttons=false) {
 		//--
 		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
 			$y_lang = '';
@@ -412,10 +412,12 @@ final class Manager {
 					} else { // html
 						$out .= '<font size="4" color="#666699"><b>&lt;<i>html5</i>&gt;</b>'.' - '.self::text('ttl_edtc').'</font>';
 					} //end if else
-					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_html', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
-					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+					if($y_custom_buttons !== true) {
+						$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+						$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_html', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
+						$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+						$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+					} //end if
 					$out .= '</div>'."\n";
 					$out .= '<form name="page_form_html" id="page_form_html" method="post" action="#" onsubmit="return false;">';
 					$out .= '<input type="hidden" name="frm[form_mode]" value="code">';
@@ -444,7 +446,8 @@ final class Manager {
 						$out .= '<font size="4" color="#666699"><b>&lt;/<i>html5</i>&gt;</b></font>';
 					} //end if else
 					$out .= '</div>'."\n";
-					$out .= '<script>SmartJS_BrowserUtils_PageAway = false; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+					$out .= '<script>SmartJS_BrowserUtils_PageAway = false;</script>';
+					$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
 					//$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
 					//--
 				} //end if else
