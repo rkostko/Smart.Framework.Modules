@@ -30,12 +30,17 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180402
+ * @version 	v.180508
  * @package 	PageBuilder
  *
  */
 abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
+
+	protected $default_language = 'en'; // the default language
+
+
+	private $crr_lang = '';				// current language
 
 	private $max_depth = -1; 			// 0=page, 1=segment, 2=sub-segment
 	private $page_markers = [];			// extra markers to allow be direct set in template except MAIN (and the indirect: TITLE, META-DESCRIPTION, META-KEYWORDS)
@@ -56,6 +61,13 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 	//--
 	final public function renderBuilderPage($page_id, $tpl_path, $tpl_file, $markers, $maxdepth=2) { // (OUTPUTS: HTML)
+
+		//--
+		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
+		if((string)$this->crr_lang == (string)$this->default_language) {
+			$this->crr_lang = ''; // fix to avoid query translations on default language
+		} //end if
+		//--
 
 		//--
 		$page_id = (string) trim((string)$page_id);
@@ -95,7 +107,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 		$arr = array();
 		//--
-		$the_pcache_key = (string) $page_id.'@'.\SmartTextTranslations::getLanguage().'__d'.(int)$maxdepth.'__m-'.sha1((string)implode(';', $markers));
+		$the_pcache_key = (string) $page_id.'@'.\SmartTextTranslations::getLanguage().'__d'.(int)$maxdepth.'__m-'.sha1((string)implode(';', $this->page_markers));
 		//--
 		if($this->PageCacheisActive()) {
 			//$arr = (array) $this->PageGetFromCache(
@@ -180,6 +192,13 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 	final public function getRenderedBuilderSegmentCode($segment_id, $maxdepth=2) { // (OUTPUTS: HTML)
 
 		// CHECK: $this->rendered_segments[]
+
+		//--
+		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
+		if((string)$this->crr_lang == (string)$this->default_language) {
+			$this->crr_lang = ''; // fix to avoid query translations on default language
+		} //end if
+		//--
 
 		//--
 		$segment_id = (string) trim((string)$segment_id);
@@ -335,7 +354,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 		//--
-		$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getSegment((string)$id);
+		$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getSegment((string)$id, (string)$this->crr_lang);
 		//--
 		if((string)$arr['id'] == '') {
 			\Smart::log_warning('PageBuilder: WARNING: (500) @ '.'Invalid Settings Segment: '.$id.' in Page: '.implode(';', $this->current_page)); // log warning, this is internal, by page settings
@@ -428,7 +447,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 		if((string)$type == 'segment') {
 			//--
-			$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getSegment((string)$id);
+			$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getSegment((string)$id, (string)$this->crr_lang);
 			//--
 			if((string)$arr['id'] == '') {
 				$this->PageViewSetErrorStatus(500, 'Invalid PageBuilder Page Segment');
@@ -444,7 +463,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			//--
 		} else { // page
 			//--
-			$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getPage((string)$id);
+			$arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderFrontend::getPage((string)$id, (string)$this->crr_lang);
 			//--
 			if((string)$arr['id'] == '') {
 				$this->PageViewSetErrorStatus(404, 'Invalid PageBuilder Page');

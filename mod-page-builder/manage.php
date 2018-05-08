@@ -2,7 +2,7 @@
 // Controller: PageBuilder/Manage
 // Route: ?/page/page-builder.manage
 // Author: unix-world.org
-// r.180405
+// r.180508
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application

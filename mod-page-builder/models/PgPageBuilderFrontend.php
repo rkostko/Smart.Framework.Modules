@@ -21,36 +21,71 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.180329
+	// v.180508
 
-	public static function getPage($y_id) { // page must be active
+	public static function getPage($y_id, $y_lang='') { // page must be active
 		//--
 		$y_id = (string) trim((string)$y_id);
 		if(substr($y_id, 0, 1) == '#') {
 			return array(); // avoid to load a segment
 		} //end if
 		//--
-		return (array) \SmartPgsqlDb::read_asdata(
+		$arr = (array) \SmartPgsqlDb::read_asdata(
 			'SELECT "id", "name", "mode", "auth", "layout", "data", "code", "meta_title", "meta_description", "meta_keywords" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
 		);
 		//--
+		$y_lang = (string) trim((string)$y_lang);
+		if((string)$y_lang != '') {
+			$tarr = (array) self::getTranslation($y_id, $y_lang);
+			if((string)$tarr['id'] == (string)$arr['id']) {
+				$arr['code'] = (string) $tarr['code'];
+				$arr['lang'] = (string) $tarr['lang'];
+			} //end if
+		} //end if
+		//--
+		return (array) $arr;
+		//--
 	} //END FUNCTION
 
 
-	public static function getSegment($y_id) {
+	public static function getSegment($y_id, $y_lang='') {
 		//--
 		$y_id = (string) trim((string)$y_id);
 		if(substr($y_id, 0, 1) != '#') {
 			return array(); // avoid to load a page
 		} //end if
 		//--
-		return (array) \SmartPgsqlDb::read_asdata(
+		$arr = (array) \SmartPgsqlDb::read_asdata(
 			'SELECT "id", "name", "mode", 0 AS "auth", \'\' AS "layout", "data", "code", \'\' AS "meta_title", \'\' AS "meta_description", \'\' AS "meta_keywords" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
+			]
+		);
+		//--
+		$y_lang = (string) trim((string)$y_lang);
+		if((string)$y_lang != '') {
+			$tarr = (array) self::getTranslation($y_id, $y_lang);
+			if((string)$tarr['id'] == (string)$arr['id']) {
+				$arr['code'] = (string) $tarr['code'];
+				$arr['lang'] = (string) $tarr['lang'];
+			} //end if
+		} //end if
+		//--
+		return (array) $arr;
+		//--
+	} //END FUNCTION
+
+
+	private static function getTranslation($y_id, $y_lang) {
+		//--
+		return (array) \SmartPgsqlDb::read_asdata(
+			'SELECT "id", "lang", "code" FROM "web"."page_translations" WHERE (("id" = $1) AND ("lang" = $2)) LIMIT 1 OFFSET 0',
+			[
+				(string) $y_id,
+				(string) $y_lang
 			]
 		);
 		//--

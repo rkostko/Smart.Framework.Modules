@@ -3,7 +3,7 @@
 // Controller: PageBuilder/TestFrontend
 // Route: ?page=page-builder.test-frontend&section=test-page
 // Author: unix-world.org
-// r.180402
+// r.180508
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -36,7 +36,7 @@ final class SmartAppIndexController extends \SmartModExtLib\PageBuilder\Abstract
 		} //end if
 		//--
 
-		$section = $this->RequestVarGet('section', '', 'string');
+		$section = $this->RequestVarGet('section', 'test-page', 'string');
 
 		$this->renderBuilderPage(
 			(string)$section,				// page ID

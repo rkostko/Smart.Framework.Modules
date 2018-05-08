@@ -3,7 +3,7 @@
 // Controller: PageBuilder/TestFrontend
 // Route: ?page=page-builder.test-frontend&section=test-page
 // Author: unix-world.org
-// r.180402
+// r.180508
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -38,14 +38,12 @@ final class SmartAppIndexController extends \SmartModExtLib\PageBuilder\Abstract
 
 		$this->PageViewSetCfg('template-path', '@');
 		$this->PageViewSetCfg('template-file', 'template-test-frontend.htm');
-
+		//$this->default_language = 'en';
 		$top = $this->getRenderedBuilderSegmentCode(
-			'#website-menu',
-			2
+			'#website-menu'
 		);
 		$main = $this->getRenderedBuilderSegmentCode(
-			'#seg-plug',
-			2
+			'#seg-plug'
 		);
 		$foot = $this->getRenderedBuilderSegmentCode(
 			'#website-footer',
