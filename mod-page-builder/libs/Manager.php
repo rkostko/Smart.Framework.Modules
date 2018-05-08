@@ -371,7 +371,7 @@ final class Manager {
 	//==================================================================
 	// view or display form entry for Markup Code
 	// $y_mode :: 'list' | 'form'
-	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='', $y_custom_buttons=false) {
+	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='', $y_custom_view=false) {
 		//--
 		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
 			$y_lang = '';
@@ -412,7 +412,7 @@ final class Manager {
 					} else { // html
 						$out .= '<font size="4" color="#666699"><b>&lt;<i>html5</i>&gt;</b>'.' - '.self::text('ttl_edtc').'</font>';
 					} //end if else
-					if($y_custom_buttons !== true) {
+					if($y_custom_view !== true) {
 						$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 						$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_html', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
 						$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -447,7 +447,9 @@ final class Manager {
 					} //end if else
 					$out .= '</div>'."\n";
 					$out .= '<script>SmartJS_BrowserUtils_PageAway = false;</script>';
-					$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+					if($y_custom_view !== true) {
+						$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+					} //end if
 					//$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
 					//--
 				} //end if else
