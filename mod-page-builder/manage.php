@@ -101,26 +101,30 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				break;
 			case 'record-preview-tab-code':
 				$id = $this->RequestVarGet('id', '', 'string');
+				$translate = $this->RequestVarGet('translate', '', 'string');
 				$this->PageViewSetCfg('rawpage', 'yes');
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, 'view')
+					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, 'view', $translate)
 				);
 				break;
 			case 'record-view-tab-code':
 				$id = $this->RequestVarGet('id', '', 'string');
+				$mode = $this->RequestVarGet('mode', 'codeview', ['codeview','codesrcview']);
+				$translate = $this->RequestVarGet('translate', '', 'string');
 				$this->PageViewSetCfg('rawpage', 'yes');
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, 'codeview')
+					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, $mode, $translate)
 				);
 				break;
 			case 'record-edit-tab-code':
 				$id = $this->RequestVarGet('id', '', 'string');
+				$translate = $this->RequestVarGet('translate', '', 'string');
 				$this->PageViewSetCfg('rawpage', 'yes');
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, 'form')
+					\SmartModExtLib\PageBuilder\Manager::ViewFormMarkupCode($id, 'form', $translate)
 				);
 				break;
 			case 'record-view-tab-data':

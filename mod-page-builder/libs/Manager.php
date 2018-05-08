@@ -371,7 +371,7 @@ final class Manager {
 	//==================================================================
 	// view or display form entry for Markup Code
 	// $y_mode :: 'list' | 'form'
-	public static function ViewFormMarkupCode($y_id, $y_mode) {
+	public static function ViewFormMarkupCode($y_id, $y_mode, $y_lang='') {
 		//--
 		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordCodeById($y_id);
 		if((string)$query['id'] == '') {
@@ -411,6 +411,9 @@ final class Manager {
 					$out .= '</div>'."\n";
 					$out .= '<form name="page_form_html" id="page_form_html" method="post" action="#" onsubmit="return false;">';
 					$out .= '<input type="hidden" name="frm[form_mode]" value="code">';
+					if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+						$out .= '<input type="hidden" name="frm[language]" value="'.\Smart::escape_html((string)$y_lang).'">';
+					} //end if
 					if((string)$query['mode'] == 'raw') {
 						$out .= \SmartComponents::html_js_editarea('pbld_code_editor', 'frm[code]', $query['code'], 'text', true, '885px', '70vh');
 					} elseif((string)$query['mode'] == 'text') {
@@ -461,7 +464,7 @@ final class Manager {
 					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-edit.svg'.'" alt="'.self::text('ttl_edtc').'" title="'.self::text('ttl_edtc').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-edit-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 					//--
-					if((string)$y_mode == 'codeview') {
+					if(((string)$y_mode == 'codeview') OR ((string)$y_mode == 'codesrcview')) {
 						//--
 						if((string)$query['mode'] == 'raw') {
 							$out .= '</div>'."\n";
@@ -472,6 +475,11 @@ final class Manager {
 						} elseif((string)$query['mode'] == 'markdown') {
 							$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 							$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-preview.svg'.'" alt="'.self::text('record_sytx_html').'" title="'.self::text('record_sytx_html').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-preview-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
+							if((string)$y_mode == 'codesrcview') {
+								$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+								$out .= '<img alt="'.self::text('record_sytx_mkdw').'" title="'.self::text('record_sytx_mkdw').'" src="'.self::$ModulePath.'libs/views/manager/img/syntax-markdown.svg'.'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
+								$query['code'] = \SmartModExtLib\PageBuilder\Utils::renderMarkdown((string)$query['code']); // render on the fly
+							} //end if
 							$out .= '</div>'."\n";
 							$out .= \SmartComponents::html_js_editarea('pbld_code_editor', '', $query['code'], 'markdown', false, '885px', '70vh');
 						} else { // html
@@ -487,14 +495,12 @@ final class Manager {
 							$out .= '</div>'."\n";
 							$out .= \SmartComponents::operation_notice('FormView HTML Source // Raw or Text Pages does not have this feature ...', '100%');
 						} else { // markdown / html
-							// if((string)$y_mode == 'form') {
 							if((string)$query['mode'] == 'markdown') {
-							//	$query['code'] = \SmartModExtLib\PageBuilder\Utils::renderMarkdown((string)$query['code']); // render on the fly
 								$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 								$out .= '<img alt="'.self::text('record_sytx_mkdw').'" title="'.self::text('record_sytx_mkdw').'" src="'.self::$ModulePath.'libs/views/manager/img/syntax-markdown.svg'.'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 							} //end if
 							$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-							$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-view-code.svg'.'" alt="'.self::text('record_sytx_html').' Code" title="'.self::text('record_sytx_html').' Source" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
+							$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-view-code.svg'.'" alt="'.self::text('record_sytx_html').' Code" title="'.self::text('record_sytx_html').' Source" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-viewer').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&mode=codesrcview&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 							$out .= '</div>'."\n";
 							if((string)$query['mode'] == 'markdown') {
 								$the_editor_styles = '<link rel="stylesheet" type="text/css" href="lib/core/plugins/css/markdown.css">';
@@ -673,7 +679,7 @@ final class Manager {
 
 
 	//==================================================================
-	public static function ViewFormsSubmit($y_mode, $y_frm, $y_id='') {
+	public static function ViewFormsSubmit($y_mode, $y_frm, $y_id='', $y_redir=true) {
 		//--
 		$y_frm = (array) $y_frm;
 		$y_id = (string) trim((string)$y_id);
@@ -685,14 +691,13 @@ final class Manager {
 		$proc_write_ok = false; 	// only if true will run the insert or update query
 		$proc_id = ''; 				// '' for insert | 'the-uid' for update
 		$proc_mode = ''; 			// insert | update
-		$proc_upd_cksum = false;	// if true will update the page checksum: id/data/code
+		$proc_upd_cksum = false;	// if true will update the page checksum: id+data
 		//--
 		switch((string)$y_mode) {
 			//--
 			case 'add': // OK
 				//--
 				$proc_mode = 'insert';
-				$proc_upd_cksum = true;
 				//--
 				if((\SmartAuth::test_login_privilege('superadmin') === true) OR (\SmartAuth::test_login_privilege('pagebuilder_create') === true)) {
 					//--
@@ -885,9 +890,7 @@ final class Manager {
 						//--
 						$proc_write_ok = true;
 						//--
-					} elseif((string)$y_frm['form_mode'] == 'code') { // YAML
-						//--
-						$proc_upd_cksum = true;
+					} elseif((string)$y_frm['form_mode'] == 'code') { // CODE
 						//--
 						if((string)$y_frm['data'] == '') { // frm[data] must not be set here
 							//--
@@ -977,9 +980,13 @@ final class Manager {
 					$data['modified'] = date('Y-m-d H:i:s');
 					//--
 					if((string)$proc_mode == 'insert') {
-						$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::insertRecord($data, $proc_upd_cksum);
+						$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::insertRecord($data);
 					} elseif((string)$proc_mode == 'update') {
-						$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::updateRecordById($proc_id, $data, $proc_upd_cksum);
+						if((string)$y_frm['language'] != '') {
+							$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::updateTranslationById($proc_id, $y_frm['language'], $data);
+						} else {
+							$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::updateRecordById($proc_id, $data, $proc_upd_cksum);
+						} //end if
 					} else {
 						$wr = -100; // invalid op mode
 					} //end if else
@@ -1003,6 +1010,9 @@ final class Manager {
 			$result = 'OK';
 			$title = '*';
 			$message = '<font size="3"><b>'.self::text('op_compl').'</b></font>';
+			if($y_redir !== true) {
+				$redirect = (string) $y_redir;
+			} //end if
 			//--
 		} else {
 			//--

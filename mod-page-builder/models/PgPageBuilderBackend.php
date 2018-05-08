@@ -72,6 +72,31 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
+	public static function getTranslationCodeById($y_id, $y_lang) {
+		//--
+		$arr = (array) \SmartPgsqlDb::read_asdata(
+			'SELECT "id", "ref", "special", "mode", "code" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+			[
+				(string) $y_id
+			]
+		);
+		//--
+		$tarr = (array) \SmartPgsqlDb::read_asdata(
+			'SELECT "id", "lang", "code" FROM "web"."page_translations" WHERE (("id" = $1) AND ("lang" = $2)) LIMIT 1 OFFSET 0',
+			[
+				(string) $y_id,
+				(string) $y_lang
+			]
+		);
+		//--
+		$arr['code'] = (string) $tarr['code'];
+		$arr['lang'] = (string) $tarr['lang'];
+		//--
+		return (array) $arr;
+		//--
+	} //END FUNCTION
+
+
 	public static function getRecordDataById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
@@ -87,7 +112,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordPropsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -138,12 +163,11 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	public static function updateRecordById($y_id, $y_arr_data) {
+	public static function updateRecordById($y_id, $y_arr_data, $y_upd_checksum) {
 		//--
 		$y_id = (string) trim((string)$y_id);
 		$y_arr_data = (array) $y_arr_data;
-		//--
-		$y_id = (string) trim((string)$y_id);
+		$y_upd_checksum = (bool) $y_upd_checksum;
 		//--
 		if((string)$y_id == '') {
 			return -1; // empty ID
@@ -167,12 +191,58 @@ final class PgPageBuilderBackend {
 			return (int) $wr[1]; // update failed
 		} //end if
 		//--
-		$wr = self::updateChecksumRecordById((string)$y_id);
-		if($wr[1] != 1) {
-			\SmartPgsqlDb::write_data('ROLLBACK');
-			return -4; // checksum failed
+		if($y_upd_checksum === true) {
+			$wr = self::updateChecksumRecordById((string)$y_id);
+			if($wr[1] != 1) {
+				\SmartPgsqlDb::write_data('ROLLBACK');
+				return -4; // checksum failed
+			} //end if
 		} //end if
 		//--
+		\SmartPgsqlDb::write_data('COMMIT');
+		//--
+		return 1; // all ok
+		//--
+	} //END FUNCTION
+
+
+	public static function updateTranslationById($y_id, $y_lang, $y_arr_data) {
+		//--
+		$y_id = (string) trim((string)$y_id);
+		$y_lang = (string) trim((string)$y_lang);
+		$y_arr_data = (array) $y_arr_data;
+		//--
+		if((string)$y_id == '') {
+			return -1; // empty ID
+		} //end if
+		if(\Smart::array_size($y_arr_data) <= 0) {
+			return -2; // empty data
+		} //end if
+		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+			return -3; // invalid language
+		}
+		if((string)$y_arr_data['id'] != '') {
+			return -4; // data must not contain the ID which cannot be changed on edit
+		} //end if
+		//--
+		$y_arr_data['id'] = (string) $y_id;
+		//--
+		\SmartPgsqlDb::write_data('BEGIN');
+		\SmartPgsqlDb::write_data(
+			'DELETE FROM "web"."page_translations" WHERE (("id" = $1) AND ("lang" = $2))',
+			[
+				(string) $y_id,
+				(string) $y_lang
+			]
+		);
+		$wr = \SmartPgsqlDb::write_data(
+			'INSERT INTO "web"."page_translations" '.
+			\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'insert')
+		);
+		if($wr[1] != 1) {
+			\SmartPgsqlDb::write_data('ROLLBACK');
+			return (int) $wr[1]; // insert failed
+		} //end if
 		\SmartPgsqlDb::write_data('COMMIT');
 		//--
 		return 1; // all ok
@@ -188,12 +258,22 @@ final class PgPageBuilderBackend {
 			return -1; // empty ID
 		} //end if
 		//--
-		return (array) \SmartPgsqlDb::write_data(
+		\SmartPgsqlDb::write_data('BEGIN');
+		$wr = (array) \SmartPgsqlDb::write_data(
 			'DELETE FROM "web"."page_builder" WHERE ("id" = $1)',
 			[
 				(string) $y_id
 			]
 		);
+		\SmartPgsqlDb::write_data(
+			'DELETE FROM "web"."page_translations" WHERE ("id" = $1)',
+			[
+				(string) $y_id
+			]
+		);
+		\SmartPgsqlDb::write_data('COMMIT');
+		//--
+		return (array) $wr;
 		//--
 	} //END FUNCTION
 
@@ -268,7 +348,7 @@ final class PgPageBuilderBackend {
 	private static function updateChecksumRecordById($y_id) {
 		//--
 		return \SmartPgsqlDb::write_data(
-			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data" || "code") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
+			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
 		);
 		//--
 	} //END FUNCTION
