@@ -53,10 +53,13 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				$ofs = $this->RequestVarGet('ofs', 0, 'integer+');
 				$sortby = $this->RequestVarGet('sortby', 'id', 'string');
 				$sortdir = $this->RequestVarGet('sortdir', 'ASC', 'string');
+				$lst = $this->RequestVarGet('lst', '', 'string');
+				$srcby = $this->RequestVarGet('srcby', '', 'string');
+				$src = $this->RequestVarGet('src', '', 'string');
 				$this->PageViewSetCfg('rawpage', true);
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListJson($ofs, $sortby, $sortdir)
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListJson(false, $ofs, $sortby, $sortdir, $lst, $srcby, $src)
 				);
 				break;
 			case 'record-add-form':

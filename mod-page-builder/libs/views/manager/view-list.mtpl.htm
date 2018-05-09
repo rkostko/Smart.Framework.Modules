@@ -37,10 +37,32 @@
 </script>
 <form id="filtering" name="filtering" class="ux-form">
 	<table><tr>
-	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="Search ..." value="" class="ux-input-def ux-input-1-3 "></span></td>
+	<td>
+		<select name="lst" id="filter-lst" class="ux-input-def ux-input-1-4">
+			<option value=""></option>
+			<option value="a">Active Pages</option>
+			<option value="i">Inactive Pages</option>
+			<option value="s">Segments</option>
+		</select>
+	</td>
+	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="Search by ..." value="" class="ux-input-def ux-input-1-4"></span></td>
+	<td>
+		<select name="srcby" id="filter-srcby" class="ux-input-def ux-input-1-4">
+			<option value=""></option>
+			<option value="id">ID</option>
+			<option value="name">Name</option>
+		</select>
+	</td>
+	<td>&nbsp;</td>
 	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">Filter &nbsp; <i class="fa fa-filter"></i></button></td>
 	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">Reset &nbsp; <i class="fa fa-times"></i></button></td>
-	<td><a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">Add New &nbsp; <i class="fa fa-plus"></i></a></td>
+	<td>
+	[%%%%IF:LIST-NEW-URL:!=;%%%%]
+	<a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">Add New &nbsp; <i class="fa fa-plus"></i></a>
+	[%%%%ELSE:LIST-NEW-URL%%%%]
+	&nbsp;
+	[%%%%/IF:LIST-NEW-URL%%%%]
+	</td>
 	<td><div style="width:32px;">&nbsp;</div></td>
 	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">List / Records :: <span id="infoTotalRows"># / # @</span></span></td>
 	</tr></table>
@@ -52,8 +74,15 @@
 jQuery(function() {
 
 	var displayOps = function(row, cell, value, columnDef, dataContext) {
-		var html = '<div align="center" style="padding-top:2px;">';
-		html += '<a href="[####LIST-DELETE-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal">' + '<img src="[####PATH-MODULE|html|js####]libs/views/manager/img/op-delete.svg" alt="Delete" title="Delete">' + '</a>';
+		var html = '';
+		html += '<div align="center" style="padding-top:2px;">';
+		[%%%%IF:LIST-DELETE-URL:!=;%%%%]
+		html += '<a href="[####LIST-DELETE-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal">';
+		html += '<img src="[####PATH-MODULE|html|js####]libs/views/manager/img/op-delete.svg" alt="Delete" title="Delete">';
+		html += '</a>';
+		[%%%%ELSE:LIST-DELETE-URL%%%%]
+		html += '&nbsp;';
+		[%%%%/IF:LIST-DELETE-URL%%%%]
 		html += '</div>';
 		return html;
 	}
@@ -68,7 +97,13 @@ jQuery(function() {
 			txt = 'Segment Object';
 			style = ' font-style:italic;';
 		}
-		return '<div align="left" style="display:inline-block; padding-left:5px; padding-top:2px;"><a href="[####LIST-RECORD-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal" style="text-decoration:none;"><img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '"></a></div><div align="left" style="display:inline-block; padding-left:15px; padding-top:0px;' + style + '">' + SmartJS_CoreUtils.escape_html(value) + '</div>';
+		var link_start = '';
+		var link_end = '';
+		[%%%%IF:LIST-RECORD-URL:!=;%%%%]
+		link_start = '<a href="[####LIST-RECORD-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal" style="text-decoration:none;">';
+		link_end = '</a>';
+		[%%%%/IF:LIST-RECORD-URL%%%%]
+		return '<div align="left" style="display:inline-block; padding-left:5px; padding-top:2px;">' + link_start + '<img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '">' + link_end + '</div><div align="left" style="display:inline-block; padding-left:15px; padding-top:0px;' + style + '">' + SmartJS_CoreUtils.escape_html(value) + '</div>';
 	}
 
 	var displayCodeType = function(row, cell, value, columnDef, dataContext) {

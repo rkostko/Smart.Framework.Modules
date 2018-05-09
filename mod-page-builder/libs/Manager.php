@@ -1321,16 +1321,36 @@ final class Manager {
 
 
 
-	public static function ViewDisplayListTable() {
+	public static function ViewDisplayListTable($y_link_list='', $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+		//--
+		if((string)trim((string)$y_link_list) == '') {
+			$y_link_list = (string) self::composeUrl('op=records-list-json&');
+		} //end if
+		//--
+		if($y_link_add === true) {
+			$y_link_add = (string) self::composeUrl('op=record-add-form');
+		} elseif($y_link_add === false) {
+			$y_link_add = '';
+		} //end if
+		if($y_link_view === true) {
+			$y_link_view = (string) self::composeUrl('op=record-view&id=');
+		} elseif($y_link_view === false) {
+			$y_link_view = '';
+		} //end if
+		if($y_link_delete === true) {
+			$y_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		} elseif($y_link_delete === false) {
+			$y_link_delete = '';
+		} //end if
 		//--
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
 			[
 				'LIST-TTL' 			=> 'PageBuilder Objects',
-				'LIST-JSON-URL' 	=> (string) self::composeUrl('op=records-list-json&'),
-				'LIST-NEW-URL' 		=> (string) self::composeUrl('op=record-add-form'),
-				'LIST-RECORD-URL' 	=> (string) self::composeUrl('op=record-view&id='),
-				'LIST-DELETE-URL' 	=> (string) self::composeUrl('op=record-delete&id='),
+				'LIST-JSON-URL' 	=> (string) $y_link_list,
+				'LIST-NEW-URL' 		=> (string) $y_link_add,
+				'LIST-RECORD-URL' 	=> (string) $y_link_view,
+				'LIST-DELETE-URL' 	=> (string) $y_link_delete,
 				'PATH-MODULE' 		=> (string) self::$ModulePath
 			]
 		);
@@ -1338,8 +1358,7 @@ final class Manager {
 	} //END FUNCTION
 
 
-
-	public static function ViewDisplayListJson($ofs, $sortby, $sortdir) {
+	public static function ViewDisplayListJson($restrict_special, $ofs, $sortby, $sortdir, $lst, $srcby, $src) {
 		//--
 		$ofs = (int) \Smart::format_number_int($ofs, '+');
 		//--
@@ -1358,16 +1377,18 @@ final class Manager {
 			'sortDir' 			=> (string) $sortdir,
 			'sortType' 			=> (string) '', // applies only with clientSort (not used for Server-Side sort)
 			'filter' 			=> [
+				'lst' => (string) $lst,
+				'srcby' => (string) $srcby,
 				'src' => (string) $src
 			]
 		];
 		//--
-		$y_lst = ''; // all (pages and segments)
-		$y_xsrc = ''; // filter by
-		$y_src = ''; // filter expr
+		$y_lst = (string) $lst; // all (pages and segments)
+		$y_xsrc = (string) $srcby; // filter by
+		$y_src = (string) $src; // filter expr
 		//--
-		$data['totalRows'] 	= (int) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listCountRecords($y_lst, $y_xsrc, $y_src);
-		$data['rowsList'] 	= (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords($y_lst, $y_xsrc, $y_src, (int)$limit, (int)$ofs, (string)$sortdir, (string)$sortby);
+		$data['totalRows'] 	= (int) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listCountRecords($y_lst, $y_xsrc, $y_src, (bool)$restrict_special);
+		$data['rowsList'] 	= (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords($y_lst, $y_xsrc, $y_src, (int)$limit, (int)$ofs, (string)$sortdir, (string)$sortby, (bool)$restrict_special);
 		//$model->getListDataTable($src, $data['itemsPerPage'], $data['crrOffset'], $data['sortBy'], $data['sortDir']);
 		//--
 		return (string) \Smart::json_encode((array)$data);
