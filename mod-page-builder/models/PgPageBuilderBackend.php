@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.180508
+	// v.180509
 
 
 	public static function getRecordById($y_id) {
@@ -279,7 +279,7 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	public static function listGetRecords($y_lst, $y_xsrc, $y_src, $y_limit, $y_ofs, $y_xsort, $y_sort) {
+	public static function listGetRecords($y_lst, $y_xsrc, $y_src, $y_limit, $y_ofs, $y_xsort, $y_sort, $y_restr_special=false) {
 		//--
 		$y_limit = \Smart::format_number_int($y_limit, '+');
 		if($y_limit < 1) {
@@ -323,7 +323,7 @@ final class PgPageBuilderBackend {
 				$sort = 'ORDER BY "published" DESC';
 		} //end switch
 		//--
-		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src);
+		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special);
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
 			'SELECT "id", "name", "mode", "ref", "active", "auth", "special", "modified", (char_length("data") + char_length("code")) AS "total_size" FROM "web"."page_builder" '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
@@ -332,9 +332,9 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	public static function listCountRecords($y_lst, $y_xsrc, $y_src) {
+	public static function listCountRecords($y_lst, $y_xsrc, $y_src, $y_restr_special=false) {
 		//--
-		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src);
+		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special);
 		//--
 		return (int) \SmartPgsqlDb::count_data(
 			'SELECT COUNT(1) FROM "web"."page_builder" '.$where
@@ -355,7 +355,7 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	private static function buildListWhereCondition($y_lst, $y_xsrc, $y_src) {
+	private static function buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special) {
 		//--
 		switch((string)$y_lst) {
 			case 'a': // active pages
@@ -371,6 +371,10 @@ final class PgPageBuilderBackend {
 				$wh_stat = '';
 				// all
 		} //end switch
+		//--
+		if($y_restr_special === true) {
+			$wh_stat .= '("special" = 0) AND ';
+		} //end if
 		//--
 		$where = 'WHERE ('.$wh_stat.'(TRUE))';
 		if((string)$y_src != '') {
