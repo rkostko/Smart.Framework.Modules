@@ -38,7 +38,7 @@ final class SmartAppIndexController extends \SmartModExtLib\PageBuilder\Abstract
 
 		$this->PageViewSetCfg('template-path', '@');
 		$this->PageViewSetCfg('template-file', 'template-test-frontend.htm');
-		//$this->default_language = 'en';
+
 		$top = $this->getRenderedBuilderSegmentCode(
 			'#website-menu'
 		);

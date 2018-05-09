@@ -37,9 +37,6 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 
-	protected $default_language = 'en'; // the default language
-
-
 	private $crr_lang = '';				// current language
 
 	private $max_depth = -1; 			// 0=page, 1=segment, 2=sub-segment
@@ -64,7 +61,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 		//--
 		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
-		if((string)$this->crr_lang == (string)$this->default_language) {
+		if((string)$this->crr_lang == (string)SMART_FRAMEWORK_DEFAULT_LANG) {
 			$this->crr_lang = ''; // fix to avoid query translations on default language
 		} //end if
 		//--
@@ -195,7 +192,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 		//--
 		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
-		if((string)$this->crr_lang == (string)$this->default_language) {
+		if((string)$this->crr_lang == (string)SMART_FRAMEWORK_DEFAULT_LANG) {
 			$this->crr_lang = ''; // fix to avoid query translations on default language
 		} //end if
 		//--
