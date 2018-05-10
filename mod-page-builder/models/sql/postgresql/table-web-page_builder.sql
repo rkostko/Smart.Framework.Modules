@@ -1,5 +1,5 @@
 
--- START :: PostgreSQL Table: web / page_builder r.180508 #####
+-- START :: PostgreSQL Table: web / page_builder r.180509 #####
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -48,7 +48,7 @@ CREATE TABLE web.page_builder (
     CONSTRAINT page_builder__chk__published CHECK ((published >= 0))
 );
 
-COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.05.08';
+COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.05.09';
 COMMENT ON COLUMN web.page_builder.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_builder.ref IS 'Reference Parent ID, Optional';
 COMMENT ON COLUMN web.page_builder.ctrl IS 'Reference Controller ID, Optional';
@@ -87,6 +87,9 @@ CREATE TABLE web.page_translations (
     id character varying(63) NOT NULL,
     lang character varying(2) NOT NULL,
     code text NOT NULL,
+    meta_title character varying(255) DEFAULT ''::character varying NOT NULL,
+    meta_description character varying(512) DEFAULT ''::character varying NOT NULL,
+    meta_keywords character varying(1024) DEFAULT ''::character varying NOT NULL,
     admin character varying(25) DEFAULT ''::character varying NOT NULL,
     modified character varying(23) DEFAULT ''::character varying NOT NULL,
     CONSTRAINT page_translations__chk__id CHECK ((char_length((id)::text) >= 2)),
@@ -95,7 +98,7 @@ CREATE TABLE web.page_translations (
 
 ALTER TABLE ONLY web.page_translations ADD CONSTRAINT page_translations_pkey PRIMARY KEY (id, lang);
 
-COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.05.08';
+COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.05.09';
 COMMENT ON COLUMN web.page_translations.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_translations.lang IS 'Language ID: de, fr, ...';
 COMMENT ON COLUMN web.page_translations.code IS 'Render Code';

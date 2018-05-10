@@ -112,7 +112,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordPropsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -349,7 +349,7 @@ final class PgPageBuilderBackend {
 	private static function updateChecksumRecordById($y_id) {
 		//--
 		return \SmartPgsqlDb::write_data(
-			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
+			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data" || "code") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
 		);
 		//--
 	} //END FUNCTION
@@ -380,7 +380,7 @@ final class PgPageBuilderBackend {
 		if((string)$y_src != '') {
 			switch((string)$y_xsrc) {
 				case 'id':
-					$where = 'WHERE ('.$wh_stat.'("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\'))';
+					$where = 'WHERE ('.$wh_stat.'("id" LIKE \''.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'id-ref':
 					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
@@ -389,10 +389,10 @@ final class PgPageBuilderBackend {
 					$where = 'WHERE ('.$wh_stat.'("name" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'code':
-					$where = 'WHERE ('.$wh_stat.'(smart_str_striptags("code") ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\'))';
+					$where = 'WHERE ('.$wh_stat.'(smart_str_striptags(convert_from(decode("code", \'base64\'), \'UTF8\')) ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'data':
-					$where = 'WHERE ('.$wh_stat.'(convert_from(decode("data", \'base64\'), \'UTF8\') ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\'))';
+					$where = 'WHERE ('.$wh_stat.'(convert_from(decode("data", \'base64\'), \'UTF8\') ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\'))'; // find only full words
 					break;
 				default:
 					// nothing, leave as is set above

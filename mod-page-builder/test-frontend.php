@@ -3,7 +3,7 @@
 // Controller: PageBuilder/TestFrontend
 // Route: ?page=page-builder.test-frontend&section=test-page
 // Author: unix-world.org
-// r.180508
+// r.180509
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -42,8 +42,7 @@ final class SmartAppIndexController extends \SmartModExtLib\PageBuilder\Abstract
 			(string)$section,				// page ID
 			'@',							// TPL Path
 			'template-test-frontend.htm', 	// TPL File
-			[ 'AREA.TOP', 'MAIN', 'AREA.FOOTER', 'TITLE', 'META-DESCRIPTION', 'META-KEYWORDS' ], // TPL Markers
-			2 // allowed render depth: 0=page, 1=page+segment, 2=page+segment+sub-segment
+			[ 'AREA.TOP', 'MAIN', 'AREA.FOOTER', 'TITLE', 'META-DESCRIPTION', 'META-KEYWORDS' ] // Allowed TPL Markers
 		);
 
 		//-- INTERNAL DEBUG

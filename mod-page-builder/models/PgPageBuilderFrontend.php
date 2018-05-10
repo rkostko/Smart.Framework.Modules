@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.180508
+	// v.180509
 
 	public static function getPage($y_id, $y_lang='') { // page must be active
 		//--
@@ -42,7 +42,10 @@ final class PgPageBuilderFrontend {
 			$tarr = (array) self::getTranslation($y_id, $y_lang);
 			if((string)$tarr['id'] == (string)$arr['id']) {
 				$arr['code'] = (string) $tarr['code'];
-				$arr['lang'] = (string) $tarr['lang'];
+				$arr['meta_title'] = (string) $tarr['meta_title'];
+				$arr['meta_description'] = (string) $tarr['meta_description'];
+				$arr['meta_keywords'] = (string) $tarr['meta_keywords'];
+				$arr['@lang'] = (string) $tarr['lang'];
 			} //end if
 		} //end if
 		//--
@@ -70,7 +73,7 @@ final class PgPageBuilderFrontend {
 			$tarr = (array) self::getTranslation($y_id, $y_lang);
 			if((string)$tarr['id'] == (string)$arr['id']) {
 				$arr['code'] = (string) $tarr['code'];
-				$arr['lang'] = (string) $tarr['lang'];
+				$arr['@lang'] = (string) $tarr['lang'];
 			} //end if
 		} //end if
 		//--

@@ -2,7 +2,6 @@
 =================================================================================
 This license (SIL OPEN FONT LICENSE Version 1.1) aplies for the following fonts:
 * Exo2					https://fonts.google.com/attribution
-* Lato					https://fonts.google.com/attribution
 * Raleway				https://fonts.google.com/attribution
 * Source Sans Pro		https://fonts.google.com/attribution
 =================================================================================

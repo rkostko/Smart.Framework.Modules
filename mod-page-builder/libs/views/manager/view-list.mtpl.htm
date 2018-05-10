@@ -40,31 +40,33 @@
 	<td>
 		<select name="lst" id="filter-lst" class="ux-input-def ux-input-1-4">
 			<option value=""></option>
-			<option value="a">Active Pages</option>
-			<option value="i">Inactive Pages</option>
-			<option value="s">Segments</option>
+			<option value="a">[####TXT-PG-ACTIVE|html####]</option>
+			<option value="i">[####TXT-PG-INACTIVE|html####]</option>
+			<option value="s">[####TXT-PG-SEGMENTS|html####]</option>
 		</select>
 	</td>
-	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="Search by ..." value="" class="ux-input-def ux-input-1-4"></span></td>
+	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span></td>
 	<td>
 		<select name="srcby" id="filter-srcby" class="ux-input-def ux-input-1-4">
 			<option value=""></option>
-			<option value="id">ID</option>
-			<option value="name">Name</option>
+			<option value="id">[####TXT-COL-ID|html####]</option>
+			<option value="name">[####TXT-COL-NAME|html####]</option>
+			<option value="code">[####TXT-COL-CODE|html####]</option>
+			<option value="data">[####TXT-COL-RUNTIME|html####]</option>
 		</select>
 	</td>
 	<td>&nbsp;</td>
-	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">Filter &nbsp; <i class="fa fa-filter"></i></button></td>
-	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">Reset &nbsp; <i class="fa fa-times"></i></button></td>
+	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">[####TXT-FILTER|html####] &nbsp; <i class="fa fa-filter"></i></button></td>
+	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">[####TXT-RESET|html####] &nbsp; <i class="fa fa-times"></i></button></td>
 	<td>
 	[%%%%IF:LIST-NEW-URL:!=;%%%%]
-	<a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">Add New &nbsp; <i class="fa fa-plus"></i></a>
+	<a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">[####TXT-ADD-NEW|html####] &nbsp; <i class="fa fa-plus"></i></a>
 	[%%%%ELSE:LIST-NEW-URL%%%%]
 	&nbsp;
 	[%%%%/IF:LIST-NEW-URL%%%%]
 	</td>
 	<td><div style="width:32px;">&nbsp;</div></td>
-	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">List / Records :: <span id="infoTotalRows"># / # @</span></span></td>
+	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-RECORDS|html####] :: <span id="infoTotalRows"># / # @</span></span></td>
 	</tr></table>
 </form>
 <br>
@@ -167,7 +169,7 @@ jQuery(function() {
 	}
 
 	var diffColSize = function() {
-		var size = parseInt(jQuery(window).width() - 50 - 275 - 75 - 75 - 75 - 75) - 100;
+		var size = parseInt(jQuery(window).width() - 50 - 325 - 75 - 75 - 75 - 75) - 100;
 		if(size < 100) {
 			size = 100;
 		}
@@ -176,13 +178,13 @@ jQuery(function() {
 
 	// Grid Data Defs: defaultSortDir:1
 	var columns = [
-		{id:'x-ops', 	field:'id', 	name:'#', 			sortable:false, 	width:50, 				formatter:displayOps},
-		{id:'id', 		field:'id', 	name:'Object ID', 	sortable:true, 		width:275, 				formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
-		{id:'mode', 	field:'mode', 	name:'Syntax', 		sortable:true, 		width:75, 				formatter:displayCodeType, editor:TextCellSelector},
-		{id:'name', 	field:'name', 	name:'Object Name', sortable:true, 		width:diffColSize(), 	editor:TextCellSelector},
-		{id:'special', 	field:'special',name:'Special', 	sortable:true, 		width:75, 				formatter:displaySpecial, editor:TextCellSelector},
-		{id:'active', 	field:'active', name:'Active', 		sortable:true, 		width:75, 				formatter:displayActive, editor:TextCellSelector},
-		{id:'auth', 	field:'auth', 	name:'Auth', 		sortable:true, 		width:75, 				formatter:displayAuth, editor:TextCellSelector},
+		{id:'x-ops', 	field:'id', 	name:'#', 								sortable:false, 	width:50, 				formatter:displayOps},
+		{id:'id', 		field:'id', 	name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:325, 				formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
+		{id:'mode', 	field:'mode', 	name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 				formatter:displayCodeType, editor:TextCellSelector},
+		{id:'name', 	field:'name', 	name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize(), 	editor:TextCellSelector},
+		{id:'special', 	field:'special',name:'[####TXT-COL-SPECIAL|js####]', 	sortable:true, 		width:75, 				formatter:displaySpecial, editor:TextCellSelector},
+		{id:'active', 	field:'active', name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 				formatter:displayActive, editor:TextCellSelector},
+		{id:'auth', 	field:'auth', 	name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 				formatter:displayAuth, editor:TextCellSelector},
 	];
 
 	//-- Grid Options

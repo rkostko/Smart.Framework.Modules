@@ -63,21 +63,22 @@ final class Manager {
 
 
 	//==================================================================
-	public static function text($ykey) {
+	public static function text($ykey, $y_escape_html=true) {
 
 		//--
 		$text = array();
 		//--
 
 		//-- ttls
-		$text['ttl_list'] 			= 'Objects List';
+		$text['ttl_list'] 			= 'PageBuilder Objects';
+		$text['ttl_records'] 		= 'List / Records';
 		$text['ttl_add'] 			= 'Add New Object';
 		$text['ttl_edt'] 			= 'Edit Object Properties';
 		$text['ttl_edtc'] 			= 'Edit Object Code';
 		$text['ttl_edtac'] 			= 'Edit Object Runtime';
 		$text['ttl_del'] 			= 'Delete this Object';
 		//-- buttons
-		$text['search']				= 'Search';
+		$text['search']				= 'Filter';
 		$text['reset']				= 'Reset';
 		$text['cancel']				= 'Cancel';
 		$text['close']				= 'Close';
@@ -104,7 +105,7 @@ final class Manager {
 		$text['vep']				= 'View/Edit Object';
 		$text['dp']					= 'Delete Object';
 		//-- fields
-		$text['search_by']			= 'Search&nbsp;by';
+		$text['search_by']			= 'Search by';
 		$text['keyword']			= 'Keyword';
 		$text['op_compl']			= 'Operation completed';
 		$text['op_ncompl'] 			= 'Operation NOT completed';
@@ -137,9 +138,9 @@ final class Manager {
 		$text['active']				= 'Active';
 		$text['lst_pg_active']		= 'Active Pages';
 		$text['lst_pg_inactive']	= 'Inactive Pages';
-		$text['lst_segment']		= 'Segment Pages';
+		$text['lst_segment']		= 'Segments';
 		$text['lst_act_inact']		= 'List';
-		$text['special'] 			= 'Special Administration';
+		$text['special'] 			= 'Special';
 		$text['login'] 				= 'Login Restricted';
 		$text['modified']			= 'Modified';
 		$text['views'] 				= 'Views';
@@ -153,6 +154,7 @@ final class Manager {
 		$text['acontent'] 			= 'ActiveContent';
 		$text['admin'] 				= 'Author';
 		$text['published'] 			= 'Published';
+		$text['auth'] 				= 'Auth';
 		//--
 
 		//--
@@ -163,7 +165,11 @@ final class Manager {
 			\Smart::log_warning('Invalid Text Key: ['.$ykey.'] in: '.__METHOD__.'()');
 		} //end if else
 		//--
-		return (string) \Smart::escape_html($outText);
+		if($y_escape_html !== false) {
+			$outText = (string) \Smart::escape_html($outText);
+		} //end if
+		//--
+		return (string) $outText;
 		//--
 
 	} //END FUNCTION
@@ -318,10 +324,10 @@ final class Manager {
 		//--
 		$codetype = array();
 		if($query['len_code'] > 0) {
-			$codetype[] = 'CODE&nbsp;['.\Smart::escape_html(\SmartUtils::pretty_print_bytes((int)$query['len_code'],2)).']';
+			$codetype[] = self::text('record_code').'&nbsp;['.\Smart::escape_html(\SmartUtils::pretty_print_bytes((int)$query['len_code'],2)).']';
 		} //end if
 		if($query['len_data'] > 0) {
-			$codetype[] = 'RUNTIME&nbsp;['.\Smart::escape_html(\SmartUtils::pretty_print_bytes((int)$query['len_data'],2)).']';
+			$codetype[] = self::text('record_runtime').'&nbsp;['.\Smart::escape_html(\SmartUtils::pretty_print_bytes((int)$query['len_data'],2)).']';
 		} //end if
 		if((string)$codetype != '') {
 			$codetype = (string) str_replace(' ', '&nbsp;', (string)implode('&nbsp;&nbsp;/&nbsp;&nbsp;', (array)$codetype));
@@ -386,6 +392,8 @@ final class Manager {
 			return \SmartComponents::operation_error('FormView Code // Invalid ID');
 		} //end if
 		//--
+		$query['code'] = (string) base64_decode($query['code']);
+		//--
 		$translator_window = \SmartTextTranslations::getTranslator('@core', 'window');
 		//--
 		$query['code'] = (string) $query['code'];
@@ -439,9 +447,9 @@ final class Manager {
 					if((string)$query['mode'] == 'raw') {
 						$out .= '<font size="4" color="#FF7700"><b>&lt;/<i>raw</i>&gt;</b></font>';
 					} elseif((string)$query['mode'] == 'text') {
-						$out .= '<font size="4" color="#007700"><b>&lt;/<i>text</i>&gt;</b></font></div>';
+						$out .= '<font size="4" color="#007700"><b>&lt;/<i>text</i>&gt;</b></font>';
 					} elseif((string)$query['mode'] == 'markdown') {
-						$out .= '<font size="4" color="#003399"><b>&lt;/<i>markdown</i>&gt;</b></font></div>';
+						$out .= '<font size="4" color="#003399"><b>&lt;/<i>markdown</i>&gt;</b></font>';
 					} else { // html
 						$out .= '<font size="4" color="#666699"><b>&lt;/<i>html5</i>&gt;</b></font>';
 					} //end if else
@@ -905,6 +913,8 @@ final class Manager {
 						//--
 					} elseif((string)$y_frm['form_mode'] == 'code') { // CODE
 						//--
+						$proc_upd_cksum = true;
+						//--
 						if((string)$y_frm['data'] == '') { // frm[data] must not be set here
 							//--
 							$redirect = self::composeUrl('op=record-view&id='.\Smart::escape_url($query['id']).'&sop=code');
@@ -912,6 +922,7 @@ final class Manager {
 							$data = array();
 							//--
 							$data['code'] = (string) \SmartModExtLib\PageBuilder\Utils::fixSafeCode((string)$y_frm['code']);
+							$data['code'] = (string) base64_encode((string)$data['code']);
 							$y_frm['code'] = ''; // free memory
 							//--
 							if((int)strlen($data['code']) > (int)self::$MaxStrCodeSize) {
@@ -1346,12 +1357,29 @@ final class Manager {
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
 			[
-				'LIST-TTL' 			=> 'PageBuilder Objects',
 				'LIST-JSON-URL' 	=> (string) $y_link_list,
 				'LIST-NEW-URL' 		=> (string) $y_link_add,
 				'LIST-RECORD-URL' 	=> (string) $y_link_view,
 				'LIST-DELETE-URL' 	=> (string) $y_link_delete,
-				'PATH-MODULE' 		=> (string) self::$ModulePath
+				'PATH-MODULE' 		=> (string) self::$ModulePath,
+				'LIST-TTL' 			=> (string) self::text('ttl_list', false),
+				'LIST-RECORDS' 		=> (string) self::text('ttl_records', false),
+				'TXT-PG-ACTIVE' 	=> (string) self::text('lst_pg_active', false),
+				'TXT-PG-INACTIVE' 	=> (string) self::text('lst_pg_inactive', false),
+				'TXT-PG-SEGMENTS' 	=> (string) self::text('lst_segment', false),
+				'TXT-SEARCH-BY' 	=> (string) self::text('search_by', false),
+				'TXT-FILTER' 		=> (string) self::text('search', false),
+				'TXT-RESET' 		=> (string) self::text('reset', false),
+				'TXT-ADD-NEW' 		=> (string) self::text('ttl_add', false),
+				'TXT-COL-ID' 		=> (string) self::text('id', false),
+				'TXT-COL-NAME' 		=> (string) self::text('name', false),
+				'TXT-COL-CODE' 		=> (string) self::text('record_code', false),
+				'TXT-COL-RUNTIME' 	=> (string) self::text('record_runtime', false),
+				'TXT-COL-SYNTAX' 	=> (string) self::text('record_syntax', false),
+				'TXT-COL-SPECIAL' 	=> (string) self::text('special', false),
+				'TXT-COL-ACTIVE' 	=> (string) self::text('active', false),
+				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
+
 			]
 		);
 		//--

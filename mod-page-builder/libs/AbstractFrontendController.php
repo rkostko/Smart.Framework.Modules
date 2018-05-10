@@ -30,16 +30,17 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180508
+ * @version 	v.180509
  * @package 	PageBuilder
  *
  */
 abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
+	protected $max_depth = 2; 			// 0=page, 1=segment, 2=sub-segment
+	protected $cache_time = 3600; 		// cache time in seconds
 
 	private $crr_lang = '';				// current language
 
-	private $max_depth = -1; 			// 0=page, 1=segment, 2=sub-segment
 	private $page_markers = [];			// extra markers to allow be direct set in template except MAIN (and the indirect: TITLE, META-DESCRIPTION, META-KEYWORDS)
 
 	private $auth_required = 0; 		// 0: no auth ; if > 0, will req. auth
@@ -57,7 +58,11 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 
 	//--
-	final public function renderBuilderPage($page_id, $tpl_path, $tpl_file, $markers, $maxdepth=2) { // (OUTPUTS: HTML)
+	final public function renderBuilderPage($page_id, $tpl_path, $tpl_file, $markers) { // (OUTPUTS: HTML)
+
+		//--
+		$this->max_depth = $this->fixRenderMaxDepth($this->max_depth);
+		//--
 
 		//--
 		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
@@ -93,18 +98,11 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 		$this->page_markers = (array) $this->fixAllowedTemplateMarkers($markers);
 		//--
-		$this->max_depth = (int) $maxdepth;
-		if($this->max_depth <= 0) {
-			$this->max_depth = 1;
-		} elseif($this->max_depth > 2) {
-			$this->max_depth = 2;
-		} //end if
-		//--
 
 		//--
 		$arr = array();
 		//--
-		$the_pcache_key = (string) $page_id.'@'.\SmartTextTranslations::getLanguage().'__d'.(int)$maxdepth.'__m-'.sha1((string)implode(';', $this->page_markers));
+		$the_pcache_key = (string) $page_id.'@'.\SmartTextTranslations::getLanguage(); // .'__d'.(int)$this->max_depth.'__m-'.sha1((string)implode(';', $this->page_markers))
 		//--
 		if($this->PageCacheisActive()) {
 			//$arr = (array) $this->PageGetFromCache(
@@ -126,18 +124,15 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			$pcache_arr = array();
 		} //end if
 		//--
-		$pctime = 60 * 60; // default, cache for 1h
 		$is_ok = true;
 		//--
 		if($this->page_is_cached !== true) {
 			$arr = (array) $this->loadSegmentOrPage((string)$page_id, 'page'); // get arr vars structure from db
 		} //end if
 		if($this->PageViewGetStatusCode() > 200) {
-			$pctime = 60 * 10; // cache for 10m
 			$is_ok = false;
 		} //end if
 		if(\Smart::array_size($arr) <= 0) {
-			$pctime = 60 * 5; // cache for 5m
 			$is_ok = false;
 			\Smart::log_warning('PageBuilder: Invalid Page Load Data: No Array / Empty Array');
 			$this->PageViewSetErrorStatus(500, 'WARNING: Invalid PageBuilder Page Load Data');
@@ -153,7 +148,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 					'configs' 	=> (array) $this->PageViewGetCfgs(),
 					'vars' 		=> (array) $arr
 				], // this will het the full array with all page vars and configs
-				(int) $this->fixPCacheTime($pctime)
+				(int) $this->fixPCacheTime($this->cache_time)
 			); // save arr vars structure to pcache
 			//--
 			if($result_pcached === true) {
@@ -186,9 +181,13 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 	} //END FUNCTION
 
 
-	final public function getRenderedBuilderSegmentCode($segment_id, $maxdepth=2) { // (OUTPUTS: HTML)
+	final public function getRenderedBuilderSegmentCode($segment_id) { // (OUTPUTS: HTML)
 
 		// CHECK: $this->rendered_segments[]
+
+		//--
+		$this->max_depth = $this->fixRenderMaxDepth($this->max_depth);
+		//--
 
 		//--
 		$this->crr_lang = (string) \SmartTextTranslations::getLanguage();
@@ -219,18 +218,9 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 		//--
-		$this->max_depth = (int) $maxdepth;
-		if($this->max_depth <= 0) {
-			$this->max_depth = 1;
-		} elseif($this->max_depth > 2) {
-			$this->max_depth = 2;
-		} //end if
-		//--
-
-		//--
 		$arr = array();
 		//--
-		$the_pcache_key = (string) $segment_id.'@'.\SmartTextTranslations::getLanguage().'__d'.(int)$maxdepth;
+		$the_pcache_key = (string) $segment_id.'@'.\SmartTextTranslations::getLanguage(); // .'__d'.(int)$this->max_depth
 		//--
 		if($this->PageCacheisActive()) {
 			//$arr = (array) $this->PageGetFromCache(
@@ -267,7 +257,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 				[
 					'vars' 		=> (array) $arr
 				], // this will het the full array with all page vars and configs
-				(int) $this->fixPCacheTime(60 * 60) // cache for 1h
+				(int) $this->fixPCacheTime($this->cache_time)
 			); // save arr vars structure to pcache
 			//--
 			if($result_pcached === true) {
@@ -295,6 +285,20 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 
 	//##### [ PRIVATES ] #####
+
+
+	private function fixRenderMaxDepth($maxdepth) {
+		//--
+		$maxdepth = (int) $maxdepth;
+		if($maxdepth <= 0) {
+			$maxdepth = 1;
+		} elseif($maxdepth > 3) {
+			$maxdepth = 3;
+		} //end if
+		//--
+		return (int) $maxdepth;
+		//--
+	} //END FUNCTION
 
 
 	private function fixPCacheTime($time) {
@@ -496,7 +500,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			$data_arr['meta_description'] = (string) $arr['meta_description'];
 			$data_arr['meta_keywords'] = (string) $arr['meta_keywords'];
 			//--
-			$data_arr['code'] = (string) $arr['code'];
+			$data_arr['code'] = (string) base64_decode((string)$arr['code']);
 			if((string)$data_arr['mode'] == 'raw') { // FIX: RAW Pages might have the code empty if need to output from a plugin and to avoid inject spaces ...
 				if((string)trim((string)$data_arr['code']) == '') {
 					if((string)$type == 'segment') {
