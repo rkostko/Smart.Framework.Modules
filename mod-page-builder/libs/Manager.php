@@ -46,7 +46,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180508
+ * @version 	v.180511
  * @package 	PageBuilder
  *
  */
@@ -921,8 +921,12 @@ final class Manager {
 							//--
 							$data = array();
 							//--
-							$data['code'] = (string) \SmartModExtLib\PageBuilder\Utils::fixSafeCode((string)$y_frm['code']);
-							$data['code'] = (string) base64_encode((string)$data['code']);
+							if((string)trim((string)$y_frm['code']) == '') {
+								$data['code'] = ''; // avoid save empty with only spaces
+							} else {
+								$data['code'] = (string) \SmartModExtLib\PageBuilder\Utils::fixSafeCode((string)$y_frm['code']);
+								$data['code'] = (string) base64_encode((string)$data['code']);
+							} //end if
 							$y_frm['code'] = ''; // free memory
 							//--
 							if((int)strlen($data['code']) > (int)self::$MaxStrCodeSize) {
@@ -951,7 +955,11 @@ final class Manager {
 								//--
 								$data = array();
 								//--
-								$data['data'] = (string) base64_encode((string)$y_frm['data']); // encode data b64 (encode must be here because will be transmitted later as B64 encode and must cover all error situations)
+								if((string)trim((string)$y_frm['data']) == '') {
+									$data['data'] = ''; // avoid save empty with only spaces
+								} else {
+									$data['data'] = (string) base64_encode((string)$y_frm['data']); // encode data b64 (encode must be here because will be transmitted later as B64 encode and must cover all error situations)
+								} //end if
 								$y_frm['data'] = '';
 								//--
 								if((int)strlen($data['data']) > (int)(self::$MaxStrCodeSize/10)) {
