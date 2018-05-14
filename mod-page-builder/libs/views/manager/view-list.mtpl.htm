@@ -1,5 +1,4 @@
-<!-- Pagebuilder/Manage @ List / Records :: v.180402 -->
-<div style="margin-bottom:5px;"><h1 style="display:inline-block;">[####LIST-TTL|html####]</h1></div>
+<!-- Pagebuilder/Manage @ List / Records :: v.180511 -->
 <style>
 	.smartGrid_AlignCenter {
 		text-align: center;
@@ -35,9 +34,10 @@
 	var TheGrid = new Smart_Grid(IdOfGrid, 'infoTotalRows', '[####LIST-JSON-URL|js####]', 'PageBuilder_Smart_Slickgrid_List', 'id', 'ASC', '', 'filtering');
 	//--
 </script>
+<br>
 <form id="filtering" name="filtering" class="ux-form">
-	<table><tr>
-	<td>
+	<table style="width:99%;"><tr>
+	<td style="width:1px;">
 		<select name="lst" id="filter-lst" class="ux-input-def ux-input-1-4">
 			<option value=""></option>
 			<option value="a">[####TXT-PG-ACTIVE|html####]</option>
@@ -45,8 +45,10 @@
 			<option value="s">[####TXT-PG-SEGMENTS|html####]</option>
 		</select>
 	</td>
-	<td><span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span></td>
-	<td>
+	<td style="width:1px;">
+		<span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span>
+	</td>
+	<td style="width:1px;">
 		<select name="srcby" id="filter-srcby" class="ux-input-def ux-input-1-4">
 			<option value=""></option>
 			<option value="id">[####TXT-COL-ID|html####]</option>
@@ -55,27 +57,35 @@
 			<option value="data">[####TXT-COL-RUNTIME|html####]</option>
 		</select>
 	</td>
-	<td>&nbsp;</td>
-	<td><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">[####TXT-FILTER|html####] &nbsp; <i class="fa fa-filter"></i></button></td>
-	<td><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">[####TXT-RESET|html####] &nbsp; <i class="fa fa-times"></i></button></td>
-	<td>
+	<td style="width:1px;">&nbsp;</td>
+	<td style="width:1px;"><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">[####TXT-FILTER|html####] &nbsp; <i class="fa fa-filter"></i></button></td>
+	<td style="width:1px;"><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">[####TXT-RESET|html####] &nbsp; <i class="fa fa-times"></i></button></td>
+	<td style="width:1px;">
 	[%%%%IF:LIST-NEW-URL:!=;%%%%]
 	<a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">[####TXT-ADD-NEW|html####] &nbsp; <i class="fa fa-plus"></i></a>
 	[%%%%ELSE:LIST-NEW-URL%%%%]
 	&nbsp;
 	[%%%%/IF:LIST-NEW-URL%%%%]
 	</td>
-	<td><div style="width:32px;">&nbsp;</div></td>
-	<td><span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-RECORDS|html####] :: <span id="infoTotalRows"># / # @</span></span></td>
+	<td style="width:32px;">
+		&nbsp;
+	</td>
+	<td style="text-align:center;">
+		<span style="color:#333333; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-TTL|html####]</span>
+	</td>
+	<td style="text-align:right; padding-right:10px;">
+		<span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-RECORDS|html####] :: <span id="infoTotalRows"># / # @</span></span>
+	</td>
 	</tr></table>
 </form>
-<br>
-<div id="PageBuilderNavPager"></div>
+<div style="padding-left:5px;">
+	<div id="PageBuilderNavPager"></div>
+</div>
 <form class="ux-form"><div id="PageBuilderSlickGrid" class="slickgrid-table" style="font-size:10px;width:100%;height:10px;"></div></form>
 <script type="text/javascript">
 jQuery(function() {
 
-	var displayOps = function(row, cell, value, columnDef, dataContext) {
+	var displayDel = function(row, cell, value, columnDef, dataContext) {
 		var html = '';
 		html += '<div align="center" style="padding-top:2px;">';
 		[%%%%IF:LIST-DELETE-URL:!=;%%%%]
@@ -89,23 +99,34 @@ jQuery(function() {
 		return html;
 	}
 
+	var displayOps = function(row, cell, value, columnDef, dataContext) {
+		value = String(value);
+		var txt = 'Page Object';
+		var img = 'type-page.svg';
+		if(value.substr(0, 1) == '#') {
+			txt = 'Segment Object';
+			img = 'type-segment.svg';
+		}
+		var html = '';
+		html += '<div align="center" style="padding-top:2px;">';
+		[%%%%IF:LIST-RECORD-URL:!=;%%%%]
+		html += '<a href="[####LIST-RECORD-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal" title="Display">';
+		[%%%%/IF:LIST-RECORD-URL%%%%]
+		html += '<img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + SmartJS_CoreUtils.escape_html(img) + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '">';
+		[%%%%IF:LIST-RECORD-URL:!=;%%%%]
+		html += '</a>';
+		[%%%%/IF:LIST-RECORD-URL%%%%]
+		html += '</div>';
+		return html;
+	}
+
 	var displayID = function(row, cell, value, columnDef, dataContext) {
 		value = String(value);
-		var img = 'type-page.svg';
-		var txt = 'Page Object';
 		var style = '';
 		if(value.substr(0, 1) == '#') {
-			img = 'type-segment.svg';
-			txt = 'Segment Object';
 			style = ' font-style:italic;';
 		}
-		var link_start = '';
-		var link_end = '';
-		[%%%%IF:LIST-RECORD-URL:!=;%%%%]
-		link_start = '<a href="[####LIST-RECORD-URL|js####]' + SmartJS_CoreUtils.escape_url(value) + '" data-smart="open.modal" style="text-decoration:none;">';
-		link_end = '</a>';
-		[%%%%/IF:LIST-RECORD-URL%%%%]
-		return '<div align="left" style="display:inline-block; padding-left:5px; padding-top:2px;">' + link_start + '<img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '">' + link_end + '</div><div align="left" style="display:inline-block; padding-left:15px; padding-top:0px;' + style + '">' + SmartJS_CoreUtils.escape_html(value) + '</div>';
+		return '<div align="left" style="display:inline-block; padding-left:15px; padding-top:0px;' + style + '">' + SmartJS_CoreUtils.escape_html(value) + '</div>';
 	}
 
 	var displayCodeType = function(row, cell, value, columnDef, dataContext) {
@@ -168,23 +189,35 @@ jQuery(function() {
 		return '<div align="center" style="padding-top:2px;"><img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '"></div>';
 	}
 
-	var diffColSize = function() {
-		var size = parseInt(jQuery(window).width() - 50 - 325 - 75 - 75 - 75 - 75) - 100;
-		if(size < 100) {
-			size = 100;
+	var diffColSize = function(colName) {
+		var size = parseInt(jQuery(window).width() - 50 - 50 - 75 - 75 - 75 - 75) - 100;
+		switch(String(colName)) {
+			case 'id':
+				size = size * 0.33
+				break;
+			case 'name':
+				size = size * 0.66;
+				break;
+			default:
+				size = size * 0;
+		}
+		size = parseInt(size);
+		if(size < 10) {
+			size = 10;
 		}
 		return size;
 	}
 
 	// Grid Data Defs: defaultSortDir:1
 	var columns = [
-		{id:'x-ops', 	field:'id', 	name:'#', 								sortable:false, 	width:50, 				formatter:displayOps},
-		{id:'id', 		field:'id', 	name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:325, 				formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
-		{id:'mode', 	field:'mode', 	name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 				formatter:displayCodeType, editor:TextCellSelector},
-		{id:'name', 	field:'name', 	name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize(), 	editor:TextCellSelector},
-		{id:'special', 	field:'special',name:'[####TXT-COL-SPECIAL|js####]', 	sortable:true, 		width:75, 				formatter:displaySpecial, editor:TextCellSelector},
-		{id:'active', 	field:'active', name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 				formatter:displayActive, editor:TextCellSelector},
-		{id:'auth', 	field:'auth', 	name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 				formatter:displayAuth, editor:TextCellSelector},
+		{id:'x-del', 	field:'id', 	name:'#', 								sortable:false, 	width:50, 					formatter:displayDel},
+		{id:'x-ops', 	field:'id', 	name:'@', 								sortable:true, 		width:50, 					formatter:displayOps},
+		{id:'id', 		field:'id', 	name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:diffColSize('id'), 	formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
+		{id:'mode', 	field:'mode', 	name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 					formatter:displayCodeType, editor:TextCellSelector},
+		{id:'name', 	field:'name', 	name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize('name'), 	editor:TextCellSelector},
+		{id:'special', 	field:'special',name:'[####TXT-COL-SPECIAL|js####]', 	sortable:true, 		width:75, 					formatter:displaySpecial, editor:TextCellSelector},
+		{id:'active', 	field:'active', name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 					formatter:displayActive, editor:TextCellSelector},
+		{id:'auth', 	field:'auth', 	name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 					formatter:displayAuth, editor:TextCellSelector},
 	];
 
 	//-- Grid Options
@@ -206,14 +239,15 @@ jQuery(function() {
 	var winW = jQuery(window).width();
 	var winH = jQuery(window).height();
 	var diffW = 25;
-	var diffH = 275;
+	var diffH = 150;
 	jQuery('#' + IdOfGrid).css({ 'width': parseInt(winW - diffW), 'height': parseInt(winH - diffH) });
 	jQuery(window).resize(function() {
 		winW = jQuery(window).width();
 		winH = jQuery(window).height();
 		jQuery('#' + IdOfGrid).css({ 'width': parseInt(winW - diffW), 'height': parseInt(winH - diffH) });
 		TheGrid.grid.resizeCanvas();
-		columns[3].width = diffColSize()
+		columns[2].width = diffColSize('id'); // id column
+		columns[4].width = diffColSize('name'); // name column
 		TheGrid.grid.autosizeColumns();
 	});
 
