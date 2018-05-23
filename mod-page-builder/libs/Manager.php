@@ -1199,7 +1199,7 @@ final class Manager {
 
 
 	//==================================================================
-	private static function getImgForCodeType($y_id, $y_type) {
+	public static function getImgForCodeType($y_id, $y_type) {
 		//--
 		$ttl = '[Unknown] Page';
 		$img = self::$ModulePath.'libs/views/manager/img/syntax-unknown.svg';

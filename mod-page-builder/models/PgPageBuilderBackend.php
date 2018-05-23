@@ -24,6 +24,49 @@ final class PgPageBuilderBackend {
 	// v.180509
 
 
+	//--
+
+
+	public static function getRecordsUniqueControllers() {
+		//--
+		return (array) \SmartPgsqlDb::read_data(
+			'SELECT "ctrl" FROM "web"."page_builder" WHERE ("ref" = $1) GROUP BY "ctrl" ORDER BY "ctrl" ASC',
+			[
+				(string) ''
+			]
+		);
+		//--
+	} //END FUNCTION
+
+
+	public static function getRecordsByCtrl($y_ctrl) {
+		//--
+		return (array) \SmartPgsqlDb::read_adata(
+			'SELECT "id", "ref", "ctrl", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE (("ctrl" = $1) AND ("ref" = $2)) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			[
+				(string) $y_ctrl,
+				(string) ''
+			]
+		);
+		//--
+	} //END FUNCTION
+
+
+	public static function getRecordsByRef($y_ref) {
+		//--
+		return (array) \SmartPgsqlDb::read_adata(
+			'SELECT "id", "ref", "ctrl", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE ("ref" = $1) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			[
+				(string) $y_ref
+			]
+		);
+		//--
+	} //END FUNCTION
+
+
+	//--
+
+
 	public static function getRecordById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_data(
