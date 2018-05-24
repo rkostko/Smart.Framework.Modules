@@ -574,7 +574,7 @@ final class Manager {
 	//==================================================================
 	// view or display form entry for YAML Code
 	// $y_mode :: 'list' | 'form'
-	public static function ViewFormYamlData($y_id, $y_mode) {
+	public static function ViewFormYamlData($y_id, $y_mode, $y_custom_view=false) {
 		//--
 		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordDataById($y_id);
 		if((string)$query['id'] == '') {
@@ -591,17 +591,22 @@ final class Manager {
 				//-- CODE EDITOR
 				$out = '';
 				$out .= '<div align="left" id="yaml-editor"><font size="4" color="#003399"><b>&lt;<i>yaml</i>&gt;</b>'.' - '.self::text('ttl_edtac').'</font>';
-				$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_yaml', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
-				$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#yaml-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-data&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+				if($y_custom_view !== true) {
+					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_yaml', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
+					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#yaml-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-data&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+				} //end if
 				$out .= '</div>'."\n";
 				$out .= '<form class="ux-form" name="page_form_yaml" id="page_form_yaml" method="post" action="#" onsubmit="return false;">';
 				$out .= '<input type="hidden" name="frm[form_mode]" value="yaml">';
 				$out .= \SmartComponents::html_js_editarea('record_sytx_yaml', 'frm[data]', $query['data'], 'yaml', true, '885px', '70vh'); // OK.new
 				$out .= "\n".'</form>'."\n";
 				$out .= '<div align="left"><font size="4" color="#003399"><b>&lt;/<i>yaml</i>&gt;</b></font></div>'."\n";
-				$out .= '<script>SmartJS_BrowserUtils_PageAway = false; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+				$out .= '<script>SmartJS_BrowserUtils_PageAway = false;</script>';
+				if($y_custom_view !== true) {
+					$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+				} //end if
 				//$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
 				//--
 			} else {
