@@ -69,7 +69,7 @@ final class PgPageBuilderBackend {
 
 	public static function getRecordById($y_id) {
 		//--
-		return (array) \SmartPgsqlDb::read_data(
+		return (array) \SmartPgsqlDb::read_asdata(
 			'SELECT * FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
