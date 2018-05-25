@@ -1,5 +1,5 @@
 
--- START :: PostgreSQL Table: web / page_builder r.180509 #####
+-- START :: PostgreSQL Table: web / page_builder r.180525.1559 #####
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -19,11 +19,13 @@ COMMENT ON SCHEMA web IS 'Web Area';
 
 SET search_path = web, pg_catalog;
 
+BEGIN;
+
 -- Table Structure: Page-Builder #####
 
 CREATE TABLE web.page_builder (
     id character varying(63) NOT NULL,
-    ref character varying(63) DEFAULT ''::character varying NOT NULL,
+    ref jsonb DEFAULT '[]'::jsonb NOT NULL,
     ctrl character varying(128) DEFAULT ''::character varying NOT NULL,
     active smallint DEFAULT 0 NOT NULL,
     auth smallint DEFAULT 0 NOT NULL,
@@ -37,6 +39,7 @@ CREATE TABLE web.page_builder (
     meta_keywords character varying(1024) DEFAULT ''::character varying NOT NULL,
     layout character varying(75) DEFAULT ''::character varying NOT NULL,
     checksum character varying(40) DEFAULT ''::character varying NOT NULL,
+    translations smallint DEFAULT 1 NOT NULL,
     admin character varying(25) DEFAULT ''::character varying NOT NULL,
     published bigint DEFAULT 0 NOT NULL,
     modified character varying(23) DEFAULT ''::character varying NOT NULL,
@@ -45,13 +48,14 @@ CREATE TABLE web.page_builder (
     CONSTRAINT page_builder__chk__auth CHECK (((auth = 0) OR (auth = 1))),
     CONSTRAINT page_builder__chk__special CHECK (((special = 0) OR (special = 1))),
     CONSTRAINT page_builder__chk__mode CHECK ((char_length((mode)::text) >= 3)),
+    CONSTRAINT page_builder__chk__translations CHECK (((translations = 0) OR (translations = 1))),
     CONSTRAINT page_builder__chk__published CHECK ((published >= 0))
 );
 
-COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.05.09';
+COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.05.25.1559';
 COMMENT ON COLUMN web.page_builder.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
-COMMENT ON COLUMN web.page_builder.ref IS 'Reference Parent ID, Optional';
-COMMENT ON COLUMN web.page_builder.ctrl IS 'Reference Controller ID, Optional';
+COMMENT ON COLUMN web.page_builder.ref IS 'Reference Parent IDs as Json-Array [], Optional';
+COMMENT ON COLUMN web.page_builder.ctrl IS 'Parent Controller ID, Optional';
 COMMENT ON COLUMN web.page_builder.active IS 'Active Status: 0=inactive ; 1=active';
 COMMENT ON COLUMN web.page_builder.auth IS 'Auth Status: 0 = no auth ; 1 = requires auth';
 COMMENT ON COLUMN web.page_builder.special IS 'Special Status: 0 = normal ; 1 = special';
@@ -64,19 +68,21 @@ COMMENT ON COLUMN web.page_builder.meta_description IS 'Meta Description, Pages 
 COMMENT ON COLUMN web.page_builder.meta_keywords IS 'Meta Keywords, Pages Only';
 COMMENT ON COLUMN web.page_builder.layout IS 'Page Design Layout, Pages Only';
 COMMENT ON COLUMN web.page_builder.checksum IS 'Checksum (MD5)';
+COMMENT ON COLUMN web.page_builder.translations IS 'Allow Translations (1 = yes ; 0 = no)';
 COMMENT ON COLUMN web.page_builder.admin IS 'Author';
 COMMENT ON COLUMN web.page_builder.published IS 'Time of Publising: timestamp';
 COMMENT ON COLUMN web.page_builder.modified IS 'Last Modification: yyyy-mm-dd';
 
 ALTER TABLE ONLY web.page_builder ADD CONSTRAINT page_builder__id PRIMARY KEY (id);
 
-CREATE INDEX page_builder__idx__ref ON web.page_builder USING btree (ref);
+CREATE INDEX page_builder__idx__ref ON web.page_builder USING gin (ref);
 CREATE INDEX page_builder__idx__ctrl ON web.page_builder USING btree (ctrl);
 CREATE INDEX page_builder__idx__active ON web.page_builder USING btree (active);
 CREATE INDEX page_builder__idx__auth ON web.page_builder USING btree (auth);
 CREATE INDEX page_builder__idx__special ON web.page_builder USING btree (special);
 CREATE INDEX page_builder__idx__mode ON web.page_builder USING btree (mode);
 CREATE INDEX page_builder__idx__layout ON web.page_builder USING btree (layout);
+CREATE INDEX page_builder__idx__translations ON web.page_builder USING btree (translations);
 CREATE INDEX page_builder__idx__admin ON web.page_builder USING btree (admin);
 CREATE INDEX page_builder__idx__modified ON web.page_builder USING btree (modified);
 
@@ -98,7 +104,7 @@ CREATE TABLE web.page_translations (
 
 ALTER TABLE ONLY web.page_translations ADD CONSTRAINT page_translations_pkey PRIMARY KEY (id, lang);
 
-COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.05.09';
+COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.05.25';
 COMMENT ON COLUMN web.page_translations.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_translations.lang IS 'Language ID: de, fr, ...';
 COMMENT ON COLUMN web.page_translations.code IS 'Render Code';
@@ -107,6 +113,8 @@ COMMENT ON COLUMN web.page_translations.modified IS 'Last Modification: yyyy-mm-
 
 CREATE INDEX page_translations__idx__admin ON web.page_translations USING btree (admin);
 CREATE INDEX page_translations__idx__modified ON web.page_translations USING btree (modified);
+
+COMMIT;
 
 --
 -- PostgreSQL database dump complete #####

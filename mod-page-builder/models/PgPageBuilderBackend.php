@@ -32,7 +32,7 @@ final class PgPageBuilderBackend {
 		return (array) \SmartPgsqlDb::read_data(
 			'SELECT "ctrl" FROM "web"."page_builder" WHERE ("ref" = $1) GROUP BY "ctrl" ORDER BY "ctrl" ASC',
 			[
-				(string) ''
+				(string) '[]'
 			]
 		);
 		//--
@@ -42,10 +42,10 @@ final class PgPageBuilderBackend {
 	public static function getRecordsByCtrl($y_ctrl) {
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "ref", "ctrl", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE (("ctrl" = $1) AND ("ref" = $2)) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			'SELECT "id", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE (("ctrl" = $1) AND ("ref" = $2)) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
 			[
 				(string) $y_ctrl,
-				(string) ''
+				(string) '[]'
 			]
 		);
 		//--
@@ -55,7 +55,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordsByRef($y_ref) {
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "ref", "ctrl", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE ("ref" = $1) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			'SELECT "id", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE ("ref" ? $1) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
 			[
 				(string) $y_ref
 			]
@@ -81,8 +81,8 @@ final class PgPageBuilderBackend {
 
 	public static function getRecordIdsById($y_id) {
 		//--
-		return (array) \SmartPgsqlDb::read_data(
-			'SELECT "id", "ref" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+		return (array) \SmartPgsqlDb::read_asdata(
+			'SELECT "id", "name" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -155,7 +155,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordPropsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "translations", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -170,7 +170,7 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	public static function insertRecord($y_arr_data) {
+	public static function insertRecord($y_arr_data, $y_use_external_transaction=false) {
 		//--
 		$y_arr_data = (array) $y_arr_data;
 		//--
@@ -182,26 +182,78 @@ final class PgPageBuilderBackend {
 			return -2; // max 63 chars (constraint, in case it is used with wildcard subdomains)
 		} //end if
 		//--
-		\SmartPgsqlDb::write_data('BEGIN');
+		if($y_use_external_transaction !== true) {
+			\SmartPgsqlDb::write_data('BEGIN');
+		} //end if
 		//--
-		$wr = \SmartPgsqlDb::write_data(
+		$wr = (array) \SmartPgsqlDb::write_data(
 			'INSERT INTO "web"."page_builder" '.
 			\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'insert')
 		);
 		if($wr[1] != 1) {
-			\SmartPgsqlDb::write_data('ROLLBACK');
+			if($y_use_external_transaction !== true) {
+				\SmartPgsqlDb::write_data('ROLLBACK');
+			} //end if
 			return (int) $wr[1]; // insert failed
 		} //end if
 		//--
-		$wr = self::updateChecksumRecordById((string)$y_arr_data['id']);
+		$wr = (array) self::updateChecksumRecordById((string)$y_arr_data['id']);
 		if($wr[1] != 1) {
-			\SmartPgsqlDb::write_data('ROLLBACK');
+			if($y_use_external_transaction !== true) {
+				\SmartPgsqlDb::write_data('ROLLBACK');
+			} //end if
 			return -2; // checksum failed
 		} //end if
 		//--
-		\SmartPgsqlDb::write_data('COMMIT');
+		if($y_use_external_transaction !== true) {
+			\SmartPgsqlDb::write_data('COMMIT');
+		} //end if
 		//--
 		return 1; // all ok
+		//--
+	} //END FUNCTION
+
+
+	public static function updateRecordRefsById($y_id, $y_refs_arr) {
+		//--
+		if(\Smart::array_size($y_refs_arr) <= 0) {
+			return -1;
+		} //end if
+		if(\Smart::array_type_test($y_refs_arr) !== 1) { // must be array non-associative
+			return -2;
+		} //end if
+		//--
+		$arr_upd = [];
+		foreach($y_refs_arr as $key => $val) {
+			if((strlen((string)$val) < 2) OR (strlen((string)$val) > 63) OR (((string)$val != (string)\Smart::safe_validname((string)$val, '')) AND ((string)$val != (string)'#'.\Smart::safe_validname((string)$val, '')))) { // allow: [a-z0-9] _ - . @
+				return -3;
+			} //end if
+			$arr_upd[] = (string) $val;
+		} //end foreach
+		//--
+		if(\Smart::array_size($arr_upd) <= 0) {
+			return -4;
+		} //end if
+		//--
+		return (array) \SmartPgsqlDb::write_data(
+			'UPDATE "web"."page_builder" SET "ref" = smart_jsonb_arr_append("ref", $1) WHERE ("id" = $2)',
+			[
+				(string) \Smart::json_encode((array)$arr_upd), // ref add: json arr data
+				(string) $y_id // ID
+			]
+		);
+		//--
+	} //END FUNCTION
+
+
+	public static function clearRecordRefsById($y_id) {
+		//--
+		return (array) \SmartPgsqlDb::write_data(
+			'UPDATE "web"."page_builder" SET "ref" = smart_jsonb_arr_delete("ref", $1)',
+			[
+				(string) $y_id // ref del: string
+			]
+		);
 		//--
 	} //END FUNCTION
 
@@ -224,7 +276,12 @@ final class PgPageBuilderBackend {
 		//--
 		\SmartPgsqlDb::write_data('BEGIN');
 		//--
-		$wr = \SmartPgsqlDb::write_data(
+		$rd = (array) self::getRecordIdsById((string)$y_id);
+		if((string)$rd['id'] == '') {
+			return -4;
+		} //end if
+		//--
+		$wr = (array) \SmartPgsqlDb::write_data(
 			'UPDATE "web"."page_builder" '.
 			\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'update').
 			' WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
@@ -235,11 +292,87 @@ final class PgPageBuilderBackend {
 		} //end if
 		//--
 		if($y_upd_checksum === true) {
-			$wr = self::updateChecksumRecordById((string)$y_id);
+			$wr = (array) self::updateChecksumRecordById((string)$y_id);
 			if($wr[1] != 1) {
 				\SmartPgsqlDb::write_data('ROLLBACK');
-				return -4; // checksum failed
+				return -5; // checksum failed
 			} //end if
+		} //end if
+		//--
+		if(array_key_exists('data', $y_arr_data)) { // DO THIS JUST JUST ON UPDATES THAT CONTAIN THE 'data' KEY
+			//-- delete ref from all objects
+			self::clearRecordRefsById($y_id);
+			//-- rebuild reference from YAML (if new YAML segments entered will be created automatically)
+			$tmp_yaml = (string) trim((string)base64_decode((string)$y_arr_data['data']));
+			if((string)$tmp_yaml != '') {
+				$tmp_yaml = (array) (new \SmartYamlConverter())->parse((string)$tmp_yaml);
+				if(\Smart::array_size($tmp_yaml) > 0) {
+					if(\Smart::array_size($tmp_yaml['RENDER']) > 0) {
+						foreach($tmp_yaml['RENDER'] as $key => $val) {
+							$key = (string) trim((string)$key);
+							if((string)$key != '') {
+								if(\Smart::array_size($val) > 0) {
+									foreach($val as $k => $v) {
+										if(((string)trim((string)$k) != '') AND (\Smart::array_size($val[(string)$k]) > 0) AND (\Smart::array_size($v) > 0) AND ((string)$v['type'] == 'segment')) {
+											$v['id'] = (string) trim((string)$v['id']);
+											if((strlen((string)$v['id']) >= 2) AND (strlen((string)$v['id']) <= 63)) {
+												$v['id'] = (string) \Smart::safe_validname($v['id'], ''); // allow: [a-z0-9] _ - . @
+												if((string)$v['id'] != '') {
+													$v['id'] = (string) '#'.$v['id']; // ensure is segment
+													if((strlen((string)$v['id']) >= 2) AND (strlen((string)$v['id']) <= 63)) { // db id constraint
+														$test_exists = (array) self::getRecordIdsById((string)$v['id']);
+														$tmp_arr_refs = [ (string)$y_id ];
+														if((string)$test_exists['id'] == '') { // segment does not exists
+															$tmp_new_arr = [
+																'id' => (string) $v['id'],
+																'ref' => \Smart::json_encode((array)$tmp_arr_refs),
+																'name' => (string) \SmartUnicode::sub_str($rd['name'].': ['.$key.']', 0, 255),
+																'mode' => 'text', // default to text segment
+																'admin' => (string) $y_arr_data['admin'],
+																'modified' => (string) $y_arr_data['modified']
+															];
+															$wr = (int) self::insertRecord((array)$tmp_new_arr, true); // insert with external transaction
+															if($wr != 1) {
+																\SmartPgsqlDb::write_data('ROLLBACK');
+																return -16; // insert sub-segment failed
+															} //end if
+														} else {
+															$wr = (array) self::updateRecordRefsById(
+																(string) $v['id'],
+																(array)  $tmp_arr_refs // array of IDs
+															);
+															if($wr[1] != 1) {
+																\SmartPgsqlDb::write_data('ROLLBACK');
+																return -15; // update sub-segment failed
+															} //end if
+														} //end if
+													} else {
+														\SmartPgsqlDb::write_data('ROLLBACK');
+														return -14; // invalid render val content id (3)
+													} //end if
+												} else {
+													\SmartPgsqlDb::write_data('ROLLBACK');
+													return -13; // invalid render val content id (2)
+												} //end if
+											} else {
+												\SmartPgsqlDb::write_data('ROLLBACK');
+												return -12; // invalid render val content id (1)
+											} //end if
+										} //end if
+									} //end foreach
+								} else {
+									\SmartPgsqlDb::write_data('ROLLBACK');
+									return -11; // invalid render val
+								} //end if
+							} else {
+								\SmartPgsqlDb::write_data('ROLLBACK');
+								return -10; // invalid render key
+							} //end if
+						} //end if
+					} //end if
+				} //end if
+			} //end if
+			//--
 		} //end if
 		//--
 		\SmartPgsqlDb::write_data('COMMIT');
@@ -279,7 +412,7 @@ final class PgPageBuilderBackend {
 				(string) $y_lang
 			]
 		);
-		$wr = \SmartPgsqlDb::write_data(
+		$wr = (array) \SmartPgsqlDb::write_data(
 			'INSERT INTO "web"."page_translations" '.
 			\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'insert')
 		);
@@ -303,18 +436,23 @@ final class PgPageBuilderBackend {
 		} //end if
 		//--
 		\SmartPgsqlDb::write_data('BEGIN');
+		//--
 		$wr = (array) \SmartPgsqlDb::write_data(
 			'DELETE FROM "web"."page_builder" WHERE ("id" = $1)',
 			[
 				(string) $y_id
 			]
 		);
+		//--
+		self::clearRecordRefsById($y_id);
+		//--
 		\SmartPgsqlDb::write_data(
 			'DELETE FROM "web"."page_translations" WHERE ("id" = $1)',
 			[
 				(string) $y_id
 			]
 		);
+		//--
 		\SmartPgsqlDb::write_data('COMMIT');
 		//--
 		return (array) $wr;
@@ -426,7 +564,7 @@ final class PgPageBuilderBackend {
 					$where = 'WHERE ('.$wh_stat.'("id" LIKE \''.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'id-ref':
-					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
+					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" ? \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
 					break;
 				case 'name':
 					$where = 'WHERE ('.$wh_stat.'("name" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';

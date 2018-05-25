@@ -49,6 +49,12 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListTable()
 				);
 				break;
+			case 'records-tree':
+				$this->PageViewSetVar(
+					'main',
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayTree()
+				);
+				break;
 			case 'records-list-json':
 				$ofs = $this->RequestVarGet('ofs', 0, 'integer+');
 				$sortby = $this->RequestVarGet('sortby', 'id', 'string');

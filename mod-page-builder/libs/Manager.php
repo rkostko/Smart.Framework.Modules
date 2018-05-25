@@ -155,6 +155,7 @@ final class Manager {
 		$text['admin'] 				= 'Author';
 		$text['published'] 			= 'Published';
 		$text['auth'] 				= 'Auth';
+		$text['translatable'] 		= 'Translatable';
 		//--
 
 		//--
@@ -241,7 +242,7 @@ final class Manager {
 	//==================================================================
 	// view or display form entry for PROPS
 	// $y_mode :: 'list' | 'form'
-	public static function ViewFormProps($y_id, $y_mode) {
+	public static function ViewFormProps($y_id, $y_mode, $y_custom_view=false) {
 		//--
 		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordPropsById($y_id);
 		if((string)$query['id'] == '') {
@@ -260,9 +261,11 @@ final class Manager {
 		//--
 		if((string)$y_mode == 'form') {
 			//--
-			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_props', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
-			$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+			if($y_custom_view !== true) {
+				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_props', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
+				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+			} //end if
 			//--
 			$fld_name = '<input type="text" name="frm[name]" value="'.\Smart::escape_html($query['name']).'" size="70" maxlength="150" autocomplete="off" placeholder="Internal Page Title" required>';
 			//--
@@ -281,6 +284,7 @@ final class Manager {
 			$fld_special = \SmartComponents::html_selector_true_false('frm[special]', $query['special']);
 			$fld_active = \SmartComponents::html_selector_true_false('frm[active]', $query['active']);
 			$fld_auth = \SmartComponents::html_selector_true_false('frm[auth]', $query['auth']);
+			$fld_trans = \SmartComponents::html_selector_true_false('frm[translations]', $query['translations']);
 			//--
 			$fld_layout = self::drawListLayout($query['mode'], 'form', $query['layout'], 'frm[layout]');
 			$fld_meta_ttl = '<input type="text" name="frm[meta_title]" value="'.\Smart::escape_html($query['meta_title']).'" size="55" maxlength="255" autocomplete="off" placeholder="WebPage (meta) Title - SEO">';
@@ -289,19 +293,24 @@ final class Manager {
 			//--
 			$extra_form_start = '<form class="ux-form" name="page_form_props" id="page_form_props" method="post" action="#" onsubmit="return false;"><input type="hidden" name="frm[form_mode]" value="props">';
 			$extra_form_end = '</form>';
-			$extra_scripts = '<script>SmartJS_BrowserUtils_PageAway = false; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>'.'<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>';
+			$extra_scripts = '<script type="text/javascript">SmartJS_BrowserUtils_PageAway = false;</script>';
+			if($y_custom_view !== true) {
+				$extra_scripts .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
+			} //end if
+			$extra_scripts .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>';
 			//--
 		} else {
 			//--
-			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-delete.svg'.'" alt="'.self::text('ttl_del').'" title="'.self::text('ttl_del').'" style="cursor:pointer;" onClick="self.location=\''.\Smart::escape_js(self::composeUrl('op=record-delete&id='.\Smart::escape_url($query['id']))).'\';">';
-			$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-edit.svg'.'" alt="'.self::text('ttl_edt').'" title="'.self::text('ttl_edt').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-edit-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
-			//--
-			if((string)$query['checksum'] != (string)$query['calc_checksum']) {
+			if($y_custom_view !== true) {
+				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-delete.svg'.'" alt="'.self::text('ttl_del').'" title="'.self::text('ttl_del').'" style="cursor:pointer;" onClick="self.location=\''.\Smart::escape_js(self::composeUrl('op=record-delete&id='.\Smart::escape_url($query['id']))).'\';">';
 				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/no-hash.svg'.'" alt="'.self::text('msg_invalid_cksum').'" title="'.self::text('msg_invalid_cksum').'" style="cursor:help;">';
+				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-edit.svg'.'" alt="'.self::text('ttl_edt').'" title="'.self::text('ttl_edt').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-edit-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
+				if((string)$query['checksum'] != (string)$query['calc_checksum']) {
+					$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/no-hash.svg'.'" alt="'.self::text('msg_invalid_cksum').'" title="'.self::text('msg_invalid_cksum').'" style="cursor:help;">';
+				} //end if
 			} //end if
 			//--
 			$fld_name = \Smart::escape_html($query['name']);
@@ -310,6 +319,7 @@ final class Manager {
 			$fld_special = \SmartComponents::html_selector_true_false('', $query['special']);
 			$fld_active = \SmartComponents::html_selector_true_false('', $query['active']);
 			$fld_auth = \SmartComponents::html_selector_true_false('', $query['auth']);
+			$fld_trans = \SmartComponents::html_selector_true_false('', $query['translations']);
 			//--
 			$fld_layout = self::drawListLayout($query['mode'], 'list', $query['layout']);
 			$fld_meta_ttl = \Smart::escape_html($query['meta_title']);
@@ -318,7 +328,10 @@ final class Manager {
 			//--
 			$extra_form_start = '';
 			$extra_form_end = '';
-			$extra_scripts = '<script>SmartJS_BrowserUtils_PageAway = true; SmartJS_BrowserUIUtils.Tabs_Activate("tabs", true);</script>';
+			$extra_scripts = '<script>SmartJS_BrowserUtils_PageAway = true;</script>';
+			if($y_custom_view !== true) {
+				$extra_scripts .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", true);</script>';
+			} //end if
 			//--
 		} //end if else
 		//--
@@ -329,8 +342,13 @@ final class Manager {
 		if($query['len_data'] > 0) {
 			$codetype[] = self::text('record_runtime').'&nbsp;['.\Smart::escape_html(\SmartUtils::pretty_print_bytes((int)$query['len_data'],2)).']';
 		} //end if
-		if((string)$codetype != '') {
+		if(\Smart::array_size($codetype) > 0) {
 			$codetype = (string) str_replace(' ', '&nbsp;', (string)implode('&nbsp;&nbsp;/&nbsp;&nbsp;', (array)$codetype));
+		} else {
+			$codetype = '';
+		} //end if
+		if($y_custom_view === true) {
+			$codetype = '';
 		} //end if
 		//--
 		if(self::testIsSegmentPage($query['id'])) {
@@ -356,6 +374,8 @@ final class Manager {
 				'FIELD-ACTIVE'				=> (string) $fld_active,
 				'TEXT-AUTH'					=> (string) self::text('login'),
 				'FIELD-AUTH'				=> (string) $fld_auth,
+				'TEXT-TRANS'				=> (string) self::text('translatable'),
+				'FIELD-TRANS'				=> (string) $fld_trans,
 				'TEXT-LAYOUT'				=> (string) self::text('layout'),
 				'FIELD-LAYOUT'				=> (string) $fld_layout,
 				'TEXT-META-TITLE'			=> (string) self::text('meta_ttl'),
@@ -458,7 +478,7 @@ final class Manager {
 					if($y_custom_view !== true) {
 						$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
 					} //end if
-					//$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
+					$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
 					//--
 				} //end if else
 				//--
@@ -607,7 +627,7 @@ final class Manager {
 				if($y_custom_view !== true) {
 					$out .= '<script>SmartJS_BrowserUIUtils.Tabs_Activate("tabs", false);</script>';
 				} //end if
-				//$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
+				$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>'; // not necessary
 				//--
 			} else {
 				//-- CODE VIEW
@@ -770,7 +790,7 @@ final class Manager {
 						//--
 						$redirect = self::composeUrl('op=record-view&id='.\Smart::escape_url($data['id']));
 						//--
-						$data['ref'] = ''; // reference parent, by default is empty
+						$data['ref'] = '[]'; // reference parent, by default is empty json array []
 						$data['name'] = (string) trim((string)$y_frm['name']);
 						$data['active'] = '0'; // the page will be inactive at creation time
 						$data['ctrl'] = '';
@@ -783,7 +803,7 @@ final class Manager {
 						} //end if
 						if((string)$error == '') {
 							$chk_id = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordIdsById($data['id']);
-							if(strlen($chk_id[0]) > 0) {
+							if(strlen($chk_id['id']) > 0) {
 								$error = self::text('err_3')."\n"; // duplicate ID
 							} //end if
 						} //end if
@@ -829,16 +849,19 @@ final class Manager {
 						//--
 						$data = array();
 						//--
-						$data['name'] = trim((string)$y_frm['name']);
+						$data['name'] = (string) \SmartUnicode::sub_str((string)trim((string)$y_frm['name']), 0, 255);
 						if((string)$error == '') {
 							if((string)$data['name'] == '') {
 								$error = self::text('err_6')."\n"; // invalid (empty) Title
 							} //end if
 						} //end if
 						//--
-						$data['ctrl'] = (string) trim((string)$y_frm['ctrl']);
-						$data['ctrl'] = (string) \Smart::safe_validname($data['ctrl'], ''); // allow: [a-z0-9] _ - . @
-						$data['ctrl'] = (string) str_replace('@', '', (string)$data['ctrl']); // dissalow: @ (this should allow valid controllers names)
+						$data['ctrl'] = (string) \SmartUnicode::sub_str((string)trim((string)$y_frm['ctrl']), 0, 128);
+						//--
+						$data['translations'] = (int) $y_frm['translations'];
+						if($data['translations'] !== 0) {
+							$data['translations'] = 1;
+						} //end if
 						//--
 						if(((\SmartAuth::test_login_privilege('superadmin') !== true) AND (\SmartAuth::test_login_privilege('pagebuilder_manager') !== true)) AND ((string)$query['special'] == '0') AND ((string)$y_frm['special'] == '1')) {
 							// avoid unprivileged admins to mark a page as special
@@ -879,7 +902,7 @@ final class Manager {
 									$data['mode'] = 'html';
 							} //end switch
 							//--
-							$data['layout'] = trim((string)$y_frm['layout']);
+							$data['layout'] = (string) trim((string)$y_frm['layout']);
 							if(strlen((string)$data['layout']) > 75) {
 								$data['layout'] = ''; // fix to avoid DB overflow
 							} //end if
@@ -887,14 +910,15 @@ final class Manager {
 								$data['layout'] = ''; // force for raw pages
 							} //end if
 							//--
-							$data['meta_title'] = trim($y_frm['meta_title']);
-							$data['meta_description'] = trim($y_frm['meta_description']);
-							$data['meta_keywords'] = trim($y_frm['meta_keywords']);
+							$data['meta_title'] = (string) \SmartUnicode::sub_str((string)trim((string)$y_frm['meta_title']), 0, 255);
+							$data['meta_description'] = (string) \SmartUnicode::sub_str((string)trim((string)$y_frm['meta_description']), 0, 512);
+							$data['meta_keywords'] = (string) \SmartUnicode::sub_str((string)trim((string)$y_frm['meta_keywords']), 0, 1024);
 							//--
 						} else {
 							//--
-							$data['ctrl'] = '';
-							$data['layout'] = '';
+							$data['active'] = 0;
+							$data['auth'] = 0;
+							//--
 							$data['mode'] = strtolower(trim($y_frm['mode']));
 							switch((string)$data['mode']) {
 								case 'settings':
@@ -911,6 +935,11 @@ final class Manager {
 								default:
 									$data['mode'] = 'html';
 							} //end switch
+							//--
+							$data['layout'] = '';
+							$data['meta_title'] = '';
+							$data['meta_description'] = '';
+							$data['meta_keywords'] = '';
 							//--
 						} //end if
 						//--
@@ -1029,7 +1058,7 @@ final class Manager {
 					} //end if else
 					//--
 					if($wr !== 1) {
-						$error = self::text('err_5')."\n";
+						$error = self::text('err_5').' @ '.$wr."\n";
 					} // end if else
 					//--
 				} else {
@@ -1326,7 +1355,7 @@ final class Manager {
 	private static function drawListAreas($y_id, $y_mode, $y_var='', $y_width='65') {
 		//--
 		if((string)$y_mode == 'form') {
-			return (string) '<input type="text" name="'.\Smart::escape_html((string)$y_var).'" value="'.\Smart::escape_html((string)$y_id).'" size="'.\Smart::format_number_int($y_width,'+').'" maxlength="63" autocomplete="off" placeholder="Unique Object Slug: [a-z0-9_-]" required>';
+			return (string) '<input type="text" name="'.\Smart::escape_html((string)$y_var).'" value="'.\Smart::escape_html((string)$y_id).'" size="'.\Smart::format_number_int($y_width,'+').'" maxlength="128" autocomplete="off" placeholder="Meta Controller Name" required>';
 		} else {
 			return (string) \Smart::escape_html($y_id);
 		} //end if else
@@ -1344,13 +1373,43 @@ final class Manager {
 	//==================================================================
 
 
-
-	public static function ViewDisplayListTable($y_link_list='', $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+	//==================================================================
+	public static function ViewDisplayTree($y_link_add=true, $y_link_view=true, $y_link_delete=true) {
 		//--
-		if((string)trim((string)$y_link_list) == '') {
-			$y_link_list = (string) self::composeUrl('op=records-list-json&');
+		$arr_controllers = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsUniqueControllers();
+		$arr_pages_data = array();
+		for($i=0; $i<\Smart::array_size($arr_controllers); $i++) {
+			$tmp_arr_lvl1 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByCtrl((string)$arr_controllers[$i]);
+			for($j=0; $j<\Smart::array_size($tmp_arr_lvl1); $j++) {
+				if(\Smart::array_size($tmp_arr_lvl1[$j]) > 0) {
+					$tmp_arr_lvl2 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl1[$j]['id']);
+					$tmp_arr_lvl1[$j]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl1[$j]['id'], (string)$tmp_arr_lvl1[$j]['mode']);
+					$tmp_arr_lvl1[$j]['ref-childs'] = array();
+					if(\Smart::array_size($tmp_arr_lvl2) > 0) {
+						for($k=0; $k<\Smart::array_size($tmp_arr_lvl2); $k++) {
+							if(\Smart::array_size($tmp_arr_lvl2[$k]) > 0) {
+								$tmp_arr_lvl3 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl2[$k]['id']);
+								$tmp_arr_lvl2[$k]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl2[$k]['id'], (string)$tmp_arr_lvl2[$k]['mode']);
+								$tmp_arr_lvl2[$k]['ref-childs'] = array();
+								if(\Smart::array_size($tmp_arr_lvl3) > 0) {
+									for($z=0; $z<\Smart::array_size($tmp_arr_lvl3); $z++) {
+										$tmp_arr_lvl3[$z]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl3[$z]['id'], (string)$tmp_arr_lvl3[$z]['mode']);
+									} //end for
+									$tmp_arr_lvl2[$k]['ref-childs'] = (array) $tmp_arr_lvl3;
+								} //end if
+								$tmp_arr_lvl3 = array();
+							} //end if
+						} //end for
+						$tmp_arr_lvl1[$j]['ref-childs'] = (array) $tmp_arr_lvl2;
+					} //end if
+					$tmp_arr_lvl2 = array();
+					$arr_pages_data[(string)$arr_controllers[$i]][] = (array) $tmp_arr_lvl1[$j];
+				} //end if
+			} //end for
+			$tmp_arr_lvl1 = array();
 		} //end if
-		//--
+		//print_r($arr_pages_data); die();
+		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		if($y_link_add === true) {
 			$y_link_add = (string) self::composeUrl('op=record-add-form');
 		} elseif($y_link_add === false) {
@@ -1366,7 +1425,42 @@ final class Manager {
 		} elseif($y_link_delete === false) {
 			$y_link_delete = '';
 		} //end if
+		//-- #{{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
+		return (string) \SmartMarkersTemplating::render_file_template(
+			self::$ModulePath.'libs/views/manager/view-tree.mtpl.htm',
+			[
+				'RECORD-URL' 	=> (string) $y_link_view,
+				'DATA' 			=> (array) $arr_pages_data
+			]
+		);
 		//--
+	} //END FUNCTION
+	//==================================================================
+
+
+	//==================================================================
+	public static function ViewDisplayListTable($y_link_list='', $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+		//--
+		if((string)trim((string)$y_link_list) == '') {
+			$y_link_list = (string) self::composeUrl('op=records-list-json&');
+		} //end if
+		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
+		if($y_link_add === true) {
+			$y_link_add = (string) self::composeUrl('op=record-add-form');
+		} elseif($y_link_add === false) {
+			$y_link_add = '';
+		} //end if
+		if($y_link_view === true) {
+			$y_link_view = (string) self::composeUrl('op=record-view&id=');
+		} elseif($y_link_view === false) {
+			$y_link_view = '';
+		} //end if
+		if($y_link_delete === true) {
+			$y_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		} elseif($y_link_delete === false) {
+			$y_link_delete = '';
+		} //end if
+		//-- #{{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
 			[
@@ -1397,8 +1491,10 @@ final class Manager {
 		);
 		//--
 	} //END FUNCTION
+	//==================================================================
 
 
+	//==================================================================
 	public static function ViewDisplayListJson($restrict_special, $ofs, $sortby, $sortdir, $lst, $srcby, $src) {
 		//--
 		$ofs = (int) \Smart::format_number_int($ofs, '+');
@@ -1435,7 +1531,7 @@ final class Manager {
 		return (string) \Smart::json_encode((array)$data);
 		//--
 	} //END FUNCTION
-
+	//==================================================================
 
 
 } //END CLASS

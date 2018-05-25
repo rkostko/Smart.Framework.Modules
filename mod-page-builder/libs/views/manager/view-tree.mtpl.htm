@@ -1,0 +1,54 @@
+<script src="lib/js/jquery/tree/simpletree.js"></script>
+<style>
+.simpletree-toggle, .simpletree-notoggle {
+	display: inline-block;
+	width: 15px;
+}
+.simpletree-tree .simpletree-button {
+	cursor: pointer;
+}
+ul.pagebuilder-tree, ul.pagebuilder-tree li {
+	list-style-type: none;
+}
+</style>
+<h1>PageBuilder Tree</h1>
+<ul class="pagebuilder-tree">
+	[%%%%LOOP:DATA%%%%]
+	<!-- start CTRL: [####DATA._-KEY-_|html####] -->
+	<li>
+		[%%%%IF:DATA._-KEY-_:!=;%%%%][####DATA._-KEY-_|html####][%%%%ELSE:DATA._-KEY-_%%%%]*** (UNASSIGNED) ***[%%%%/IF:DATA._-KEY-_%%%%]
+		[%%%%LOOP:DATA._-VAL-_%%%%]
+		<ul>
+			<li title="[####DATA._-VAL-_.ID|html####]" data-simpletree="collapsed">
+				<a href="[####RECORD-URL|html####][####DATA._-VAL-_.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.IMG-TYPE-HTML%%%%]</a> &nbsp; [####DATA._-VAL-_.NAME|html####]
+				[%%%%IF:DATA._-VAL-_.REF-CHILDS:@+0;%%%%]
+					[%%%%LOOP:DATA._-VAL-_.REF-CHILDS%%%%]
+					<ul>
+						<li title="[####DATA._-VAL-_.REF-CHILDS.ID|html####]" data-simpletree="collapsed">
+							<a href="[####RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; [####DATA._-VAL-_.REF-CHILDS.NAME|html####]
+							[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS:@+0;%%%%]
+								[%%%%LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
+								<ul>
+									<li title="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]" data-simpletree="collapsed">
+										<a href="[####RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; [####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.NAME|html####]
+									</li>
+								</ul>
+								[%%%%/LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
+							[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
+						</li>
+					</ul>
+					[%%%%/LOOP:DATA._-VAL-_.REF-CHILDS%%%%]
+				[%%%%/IF:DATA._-VAL-_.REF-CHILDS%%%%]
+			</li>
+		</ul>
+		[%%%%/LOOP:DATA._-VAL-_%%%%]
+	</li>
+	<!-- end CTRL: [####DATA._-KEY-_|html####] -->
+	[%%%%/LOOP:DATA%%%%]
+</ul>
+<script>
+	jQuery('ul.pagebuilder-tree').simpletree({
+		signCollapsed: '+',
+		signExpanded: '-'
+	});
+</script>
