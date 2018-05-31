@@ -42,6 +42,8 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 	private $crr_lang = '';				// current language
 
 	private $page_markers = [];			// extra markers to allow be direct set in template except MAIN (and the indirect: TITLE, META-DESCRIPTION, META-KEYWORDS)
+	private $regex_tpl_marker = '/^[A-Z0-9_\-\.@]+$/'; // regex for tpl markers
+	private $regex_marker     = '/^[A-Z0-9_\-\.]+$/';  // regex for internal markers
 
 	private $auth_required = 0; 		// 0: no auth ; if > 0, will req. auth
 	private $recursion_control = 0; 	// initialize
@@ -332,7 +334,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		for($i=0; $i<\Smart::array_size($tmp_arr); $i++) {
 			$tmp_arr[$i] = (string) trim((string)$tmp_arr[$i]);
 			if((string)$tmp_arr[$i] != '') {
-				if(preg_match('/^[A-Z0-9\-\.]+$/', (string)$tmp_arr[$i])) {
+				if(preg_match((string)$this->regex_marker, (string)$tmp_arr[$i])) {
 					if(!in_array((string)$tmp_arr[$i], [ 'MAIN', 'TITLE', 'META-DESCRIPTION', 'META-KEYWORDS' ])) {
 						$markers[] = 'TEMPLATE@'.$tmp_arr[$i];
 					} //end if
@@ -866,7 +868,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 					$plugin_exec 			= null; // reset each cycle
 					$plugin_status 			= null; // reset each cycle
 					//--
-					if(((string)$key != '') AND (preg_match('/^[A-Z0-9\-\.@]+$/', (string)$key))) {
+					if(((string)$key != '') AND (preg_match((string)$this->regex_tpl_marker, (string)$key))) {
 						//--
 						if((string)$val[$i]['type'] == 'plugin') { // INFO: each template must provide it's content (already cached or not) and the pcache key suffixes
 							//--
@@ -997,7 +999,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 												//-- don't replace these markers, they are template markers
 												$data_arr['smart-markers'][(string)substr((string)$key, strlen('TEMPLATE@'))] .= (string) $plugin_exec['content']; // append is mandatory here else will not render correctly more than one sub-segment/plugin
 												//--
-											} elseif(preg_match('/^[A-Z0-9\-\.]+$/', (string)$key)) {
+											} elseif(preg_match((string)$this->regex_marker, (string)$key)) {
 												//--
 												if(strpos((string)$data_arr['code'], '{{:'.(string)$key) !== false) {
 													//-- replace these markers, they are page markers
@@ -1058,7 +1060,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 									//-- don't replace these markers, they are template markers
 									$data_arr['smart-markers'][(string)substr((string)$key, strlen('TEMPLATE@'))] .= (string) $val[$i]['code']; // append is mandatory here else will not render correctly more than one sub-segment/plugin
 									//--
-								} elseif(preg_match('/^[A-Z0-9\-\.]+$/', (string)$key)) {
+								} elseif(preg_match((string)$this->regex_marker, (string)$key)) {
 									//--
 									if(strpos((string)$data_arr['code'], '{{:'.(string)$key) !== false) {
 										//-- replace these markers, they are page markers
