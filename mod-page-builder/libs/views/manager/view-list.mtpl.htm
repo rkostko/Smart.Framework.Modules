@@ -1,4 +1,4 @@
-<!-- Pagebuilder/Manage @ List / Records :: v.180511 -->
+<!-- Pagebuilder/Manage @ List / Records :: v.180605 -->
 <style>
 	.smartGrid_AlignCenter {
 		text-align: center;
@@ -34,50 +34,16 @@
 	var TheGrid = new Smart_Grid(IdOfGrid, 'infoTotalRows', '[####LIST-JSON-URL|js####]', 'PageBuilder_Smart_Slickgrid_List', 'id', 'ASC', '', 'filtering');
 	//--
 </script>
-<br>
-<form id="filtering" name="filtering" class="ux-form">
-	<table style="width:99%;"><tr>
-	<td style="width:1px;">
-		<select name="lst" id="filter-lst" class="ux-input-def ux-input-1-4">
-			<option value=""></option>
-			<option value="a">[####TXT-PG-ACTIVE|html####]</option>
-			<option value="i">[####TXT-PG-INACTIVE|html####]</option>
-			<option value="s">[####TXT-PG-SEGMENTS|html####]</option>
-		</select>
-	</td>
-	<td style="width:1px;">
-		<span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span>
-	</td>
-	<td style="width:1px;">
-		<select name="srcby" id="filter-srcby" class="ux-input-def ux-input-1-4">
-			<option value=""></option>
-			<option value="id">[####TXT-COL-ID|html####]</option>
-			<option value="name">[####TXT-COL-NAME|html####]</option>
-			<option value="code">[####TXT-COL-CODE|html####]</option>
-			<option value="data">[####TXT-COL-RUNTIME|html####]</option>
-		</select>
-	</td>
-	<td style="width:1px;">&nbsp;</td>
-	<td style="width:1px;"><button type="button" class="ux-button ux-button-primary" onClick="TheGrid.loadGridData(0);">[####TXT-FILTER|html####] &nbsp; <i class="fa fa-filter"></i></button></td>
-	<td style="width:1px;"><button type="button" class="ux-button ux-button-secondary" onClick="TheGrid.resetGrid(); TheGrid.loadGridData(0);">[####TXT-RESET|html####] &nbsp; <i class="fa fa-times"></i></button></td>
-	<td style="width:1px;">
-	[%%%%IF:LIST-NEW-URL:!=;%%%%]
-	<a class="ux-button ux-button-special" href="[####LIST-NEW-URL|html####]" data-smart="open.modal">[####TXT-ADD-NEW|html####] &nbsp; <i class="fa fa-plus"></i></a>
-	[%%%%ELSE:LIST-NEW-URL%%%%]
-	&nbsp;
-	[%%%%/IF:LIST-NEW-URL%%%%]
-	</td>
-	<td style="width:32px;">
-		&nbsp;
-	</td>
-	<td style="text-align:center;">
-		<span style="color:#333333; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-TTL|html####]</span>
-	</td>
-	<td style="text-align:right; padding-right:10px;">
-		<span style="color:#CCCCCC; line-height:24px; font-size:24px; font-weight:bold;">[####LIST-RECORDS|html####] :: <span id="infoTotalRows"># / # @</span></span>
-	</td>
-	</tr></table>
-</form>
+<script type="text/javascript">
+function pageBuilderFormBtnFilter() {
+	TheGrid.loadGridData(0);
+}
+function pageBuilderFormBtnResetFilter() {
+	TheGrid.resetGrid();
+	TheGrid.loadGridData(0);
+}
+</script>
+[@@@@SUB-TEMPLATE:view-filter-form.mtpl.inc.htm@@@@]
 <div style="padding-left:5px;">
 	<div id="PageBuilderNavPager"></div>
 </div>

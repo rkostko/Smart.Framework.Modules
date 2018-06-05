@@ -71,7 +71,8 @@ final class Manager {
 
 		//-- ttls
 		$text['ttl_list'] 			= 'PageBuilder Objects';
-		$text['ttl_records'] 		= 'List / Records';
+		$text['ttl_records'] 		= 'List';
+		$text['ttl_trecords'] 		= 'TreeList';
 		$text['ttl_add'] 			= 'Add New Object';
 		$text['ttl_edt'] 			= 'Edit Object Properties';
 		$text['ttl_edtc'] 			= 'Edit Object Code';
@@ -101,11 +102,12 @@ final class Manager {
 		$text['tab_data'] 			= 'Runtime';
 		$text['tab_info'] 			= 'Info';
 		//-- list data
+		$text['records'] 			= 'Records';
 		$text['cnp']				= 'Create A New Object';
 		$text['vep']				= 'View/Edit Object';
 		$text['dp']					= 'Delete Object';
 		//-- fields
-		$text['search_by']			= 'Search by';
+		$text['search_by']			= 'Filter by';
 		$text['keyword']			= 'Keyword';
 		$text['op_compl']			= 'Operation completed';
 		$text['op_ncompl'] 			= 'Operation NOT completed';
@@ -156,6 +158,8 @@ final class Manager {
 		$text['published'] 			= 'Published';
 		$text['auth'] 				= 'Auth';
 		$text['translatable'] 		= 'Translatable';
+		$text['pw_code'] 			= 'Code Preview';
+		$text['pw_data'] 			= 'Data Preview';
 		//--
 
 		//--
@@ -173,6 +177,58 @@ final class Manager {
 		return (string) $outText;
 		//--
 
+	} //END FUNCTION
+	//==================================================================
+
+
+	//==================================================================
+	public static function ViewDisplayHighlightCode($y_id) {
+		//--
+		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordById($y_id);
+		//--
+		if((string)$query['id'] == '') {
+			return \SmartComponents::operation_warn(self::text('err_4'));
+		} //end if
+		//--
+		if((string)$query['mode'] == 'text') {
+			$type = 'xml'; // fix for text
+		} else {
+			$type = (string) $query['mode'];
+		} //end if else
+		//--
+		$out = \SmartComponents::html_jsload_editarea();
+		$out .= \SmartComponents::js_code_highlightsyntax('div');
+		$out .= '<div style="text-align:left;">';
+		$out .= '<h3>Code Preview: '.\Smart::escape_html($query['name']).' :: '.\Smart::escape_html($query['id']).'</h3>';
+		$out .= '<pre style="background:#ebe9e9;"><code class="'.\Smart::escape_html($type).'" id="code-view-area">'.\Smart::escape_html(base64_decode((string)$query['code'])).'</code></pre>';
+		$out .= '</div>';
+		//--
+		return (string) $out;
+		//--
+	} //END FUNCTION
+	//==================================================================
+
+
+	//==================================================================
+	public static function ViewDisplayHighlightData($y_id) {
+		//--
+		$query = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordById($y_id);
+		//--
+		if((string)$query['id'] == '') {
+			return \SmartComponents::operation_warn(self::text('err_4'));
+		} //end if
+		//--
+		$type = 'yaml';
+		//--
+		$out = \SmartComponents::html_jsload_editarea();
+		$out .= \SmartComponents::js_code_highlightsyntax('div');
+		$out .= '<div style="text-align:left;">';
+		$out .= '<h3>Data Preview: '.\Smart::escape_html($query['name']).' :: '.\Smart::escape_html($query['id']).'</h3>';
+		$out .= '<pre style="background:#ebe9e9;"><code class="'.\Smart::escape_html($type).'" id="data-view-area">'.\Smart::escape_html(base64_decode((string)$query['data'])).'</code></pre>';
+		$out .= '</div>';
+		//--
+		return (string) $out;
+		//--
 	} //END FUNCTION
 	//==================================================================
 
@@ -445,6 +501,7 @@ final class Manager {
 						$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_html', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
 						$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 						$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#code-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-code&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+						$out .= (string) self::getPreviewButtons($query['id']);
 					} //end if
 					$out .= '</div>'."\n";
 					$out .= '<form name="page_form_html" id="page_form_html" method="post" action="#" onsubmit="return false;">';
@@ -616,6 +673,7 @@ final class Manager {
 					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-save.svg'.'" alt="'.self::text('save').'" title="'.self::text('save').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_ajax_submit_html_form('page_form_yaml', self::composeUrl('op=record-edit-do&id='.\Smart::escape_url($query['id']))).'">';
 					$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 					$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-back.svg'.'" alt="'.self::text('cancel').'" title="'.self::text('cancel').'" style="cursor:pointer;" onClick="'.\SmartComponents::js_code_ui_confirm_dialog('<h3>'.self::text('msg_unsaved').'</h3>'.'<br>'.'<b>'.\Smart::escape_html($translator_window->text('confirm_action')).'</b>', "SmartJS_BrowserUtils.Load_Div_Content_By_Ajax($('#yaml-editor').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-view-tab-data&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');").'">';
+					$out .= (string) self::getPreviewButtons($query['id']);
 				} //end if
 				$out .= '</div>'."\n";
 				$out .= '<form class="ux-form" name="page_form_yaml" id="page_form_yaml" method="post" action="#" onsubmit="return false;">';
@@ -1199,6 +1257,25 @@ final class Manager {
 
 
 	//==================================================================
+	private static function getPreviewButtons($id) {
+		//--
+		$out = '';
+		//--
+		$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		//--
+		$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-preview-code.svg'.'" alt="'.self::text('pw_code').'" title="'.self::text('pw_code').'" style="cursor:pointer;" onClick="SmartJS_BrowserUtils.PopUpLink(\''.\Smart::escape_js(self::composeUrl('op=record-view-highlight-code&id='.\Smart::escape_url($id))).'\', \'page-builder-pw\', null, null, 1); return false;">';
+		$out .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$out .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-preview-data.svg'.'" alt="'.self::text('pw_data').'" title="'.self::text('pw_data').'" style="cursor:pointer;" onClick="SmartJS_BrowserUtils.PopUpLink(\''.\Smart::escape_js(self::composeUrl('op=record-view-highlight-data&id='.\Smart::escape_url($id))).'\', \'page-builder-pw\', null, null, 1); return false;">';
+		//--
+		return (string) $out;
+		//--
+	} //END FUNCTION
+	//==================================================================
+
+
+	//==================================================================
 	private static function getImgForPageType($y_id) {
 		//--
 		if(self::testIsSegmentPage($y_id)) { // segment
@@ -1374,7 +1451,31 @@ final class Manager {
 
 
 	//==================================================================
-	public static function ViewDisplayTree($y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+	public static function ViewDisplayTree($srcby, $src, $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+		//--
+		$flimit = 500; // filter limit
+		//--
+		$src = (string) trim((string)$src);
+		if((string)trim((string)$src) == '') {
+			$srcby = '';
+		} elseif((string)trim((string)$srcby) == '') {
+			$src = '';
+		} //end if
+		//--
+		$collapse = 'collapsed';
+		$filter = array();
+		if(((string)trim((string)$src) != '') AND ((string)trim((string)$srcby) != '')) {
+			$tmp_filter = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords('', $srcby, $src, (int)$flimit, 0, 'ASC', 'id', false);
+			for($i=0; $i<\Smart::array_size($tmp_filter); $i++) {
+				$filter[] = [ 'id' => (string)$tmp_filter[$i]['id'], 'hash-id' => (string)sha1((string)$tmp_filter[$i]['id']) ];
+			} //end for
+			$tmp_filter = array();
+		} //end if
+		if(\Smart::array_size($filter) > 0) {
+			$collapse = '';
+		} //end if
+		//--
+		$total = [];
 		//--
 		$arr_controllers = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsUniqueControllers();
 		$arr_pages_data = array();
@@ -1383,31 +1484,38 @@ final class Manager {
 			for($j=0; $j<\Smart::array_size($tmp_arr_lvl1); $j++) {
 				if(\Smart::array_size($tmp_arr_lvl1[$j]) > 0) {
 					$tmp_arr_lvl2 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl1[$j]['id']);
+					$tmp_arr_lvl1[$j]['hash-id'] = (string) sha1((string)$tmp_arr_lvl1[$j]['id']);
 					$tmp_arr_lvl1[$j]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl1[$j]['id'], (string)$tmp_arr_lvl1[$j]['mode']);
 					$tmp_arr_lvl1[$j]['ref-childs'] = array();
 					if(\Smart::array_size($tmp_arr_lvl2) > 0) {
 						for($k=0; $k<\Smart::array_size($tmp_arr_lvl2); $k++) {
 							if(\Smart::array_size($tmp_arr_lvl2[$k]) > 0) {
 								$tmp_arr_lvl3 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl2[$k]['id']);
+								$tmp_arr_lvl2[$k]['hash-id'] = (string) sha1((string)$tmp_arr_lvl2[$k]['id']);
 								$tmp_arr_lvl2[$k]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl2[$k]['id'], (string)$tmp_arr_lvl2[$k]['mode']);
 								$tmp_arr_lvl2[$k]['ref-childs'] = array();
 								if(\Smart::array_size($tmp_arr_lvl3) > 0) {
 									for($z=0; $z<\Smart::array_size($tmp_arr_lvl3); $z++) {
+										$tmp_arr_lvl3[$z]['hash-id'] = (string) sha1((string)$tmp_arr_lvl3[$z]['id']);
 										$tmp_arr_lvl3[$z]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl3[$z]['id'], (string)$tmp_arr_lvl3[$z]['mode']);
 									} //end for
 									$tmp_arr_lvl2[$k]['ref-childs'] = (array) $tmp_arr_lvl3;
+									$total[(string)$tmp_arr_lvl3[$z]['id']] += 1;
 								} //end if
 								$tmp_arr_lvl3 = array();
+								$total[(string)$tmp_arr_lvl2[$k]['id']] += 1;
 							} //end if
 						} //end for
 						$tmp_arr_lvl1[$j]['ref-childs'] = (array) $tmp_arr_lvl2;
 					} //end if
 					$tmp_arr_lvl2 = array();
 					$arr_pages_data[(string)$arr_controllers[$i]][] = (array) $tmp_arr_lvl1[$j];
+					$total[(string)$tmp_arr_lvl1[$j]['id']] += 1;
 				} //end if
 			} //end for
 			$tmp_arr_lvl1 = array();
 		} //end if
+		//print_r($total); die();
 		//print_r($arr_pages_data); die();
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		if($y_link_add === true) {
@@ -1429,8 +1537,41 @@ final class Manager {
 		return (string) \SmartMarkersTemplating::render_file_template(
 			self::$ModulePath.'libs/views/manager/view-tree.mtpl.htm',
 			[
-				'RECORD-URL' 	=> (string) $y_link_view,
-				'DATA' 			=> (array) $arr_pages_data
+				'SHOW-FILTER-TYPE' 	=> 'no',
+				'LIST-FORM-URL' 	=> (string) self::$ModuleScript,
+				'LIST-FORM-METHOD' 	=> 'GET',
+				'LIST-FORM-VARS' 	=> (array) [
+					[ 'name' => 'page', 'value' => (string) self::$ModulePageURLId ],
+					[ 'name' => 'op',   'value' => 'records-tree' ]
+				],
+				'LIST-VAL-SRC' 		=> (string) $src,
+				'LIST-VAL-SRCBY' 	=> (string) $srcby,
+				'LIST-BTN-RESET' 	=> (string) self::composeUrl('op=records-tree'),
+				'LIST-NEW-URL' 		=> (string) $y_link_add,
+				'LIST-RECORD-URL' 	=> (string) $y_link_view,
+				'COLLAPSE' 			=> (string) $collapse,
+				'FILTER' 			=> (array)  $filter,
+				'DATA' 				=> (array)  $arr_pages_data,
+				'PATH-MODULE' 		=> (string) self::$ModulePath,
+				'LIST-TTL' 			=> (string) self::text('ttl_list', false),
+				'LIST-RECORDS' 		=> (string) self::text('ttl_trecords', false),
+				'TXT-RECORDS' 		=> (string) self::text('records', false),
+				'TXT-PG-ACTIVE' 	=> (string) self::text('lst_pg_active', false),
+				'TXT-PG-INACTIVE' 	=> (string) self::text('lst_pg_inactive', false),
+				'TXT-PG-SEGMENTS' 	=> (string) self::text('lst_segment', false),
+				'TXT-SEARCH-BY' 	=> (string) self::text('search_by', false),
+				'TXT-FILTER' 		=> (string) self::text('search', false),
+				'TXT-RESET' 		=> (string) self::text('reset', false),
+				'TXT-ADD-NEW' 		=> (string) self::text('ttl_add', false),
+				'TXT-COL-ID' 		=> (string) self::text('id', false),
+				'TXT-COL-NAME' 		=> (string) self::text('name', false),
+				'TXT-COL-CODE' 		=> (string) self::text('record_code', false),
+				'TXT-COL-RUNTIME' 	=> (string) self::text('record_runtime', false),
+				'TXT-COL-SYNTAX' 	=> (string) self::text('record_syntax', false),
+				'TXT-COL-SPECIAL' 	=> (string) self::text('special', false),
+				'TXT-COL-ACTIVE' 	=> (string) self::text('active', false),
+				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
+				'FMT-LIST' 			=> (int)    \Smart::array_size($total)
 			]
 		);
 		//--
@@ -1464,6 +1605,10 @@ final class Manager {
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',
 			[
+				'SHOW-FILTER-TYPE' 	=> 'yes',
+				'LIST-FORM-URL' 	=> '#',
+				'LIST-FORM-METHOD' 	=> 'POST',
+				'LIST-FORM-VARS' 	=> (array) [],
 				'LIST-JSON-URL' 	=> (string) $y_link_list,
 				'LIST-NEW-URL' 		=> (string) $y_link_add,
 				'LIST-RECORD-URL' 	=> (string) $y_link_view,
@@ -1471,6 +1616,7 @@ final class Manager {
 				'PATH-MODULE' 		=> (string) self::$ModulePath,
 				'LIST-TTL' 			=> (string) self::text('ttl_list', false),
 				'LIST-RECORDS' 		=> (string) self::text('ttl_records', false),
+				'TXT-RECORDS' 		=> (string) self::text('records', false),
 				'TXT-PG-ACTIVE' 	=> (string) self::text('lst_pg_active', false),
 				'TXT-PG-INACTIVE' 	=> (string) self::text('lst_pg_inactive', false),
 				'TXT-PG-SEGMENTS' 	=> (string) self::text('lst_segment', false),
@@ -1486,7 +1632,7 @@ final class Manager {
 				'TXT-COL-SPECIAL' 	=> (string) self::text('special', false),
 				'TXT-COL-ACTIVE' 	=> (string) self::text('active', false),
 				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
-
+				'FMT-LIST' 			=> '# / # @'
 			]
 		);
 		//--
@@ -1506,6 +1652,13 @@ final class Manager {
 		//--
 		$limit = 25;
 		//--
+		$src = (string) trim((string)$src);
+		if((string)trim((string)$src) == '') {
+			$srcby = '';
+		} elseif((string)trim((string)$srcby) == '') {
+			$src = '';
+		} //end if
+		//--
 		$data = [
 			'status'  			=> 'OK',
 			'crrOffset' 		=> (int)    $ofs,
@@ -1520,13 +1673,8 @@ final class Manager {
 			]
 		];
 		//--
-		$y_lst = (string) $lst; // all (pages and segments)
-		$y_xsrc = (string) $srcby; // filter by
-		$y_src = (string) $src; // filter expr
-		//--
-		$data['totalRows'] 	= (int) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listCountRecords($y_lst, $y_xsrc, $y_src, (bool)$restrict_special);
-		$data['rowsList'] 	= (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords($y_lst, $y_xsrc, $y_src, (int)$limit, (int)$ofs, (string)$sortdir, (string)$sortby, (bool)$restrict_special);
-		//$model->getListDataTable($src, $data['itemsPerPage'], $data['crrOffset'], $data['sortBy'], $data['sortDir']);
+		$data['totalRows'] 	= (int) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listCountRecords((string)$lst, (string)$srcby, (string)$src, (bool)$restrict_special);
+		$data['rowsList'] 	= (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords((string)$lst, (string)$srcby, (string)$src, (int)$limit, (int)$ofs, (string)$sortdir, (string)$sortby, (bool)$restrict_special);
 		//--
 		return (string) \Smart::json_encode((array)$data);
 		//--

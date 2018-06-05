@@ -50,9 +50,11 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				);
 				break;
 			case 'records-tree':
+				$srcby = $this->RequestVarGet('srcby', '', 'string');
+				$src = $this->RequestVarGet('src', '', 'string');
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayTree()
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayTree($srcby, $src)
 				);
 				break;
 			case 'records-list-json':
@@ -158,6 +160,22 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				$this->PageViewSetVar(
 					'main',
 					\SmartModExtLib\PageBuilder\Manager::ViewFormInfo($id, 'view')
+				);
+				break;
+			case 'record-view-highlight-code': // preview code
+				$id = $this->RequestVarGet('id', '', 'string');
+				$this->PageViewSetCfg('template-file', 'template-modal.htm');
+				$this->PageViewSetVar(
+					'main',
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayHighlightCode($id)
+				);
+				break;
+			case 'record-view-highlight-data': // preview code
+				$id = $this->RequestVarGet('id', '', 'string');
+				$this->PageViewSetCfg('template-file', 'template-modal.htm');
+				$this->PageViewSetVar(
+					'main',
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayHighlightData($id)
 				);
 				break;
 			case 'record-edit-do':
