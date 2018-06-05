@@ -62,13 +62,20 @@ function pageBuilderFormBtnResetFilter() {
 	[%%%%/LOOP:DATA%%%%]
 </ul>
 <script type="text/javascript">
+	[%%%%IF:FILTER:@+0;%%%%]
+		[%%%%LOOP:FILTER%%%%]
+		jQuery('li').highlight('[####FILTER.ID|js####]', 'jqtxthighlight');
+		[%%%%/LOOP:FILTER%%%%]
+		jQuery('span.jqtxthighlight').parents('li').attr('data-simpletree', '');
+	[%%%%ELSE:FILTER%%%%]
+		// no highlights
+	[%%%%/IF:FILTER%%%%]
+</script>
+<script>
 	jQuery('ul.pagebuilder-tree').simpletree({
 		useAnimation: true,
 		signCollapsed: '+',
 		signExpanded: '-'
 	});
-	[%%%%IF:FILTER:@+0;%%%%][%%%%LOOP:FILTER%%%%]
-		jQuery('li').highlight('[####FILTER.ID|js####]', 'jqtxthighlight');
-	[%%%%/LOOP:FILTER%%%%][%%%%/IF:FILTER%%%%]
 </script>
 <!-- #END -->

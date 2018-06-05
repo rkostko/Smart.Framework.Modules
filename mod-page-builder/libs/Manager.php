@@ -76,7 +76,7 @@ final class Manager {
 		$text['ttl_add'] 			= 'Add New Object';
 		$text['ttl_edt'] 			= 'Edit Object Properties';
 		$text['ttl_edtc'] 			= 'Edit Object Code';
-		$text['ttl_edtac'] 			= 'Edit Object Runtime';
+		$text['ttl_edtac'] 			= 'Edit Object Data';
 		$text['ttl_del'] 			= 'Delete this Object';
 		//-- buttons
 		$text['search']				= 'Filter';
@@ -88,7 +88,7 @@ final class Manager {
 		$text['no']		   			= 'No';
 		$text['segment_page'] 		= 'Segment';
 		//-- page data mode
-		$text['record_runtime'] 	= 'Runtime';
+		$text['record_runtime'] 	= 'Data';
 		$text['record_data'] 		= 'YAML';
 		$text['record_syntax'] 		= 'Syntax';
 		$text['record_code'] 		= 'Code';
@@ -99,7 +99,7 @@ final class Manager {
 		//-- tab nav
 		$text['tab_props'] 			= 'Properties';
 		$text['tab_code'] 			= 'Code';
-		$text['tab_data'] 			= 'Runtime';
+		$text['tab_data'] 			= 'Data';
 		$text['tab_info'] 			= 'Info';
 		//-- list data
 		$text['records'] 			= 'Records';
@@ -127,7 +127,7 @@ final class Manager {
 		$text['msg_no_priv_read'] 	= 'WARNING: You have not enough privileges to READ this Object !';
 		$text['msg_no_priv_edit'] 	= 'WARNING: You have not enough privileges to EDIT this Object !';
 		$text['msg_no_priv_del']  	= 'WARNING: You have not enough privileges to DELETE this Object !';
-		$text['msg_invalid_cksum'] 	= 'NOTICE: Invalid Object CHECKSUM ! Edit and Save again the Object Code or Object Runtime to (Re)Validate it !';
+		$text['msg_invalid_cksum'] 	= 'NOTICE: Invalid Object CHECKSUM ! Edit and Save again the Object Code or Object Data to (Re)Validate it !';
 		//--
 		$text['id'] 				= 'ID';
 		$text['ref'] 				= 'Ref.';
@@ -1471,9 +1471,9 @@ final class Manager {
 			} //end for
 			$tmp_filter = array();
 		} //end if
-		if(\Smart::array_size($filter) > 0) {
-			$collapse = '';
-		} //end if
+	//	if(\Smart::array_size($filter) > 0) {
+	//		$collapse = '';
+	//	} //end if
 		//--
 		$total = [];
 		//--

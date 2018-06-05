@@ -561,7 +561,7 @@ final class PgPageBuilderBackend {
 		if((string)$y_src != '') {
 			switch((string)$y_xsrc) {
 				case 'id':
-					$where = 'WHERE ('.$wh_stat.'("id" LIKE \''.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
+					$where = 'WHERE ('.$wh_stat.'("id" LIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
 					break;
 				case 'id-ref':
 					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" ? \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
