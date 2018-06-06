@@ -88,10 +88,11 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 			case 'record-view':
 				$id = $this->RequestVarGet('id', '', 'string');
 				$sop = $this->RequestVarGet('sop', '', 'string');
+				$translate = $this->RequestVarGet('translate', '', 'string');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayRecord($id, $sop)
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayRecord($id, $sop, $translate)
 				);
 				break;
 			case 'record-view-tab-props':

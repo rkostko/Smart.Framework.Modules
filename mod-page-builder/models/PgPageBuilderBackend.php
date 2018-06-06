@@ -106,7 +106,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordCodeById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "code" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+			'SELECT "id", "ref", "special", "mode", "code", "translations" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -117,12 +117,7 @@ final class PgPageBuilderBackend {
 
 	public static function getTranslationCodeById($y_id, $y_lang) {
 		//--
-		$arr = (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "code" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
-			[
-				(string) $y_id
-			]
-		);
+		$arr = (array) self::getRecordCodeById($y_id);
 		//--
 		$tarr = (array) \SmartPgsqlDb::read_asdata(
 			'SELECT "id", "lang", "code" FROM "web"."page_translations" WHERE (("id" = $1) AND ("lang" = $2)) LIMIT 1 OFFSET 0',
@@ -155,7 +150,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordPropsById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "translations", "layout", "meta_title", "meta_description", "meta_keywords", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "name", "ctrl", "active", "auth", "translations", "layout", OCTET_LENGTH("code") AS len_code, OCTET_LENGTH("data") AS len_data, "checksum", md5("id" || "data" || "code") AS calc_checksum FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -561,7 +556,7 @@ final class PgPageBuilderBackend {
 		if((string)$y_src != '') {
 			switch((string)$y_xsrc) {
 				case 'id':
-					$where = 'WHERE ('.$wh_stat.'("id" LIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
+					$where = 'WHERE ('.$wh_stat.'("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\'))';
 					break;
 				case 'id-ref':
 					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" ? \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';

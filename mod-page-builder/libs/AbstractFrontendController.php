@@ -41,7 +41,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 
 	private $crr_lang = '';				// current language
 
-	private $page_markers = [];			// extra markers to allow be direct set in template except MAIN (and the indirect: TITLE, META-DESCRIPTION, META-KEYWORDS)
+	private $page_markers = [];			// extra markers to allow be direct set in template except MAIN (and others as: TITLE, META-DESCRIPTION, META-KEYWORDS)
 	private $regex_tpl_marker = '/^[A-Z0-9_\-\.@]+$/'; // regex for tpl markers
 	private $regex_marker     = '/^[A-Z0-9_\-\.]+$/';  // regex for internal markers
 
@@ -335,7 +335,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			$tmp_arr[$i] = (string) trim((string)$tmp_arr[$i]);
 			if((string)$tmp_arr[$i] != '') {
 				if(preg_match((string)$this->regex_marker, (string)$tmp_arr[$i])) {
-					if(!in_array((string)$tmp_arr[$i], [ 'MAIN', 'TITLE', 'META-DESCRIPTION', 'META-KEYWORDS' ])) {
+					if(!in_array((string)$tmp_arr[$i], [ 'MAIN' ])) {
 						$markers[] = 'TEMPLATE@'.$tmp_arr[$i];
 					} //end if
 				} //end if
@@ -488,19 +488,11 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			//--
 			$data_arr['layout'] = '';
 			//--
-			$data_arr['meta_title'] = '';
-			$data_arr['meta_description'] = '';
-			$data_arr['meta_keywords'] = '';
-			//--
 			$data_arr['code'] = '';
 			//--
 		} else {
 			//--
 			$data_arr['layout'] = (string) $arr['layout']; // no html escape on this as it is a file
-			//--
-			$data_arr['meta_title'] = (string) $arr['meta_title'];
-			$data_arr['meta_description'] = (string) $arr['meta_description'];
-			$data_arr['meta_keywords'] = (string) $arr['meta_keywords'];
 			//--
 			$data_arr['code'] = (string) base64_decode((string)$arr['code']);
 			if((string)$data_arr['mode'] == 'raw') { // FIX: RAW Pages might have the code empty if need to output from a plugin and to avoid inject spaces ...
@@ -603,9 +595,6 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 			} //end if
 			$data_arr['props'] = (array) $props_arr;
 			unset($data_arr['layout']);
-			unset($data_arr['meta_title']);
-			unset($data_arr['meta_description']);
-			unset($data_arr['meta_keywords']);
 		} //end if
 		//--
 
@@ -833,10 +822,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 				];
 			} else {
 				$data_arr['smart-markers'] = [
+					'MAIN' 				=> '',
 					'TITLE' 			=> '',
 					'META-DESCRIPTION' 	=> '',
-					'META-KEYWORDS' 	=> '',
-					'MAIN' 				=> ''
+					'META-KEYWORDS' 	=> ''
 				];
 			} //end if else
 			//--
@@ -1114,34 +1103,31 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 		if($level === 0) {
 			//--
-			$data_arr['smart-markers']['TITLE'] = (string) \Smart::escape_html(\Smart::striptags((string)$data_arr['meta_title']));
-			unset($data_arr['meta_title']);
-			$data_arr['smart-markers']['META-DESCRIPTION'] = (string) \Smart::escape_html(\Smart::striptags((string)$data_arr['meta_description']));
-			unset($data_arr['meta_description']);
-			$data_arr['smart-markers']['META-KEYWORDS'] = (string) \Smart::escape_html(\Smart::striptags((string)$data_arr['meta_keywords']));
-			unset($data_arr['meta_keywords']);
-			//--
 			$data_arr['smart-markers']['MAIN'] = (string) $data_arr['code'];
 			unset($data_arr['code']);
 			//--
-		} else {
-			//--
-			unset($data_arr['meta_title']);
-			unset($data_arr['meta_description']);
-			unset($data_arr['meta_keywords']);
-			//--
 		} //end if
 		//--
-		if((string)$data_arr['@meta-title'] != '') {
-			$data_arr['smart-markers']['TITLE'] = (string) $data_arr['@meta-title'];
+
+		//-- manage meta from plugins
+		if(in_array('TITLE', (array)$this->page_markers)) {
+			if((string)$data_arr['@meta-title'] != '') {
+				$data_arr['smart-markers']['TITLE'] = (string) $data_arr['@meta-title'];
+			} //end if
 		} //end if
 		unset($data_arr['@meta-title']);
-		if((string)$data_arr['@meta-description'] != '') {
-			$data_arr['smart-markers']['META-DESCRIPTION'] = (string) $data_arr['@meta-description'];
+		//--
+		if(in_array('META-DESCRIPTION', (array)$this->page_markers)) {
+			if((string)$data_arr['@meta-description'] != '') {
+				$data_arr['smart-markers']['META-DESCRIPTION'] = (string) $data_arr['@meta-description'];
+			} //end if
 		} //end if
 		unset($data_arr['@meta-description']);
-		if((string)$data_arr['@meta-keywords'] != '') {
-			$data_arr['smart-markers']['META-KEYWORDS'] = (string) $data_arr['@meta-keywords'];
+		//--
+		if(in_array('META-KEYWORDS', (array)$this->page_markers)) {
+			if((string)$data_arr['@meta-keywords'] != '') {
+				$data_arr['smart-markers']['META-KEYWORDS'] = (string) $data_arr['@meta-keywords'];
+			} //end if
 		} //end if
 		unset($data_arr['@meta-keywords']);
 		//--

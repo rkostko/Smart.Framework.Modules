@@ -1,5 +1,5 @@
 
--- START :: PostgreSQL Table: web / page_builder r.180525.1559 #####
+-- START :: PostgreSQL Table: web / page_builder r.180606 #####
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -34,9 +34,6 @@ CREATE TABLE web.page_builder (
     mode character varying(8) NOT NULL,
     data text DEFAULT ''::text NOT NULL,
     code text DEFAULT ''::text NOT NULL,
-    meta_title character varying(255) DEFAULT ''::character varying NOT NULL,
-    meta_description character varying(512) DEFAULT ''::character varying NOT NULL,
-    meta_keywords character varying(1024) DEFAULT ''::character varying NOT NULL,
     layout character varying(75) DEFAULT ''::character varying NOT NULL,
     checksum character varying(40) DEFAULT ''::character varying NOT NULL,
     translations smallint DEFAULT 1 NOT NULL,
@@ -52,7 +49,7 @@ CREATE TABLE web.page_builder (
     CONSTRAINT page_builder__chk__published CHECK ((published >= 0))
 );
 
-COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.05.25.1559';
+COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.06.06';
 COMMENT ON COLUMN web.page_builder.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_builder.ref IS 'Reference Parent IDs as Json-Array [], Optional';
 COMMENT ON COLUMN web.page_builder.ctrl IS 'Parent Controller ID, Optional';
@@ -63,9 +60,6 @@ COMMENT ON COLUMN web.page_builder.name IS 'Record Name (for management only)';
 COMMENT ON COLUMN web.page_builder.mode IS 'Render Mode: html / markdown / text / raw / settings';
 COMMENT ON COLUMN web.page_builder.data IS 'Render Active Runtime';
 COMMENT ON COLUMN web.page_builder.code IS 'Render Code';
-COMMENT ON COLUMN web.page_builder.meta_title IS 'Meta Title, Pages Only';
-COMMENT ON COLUMN web.page_builder.meta_description IS 'Meta Description, Pages Only';
-COMMENT ON COLUMN web.page_builder.meta_keywords IS 'Meta Keywords, Pages Only';
 COMMENT ON COLUMN web.page_builder.layout IS 'Page Design Layout, Pages Only';
 COMMENT ON COLUMN web.page_builder.checksum IS 'Checksum (MD5)';
 COMMENT ON COLUMN web.page_builder.translations IS 'Allow Translations (1 = yes ; 0 = no)';
@@ -93,9 +87,6 @@ CREATE TABLE web.page_translations (
     id character varying(63) NOT NULL,
     lang character varying(2) NOT NULL,
     code text NOT NULL,
-    meta_title character varying(255) DEFAULT ''::character varying NOT NULL,
-    meta_description character varying(512) DEFAULT ''::character varying NOT NULL,
-    meta_keywords character varying(1024) DEFAULT ''::character varying NOT NULL,
     admin character varying(25) DEFAULT ''::character varying NOT NULL,
     modified character varying(23) DEFAULT ''::character varying NOT NULL,
     CONSTRAINT page_translations__chk__id CHECK ((char_length((id)::text) >= 2)),
@@ -104,7 +95,7 @@ CREATE TABLE web.page_translations (
 
 ALTER TABLE ONLY web.page_translations ADD CONSTRAINT page_translations_pkey PRIMARY KEY (id, lang);
 
-COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.05.25';
+COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.06.06';
 COMMENT ON COLUMN web.page_translations.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_translations.lang IS 'Language ID: de, fr, ...';
 COMMENT ON COLUMN web.page_translations.code IS 'Render Code';
