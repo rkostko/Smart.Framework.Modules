@@ -28,15 +28,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 		//--
 
 		//--
-		$this->PageViewSetCfg('template-path', 'default');
-		$this->PageViewSetCfg('template-file', 'template.htm');
-		//--
-
-		//--
-		$this->PageViewSetVar(
-			'title',
-			'Web / PageBuilder :: Manage'
-		);
+		$this->PageViewSetVar('title', 'Web / PageBuilder :: Manage');
 		//--
 
 		//--
@@ -44,18 +36,26 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 		//--
 		switch((string)$op) {
 			case 'records-list': // default view
-				$this->PageViewSetVar(
-					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListTable()
-				);
+				$tpl = $this->RequestVarGet('tpl', '', 'string');
+				if((string)$tpl != 'custom') {
+					$this->PageViewSetCfg('template-path', 'default');
+					$this->PageViewSetCfg('template-file', 'template.htm');
+				} //end if
+				$this->PageViewSetVars([
+					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayListTable()
+				]);
 				break;
 			case 'records-tree':
 				$srcby = $this->RequestVarGet('srcby', '', 'string');
 				$src = $this->RequestVarGet('src', '', 'string');
-				$this->PageViewSetVar(
-					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayTree($srcby, $src)
-				);
+				$tpl = $this->RequestVarGet('tpl', '', 'string');
+				if((string)$tpl != 'custom') {
+					$this->PageViewSetCfg('template-path', 'default');
+					$this->PageViewSetCfg('template-file', 'template.htm');
+				} //end if
+				$this->PageViewSetVars([
+					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayTree($srcby, $src)
+				]);
 				break;
 			case 'records-list-json':
 				$ofs = $this->RequestVarGet('ofs', 0, 'integer+');
@@ -71,6 +71,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				);
 				break;
 			case 'record-add-form':
+				$this->PageViewSetCfg('template-path', 'default');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',
@@ -89,6 +90,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				$id = $this->RequestVarGet('id', '', 'string');
 				$sop = $this->RequestVarGet('sop', '', 'string');
 				$translate = $this->RequestVarGet('translate', '', 'string');
+				$this->PageViewSetCfg('template-path', 'default');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',
@@ -165,6 +167,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				break;
 			case 'record-view-highlight-code': // preview code
 				$id = $this->RequestVarGet('id', '', 'string');
+				$this->PageViewSetCfg('template-path', 'default');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',
@@ -173,6 +176,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				break;
 			case 'record-view-highlight-data': // preview code
 				$id = $this->RequestVarGet('id', '', 'string');
+				$this->PageViewSetCfg('template-path', 'default');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',
@@ -191,6 +195,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 			case 'record-delete':
 				$id = $this->RequestVarGet('id', '', 'string');
 				$delete = $this->RequestVarGet('delete', '', 'string');
+				$this->PageViewSetCfg('template-path', 'default');
 				$this->PageViewSetCfg('template-file', 'template-modal.htm');
 				$this->PageViewSetVar(
 					'main',

@@ -135,6 +135,18 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
+	public static function getRecordsTranslationsById($y_id) {
+		//--
+		return (array) \SmartPgsqlDb::read_data(
+			'SELECT "lang" FROM "web"."page_translations" WHERE ("id" = $1)',
+			[
+				(string) $y_id
+			]
+		);
+		//--
+	} //END FUNCTION
+
+
 	public static function getRecordDataById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
@@ -159,7 +171,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordInfById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "published", "admin", "modified", "checksum" FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "published", "admin", "modified", "checksum", "translations" FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION
@@ -407,13 +419,15 @@ final class PgPageBuilderBackend {
 				(string) $y_lang
 			]
 		);
-		$wr = (array) \SmartPgsqlDb::write_data(
-			'INSERT INTO "web"."page_translations" '.
-			\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'insert')
-		);
-		if($wr[1] != 1) {
-			\SmartPgsqlDb::write_data('ROLLBACK');
-			return (int) $wr[1]; // insert failed
+		if((string)trim((string)$y_arr_data['code']) != '') { // avoid to insert empty translation
+			$wr = (array) \SmartPgsqlDb::write_data(
+				'INSERT INTO "web"."page_translations" '.
+				\SmartPgsqlDb::prepare_statement((array)$y_arr_data, 'insert')
+			);
+			if($wr[1] != 1) {
+				\SmartPgsqlDb::write_data('ROLLBACK');
+				return (int) $wr[1]; // insert failed
+			} //end if
 		} //end if
 		\SmartPgsqlDb::write_data('COMMIT');
 		//--

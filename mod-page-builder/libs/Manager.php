@@ -143,7 +143,6 @@ final class Manager {
 		$text['special'] 			= 'Special';
 		$text['login'] 				= 'Login Restricted';
 		$text['modified']			= 'Modified';
-		$text['views'] 				= 'Views';
 		$text['size'] 				= 'Size';
 		$text['free_acc'] 			= 'Public Access';
 		$text['login_acc'] 			= 'Access by Login';
@@ -156,6 +155,7 @@ final class Manager {
 		$text['published'] 			= 'Published';
 		$text['auth'] 				= 'Auth';
 		$text['translatable'] 		= 'Translatable';
+		$text['translations'] 		= 'Translations';
 		$text['pw_code'] 			= 'Code Preview';
 		$text['pw_data'] 			= 'Data Preview';
 		//--
@@ -762,23 +762,38 @@ final class Manager {
 			return \SmartComponents::operation_error('FormView Info // Invalid ID');
 		} //end if
 		//--
-		if(self::testIsSegmentPage($query['id'])) {
-			$the_template = self::$ModulePath.'libs/views/manager/view-record-info-segment.mtpl.htm';
-		} else {
-			$the_template = self::$ModulePath.'libs/views/manager/view-record-info.mtpl.htm';
-		} //end if else
+		$the_template = self::$ModulePath.'libs/views/manager/view-record-info.mtpl.htm';
+		//--
+		$arr_raw_langs = (array) \SmartTextTranslations::getListOfLanguages();
+		$transl_arr = array();
+		$show_translations = false;
+		if(\Smart::array_size($arr_raw_langs) > 1) {
+			$show_translations = true;
+			$transl_arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsTranslationsById($y_id);
+		} //end if
+		if(\Smart::array_size($transl_arr) > 0) {
+			for($i=0; $i<count($transl_arr); $i++) {
+				$transl_arr[$i] = (string) \SmartComponents::html_select_list_single('', (string)$transl_arr[$i], 'list', (array)$arr_raw_langs);
+			} //end if
+		} //end if
+		//--
+		$transl_cnt = (int) \Smart::array_size($transl_arr);
 		//--
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) $the_template,
 			[
-				'TEXT-VIEWS'		=> (string) self::text('views'),
-				'FIELD-VIEWS' 		=> (string) \Smart::escape_html($query['views']),
-				'TEXT-MODIFIED'		=> (string) self::text('modified'),
-				'FIELD-MODIFIED' 	=> (string) \Smart::escape_html($query['modified']),
-				'TEXT-ADMIN'		=> (string) self::text('admin'),
-				'FIELD-ADMIN' 		=> (string) \Smart::escape_html($query['admin']),
-				'TEXT-PUBLISHED'	=> (string) self::text('published'),
-				'FIELD-PUBLISHED' 	=> (string) \Smart::escape_html(date('Y-m-d H:i:s', $query['published']))
+				'TEXT-MODIFIED'			=> (string) self::text('modified'),
+				'FIELD-MODIFIED' 		=> (string) \Smart::escape_html($query['modified']),
+				'TEXT-ADMIN'			=> (string) self::text('admin'),
+				'FIELD-ADMIN' 			=> (string) \Smart::escape_html($query['admin']),
+				'TEXT-PUBLISHED'		=> (string) self::text('published'),
+				'FIELD-PUBLISHED' 		=> (string) \Smart::escape_html(date('Y-m-d H:i:s', $query['published'])),
+				'TEXT-TRANSLATIONS' 	=> (string) self::text('translations'),
+				'SHOW-TRANSLATIONS' 	=> (int)    $show_translations,
+				'COUNT-TRANSLATIONS' 	=> (int)    $transl_cnt,
+				'ARR-TRANSLATIONS' 		=> (array)  $transl_arr,
+				'IS-TRANSLATABLE' 		=> (int)    $query['translations'],
+				'MODULE-PATH' 			=> (string) self::$ModulePath
 			]
 		);
 		//--
@@ -1285,7 +1300,7 @@ final class Manager {
 			$out = 1;
 		} //endd if
 		//--
-		return $out;
+		return (int) $out;
 		//--
 	} //END FUNCTION
 	//==================================================================
@@ -1498,6 +1513,7 @@ final class Manager {
 		} //end if
 		//--
 		$collapse = 'collapsed';
+		$fcollapse = '';
 		$filter = array();
 		if(((string)trim((string)$src) != '') AND ((string)trim((string)$srcby) != '')) {
 			$tmp_filter = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::listGetRecords('', $srcby, $src, (int)$flimit, 0, 'ASC', 'id', false);
@@ -1506,11 +1522,14 @@ final class Manager {
 			} //end for
 			$tmp_filter = array();
 		} //end if
-	//	if(\Smart::array_size($filter) > 0) {
-	//		$collapse = '';
-	//	} //end if
+		if(\Smart::array_size($filter) > 0) {
+			$fcollapse = (string) $collapse;
+		} //end if
 		//--
 		$total = [];
+		//--
+		$css_cls_a = 'simpletree-item-active';
+		$css_cls_i = 'simpletree-item-inactive';
 		//--
 		$arr_controllers = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsUniqueControllers();
 		$arr_pages_data = array();
@@ -1520,6 +1539,11 @@ final class Manager {
 				if(\Smart::array_size($tmp_arr_lvl1[$j]) > 0) {
 					$tmp_arr_lvl2 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl1[$j]['id']);
 					$tmp_arr_lvl1[$j]['hash-id'] = (string) sha1((string)$tmp_arr_lvl1[$j]['id']);
+					if(((string)$tmp_arr_lvl1[$j]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl1[$j]['id']))) {
+						$tmp_arr_lvl1[$j]['style-class'] = (string) $css_cls_a;
+					} else {
+						$tmp_arr_lvl1[$j]['style-class'] = (string) $css_cls_i;
+					} //end if else
 					$tmp_arr_lvl1[$j]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl1[$j]['id'], (string)$tmp_arr_lvl1[$j]['mode']);
 					$tmp_arr_lvl1[$j]['ref-childs'] = array();
 					if(\Smart::array_size($tmp_arr_lvl2) > 0) {
@@ -1527,11 +1551,21 @@ final class Manager {
 							if(\Smart::array_size($tmp_arr_lvl2[$k]) > 0) {
 								$tmp_arr_lvl3 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl2[$k]['id']);
 								$tmp_arr_lvl2[$k]['hash-id'] = (string) sha1((string)$tmp_arr_lvl2[$k]['id']);
+								if(((string)$tmp_arr_lvl2[$k]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl2[$k]['id']))) {
+									$tmp_arr_lvl2[$k]['style-class'] = (string) $css_cls_a;
+								} else {
+									$tmp_arr_lvl2[$k]['style-class'] = (string) $css_cls_i;
+								} //end if else
 								$tmp_arr_lvl2[$k]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl2[$k]['id'], (string)$tmp_arr_lvl2[$k]['mode']);
 								$tmp_arr_lvl2[$k]['ref-childs'] = array();
 								if(\Smart::array_size($tmp_arr_lvl3) > 0) {
 									for($z=0; $z<\Smart::array_size($tmp_arr_lvl3); $z++) {
 										$tmp_arr_lvl3[$z]['hash-id'] = (string) sha1((string)$tmp_arr_lvl3[$z]['id']);
+										if(((string)$tmp_arr_lvl3[$z]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl3[$z]['id']))) {
+											$tmp_arr_lvl3[$z]['style-class'] = (string) $css_cls_a;
+										} else {
+											$tmp_arr_lvl3[$z]['style-class'] = (string) $css_cls_i;
+										} //end if else
 										$tmp_arr_lvl3[$z]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl3[$z]['id'], (string)$tmp_arr_lvl3[$z]['mode']);
 									} //end for
 									$tmp_arr_lvl2[$k]['ref-childs'] = (array) $tmp_arr_lvl3;
@@ -1585,6 +1619,7 @@ final class Manager {
 				'LIST-NEW-URL' 		=> (string) $y_link_add,
 				'LIST-RECORD-URL' 	=> (string) $y_link_view,
 				'COLLAPSE' 			=> (string) $collapse,
+				'FILTER-COLLAPSE' 	=> (string) $fcollapse,
 				'FILTER' 			=> (array)  $filter,
 				'DATA' 				=> (array)  $arr_pages_data,
 				'PATH-MODULE' 		=> (string) self::$ModulePath,

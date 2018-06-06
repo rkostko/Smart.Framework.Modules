@@ -8,11 +8,30 @@
 .simpletree-tree .simpletree-button {
 	cursor: pointer;
 }
+ul.pagebuilder-tree {
+	margin-top: 0 !important;
+	margin-left: 0 !important;
+	display:inline-block;
+}
 ul.pagebuilder-tree, ul.pagebuilder-tree li {
 	list-style-type: none;
 }
 span.simpletree-highlight {
-	background: #FFCC00;
+	background: #333333;
+	color: #FFFFFF;
+}
+span.simpletree-item-active {
+	font-weight: bold;
+	color: #111111;
+}
+span.simpletree-item-inactive {
+	font-weight: bold;
+	color: #BBBBBB;
+}
+span.simpletree-ctrl {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #333333;
 }
 </style>
 <script type="text/javascript">
@@ -28,25 +47,26 @@ function pageBuilderFormBtnResetFilter() {
 	jQuery('#filter-src').val('[####LIST-VAL-SRC|js####]');
 	jQuery('#filter-srcby').val('[####LIST-VAL-SRCBY|js####]');
 </script>
+<div style="color:#ECECEC; display:inline-block; vertical-align:top;"><i class="fa fa-sitemap fa-3x"></i></div>
 <ul class="pagebuilder-tree">
 	[%%%%LOOP:DATA%%%%]
 	<!-- start CTRL: [####DATA._-KEY-_|html####] -->
-	<li>
-		[%%%%IF:DATA._-KEY-_:!=;%%%%][####DATA._-KEY-_|html####][%%%%ELSE:DATA._-KEY-_%%%%]*** (UNASSIGNED) ***[%%%%/IF:DATA._-KEY-_%%%%]
+	<li data-simpletree="[####FILTER-COLLAPSE|html####]">
+		<span class="simpletree-ctrl">[%%%%IF:DATA._-KEY-_:!=;%%%%][####DATA._-KEY-_|html####][%%%%ELSE:DATA._-KEY-_%%%%]<i class="fa fa-cubes" title="*** (UNASSIGNED) ***"></i> <span style="color:#778899;">UNASSIGNED</span>[%%%%/IF:DATA._-KEY-_%%%%]</span>
 		[%%%%LOOP:DATA._-VAL-_%%%%]
 		<ul>
 			<li title="[####DATA._-VAL-_.ID|html####]" id="item-[####DATA._-VAL-_.HASH-ID|htmid####]" data-simpletree="[####COLLAPSE|html####]">
-				<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.IMG-TYPE-HTML%%%%]</a> &nbsp; <b>[####DATA._-VAL-_.NAME|html####]</b> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.HASH-ID|htmid####]">[####DATA._-VAL-_.ID|html####]</span>
+				<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.STYLE-CLASS|html####]">[####DATA._-VAL-_.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.HASH-ID|htmid####]">[####DATA._-VAL-_.ID|html####]</span>
 				[%%%%IF:DATA._-VAL-_.REF-CHILDS:@+0;%%%%]
 					[%%%%LOOP:DATA._-VAL-_.REF-CHILDS%%%%]
 					<ul>
 						<li title="[####DATA._-VAL-_.REF-CHILDS.ID|html####]" id="item-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]" data-simpletree="[####COLLAPSE|html####]">
-							<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <b>[####DATA._-VAL-_.REF-CHILDS.NAME|html####]</b> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.ID|html####]</span>
+							<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.ID|html####]</span>
 							[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS:@+0;%%%%]
 								[%%%%LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
 								<ul>
 									<li title="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]" id="item-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]" data-simpletree="">
-										<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <b>[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.NAME|html####]</b> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]</span>
+										<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]</span>
 									</li>
 								</ul>
 								[%%%%/LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
@@ -88,9 +108,9 @@ function pageBuilderFormBtnResetFilter() {
 </script>
 <script>
 	jQuery('ul.pagebuilder-tree').simpletree({
-		useAnimation: true,
-		signCollapsed: '+',
-		signExpanded: '-'
+	//	useAnimation: true,
+		signCollapsed: '<i class="fa fa-plus-square-o" style="color:#778899;"></i>',
+		signExpanded: '<i class="fa fa-minus-square-o" style="color:#778899;"></i>'
 	});
 </script>
 <!-- #END -->

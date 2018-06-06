@@ -1,18 +1,20 @@
-<!-- Pagebuilder/Manage @ View Record / Info :: v.180402 -->
+<!-- Pagebuilder/Manage @ View Record / Info :: v.180606 -->
+<style>
+ul#lang-list {
+	display: inline;
+	list-style: none;
+}
+ul#lang-list li {
+	display: inline;
+}
+ul#lang-list li:after {
+	content: ", ";
+}
+ul#lang-list li:last-child:after {
+	content: "";
+}
+</style>
 <table width="100%" border="0">
-	<tr>
-		<td width="25%">
-			<b>[####TEXT-VIEWS####]:</b>
-		</td>
-		<td>
-			[####FIELD-VIEWS####]
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<hr>
-		</td>
-	</tr>
 	<tr>
 		<td>
 			<b>[####TEXT-MODIFIED####]:</b>
@@ -37,5 +39,31 @@
 			[####FIELD-ADMIN####]
 		</td>
 	</tr>
+	[%%%%IF:SHOW-TRANSLATIONS:==1;%%%%]
+	<tr>
+		<td colspan="2">
+			<hr>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>[####TEXT-TRANSLATIONS####]:</b>
+		</td>
+		<td>
+			[%%%%IF:IS-TRANSLATABLE:!=1;%%%%]
+			[%%%%IF:ARR-TRANSLATIONS:@+0;%%%%]
+			<img src="[####MODULE-PATH|html####]libs/views/manager/img/syntax-unknown.svg" alt="WARNING: Not Translatable" title="WARNING: Not Translatable">
+			[%%%%ELSE:ARR-TRANSLATIONS%%%%]
+			-
+			[%%%%/IF:ARR-TRANSLATIONS%%%%]
+			[%%%%ELSE:IS-TRANSLATABLE%%%%]
+			([####COUNT-TRANSLATIONS|int####])
+			[%%%%/IF:IS-TRANSLATABLE%%%%]
+			<ul id="lang-list">[%%%%LOOP:ARR-TRANSLATIONS%%%%]
+			<li>[####ARR-TRANSLATIONS._-VAL-_|html####]</li>
+			[%%%%/LOOP:ARR-TRANSLATIONS%%%%]</ul>
+		</td>
+	</tr>
+	[%%%%/IF:SHOW-TRANSLATIONS%%%%]
 </table>
 <!-- #END -->

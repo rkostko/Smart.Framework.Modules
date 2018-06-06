@@ -2,26 +2,26 @@
 <form id="filtering" name="filtering" class="ux-form" action="[####LIST-FORM-URL|html####]" method="[####LIST-FORM-METHOD|html####]">
 	[%%%%LOOP:LIST-FORM-VARS%%%%]<input type="hidden" name="[####LIST-FORM-VARS.NAME|html####]" value="[####LIST-FORM-VARS.VALUE|html####]">[%%%%/LOOP:LIST-FORM-VARS%%%%]
 	<table style="width:99%;"><tr style="valign:top;">
-	[%%%%IF:SHOW-FILTER-TYPE:==yes;%%%%]<td style="width:1px;">
+	[%%%%COMMENT%%%%][%%%%IF:SHOW-FILTER-TYPE:==yes;%%%%]<td style="width:1px;">
 		<select name="lst" id="filter-lst" class="ux-input-def ux-input-1-4">
 			<option value=""></option>
 			<option value="a">[####TXT-PG-ACTIVE|html####]</option>
 			<option value="i">[####TXT-PG-INACTIVE|html####]</option>
 			<option value="s">[####TXT-PG-SEGMENTS|html####]</option>
 		</select>
-	</td>[%%%%/IF:SHOW-FILTER-TYPE%%%%]
-	<td style="width:1px;">
-		<span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span>
-	</td>
+	</td>[%%%%/IF:SHOW-FILTER-TYPE%%%%][%%%%/COMMENT%%%%]
 	<td style="width:1px;">
 		<select name="srcby" id="filter-srcby" class="ux-input-def ux-input-1-4">
-			<option value=""></option>
+			<option value="">[####TXT-SEARCH-BY|html####]</option>
 			<option value="id">[####TXT-COL-ID|html####]</option>
 			<option value="id-ref">[####TXT-COL-REFID|html####]</option>
 			<option value="name">[####TXT-COL-NAME|html####]</option>
 			<option value="code">[####TXT-COL-CODE|html####]</option>
 			<option value="data">[####TXT-COL-RUNTIME|html####]</option>
 		</select>
+	</td>
+	<td style="width:1px;">
+		<span style="display:inline-block;"><input type="text" id="filter-src" name="src" placeholder="[####TXT-SEARCH-BY|html####] ..." value="" class="ux-input-def ux-input-1-4"></span>
 	</td>
 	<td style="width:1px;">&nbsp;</td>
 	<td style="width:1px;"><button type="button" class="ux-button ux-button-primary" onClick="try { pageBuilderFormBtnFilter(); } catch(err) { console.log(err); } return false;">[####TXT-FILTER|html####] &nbsp; <i class="fa fa-filter"></i></button></td>
