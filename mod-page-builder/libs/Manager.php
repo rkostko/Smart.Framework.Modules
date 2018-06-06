@@ -1501,7 +1501,7 @@ final class Manager {
 
 
 	//==================================================================
-	public static function ViewDisplayTree($srcby, $src, $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+	public static function ViewDisplayTree($y_tpl, $srcby, $src, $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
 		//--
 		$flimit = 500; // filter limit
 		//--
@@ -1611,11 +1611,12 @@ final class Manager {
 				'LIST-FORM-METHOD' 	=> 'GET',
 				'LIST-FORM-VARS' 	=> (array) [
 					[ 'name' => 'page', 'value' => (string) self::$ModulePageURLId ],
-					[ 'name' => 'op',   'value' => 'records-tree' ]
+					[ 'name' => 'op',   'value' => 'records-tree' ],
+					[ 'name' => 'tpl',  'value' => (string) $y_tpl ]
 				],
 				'LIST-VAL-SRC' 		=> (string) $src,
 				'LIST-VAL-SRCBY' 	=> (string) $srcby,
-				'LIST-BTN-RESET' 	=> (string) self::composeUrl('op=records-tree'),
+				'LIST-BTN-RESET' 	=> (string) self::composeUrl('op=records-tree&tpl='.\Smart::escape_url($y_tpl)),
 				'LIST-NEW-URL' 		=> (string) $y_link_add,
 				'LIST-RECORD-URL' 	=> (string) $y_link_view,
 				'COLLAPSE' 			=> (string) $collapse,
@@ -1651,7 +1652,7 @@ final class Manager {
 
 
 	//==================================================================
-	public static function ViewDisplayListTable($y_link_list='', $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
+	public static function ViewDisplayListTable($y_tpl, $y_link_list='', $y_link_add=true, $y_link_view=true, $y_link_delete=true) {
 		//--
 		if((string)trim((string)$y_link_list) == '') {
 			$y_link_list = (string) self::composeUrl('op=records-list-json&');

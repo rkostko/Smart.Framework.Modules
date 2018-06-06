@@ -42,7 +42,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 					$this->PageViewSetCfg('template-file', 'template.htm');
 				} //end if
 				$this->PageViewSetVars([
-					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayListTable()
+					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayListTable($tpl)
 				]);
 				break;
 			case 'records-tree':
@@ -54,7 +54,7 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 					$this->PageViewSetCfg('template-file', 'template.htm');
 				} //end if
 				$this->PageViewSetVars([
-					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayTree($srcby, $src)
+					'main' => (string) \SmartModExtLib\PageBuilder\Manager::ViewDisplayTree($tpl, $srcby, $src)
 				]);
 				break;
 			case 'records-list-json':
