@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.180509
+	// v.180607
 
 
 	//--
@@ -469,7 +469,7 @@ final class PgPageBuilderBackend {
 	} //END FUNCTION
 
 
-	public static function listGetRecords($y_lst, $y_xsrc, $y_src, $y_limit, $y_ofs, $y_xsort, $y_sort, $y_restr_special=false) {
+	public static function listGetRecords($y_xsrc, $y_src, $y_limit, $y_ofs, $y_xsort, $y_sort) {
 		//--
 		$y_limit = \Smart::format_number_int($y_limit, '+');
 		if($y_limit < 1) {
@@ -496,38 +496,38 @@ final class PgPageBuilderBackend {
 			case 'ctrl':
 			case 'modified':
 			case 'views':
-				$sort = 'ORDER BY '.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort;
+				$sort = 'ORDER BY a.'.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort;
 				break;
 			case 'special':
 			case 'active':
 			case 'auth':
-				$sort = 'ORDER BY '.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort.', "id" '.$xsort;
+				$sort = 'ORDER BY a.'.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort.', a."id" '.$xsort;
 				break;
 			case 'mode':
-				$sort = 'ORDER BY "mode" '.$xsort.', "id" DESC';
+				$sort = 'ORDER BY a."mode" '.$xsort.', a."id" DESC';
 				break;
 			case '@data':
-				$sort = 'ORDER BY (char_length("data") + char_length("code")) '.$xsort;
+				$sort = 'ORDER BY (char_length(a."data") + char_length(a."code")) '.$xsort;
 				break;
 			default:
-				$sort = 'ORDER BY "published" DESC';
+				$sort = 'ORDER BY a."published" DESC';
 		} //end switch
 		//--
-		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special);
+		$where = (string) self::buildListWhereCondition($y_xsrc, $y_src);
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "name", "mode", "ref", "active", "auth", "special", "modified", (char_length("data") + char_length("code")) AS "total_size" FROM "web"."page_builder" '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
+			'SELECT a."id", a."name", a."mode", a."ref", a."active", a."auth", a."special", a."modified", (char_length(a."data") + char_length(a."code")) AS "total_size" FROM "web"."page_builder" a '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
 		);
 		//--
 	} //END FUNCTION
 
 
-	public static function listCountRecords($y_lst, $y_xsrc, $y_src, $y_restr_special=false) {
+	public static function listCountRecords($y_xsrc, $y_src) {
 		//--
-		$where = (string) self::buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special);
+		$where = (string) self::buildListWhereCondition($y_xsrc, $y_src);
 		//--
 		return (int) \SmartPgsqlDb::count_data(
-			'SELECT COUNT(1) FROM "web"."page_builder" '.$where
+			'SELECT COUNT(1) FROM "web"."page_builder" a '.$where
 		);
 		//--
 	} //END FUNCTION
@@ -536,53 +536,76 @@ final class PgPageBuilderBackend {
 	//##### PRIVATES #####
 
 
-	private static function updateChecksumRecordById($y_id) {
+	private static function buildListWhereCondition($y_xsrc, $y_src) {
 		//--
-		return \SmartPgsqlDb::write_data(
-			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data" || "code") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
-		);
+		$y_src = (string) trim((string)$y_src);
 		//--
-	} //END FUNCTION
-
-
-	private static function buildListWhereCondition($y_lst, $y_xsrc, $y_src, $y_restr_special) {
-		//--
-		switch((string)$y_lst) {
-			case 'a': // active pages
-				$wh_stat = '(("id" NOT LIKE \'#%\') AND ("active" = 1)) AND ';
-				break;
-			case 'i': // inactive pages
-				$wh_stat = '(("id" NOT LIKE \'#%\') AND ("active" != 1)) AND ';
-				break;
-			case 's': // segments
-				$wh_stat = '("id" LIKE \'#%\') AND ';
-				break;
-			default: // all
-				$wh_stat = '';
-				// all
-		} //end switch
-		//--
-		if($y_restr_special === true) {
-			$wh_stat .= '("special" = 0) AND ';
-		} //end if
-		//--
-		$where = 'WHERE ('.$wh_stat.'(TRUE))';
+		$where = '';
 		if((string)$y_src != '') {
 			switch((string)$y_xsrc) {
 				case 'id':
-					$where = 'WHERE ('.$wh_stat.'("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\'))';
+					$where = 'WHERE (a."id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')';
 					break;
 				case 'id-ref':
-					$where = 'WHERE ('.$wh_stat.'(("id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR ("ref" ? \''.\SmartPgsqlDb::escape_str((string)$y_src).'\')))';
+					if((string)$y_src == '[]') { // empty
+						$where = 'WHERE (a."ref" = \'[]\')';
+					} elseif((string)$y_src == '![]') { // non empty
+						$where = 'WHERE (a."ref" != \'[]\')';
+					} else {
+						$where = 'WHERE ((a."id" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\') OR (a."ref" ? \''.\SmartPgsqlDb::escape_str((string)$y_src).'\'))';
+					} //end if else
 					break;
 				case 'name':
-					$where = 'WHERE ('.$wh_stat.'("name" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
+					$where = 'WHERE (a."name" ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\')';
 					break;
 				case 'code':
-					$where = 'WHERE ('.$wh_stat.'(smart_str_striptags(convert_from(decode("code", \'base64\'), \'UTF8\')) ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\'))';
+					if((string)$y_src == '[]') { // empty
+						$where = 'WHERE (a."code" = \'\')';
+					} elseif((string)$y_src == '![]') { // non empty
+						$where = 'WHERE (a."code" != \'\')';
+					} else {
+						$where = 'WHERE (smart_str_striptags(convert_from(decode(a."code", \'base64\'), \'UTF8\')) ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\')';
+					} //end if
 					break;
 				case 'data':
-					$where = 'WHERE ('.$wh_stat.'(convert_from(decode("data", \'base64\'), \'UTF8\') ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\'))'; // find only full words
+					if((string)$y_src == '[]') { // empty
+						$where = 'WHERE (a."data" = \'\')';
+					} elseif((string)$y_src == '![]') { // non empty
+						$where = 'WHERE (a."data" != \'\')';
+					} else {
+					//	$where = 'WHERE (convert_from(decode(a."data", \'base64\'), \'UTF8\') ~* \'\\y'.\SmartPgsqlDb::escape_str((string)$y_src, 'regex').'\\y\')'; // find only full words
+						$where = 'WHERE (convert_from(decode(a."data", \'base64\'), \'UTF8\') ILIKE \'%'.\SmartPgsqlDb::escape_str((string)$y_src, 'likes').'%\')';
+					} //end if
+					break;
+				case 'translations':
+					if(strpos((string)$y_src, '!') === 0) { // negation search: !ro
+						$y_src = (string) ltrim((string)$y_src, '!');
+						$is_negative = true;
+					} else { // positive search: ro
+						$is_negative = false;
+					} //end if else
+					if((strlen((string)$y_src) == 2) AND (preg_match('/^[a-z]+$/', (string)$y_src))) {
+						$arr_raw_langs = (array) \SmartTextTranslations::getListOfLanguages();
+						$flang = '';
+						foreach($arr_raw_langs as $key => $val) {
+							$flang = (string) $key;
+							break;
+						} //end foreach
+						if((string)$flang == (string)$y_src) { // default language
+							if($is_negative) {
+								$where = 'WHERE FALSE';
+							} //end if
+						} else {
+							if($is_negative) {
+								$is_negative = ' ';
+							} else {
+								$is_negative = ' NOT ';
+							} //end if else
+							$where = 'LEFT OUTER JOIN "web"."page_translations" b ON a."id" = b."id" AND a."translations" = 1 AND b."lang" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\' WHERE ((a."translations" = 1) AND (b."lang" IS'.$is_negative.'NULL))';
+						} //end if else
+					} elseif($is_negative) {
+						$where = 'WHERE (a."translations" != 1)';
+					} //end if
 					break;
 				default:
 					// nothing, leave as is set above
@@ -590,6 +613,15 @@ final class PgPageBuilderBackend {
 		} //end if
 		//--
 		return (string) $where;
+		//--
+	} //END FUNCTION
+
+
+	private static function updateChecksumRecordById($y_id) {
+		//--
+		return \SmartPgsqlDb::write_data(
+			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data" || "code") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
+		);
 		//--
 	} //END FUNCTION
 

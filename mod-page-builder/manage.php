@@ -2,7 +2,7 @@
 // Controller: PageBuilder/Manage
 // Route: ?/page/page-builder.manage
 // Author: unix-world.org
-// r.180508
+// r.180607
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -61,13 +61,12 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				$ofs = $this->RequestVarGet('ofs', 0, 'integer+');
 				$sortby = $this->RequestVarGet('sortby', 'id', 'string');
 				$sortdir = $this->RequestVarGet('sortdir', 'ASC', 'string');
-				$lst = $this->RequestVarGet('lst', '', 'string');
 				$srcby = $this->RequestVarGet('srcby', '', 'string');
 				$src = $this->RequestVarGet('src', '', 'string');
 				$this->PageViewSetCfg('rawpage', true);
 				$this->PageViewSetVar(
 					'main',
-					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListJson(false, $ofs, $sortby, $sortdir, $lst, $srcby, $src)
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayListJson($ofs, $sortby, $sortdir, $srcby, $src)
 				);
 				break;
 			case 'record-add-form':

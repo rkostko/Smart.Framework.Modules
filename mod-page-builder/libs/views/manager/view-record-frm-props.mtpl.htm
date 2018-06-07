@@ -1,11 +1,11 @@
-<!-- Pagebuilder/Manage @ View Record / Props :: v.180525 -->
+<!-- Pagebuilder/Manage @ View Record / Props :: v.180607 -->
 <table width="100%" border="0">
 	<tr>
 		<td width="25%">
 			[####BUTTONS####]
 		</td>
 		<td align="right">
-			<font size="1" color="#778899"><b>[####CODE-TYPE####]</b></font>
+			<font size="1"><b>[####CODE-TYPE####]</b></font>
 		</td>
 	</tr>
 	<tr>
@@ -45,6 +45,12 @@
 			[####FIELD-SPECIAL####]
 		</td>
 	</tr>
+[%%%%IF:MODE-PAGETYPE:!=settings;%%%%]
+	<tr>
+		<td colspan="2">
+			<hr id="dark">
+		</td>
+	</tr>
 	<tr>
 		<td width="25%">
 			<b>[####TEXT-TRANS####]:</b>
@@ -53,6 +59,8 @@
 			[####FIELD-TRANS####]
 		</td>
 	</tr>
+[%%%%/IF:MODE-PAGETYPE%%%%]
+[%%%%IF:IS-SEGMENT:!=1;%%%%]
 	<tr>
 		<td colspan="2">
 			<hr id="dark">
@@ -74,7 +82,7 @@
 			[####FIELD-AUTH####]
 		</td>
 	</tr>
-[%%%%IF:MODE-PAGETYPE:!=raw;%%%%]
+	[%%%%IF:MODE-PAGETYPE:!=raw;%%%%]
 	<tr>
 		<td>
 			<b>[####TEXT-LAYOUT####]:</b>
@@ -83,6 +91,7 @@
 			[####FIELD-LAYOUT####]
 		</td>
 	</tr>
-[%%%%/IF:MODE-PAGETYPE%%%%]
+	[%%%%/IF:MODE-PAGETYPE%%%%]
+[%%%%/IF:IS-SEGMENT%%%%]
 </table>
 <!-- #END -->
