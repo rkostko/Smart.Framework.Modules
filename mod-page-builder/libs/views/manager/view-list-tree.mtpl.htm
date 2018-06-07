@@ -16,6 +16,9 @@ ul.pagebuilder-tree {
 ul.pagebuilder-tree, ul.pagebuilder-tree li {
 	list-style-type: none;
 }
+ul.pagebuilder-tree a {
+	text-decoration: none !important;
+}
 span.simpletree-highlight {
 	background: #333333;
 	color: #FFFFFF;
@@ -56,17 +59,17 @@ function pageBuilderFormBtnResetFilter() {
 		[%%%%LOOP:DATA._-VAL-_%%%%]
 		<ul>
 			<li title="[####DATA._-VAL-_.ID|html####]" id="item-[####DATA._-VAL-_.HASH-ID|htmid####]" data-simpletree="[####COLLAPSE|html####]">
-				<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.STYLE-CLASS|html####]">[####DATA._-VAL-_.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.HASH-ID|htmid####]">[####DATA._-VAL-_.ID|html####]</span>
+				<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.ID|url|html####]" data-smart="open.modal"><img src="[####DATA._-VAL-_.ICON-TYPE|html####]">&nbsp;[%%%%IF:DATA._-VAL-_.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.IMG-TYPE-HTML####][%%%%/IF:DATA._-VAL-_.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.STYLE-CLASS|html####]">[####DATA._-VAL-_.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.HASH-ID|htmid####]">[%%%%IF:DATA._-VAL-_.IS-SEGMENT:==1;%%%%]<i>[%%%%/IF:DATA._-VAL-_.IS-SEGMENT%%%%][####DATA._-VAL-_.ID|html####][%%%%IF:DATA._-VAL-_.IS-SEGMENT:==1;%%%%]</i>[%%%%/IF:DATA._-VAL-_.IS-SEGMENT%%%%]</span>
 				[%%%%IF:DATA._-VAL-_.REF-CHILDS:@+0;%%%%]
 					[%%%%LOOP:DATA._-VAL-_.REF-CHILDS%%%%]
 					<ul>
 						<li title="[####DATA._-VAL-_.REF-CHILDS.ID|html####]" id="item-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]" data-simpletree="[####COLLAPSE|html####]">
-							<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.ID|html####]</span>
+							<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.ID|url|html####]" data-smart="open.modal"><img src="[####DATA._-VAL-_.REF-CHILDS.ICON-TYPE|html####]">&nbsp;[%%%%IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML####][%%%%/IF:DATA._-VAL-_.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.HASH-ID|htmid####]">[%%%%IF:DATA._-VAL-_.REF-CHILDS.IS-SEGMENT:==1;%%%%]<i>[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IS-SEGMENT%%%%][####DATA._-VAL-_.REF-CHILDS.ID|html####][%%%%IF:DATA._-VAL-_.REF-CHILDS.IS-SEGMENT:==1;%%%%]</i>[%%%%/IF:DATA._-VAL-_.REF-CHILDS.IS-SEGMENT%%%%]</span>
 							[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS:@+0;%%%%]
 								[%%%%LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]
 								<ul>
 									<li title="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]" id="item-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]" data-simpletree="">
-										<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|url|html####]" data-smart="open.modal">[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML####][%%%%ELSE:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]?[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####]</span>
+										<a href="[####LIST-RECORD-URL|html####][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|url|html####]" data-smart="open.modal"><img src="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ICON-TYPE|html####]">&nbsp;[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML:!=;%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML####][%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IMG-TYPE-HTML%%%%]</a> &nbsp; <span class="[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.STYLE-CLASS|html####]">[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.NAME|html####]</span> :: <span class="simpletree-ids" id="id-[####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.HASH-ID|htmid####]">[%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IS-SEGMENT:==1;%%%%]<i>[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IS-SEGMENT%%%%][####DATA._-VAL-_.REF-CHILDS.REF-CHILDS.ID|html####][%%%%IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IS-SEGMENT:==1;%%%%]</i>[%%%%/IF:DATA._-VAL-_.REF-CHILDS.REF-CHILDS.IS-SEGMENT%%%%]</span>
 									</li>
 								</ul>
 								[%%%%/LOOP:DATA._-VAL-_.REF-CHILDS.REF-CHILDS%%%%]

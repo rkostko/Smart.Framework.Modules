@@ -1516,34 +1516,40 @@ final class Manager {
 				if(\Smart::array_size($tmp_arr_lvl1[$j]) > 0) {
 					$tmp_arr_lvl2 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl1[$j]['id']);
 					$tmp_arr_lvl1[$j]['hash-id'] = (string) sha1((string)$tmp_arr_lvl1[$j]['id']);
-					if(((string)$tmp_arr_lvl1[$j]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl1[$j]['id']))) {
+					$tmp_arr_lvl1[$j]['is-segment'] = (int) self::testIsSegmentPage((string)$tmp_arr_lvl1[$j]['id']);
+					if(((string)$tmp_arr_lvl1[$j]['active'] == 1) OR ($tmp_arr_lvl1[$j]['is-segment'] == 1)) {
 						$tmp_arr_lvl1[$j]['style-class'] = (string) $css_cls_a;
 					} else {
 						$tmp_arr_lvl1[$j]['style-class'] = (string) $css_cls_i;
 					} //end if else
-					$tmp_arr_lvl1[$j]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl1[$j]['id'], (string)$tmp_arr_lvl1[$j]['mode']);
+					$tmp_arr_lvl1[$j]['icon-type'] = (string) self::getImgForPageType((string)$tmp_arr_lvl1[$j]['id']);
+					$tmp_arr_lvl1[$j]['img-type-html'] = (string) self::getImgForCodeType((string)$tmp_arr_lvl1[$j]['id'], (string)$tmp_arr_lvl1[$j]['mode']);
 					$tmp_arr_lvl1[$j]['ref-childs'] = array();
 					if(\Smart::array_size($tmp_arr_lvl2) > 0) {
 						for($k=0; $k<\Smart::array_size($tmp_arr_lvl2); $k++) {
 							if(\Smart::array_size($tmp_arr_lvl2[$k]) > 0) {
 								$tmp_arr_lvl3 = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsByRef((string)$tmp_arr_lvl2[$k]['id']);
 								$tmp_arr_lvl2[$k]['hash-id'] = (string) sha1((string)$tmp_arr_lvl2[$k]['id']);
-								if(((string)$tmp_arr_lvl2[$k]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl2[$k]['id']))) {
+								$tmp_arr_lvl2[$k]['is-segment'] = (int) self::testIsSegmentPage((string)$tmp_arr_lvl2[$k]['id']);
+								if(((string)$tmp_arr_lvl2[$k]['active'] == 1) OR ($tmp_arr_lvl2[$k]['is-segment'] == 1)) {
 									$tmp_arr_lvl2[$k]['style-class'] = (string) $css_cls_a;
 								} else {
 									$tmp_arr_lvl2[$k]['style-class'] = (string) $css_cls_i;
 								} //end if else
-								$tmp_arr_lvl2[$k]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl2[$k]['id'], (string)$tmp_arr_lvl2[$k]['mode']);
+								$tmp_arr_lvl2[$k]['icon-type'] = (string) self::getImgForPageType((string)$tmp_arr_lvl2[$k]['id']);
+								$tmp_arr_lvl2[$k]['img-type-html'] = (string) self::getImgForCodeType((string)$tmp_arr_lvl2[$k]['id'], (string)$tmp_arr_lvl2[$k]['mode']);
 								$tmp_arr_lvl2[$k]['ref-childs'] = array();
 								if(\Smart::array_size($tmp_arr_lvl3) > 0) {
 									for($z=0; $z<\Smart::array_size($tmp_arr_lvl3); $z++) {
 										$tmp_arr_lvl3[$z]['hash-id'] = (string) sha1((string)$tmp_arr_lvl3[$z]['id']);
-										if(((string)$tmp_arr_lvl3[$z]['active'] == 1) OR (self::testIsSegmentPage((string)$tmp_arr_lvl3[$z]['id']))) {
+										$tmp_arr_lvl3[$z]['is-segment'] = (int) self::testIsSegmentPage((string)$tmp_arr_lvl3[$z]['id']);
+										if(((string)$tmp_arr_lvl3[$z]['active'] == 1) OR ($tmp_arr_lvl3[$z]['is-segment'] == 1)) {
 											$tmp_arr_lvl3[$z]['style-class'] = (string) $css_cls_a;
 										} else {
 											$tmp_arr_lvl3[$z]['style-class'] = (string) $css_cls_i;
 										} //end if else
-										$tmp_arr_lvl3[$z]['img-type-html'] = (string) \SmartModExtLib\PageBuilder\Manager::getImgForCodeType((string)$tmp_arr_lvl3[$z]['id'], (string)$tmp_arr_lvl3[$z]['mode']);
+										$tmp_arr_lvl3[$z]['icon-type'] = (string) self::getImgForPageType((string)$tmp_arr_lvl3[$z]['id']);
+										$tmp_arr_lvl3[$z]['img-type-html'] = (string) self::getImgForCodeType((string)$tmp_arr_lvl3[$z]['id'], (string)$tmp_arr_lvl3[$z]['mode']);
 									} //end for
 									$tmp_arr_lvl2[$k]['ref-childs'] = (array) $tmp_arr_lvl3;
 									$total[(string)$tmp_arr_lvl3[$z]['id']] += 1;
