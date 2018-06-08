@@ -46,7 +46,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180607
+ * @version 	v.180608
  * @package 	PageBuilder
  *
  */
@@ -78,6 +78,7 @@ final class Manager {
 		$text['ttl_edtc'] 			= 'Edit Object Code';
 		$text['ttl_edtac'] 			= 'Edit Object Data';
 		$text['ttl_del'] 			= 'Delete this Object';
+		$text['ttl_ch_list'] 		= 'List Mode Change';
 		//-- buttons
 		$text['search']				= 'Filter';
 		$text['reset']				= 'Reset';
@@ -1571,6 +1572,7 @@ final class Manager {
 		//print_r($arr_pages_data); die();
 		//--
 		$the_link_list = (string) self::composeUrl('op=records-tree&tpl='.\Smart::escape_url($y_tpl));
+		$the_alt_link_list = (string) self::composeUrl('tpl='.\Smart::escape_url($y_tpl).'#!'.'&srcby='.\Smart::escape_url($srcby).'&src='.\Smart::escape_url($src));
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		$the_link_add = (string) self::composeUrl('op=record-add-form');
 		$the_link_view = (string) self::composeUrl('op=record-view&id=');
@@ -1592,6 +1594,9 @@ final class Manager {
 				'LIST-BTN-RESET' 	=> (string) $the_link_list,
 				'LIST-NEW-URL' 		=> (string) $the_link_add,
 				'LIST-RECORD-URL' 	=> (string) $the_link_view,
+				'LIST-ALT-COOKIE' 	=> (string) '',
+				'LIST-ALT-LINK' 	=> (string) $the_alt_link_list,
+				'TXT-ALT-LINK' 		=> (string) self::text('ttl_ch_list', false),
 				'COLLAPSE' 			=> (string) $collapse,
 				'FILTER-COLLAPSE' 	=> (string) $fcollapse,
 				'FILTER' 			=> (array)  $filter,
@@ -1626,6 +1631,7 @@ final class Manager {
 	public static function ViewDisplayListTable($y_tpl) {
 		//--
 		$the_link_list = (string) self::composeUrl('op=records-list-json&');
+		$the_alt_link_list = (string) self::composeUrl('op=records-tree&tpl='.\Smart::escape_url($y_tpl)); // \SmartFrameworkRegistry::getCookieVar('PageBuilder_Smart_Slickgrid_List_URL')
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		$the_link_add = (string) self::composeUrl('op=record-add-form');
 		$the_link_view = (string) self::composeUrl('op=record-view&id=');
@@ -1642,6 +1648,9 @@ final class Manager {
 				'LIST-NEW-URL' 		=> (string) $the_link_add,
 				'LIST-RECORD-URL' 	=> (string) $the_link_view,
 				'LIST-DELETE-URL' 	=> (string) $the_link_delete,
+				'LIST-ALT-COOKIE' 	=> (string) 'PageBuilder_Smart_Slickgrid_List_URL',
+				'LIST-ALT-LINK' 	=> (string) $the_alt_link_list,
+				'TXT-ALT-LINK' 		=> (string) self::text('ttl_ch_list', false),
 				'PATH-MODULE' 		=> (string) self::$ModulePath,
 				'LIST-TTL' 			=> (string) self::text('ttl_list', false),
 				'LIST-RECORDS' 		=> (string) self::text('ttl_records', false),
