@@ -27,7 +27,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180607
+ * @version 	v.180614
  * @package 	PageBuilder
  *
  */

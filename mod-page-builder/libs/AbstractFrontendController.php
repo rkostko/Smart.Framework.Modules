@@ -30,7 +30,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180607
+ * @version 	v.180614
  * @package 	PageBuilder
  *
  */
@@ -131,8 +131,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		if($this->page_is_cached !== true) {
 			$arr = (array) $this->loadSegmentOrPage((string)$page_id, 'page'); // get arr vars structure from db
 		} //end if
-		if($this->PageViewGetStatusCode() > 200) {
-			$is_ok = false;
+		if((int)$this->PageViewGetStatusCode() >= 400) {
+			if(in_array((int)$this->PageViewGetStatusCode(), (array)\SmartFrameworkRuntime::getHttpStatusCodesERR())) {
+				$is_ok = false;
+			} //end if
 		} //end if
 		if(\Smart::array_size($arr) <= 0) {
 			$is_ok = false;
@@ -244,9 +246,6 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		if($this->segments_cached[(string)$segment_id] <= 0) {
 			$arr = (array) $this->loadSegmentOrPage((string)$segment_id, 'segment'); // get arr vars structure from db
 		} //end if
-		if($this->PageViewGetStatusCode() > 200) {
-			$arr = array();
-		} //end if
 		if(\Smart::array_size($arr) <= 0) {
 			$arr = array();
 		} //end if
@@ -270,6 +269,12 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 		if($this->IfDebug()) {
 			$this->SetDebugData('Segment ['.(string)$segment_id.'] Pre-Render Data', $arr);
+		} //end if
+		//-- chk err
+		if((int)$this->PageViewGetStatusCode() >= 400) {
+			if(in_array((int)$this->PageViewGetStatusCode(), (array)\SmartFrameworkRuntime::getHttpStatusCodesERR())) {
+				return '';
+			} //end if
 		} //end if
 		//-- render the page
 		$arr = (array) $this->renderSegmentWithSegments($segment_id, $arr);
@@ -771,6 +776,12 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 		//--
+		if((int)$this->PageViewGetStatusCode() >= 400) {
+			return array(); // skip on first err to preserve the last status code
+		} //end if
+		//--
+
+		//--
 		if(!is_array($data_arr)) {
 			$this->PageViewSetErrorStatus(500, 'PageBuilder: Empty Page Data Format on Page/Segment');
 			\Smart::log_warning('PageBuilder: Empty Page Data Format on Page/Segment: '.(string)$id.' ; Level: '.(int)$level);
@@ -885,8 +896,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 											//--
 											$plugin_obj = new $plugin_class('index', $this->ControllerGetParam('module-path'), $this->ControllerGetParam('url-script'), $this->ControllerGetParam('url-path'), $this->ControllerGetParam('url-addr'), $this->ControllerGetParam('url-page'), $this->ControllerGetParam('controller'));
 											$plugin_obj->initPlugin((array)$plugin_cfg); // initialize before run !
-											$plugin_status = (int) $plugin_obj->Run();
-											$plugin_obj->ShutDown();
+											//--
+											$plugin_obj->Initialize(); // pre-run
+											$plugin_status = (int) $plugin_obj->Run(); // run
+											$plugin_obj->ShutDown(); // post run
 											//--
 											$plugin_raw_heads = (array) $plugin_obj->PageViewGetRawHeaders();
 											if(\Smart::array_size($plugin_raw_heads) > 0) {
