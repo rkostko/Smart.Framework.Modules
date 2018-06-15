@@ -46,7 +46,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180608
+ * @version 	v.180615
  * @package 	PageBuilder
  *
  */
@@ -1194,8 +1194,8 @@ final class Manager {
 		//--
 		$tmp_rd_arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordDetailsById($y_id);
 		//--
-		if(strlen($tmp_rd_arr['id']) <= 0) {
-			return \SmartComponents::operation_warn(self::text('err_4'));
+		if((string)$tmp_rd_arr['id'] == '') {
+			return \SmartComponents::operation_error(self::text('err_4'));
 		} //end if
 		//--
 
@@ -1216,24 +1216,38 @@ final class Manager {
 				//--
 				if((\SmartAuth::test_login_privilege('superadmin') === true) OR ((\SmartAuth::test_login_privilege('pagebuilder_delete') === true) AND ((string)$tmp_rd_arr['special'] != '1')) OR ((\SmartAuth::test_login_privilege('pagebuilder_delete') === true) AND (\SmartAuth::test_login_privilege('pagebuilder_manager') === true) AND ((string)$tmp_rd_arr['special'] == '1'))) {
 					//--
-					\SmartModDataModel\PageBuilder\PgPageBuilderBackend::deleteRecordById($tmp_rd_arr['id']);
+					$rdw = '<script type="text/javascript">'.\SmartComponents::js_code_wnd_redirect(self::composeUrl('op=record-view&id='.\Smart::escape_url($tmp_rd_arr['id'])), 3000).'</script>';
 					//--
-					$out .= '<br>'.\SmartComponents::operation_ok(self::text('op_compl'));
 					$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_refresh_parent().'</script>';
-					$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_close_modal_popup().'</script>'; // ok
+					//--
+					$chk_del = (int) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::deleteRecordById($tmp_rd_arr['id']);
+					//--
+					if($chk_del == 1) {
+						$out .= '<br>'.\SmartComponents::operation_ok(self::text('op_compl'));
+						$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_close_modal_popup().'</script>'; // ok
+					} elseif($chk_del == -1) {
+						$out .= '<br>'.\SmartComponents::operation_warn('Delete Failed: Empty ID');
+						$out .= $rdw;
+					} elseif($chk_del == -2) {
+						$out .= '<br>'.\SmartComponents::operation_notice('Delete Canceled: The selected segment is in use in other pages or segments. Relations must be cleared first !');
+						$out .= $rdw;
+					} else {
+						$out .= '<br>'.\SmartComponents::operation_error('Something goes really wrong ... Delete returned an invalid number rows: '.$chk_del);
+						$out .= $rdw;
+					} //end if else
 					//--
 				} else {
 					//--
 					$out .= '<br>'.\SmartComponents::operation_error(self::text('msg_no_priv_del'));
-					$out .= '<script type="text/javascript">SmartJS_BrowserUtils.RefreshParent();</script>';
-					$out .= '<script type="text/javascript">SmartJS_BrowserUtils.CloseDelayedModalPopUp();</script>'; // ok
+					$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_refresh_parent().'</script>';
+				$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_close_modal_popup(1500).'</script>'; // ok
 					//--
 				} //end if else
 				//--
 			} else {
 				//--
 				$out .= '<br>'.\SmartComponents::operation_warn(self::text('err_8'));
-				$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_refresh_parent('').'</script>';
+				$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_refresh_parent().'</script>';
 				$out .= '<script type="text/javascript">'.\SmartComponents::js_code_wnd_close_modal_popup(2500).'</script>'; // ok
 				//--
 			} //end if else

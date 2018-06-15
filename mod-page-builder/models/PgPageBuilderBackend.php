@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.180607
+	// v.180615
 
 
 	//--
@@ -446,6 +446,35 @@ final class PgPageBuilderBackend {
 		//--
 		\SmartPgsqlDb::write_data('BEGIN');
 		//--
+		$chk_ref = (array) self::getRecordDetailsById((string)$y_id);
+		$is_related = false;
+		if(\Smart::array_size($chk_ref) > 0) {
+			for($i=0; $i<\Smart::array_size($chk_ref); $i++) {
+				if($is_related === true) {
+					break;
+				} //end if
+				$tmp_arr_refs = \Smart::json_decode((string)$chk_ref['ref']);
+				if(\Smart::array_size($tmp_arr_refs) > 0) {
+					if(\Smart::array_type_test($tmp_arr_refs) == 1) { // non-associative
+						for($j=0; $j<\Smart::array_size($tmp_arr_refs); $j++) {
+							$tmp_arr_refs[$j] = (string) trim((string)$tmp_arr_refs[$j]);
+							if((string)$tmp_arr_refs[$j] != '') {
+								$tmp_arr_chk = (array) self::getRecordDetailsById((string)$tmp_arr_refs[$j]);
+								if(\Smart::array_size($tmp_arr_chk) > 0) {
+									$is_related = true;
+									break;
+								} //end if
+							} //end if
+						} //end for
+					} //end if
+				} //end if
+			} //end for
+			if($is_related === true) {
+				\SmartPgsqlDb::write_data('ROLLBACK');
+				return -2; // have refs that exist
+			} //end if
+		} //end if
+		//--
 		$wr = (array) \SmartPgsqlDb::write_data(
 			'DELETE FROM "web"."page_builder" WHERE ("id" = $1)',
 			[
@@ -464,7 +493,7 @@ final class PgPageBuilderBackend {
 		//--
 		\SmartPgsqlDb::write_data('COMMIT');
 		//--
-		return (array) $wr;
+		return (int) $wr[1];
 		//--
 	} //END FUNCTION
 

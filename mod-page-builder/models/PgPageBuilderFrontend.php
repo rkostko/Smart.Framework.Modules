@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.180607
+	// v.180615
 
 	public static function getPage($y_id, $y_lang='') { // page must be active
 		//--
