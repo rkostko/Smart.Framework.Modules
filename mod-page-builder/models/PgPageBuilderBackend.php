@@ -401,7 +401,7 @@ final class PgPageBuilderBackend {
 		if(\Smart::array_size($y_arr_data) <= 0) {
 			return -2; // empty data
 		} //end if
-		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR \SmartTextTranslations::validateLanguage($y_lang) !== true) {
+		if(((string)$y_lang == '') OR (strlen($y_lang) != 2) OR (\SmartTextTranslations::validateLanguage($y_lang) !== true)) {
 			return -3; // invalid language
 		} //end if
 		if((string)$y_arr_data['id'] != '') {
@@ -651,6 +651,121 @@ final class PgPageBuilderBackend {
 		return \SmartPgsqlDb::write_data(
 			'UPDATE "web"."page_builder" SET "checksum" = md5("id" || "data" || "code") WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).')'
 		);
+		//--
+	} //END FUNCTION
+
+
+	//#####
+
+
+	public static function updateTranslationByText($text_en, $lang, $text_lang, $admin) {
+		//--
+		if((string)trim((string)$text_lang) == '') {
+			return -1;
+		} //end if
+		//--
+		if((string)trim((string)$text_en) == '') {
+			return -2;
+		} //end if
+		if(((string)$lang == 'en') OR ((string)$lang == '') OR (strlen($lang) != 2) OR (\SmartTextTranslations::validateLanguage($lang) !== true)) {
+			return -3;
+		} //end if
+		//--
+		\SmartPgsqlDb::write_data('BEGIN');
+		//--
+		$arr = \SmartPgsqlDb::read_adata(
+			'SELECT "id", "code" FROM "web"."page_builder" WHERE ("code" = $1)',
+			[
+				(string) base64_encode((string)$text_en)
+			]
+		);
+		//--
+		if(\Smart::array_size($arr) <= 0) {
+			return -4;
+		} //end if
+		//--
+		$upd = 0;
+		//--
+		if(\Smart::array_size($arr) > 0) {
+			//--
+			for($i=0; $i<\Smart::array_size($arr); $i++) {
+				//--
+				\SmartPgsqlDb::write_data(
+					'DELETE FROM "web"."page_translations" WHERE (("id" = $1) AND ("lang" = $2))',
+					[
+						(string) $arr[$i]['id'],
+						(string) $lang
+					]
+				);
+				//--
+				$wr = (array) \SmartPgsqlDb::write_data(
+					'INSERT INTO "web"."page_translations" '.\SmartPgsqlDb::prepare_statement(
+						[
+							'id' 		=> (string) $arr[$i]['id'],
+							'lang' 		=> (string) $lang,
+							'code' 		=> (string) base64_encode((string)$text_lang),
+							'admin' 	=> (string) $admin,
+							'modified' 	=> (string) date('Y-m-d H:i:s')
+						],
+						'insert'
+					)
+				);
+				//--
+				$upd += (int) $wr[1];
+				//--
+			} //end for
+			//--
+		} //end if
+		//--
+		\SmartPgsqlDb::write_data('COMMIT');
+		//--
+		return (int) $upd;
+		//--
+	} //END FUNCTION
+
+
+	public static function exportTranslationsByLang($lang, $mode='all', $arrmode='non-associative') {
+		//--
+		$lang = (string) trim((string)$lang);
+		//--
+		if(((string)$lang == '') OR (strlen($lang) != 2) OR (\SmartTextTranslations::validateLanguage($lang) !== true)) {
+			return array(); // invalid language
+		} //end if
+		//--
+		if((string)$lang == 'en') {
+			//--
+			$query = '
+				SELECT DISTINCT convert_from(decode("code", \'base64\'), \'UTF8\') AS "lang_en", \'\' AS '.\SmartPgsqlDb::escape_identifier((string)'lang_'.$lang).' FROM "web"."page_builder" WHERE "translations" = 1
+			';
+			//--
+			if((string)$mode == 'missing') {
+				$query .= ' AND "code" = \'\'';
+			} //end if
+			//--
+		} else {
+			//--
+			$query = '
+				SELECT
+				convert_from(decode("a"."code", \'base64\'), \'UTF8\') AS "lang_en", COALESCE(convert_from(decode("b"."code", \'base64\'), \'UTF8\'), \'\') AS '.\SmartPgsqlDb::escape_identifier((string)'lang_'.$lang).'
+				FROM "web"."page_builder" "a"
+				LEFT OUTER JOIN "web"."page_translations" "b" ON
+					"a"."id" = "b"."id" AND
+					"b"."lang" = \''.\SmartPgsqlDb::escape_str((string)$lang).'\'
+				WHERE
+					"a"."translations" = 1
+			';
+			//--
+			if((string)$mode == 'missing') {
+				$query .= ' AND "b"."lang" IS NULL';
+			} //end if
+			//--
+		} //end if
+		//--
+		if((string)$arrmode == 'associative') {
+			return (array) \SmartPgsqlDb::read_adata((string)$query);
+		} else {
+			return (array) \SmartPgsqlDb::read_data((string)$query);
+		} //end if else
 		//--
 	} //END FUNCTION
 

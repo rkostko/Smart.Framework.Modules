@@ -1041,6 +1041,9 @@ final class Manager {
 								$data['code'] = ''; // avoid save empty with only spaces
 							} else {
 								$data['code'] = (string) \SmartModExtLib\PageBuilder\Utils::fixSafeCode((string)$y_frm['code']);
+								$data['code'] = (string) str_replace(["\r\n", "\r"], "\n", (string)$data['code']); // normalize line endings
+								$data['code'] = (string) str_replace(["\x0B", "\0", "\f"], ' ', (string)$data['code']); // fix weird characters
+								$data['code'] = (string) preg_replace('/[ ]+[\\n]/', "\n", (string)$data['code']); // remove empty line spaces
 								$data['code'] = (string) base64_encode((string)$data['code']);
 							} //end if
 							$y_frm['code'] = ''; // free memory
@@ -1074,7 +1077,9 @@ final class Manager {
 								if((string)trim((string)$y_frm['data']) == '') {
 									$data['data'] = ''; // avoid save empty with only spaces
 								} else {
-									$data['data'] = (string) base64_encode((string)$y_frm['data']); // encode data b64 (encode must be here because will be transmitted later as B64 encode and must cover all error situations)
+									$data['data'] = (string) str_replace(["\r\n", "\r"], "\n", (string)$y_frm['data']); // normalize line endings
+									$data['data'] = (string) str_replace(["\x0B", "\0", "\f"], ' ', (string)$data['data']); // fix weird characters
+									$data['data'] = (string) base64_encode((string)$data['data']); // encode data b64 (encode must be here because will be transmitted later as B64 encode and must cover all error situations)
 								} //end if
 								$y_frm['data'] = '';
 								//--
