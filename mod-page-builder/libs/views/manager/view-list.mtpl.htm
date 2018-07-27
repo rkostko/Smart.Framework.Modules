@@ -177,7 +177,7 @@ jQuery(function() {
 	// Grid Data Defs: defaultSortDir:1
 	var columns = [
 		{id:'x-del', 	field:'id', 	name:'#', 								sortable:false, 	width:50, 					formatter:displayDel},
-		{id:'x-ops', 	field:'id', 	name:'@', 								sortable:true, 		width:50, 					formatter:displayOps},
+		{id:'x-ops', 	field:'id', 	name:'@', 								sortable:false, 	width:50, 					formatter:displayOps},
 		{id:'id', 		field:'id', 	name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:diffColSize('id'), 	formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
 		{id:'mode', 	field:'mode', 	name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 					formatter:displayCodeType, editor:TextCellSelector},
 		{id:'name', 	field:'name', 	name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize('name'), 	editor:TextCellSelector},
