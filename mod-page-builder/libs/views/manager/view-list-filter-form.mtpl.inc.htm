@@ -40,3 +40,12 @@
 	</td>
 	</tr></table>
 </form><!-- #END -->
+<script type="text/javascript">
+jQuery(function() {
+	jQuery('#filter-src').bind('keydown', function(e) {
+		if(e.keyCode == 13) {
+			e.preventDefault();
+		}
+	});
+});
+</script>

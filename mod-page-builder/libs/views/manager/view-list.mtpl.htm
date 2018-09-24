@@ -29,10 +29,8 @@
 <script type="text/javascript" src="lib/js/jquery/slickgrid/slick.editors.js"></script>
 <script type="text/javascript" src="lib/js/jquery/slickgrid/smart-grid.js"></script>
 <script type="text/javascript">
-	//--
 	var IdOfGrid = 'PageBuilderSlickGrid';
 	var TheGrid = new Smart_Grid(IdOfGrid, 'infoTotalRows', '[####LIST-JSON-URL|js####]', 'PageBuilder_Smart_Slickgrid_List', 'id', 'ASC', '', 'filtering');
-	//--
 </script>
 <script type="text/javascript">
 function pageBuilderFormBtnFilter() {
@@ -186,7 +184,7 @@ jQuery(function() {
 		{id:'auth', 	field:'auth', 	name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 					formatter:displayAuth, editor:TextCellSelector},
 	];
 
-	//-- Grid Options
+	// Grid Options
 	var options = {
 		enableAddRow: false,
 		enableCellNavigation: true,
@@ -225,6 +223,5 @@ jQuery(function() {
 	TheGrid.loadGridData(0);
 
 });
-//--
 </script>
 <!-- #END -->
