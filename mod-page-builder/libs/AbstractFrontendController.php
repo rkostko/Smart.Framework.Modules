@@ -30,11 +30,12 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180615
+ * @version 	v.180926
  * @package 	PageBuilder
  *
  */
 abstract class AbstractFrontendController extends \SmartAbstractAppController {
+
 
 	protected $max_depth = 2; 			// 0=page, 1=segment, 2=sub-segment
 	protected $cache_time = 3600; 		// cache time in seconds
@@ -59,7 +60,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 	private $debug = false; 			// internal debug
 
 
-	//--
+	//=====
 	final public function renderBuilderPage($page_id, $tpl_path, $tpl_file, $markers) { // (OUTPUTS: HTML)
 
 		//--
@@ -183,8 +184,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	final public function getRenderedBuilderSegmentCode($segment_id) { // (OUTPUTS: HTML)
 
 		// CHECK: $this->rendered_segments[]
@@ -289,11 +292,13 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
 	//##### [ PRIVATES ] #####
 
 
+	//=====
 	private function fixRenderMaxDepth($maxdepth) {
 		//--
 		$maxdepth = (int) $maxdepth;
@@ -306,8 +311,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		return (int) $maxdepth;
 		//--
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	private function fixPCacheTime($time) {
 		//--
 		$time = (int) $time;
@@ -321,8 +328,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		return (int) $time;
 		//--
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	private function fixAllowedTemplateMarkers($markers) {
 		//--
 		if(!is_array($markers)) {
@@ -352,8 +361,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		return (array) $markers;
 		//--
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	// load settings segment
 	private function loadSegmentSettingsOnly($id) {
 
@@ -400,8 +411,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	// load page or segment ; page is level -1 ; segment is higher level
 	// the execution of this method is pcached thus it never returns to re-render if pcached
 	private function loadSegmentOrPage($id, $type, $level=-1) {
@@ -747,8 +760,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	private function renderPageWithSegments($id, $data_arr) {
 
 		//--
@@ -756,8 +771,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	private function renderSegmentWithSegments($id, $data_arr) {
 
 		//--
@@ -765,8 +782,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
+	//=====
 	private function renderSegmentOrPage($id, $data_arr, $level) {
 
 		// TODO: ? escape for markers: js, html ... ?
@@ -1154,6 +1173,7 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		//--
 
 	} //END FUNCTION
+	//=====
 
 
 } //END CLASS

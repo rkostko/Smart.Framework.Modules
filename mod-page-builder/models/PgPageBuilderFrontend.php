@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.180615
+	// v.180926
 
 	public static function getPage($y_id, $y_lang='') { // page must be active
 		//--
@@ -36,6 +36,14 @@ final class PgPageBuilderFrontend {
 				(string) $y_id
 			]
 		);
+		if((string)SMART_ERROR_HANDLER == 'dev') {
+			\SmartPgsqlDb::write_data(
+				'UPDATE "web"."page_builder" SET "counter" = "counter" + 1 WHERE (("id" = $1) AND ("active" = 1))',
+				[
+					(string) $y_id
+				]
+			);
+		} //end if
 		//--
 		$y_lang = (string) trim((string)$y_lang);
 		if((string)$y_lang != '') {
@@ -64,6 +72,14 @@ final class PgPageBuilderFrontend {
 				(string) $y_id
 			]
 		);
+		if((string)SMART_ERROR_HANDLER == 'dev') {
+			\SmartPgsqlDb::write_data(
+				'UPDATE "web"."page_builder" SET "counter" = "counter" + 1 WHERE ("id" = $1)',
+				[
+					(string) $y_id
+				]
+			);
+		} //end if
 		//--
 		$y_lang = (string) trim((string)$y_lang);
 		if((string)$y_lang != '') {

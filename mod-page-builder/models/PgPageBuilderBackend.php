@@ -21,10 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.180615
-
-
-	//--
+	// v.180926
 
 
 	public static function getRecordsUniqueControllers() {
@@ -62,9 +59,6 @@ final class PgPageBuilderBackend {
 		);
 		//--
 	} //END FUNCTION
-
-
-	//--
 
 
 	public static function getRecordById($y_id) {

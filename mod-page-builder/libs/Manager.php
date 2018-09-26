@@ -46,7 +46,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180615
+ * @version 	v.180926
  * @package 	PageBuilder
  *
  */
