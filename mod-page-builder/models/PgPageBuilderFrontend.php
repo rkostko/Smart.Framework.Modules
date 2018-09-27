@@ -21,7 +21,34 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.180926
+	// v.180927
+
+
+	public static function checkIfPageOrSegmentExist($y_id) {
+		//--
+		$y_id = (string) trim((string)$y_id);
+		//--
+		if(substr($y_id, 0, 1) == '#') { // segment
+			$query = 'SELECT "id" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0';
+		} else { // page
+			$query = 'SELECT "id" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0';
+		} //end if else
+		//--
+		$arr = (array) \SmartPgsqlDb::read_asdata(
+			(string) $query,
+			[
+				(string) $y_id
+			]
+		);
+		//--
+		if((string)$arr['id'] === (string)$y_id) {
+			return true; // exists
+		} else {
+			return false; // does not exists
+		} //end if else
+		//--
+	} //END FUNCTION
+
 
 	public static function getPage($y_id, $y_lang='') { // page must be active
 		//--
