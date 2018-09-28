@@ -181,14 +181,14 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			$version_pos = strpos($url, '/oauth2/');
 		} //end if
 		if($version_pos === false) {
-			$version_pos = strpos($url, '/ads/0/');
+			$version_pos = strpos($url, '/ads/2/');
 			$api_host = 'ads-api.twitter.com';
 			if($version_pos !== false) {
 				$version_pos += 4; // strip '/ads' prefix
 			} //end if
 		} //end if
 		if($version_pos === false) {
-			$version_pos = strpos($url, '/ads-sandbox/0/');
+			$version_pos = strpos($url, '/ads-sandbox/2/');
 			$api_host = 'ads-api-sandbox.twitter.com';
 			if($version_pos !== false) {
 				$version_pos += 12; // strip '/ads-sandbox' prefix
