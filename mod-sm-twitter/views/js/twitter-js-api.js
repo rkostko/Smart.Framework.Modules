@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.170919
+// v.180928
 
 // Depends on: codebird.js, SmartJS_BrowserUtils
 
@@ -332,10 +332,12 @@ var TwitterApiHandler = new function() { // START CLASS
 							wndPopUp.close();
 						} catch(err){}
 					} //end if
-					console.error('TwitterApiHandler: Error response or timeout exceeded' + err.error);
+					console.error('TwitterApiHandler: Error response or timeout exceeded: ' + err.error);
 					return;
 				} //end if
-				if(reply && reply.oauth_token && reply.oauth_token_secret) {
+				if(reply && reply.errors && reply.errors['415']) {
+					console.log('TwitterApiHandler: Error: ' + reply.errors['415']);
+				} else if(reply && reply.oauth_token && reply.oauth_token_secret) {
 					//console.log('reply', reply)
 					// stores it
 					cb.setToken(String(reply.oauth_token), String(reply.oauth_token_secret));

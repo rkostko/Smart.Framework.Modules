@@ -16,7 +16,7 @@ define('SMART_APP_MODULE_AREA', 'SHARED');
 
 // This class is based on the Codebird Twitter Proxy,
 // Proxy to the Twitter API, adding CORS headers to replies.
-// version 1.5.0
+// version 1.5.0.uxm-180928
 // author Jublo Solutions <support@jublo.net>
 // copyright 2013-2015 Jublo Solutions <support@jublo.net>
 // license: GPL
@@ -181,17 +181,19 @@ class SmartAppIndexController extends SmartAbstractAppController {
 			$version_pos = strpos($url, '/oauth2/');
 		} //end if
 		if($version_pos === false) {
+		//	$version_pos = strpos($url, '/ads/0/');
 			$version_pos = strpos($url, '/2/');
 			$api_host = 'ads-api.twitter.com';
 			if($version_pos !== false) {
-			//	$version_pos += 4; // strip '/ads' prefix
+		//		$version_pos += 4; // strip '/ads' prefix
 			} //end if
 		} //end if
 		if($version_pos === false) {
+		//	$version_pos = strpos($url, '/ads-sandbox/0/');
 			$version_pos = strpos($url, '/2/');
 			$api_host = 'ads-api-sandbox.twitter.com';
 			if($version_pos !== false) {
-			//	$version_pos += 12; // strip '/ads-sandbox' prefix
+		//		$version_pos += 12; // strip '/ads-sandbox' prefix
 			} //end if
 		} //end if
 		if($version_pos === false) {

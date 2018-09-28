@@ -2,7 +2,7 @@
  * A Twitter library in JavaScript
  *
  * @package   codebird
- * @version   3.0.0-dev
+ * @version   3.0.0-dev.uxm-180928
  * @author    Jublo Limited <support@jublo.net>
  * @copyright 2010-2018 Jublo Limited <support@jublo.net>
  * @license   http://opensource.org/licenses/GPL-3.0 GNU Public License 3.0
@@ -10,7 +10,7 @@
  */
 
 // modified by unixman v.180928
-// 		* security feature: connect with the proxy by using a special hash in header
+// 		+ security feature: connect with the proxy by using a special hash in header
 
 /* global window,
 	  document,
