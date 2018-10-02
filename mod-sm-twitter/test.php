@@ -15,9 +15,10 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 define('SMART_APP_MODULE_AREA', 'SHARED'); // INDEX, ADMIN, SHARED
 
 /**
- * Index Controller :: v.170919
+ * Index Controller :: v.181002
  *
- * Test PHP-Api (run on localhost): 	?/page/sm-twitter.test/app_id/{the-app-id-goes-here}/app_secret/{the-app-secret-goes-here}
+ * First Test the Js-Api: modules/mod-sm-twitter/views/js/demo/sample.html (need to set the {AppId} and {AppSecret} in modules/mod-sm-twitter/views/js/demo/setup.js)
+ * Test PHP-Api (run on localhost): 	?/page/sm-twitter.test/app_id/{AppId}/app_secret/{AppSecret}
  *
  * @ignore
  *

@@ -1,7 +1,7 @@
 
 // Twitter JS API Handler
 // (c) 2012 - 2017 Radu I.
-// v.180928
+// v.181002
 
 // Depends on: codebird.js, SmartJS_BrowserUtils
 
@@ -274,7 +274,7 @@ var TwitterApiHandler = new function() { // START CLASS
 			},
 			function(reply, rate, err) {
 				//console.log(reply, rate, err);
-				if(!err) {
+				if(reply && !err) {
 					cb.__call(
 						'statuses_update',
 						{

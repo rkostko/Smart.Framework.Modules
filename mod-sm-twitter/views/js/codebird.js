@@ -2,7 +2,7 @@
  * A Twitter library in JavaScript
  *
  * @package   codebird
- * @version   3.0.0-dev.uxm-180928
+ * @version   3.0.0-dev.uxm-181002
  * @author    Jublo Limited <support@jublo.net>
  * @copyright 2010-2018 Jublo Limited <support@jublo.net>
  * @license   http://opensource.org/licenses/GPL-3.0 GNU Public License 3.0
@@ -1106,7 +1106,8 @@
 	_detectMultipart(method) {
 	  const multiparts = [
 		// Tweets
-		"media/upload",
+//		"media/upload", // fix by unixman (with this appear not to work sending b64 images)
+//		"statuses/update_with_media", // this was in the old CB Version
 
 		// Users
 		"account/update_profile_image",

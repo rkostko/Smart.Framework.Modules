@@ -6,7 +6,7 @@ namespace Codebird;
  * A Twitter library in PHP.
  *
  * @package   codebird
- * @version   4.0.0-beta.1.uxm-180928
+ * @version   4.0.0-beta.1.uxm-181002
  * @author    Jublo Limited <support@jublo.net>
  * @copyright 2010-2018 Jublo Limited <support@jublo.net>
  * @license   https://opensource.org/licenses/GPL-3.0 GNU General Public License 3.0
@@ -26,7 +26,7 @@ class Codebird {
 	/**
 	 * The current Codebird version
 	 */
-	protected static $_version = '4.0.0-beta.1.uxm-180928';
+	protected static $_version = '4.0.0-beta.1.uxm-181002';
 
 	private static $CONST_CURLXE_SSL_CERTPROBLEM = 58;
 	private static $CONST_CURLXE_SSL_CACERT_ISSUE = 60;

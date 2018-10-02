@@ -1,5 +1,5 @@
 
-// Twitter Api Setup :: v.170919
+// Twitter Api Setup :: v.181002
 
 var twitterConsumerKey = '';
 var twitterConsumerSecret = '';
