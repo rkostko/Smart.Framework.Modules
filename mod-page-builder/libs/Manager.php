@@ -32,6 +32,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
 */
 //==================================================================
 
+//define('SMART_PAGEBUILDER_DISABLE_DELETE', true);
 
 //=====================================================================================
 //===================================================================================== CLASS START
@@ -46,7 +47,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.180926
+ * @version 	v.181005
  * @package 	PageBuilder
  *
  */
@@ -349,8 +350,10 @@ final class Manager {
 			//--
 		} else {
 			//--
-			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-delete.svg'.'" alt="'.self::text('ttl_del').'" title="'.self::text('ttl_del').'" style="cursor:pointer;" onClick="self.location=\''.\Smart::escape_js(self::composeUrl('op=record-delete&id='.\Smart::escape_url($query['id']))).'\';">';
-			$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			if(!defined('SMART_PAGEBUILDER_DISABLE_DELETE')) {
+				$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-delete.svg'.'" alt="'.self::text('ttl_del').'" title="'.self::text('ttl_del').'" style="cursor:pointer;" onClick="self.location=\''.\Smart::escape_js(self::composeUrl('op=record-delete&id='.\Smart::escape_url($query['id']))).'\';">';
+				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+			} //end if
 			$bttns .= '<img src="'.self::$ModulePath.'libs/views/manager/img/op-edit.svg'.'" alt="'.self::text('ttl_edt').'" title="'.self::text('ttl_edt').'" style="cursor:pointer;" onClick="'."SmartJS_BrowserUtils.Load_Div_Content_By_Ajax(jQuery('#adm-page-props').parent().prop('id'), 'lib/framework/img/loading-bars.svg', '".\Smart::escape_js(self::composeUrl('op=record-edit-tab-props&id='.\Smart::escape_url($query['id'])))."', 'GET', 'html');".'">';
 			if((string)$query['checksum'] != (string)$query['calc_checksum']) {
 				$bttns .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -1365,19 +1368,19 @@ final class Manager {
 		if(self::testIsSegmentPage($y_id)) {
 			switch((string)$y_type) {
 				case 'settings':
-					$ttl = 'SETTINGS SEGMENT Page';
+					$ttl = 'SETTINGS Segment';
 					$img = self::$ModulePath.'libs/views/manager/img/syntax-settings.svg';
 					break;
 				case 'text':
-					$ttl = 'TEXT SEGMENT Page';
+					$ttl = 'TEXT Segment';
 					$img = self::$ModulePath.'libs/views/manager/img/syntax-text.svg';
 					break;
 				case 'markdown':
-					$ttl = 'MARKDOWN SEGMENT Page';
+					$ttl = 'MARKDOWN Segment';
 					$img = self::$ModulePath.'libs/views/manager/img/syntax-markdown.svg';
 					break;
 				case 'html':
-					$ttl = 'HTML SEGMENT Page';
+					$ttl = 'HTML Segment';
 					$img = self::$ModulePath.'libs/views/manager/img/syntax-html.svg';
 					break;
 				default:
@@ -1595,7 +1598,10 @@ final class Manager {
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		$the_link_add = (string) self::composeUrl('op=record-add-form');
 		$the_link_view = (string) self::composeUrl('op=record-view&id=');
-		$the_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		$the_link_delete = '';
+		if(!defined('SMART_PAGEBUILDER_DISABLE_DELETE')) {
+			$the_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		} //end if
 		//-- #{{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		return (string) \SmartMarkersTemplating::render_file_template(
 			self::$ModulePath.'libs/views/manager/view-list-tree.mtpl.htm',
@@ -1613,6 +1619,7 @@ final class Manager {
 				'LIST-BTN-RESET' 	=> (string) $the_link_list,
 				'LIST-NEW-URL' 		=> (string) $the_link_add,
 				'LIST-RECORD-URL' 	=> (string) $the_link_view,
+				'LIST-DELETE-URL' 	=> (string) $the_link_delete,
 				'LIST-ALT-COOKIE' 	=> (string) '',
 				'LIST-ALT-LINK' 	=> (string) $the_alt_link_list,
 				'TXT-ALT-LINK' 		=> (string) self::text('ttl_ch_list', false),
@@ -1654,7 +1661,10 @@ final class Manager {
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		$the_link_add = (string) self::composeUrl('op=record-add-form');
 		$the_link_view = (string) self::composeUrl('op=record-view&id=');
-		$the_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		$the_link_delete = '';
+		if(!defined('SMART_PAGEBUILDER_DISABLE_DELETE')) {
+			$the_link_delete = (string) self::composeUrl('op=record-delete&id=');
+		} //end if
 		//-- #{{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) self::$ModulePath.'libs/views/manager/view-list.mtpl.htm',

@@ -30,7 +30,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  *
- * @version 	v.180926
+ * @version 	v.181005
  * @package 	PageBuilder
  *
  */
@@ -283,10 +283,10 @@ abstract class AbstractFrontendController extends \SmartAbstractAppController {
 		$arr = (array) $this->renderSegmentWithSegments($segment_id, $arr);
 		//print_r($arr); die();
 		//--
-		if((string)trim((string)$arr['code']) == '') {
+	/*	if((string)trim((string)$arr['code']) == '') {
 			$this->PageViewSetErrorStatus(500, 'WARNING: Empty PageBuilder Segment Code to Render ...');
 			return '';
-		} //end if
+		} //end if */
 		//--
 		return (string) $arr['code'];
 		//--

@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.180926
+	// v.181005
 
 
 	public static function getRecordsUniqueControllers() {
@@ -518,7 +518,7 @@ final class PgPageBuilderBackend {
 			case 'name':
 			case 'ctrl':
 			case 'modified':
-			case 'views':
+			case 'counter':
 				$sort = 'ORDER BY a.'.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort;
 				break;
 			case 'special':
@@ -539,7 +539,7 @@ final class PgPageBuilderBackend {
 		$where = (string) self::buildListWhereCondition($y_xsrc, $y_src);
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT a."id", a."name", a."mode", a."ref", a."active", a."auth", a."special", a."modified", (char_length(a."data") + char_length(a."code")) AS "total_size" FROM "web"."page_builder" a '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
+			'SELECT a."id", a."name", a."mode", a."ref", a."ctrl", a."active", a."auth", a."special", a."modified", a."counter", (char_length(a."data") + char_length(a."code")) AS "total_size" FROM "web"."page_builder" a '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
 		);
 		//--
 	} //END FUNCTION
