@@ -154,6 +154,16 @@ jQuery(function() {
 		return '<div align="center" style="padding-top:2px;"><img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '"></div>';
 	}
 
+	var displayTransl = function(row, cell, value, columnDef, dataContext) {
+		var img = 'translatable-non.svg';
+		var txt = 'Non-Translatable';
+		if(value == 1) {
+			img = 'translatable.svg';
+			txt = 'Translatable';
+		}
+		return '<div align="center" style="padding-top:2px;"><img src="[####PATH-MODULE|html|js####]libs/views/manager/img/' + img + '" alt="' + SmartJS_CoreUtils.escape_html(txt) + '" title="' + SmartJS_CoreUtils.escape_html(txt) + '"></div>';
+	}
+
 	var displayName = function(row, cell, value, columnDef, dataContext) {
 		value = String(value);
 		return '<span title="' + SmartJS_CoreUtils.escape_html(dataContext['ctrl']) + '">' + SmartJS_CoreUtils.escape_html(value) + '</span>';
@@ -164,7 +174,7 @@ jQuery(function() {
 		[%%%%IF:LIST-DELETE-URL:!=;%%%%]
 			szDiff = 50;
 		[%%%%/IF:LIST-DELETE-URL%%%%]
-		var size = parseInt(jQuery(window).width() - szDiff - 50 - 75 - 75 - 75 - 75) - 100;
+		var size = parseInt(jQuery(window).width() - szDiff - 50 - 75 - 75 - 75 - 75 - 75) - 100;
 		switch(String(colName)) {
 			case 'id':
 				size = size * 0.33
@@ -185,15 +195,16 @@ jQuery(function() {
 	// Grid Data Defs: defaultSortDir:1
 	var columns = [
 		[%%%%IF:LIST-DELETE-URL:!=;%%%%]
-		{id:'x-del', 	field:'id', 	name:'#', 								sortable:false, 	width:50, 					formatter:displayDel},
+		{id:'x-del', 		field:'id', 			name:'#', 								sortable:false, 	width:50, 					formatter:displayDel},
 		[%%%%/IF:LIST-DELETE-URL%%%%]
-		{id:'x-ops', 	field:'id', 	name:'@', 								sortable:false, 	width:50, 					formatter:displayOps},
-		{id:'id', 		field:'id', 	name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:diffColSize('id'), 	formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
-		{id:'mode', 	field:'mode', 	name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 					formatter:displayCodeType, editor:TextCellSelector},
-		{id:'name', 	field:'name', 	name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize('name'), 	formatter:displayName, editor:TextCellSelector},
-		{id:'special', 	field:'special',name:'[####TXT-COL-SPECIAL|js####]', 	sortable:true, 		width:75, 					formatter:displaySpecial, editor:TextCellSelector},
-		{id:'active', 	field:'active', name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 					formatter:displayActive, editor:TextCellSelector},
-		{id:'auth', 	field:'auth', 	name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 					formatter:displayAuth, editor:TextCellSelector},
+		{id:'x-ops', 		field:'id', 			name:'@', 								sortable:false, 	width:50, 					formatter:displayOps},
+		{id:'id', 			field:'id', 			name:'[####TXT-COL-ID|js####]', 		sortable:true, 		width:diffColSize('id'), 	formatter:displayID, editor:TextCellSelector, cssClass:'smartGrid_Important'},
+		{id:'mode', 		field:'mode', 			name:'[####TXT-COL-SYNTAX|js####]', 	sortable:true, 		width:75, 					formatter:displayCodeType, editor:TextCellSelector},
+		{id:'name', 		field:'name', 			name:'[####TXT-COL-NAME|js####]', 		sortable:true, 		width:diffColSize('name'), 	formatter:displayName, editor:TextCellSelector},
+		{id:'special', 		field:'special',		name:'[####TXT-COL-SPECIAL|js####]', 	sortable:true, 		width:75, 					formatter:displaySpecial, editor:TextCellSelector},
+		{id:'active', 		field:'active', 		name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 					formatter:displayActive, editor:TextCellSelector},
+		{id:'auth', 		field:'auth', 			name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 					formatter:displayAuth, editor:TextCellSelector},
+		{id:'translations', field:'translations', 	name:'[####TXT-COL-TRANSL|js####]', 	sortable:true, 		width:75, 					formatter:displayTransl, editor:TextCellSelector},
 	];
 
 	// Grid Options

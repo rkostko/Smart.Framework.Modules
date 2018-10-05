@@ -519,6 +519,7 @@ final class PgPageBuilderBackend {
 			case 'ctrl':
 			case 'modified':
 			case 'counter':
+			case 'translations':
 				$sort = 'ORDER BY a.'.\SmartPgsqlDb::escape_identifier((string)$y_sort).' '.$xsort;
 				break;
 			case 'special':
@@ -539,7 +540,7 @@ final class PgPageBuilderBackend {
 		$where = (string) self::buildListWhereCondition($y_xsrc, $y_src);
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT a."id", a."name", a."mode", a."ref", a."ctrl", a."active", a."auth", a."special", a."modified", a."counter", (char_length(a."data") + char_length(a."code")) AS "total_size" FROM "web"."page_builder" a '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
+			'SELECT a."id", a."name", a."mode", a."ref", a."ctrl", a."active", a."auth", a."special", a."modified", a."counter", a."translations", (char_length(a."data") + char_length(a."code")) AS "total_size" FROM "web"."page_builder" a '.$where.' '.$sort.' LIMIT '.(int)$y_limit.' OFFSET '.(int)$y_ofs
 		);
 		//--
 	} //END FUNCTION
@@ -601,11 +602,15 @@ final class PgPageBuilderBackend {
 					} //end if
 					break;
 				case 'translations':
+					$is_positive = false;
 					if(strpos((string)$y_src, '!') === 0) { // negation search: !ro
 						$y_src = (string) ltrim((string)$y_src, '!');
 						$is_negative = true;
 					} else { // positive search: ro
 						$is_negative = false;
+						if(strpos((string)$y_src, '"') === 0) {
+							$is_positive = true;
+						} //end if
 					} //end if else
 					if((strlen((string)$y_src) == 2) AND (preg_match('/^[a-z]+$/', (string)$y_src))) {
 						$arr_raw_langs = (array) \SmartTextTranslations::getListOfLanguages();
@@ -626,6 +631,8 @@ final class PgPageBuilderBackend {
 							} //end if else
 							$where = 'LEFT OUTER JOIN "web"."page_translations" b ON a."id" = b."id" AND a."translations" = 1 AND b."lang" = \''.\SmartPgsqlDb::escape_str((string)$y_src).'\' WHERE ((a."translations" = 1) AND (b."lang" IS'.$is_negative.'NULL))';
 						} //end if else
+					} elseif($is_positive) {
+						$where = 'WHERE (a."translations" = 1)';
 					} elseif($is_negative) {
 						$where = 'WHERE (a."translations" != 1)';
 					} //end if
