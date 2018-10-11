@@ -1,4 +1,4 @@
-<!-- Pagebuilder/Manage @ List / Records :: v.181005 -->
+<!-- Pagebuilder/Manage @ List / Records :: v.181011 -->
 <style>
 	.smartGrid_AlignCenter {
 		text-align: center;
@@ -174,7 +174,7 @@ jQuery(function() {
 		[%%%%IF:LIST-DELETE-URL:!=;%%%%]
 			szDiff = 50;
 		[%%%%/IF:LIST-DELETE-URL%%%%]
-		var size = parseInt(jQuery(window).width() - szDiff - 50 - 75 - 75 - 75 - 75 - 75) - 100;
+		var size = parseInt(jQuery(window).width() - szDiff - 50 - 75 - 75 - 75 - 75 - 75 - 75) - 100;
 		switch(String(colName)) {
 			case 'id':
 				size = size * 0.33
@@ -205,6 +205,7 @@ jQuery(function() {
 		{id:'active', 		field:'active', 		name:'[####TXT-COL-ACTIVE|js####]', 	sortable:true, 		width:75, 					formatter:displayActive, editor:TextCellSelector},
 		{id:'auth', 		field:'auth', 			name:'[####TXT-COL-AUTH|js####]', 		sortable:true, 		width:75, 					formatter:displayAuth, editor:TextCellSelector},
 		{id:'translations', field:'translations', 	name:'[####TXT-COL-TRANSL|js####]', 	sortable:true, 		width:75, 					formatter:displayTransl, editor:TextCellSelector},
+		{id:'counter', 		field:'counter', 		name:'[####TXT-COL-COUNTER|js####]', 	sortable:true, 		width:75, 					editor:TextCellSelector, cssClass:'smartGrid_AlignRight'}
 	];
 
 	// Grid Options

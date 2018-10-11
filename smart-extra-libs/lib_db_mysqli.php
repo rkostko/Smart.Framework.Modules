@@ -90,7 +90,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.180423
+ * @version 	v.181011
  * @package 	Database:MySQL
  *
  */
@@ -457,6 +457,14 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//--
+	$mysql_result_count = 0; // store COUNT data
+	if((string)$error == '') {
+		$record = @mysqli_fetch_row($result);
+		$mysql_result_count = Smart::format_number_int($record[0]);
+	} //end if
+	//--
+
+	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
@@ -474,6 +482,7 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 			'data' => 'COUNT :: '.$the_query_title,
 			'query' => $queryval,
 			'params' => $dbg_query_params,
+			'rows' => $mysql_result_count,
 			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
 			'connection' => (string) self::get_connection_id($y_connection)
 		]);
@@ -482,18 +491,10 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//-- init vars
-	$mysql_result_count = 0; // store COUNT data
-	//--
-	if(strlen($error) > 0) {
+	if((string)$error != '') {
 		//--
 		self::error(self::get_connection_id($y_connection), 'COUNT-DATA', $error, $queryval, $params_or_title);
 		return 0;
-		//--
-	} else {
-		//--
-		$record = @mysqli_fetch_row($result);
-		//--
-		$mysql_result_count = Smart::format_number_int($record[0]);
 		//--
 	} //end else
 	//--
@@ -574,6 +575,15 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 	//--
 
 	//--
+	$number_of_rows = 0;
+	$number_of_fields = 0;
+	if((string)$error == '') {
+		$number_of_rows = @mysqli_num_rows($result);
+		$number_of_fields = @mysqli_num_fields($result);
+	} //end if
+	//--
+
+	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
@@ -591,6 +601,7 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 			'data' => 'READ [NON-ASSOCIATIVE] :: '.$the_query_title,
 			'query' => $queryval,
 			'params' => $dbg_query_params,
+			'rows' => $number_of_rows,
 			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
 			'connection' => (string) self::get_connection_id($y_connection)
 		]);
@@ -601,15 +612,12 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 	//-- init vars
 	$mysql_result_arr = array(); // store SELECT data
 	//--
-	if(strlen($error) > 0) {
+	if((string)$error != '') {
 		//--
 		self::error(self::get_connection_id($y_connection), 'READ-DATA', $error, $queryval, $params_or_title);
 		return array();
 		//--
 	} else {
-		//--
-		$number_of_rows = @mysqli_num_rows($result);
-		$number_of_fields = @mysqli_num_fields($result);
 		//--
 		for($i=0; $i<$number_of_rows; $i++) {
 			//--
@@ -700,6 +708,15 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//--
+	$number_of_rows = 0;
+	$number_of_fields = 0;
+	if((string)$error == '') {
+		$number_of_rows = @mysqli_num_rows($result);
+		$number_of_fields = @mysqli_num_fields($result);
+	} //end if
+	//--
+
+	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
@@ -717,6 +734,7 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 			'data' => 'aREAD [ASSOCIATIVE] :: '.$the_query_title,
 			'query' => $queryval,
 			'params' => $dbg_query_params,
+			'rows' => $number_of_rows,
 			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
 			'connection' => (string) self::get_connection_id($y_connection)
 		]);
@@ -727,15 +745,12 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 	//-- init vars
 	$mysql_result_arr = array(); // store SELECT data
 	//--
-	if(strlen($error) > 0) {
+	if((string)$error != '') {
 		//--
 		self::error(self::get_connection_id($y_connection), 'READ-aDATA', $error, $queryval, $params_or_title);
 		return array();
 		//--
 	} else {
-		//--
-		$number_of_rows = @mysqli_num_rows($result);
-		$number_of_fields = @mysqli_num_fields($result);
 		//--
 		if($number_of_rows > 0) {
 			//--
@@ -845,6 +860,15 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 	//--
 
 	//--
+	$number_of_rows = 0;
+	$number_of_fields = 0;
+	if((string)$error == '') {
+		$number_of_rows = @mysqli_num_rows($result);
+		$number_of_fields = @mysqli_num_fields($result);
+	} //end if
+	//--
+
+	//--
 	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
@@ -862,6 +886,7 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 			'data' => 'asREAD [SINGLE-ROW-ASSOCIATIVE] :: '.$the_query_title,
 			'query' => $queryval,
 			'params' => $dbg_query_params,
+			'rows' => $number_of_rows,
 			'time' => Smart::format_number_dec($time_end, 9, '.', ''),
 			'connection' => (string) self::get_connection_id($y_connection)
 		]);
@@ -872,15 +897,12 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 	//-- init vars
 	$mysql_result_arr = array(); // store SELECT data
 	//--
-	if(strlen($error) > 0) {
+	if((string)$error != '') {
 		//--
 		self::error(self::get_connection_id($y_connection), 'READ-asDATA', $error, $queryval, $params_or_title);
 		return array();
 		//--
 	} else {
-		//--
-		$number_of_rows = @mysqli_num_rows($result);
-		$number_of_fields = @mysqli_num_fields($result);
 		//--
 		if($number_of_rows == 1) {
 			//--
@@ -1034,7 +1056,7 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//--
-	if(strlen($error) > 0) {
+	if((string)$error != '') {
 		//--
 		$message = 'errorsqlwriteoperation: '.$error;
 		//--

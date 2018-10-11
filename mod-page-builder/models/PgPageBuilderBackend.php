@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.181005
+	// v.181011
 
 
 	public static function getRecordsUniqueControllers() {
@@ -39,7 +39,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordsByCtrl($y_ctrl) {
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE (("ctrl" = $1) AND ("ref" = $2)) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			'SELECT "id", "active", "auth", "special", "name", "mode", "translations", "counter" FROM "web"."page_builder" WHERE (("ctrl" = $1) AND ("ref" = $2)) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
 			[
 				(string) $y_ctrl,
 				(string) '[]'
@@ -52,7 +52,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordsByRef($y_ref) {
 		//--
 		return (array) \SmartPgsqlDb::read_adata(
-			'SELECT "id", "active", "auth", "special", "name", "mode" FROM "web"."page_builder" WHERE ("ref" ? $1) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
+			'SELECT "id", "active", "auth", "special", "name", "mode", "translations", "counter" FROM "web"."page_builder" WHERE ("ref" ? $1) ORDER BY "ref" ASC, "name" ASC, "id" ASC',
 			[
 				(string) $y_ref
 			]
@@ -552,6 +552,15 @@ final class PgPageBuilderBackend {
 		//--
 		return (int) \SmartPgsqlDb::count_data(
 			'SELECT COUNT(1) FROM "web"."page_builder" a '.$where
+		);
+		//--
+	} //END FUNCTION
+
+
+	public static function resetCounterOnAllRecords() {
+		//--
+		return (array) \SmartPgsqlDb::write_data(
+			'UPDATE "web"."page_builder" SET "counter" = 0'
 		);
 		//--
 	} //END FUNCTION

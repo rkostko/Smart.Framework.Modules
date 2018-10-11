@@ -47,7 +47,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.181005
+ * @version 	v.181011
  * @package 	PageBuilder
  *
  */
@@ -80,6 +80,7 @@ final class Manager {
 		$text['ttl_edtac'] 			= 'Edit Object Data';
 		$text['ttl_del'] 			= 'Delete this Object';
 		$text['ttl_ch_list'] 		= 'List Mode Change';
+		$text['ttl_reset_hits'] 	= 'Reset Hits Counter on All Records';
 		//-- buttons
 		$text['search']				= 'Filter';
 		$text['reset']				= 'Reset';
@@ -154,6 +155,7 @@ final class Manager {
 		$text['auth'] 				= 'Auth';
 		$text['translatable'] 		= 'Translatable';
 		$text['translations'] 		= 'Translations';
+		$text['counter'] 			= 'Hits Counter';
 		$text['pw_code'] 			= 'Code Preview';
 		$text['pw_data'] 			= 'Data Preview';
 		//--
@@ -1621,8 +1623,10 @@ final class Manager {
 				'LIST-RECORD-URL' 	=> (string) $the_link_view,
 				'LIST-DELETE-URL' 	=> (string) $the_link_delete,
 				'LIST-ALT-COOKIE' 	=> (string) '',
+				'LIST-CRR-LINK' 	=> (string) $the_link_list,
 				'LIST-ALT-LINK' 	=> (string) $the_alt_link_list,
 				'TXT-ALT-LINK' 		=> (string) self::text('ttl_ch_list', false),
+				'TXT-RESET-COUNTER' => (string) self::text('ttl_reset_hits', false),
 				'COLLAPSE' 			=> (string) $collapse,
 				'FILTER-COLLAPSE' 	=> (string) $fcollapse,
 				'FILTER' 			=> (array)  $filter,
@@ -1645,6 +1649,7 @@ final class Manager {
 				'TXT-COL-ACTIVE' 	=> (string) self::text('active', false),
 				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
 				'TXT-COL-TRANSL' 	=> (string) self::text('translations', false),
+				'TXT-COL-COUNTER' 	=> (string) self::text('counter', false),
 				'FMT-LIST' 			=> (int)    \Smart::array_size($filter).' / '.\Smart::array_size($total)
 			]
 		);
@@ -1657,6 +1662,7 @@ final class Manager {
 	public static function ViewDisplayListTable($y_tpl) {
 		//--
 		$the_link_list = (string) self::composeUrl('op=records-list-json&');
+		$the_back_link_list = (string) self::composeUrl('op=records-list&tpl='.\Smart::escape_url($y_tpl)); // \SmartFrameworkRegistry::getCookieVar('PageBuilder_Smart_Slickgrid_List_URL')
 		$the_alt_link_list = (string) self::composeUrl('op=records-tree&tpl='.\Smart::escape_url($y_tpl)); // \SmartFrameworkRegistry::getCookieVar('PageBuilder_Smart_Slickgrid_List_URL')
 		//-- {{{SYNC-PAGEBUILDER-MANAGER-DEF-LINKS}}}
 		$the_link_add = (string) self::composeUrl('op=record-add-form');
@@ -1678,8 +1684,10 @@ final class Manager {
 				'LIST-RECORD-URL' 	=> (string) $the_link_view,
 				'LIST-DELETE-URL' 	=> (string) $the_link_delete,
 				'LIST-ALT-COOKIE' 	=> (string) 'PageBuilder_Smart_Slickgrid_List_URL',
+				'LIST-CRR-LINK' 	=> (string) $the_back_link_list,
 				'LIST-ALT-LINK' 	=> (string) $the_alt_link_list,
 				'TXT-ALT-LINK' 		=> (string) self::text('ttl_ch_list', false),
+				'TXT-RESET-COUNTER' => (string) self::text('ttl_reset_hits', false),
 				'PATH-MODULE' 		=> (string) self::$ModulePath,
 				'LIST-TTL' 			=> (string) self::text('ttl_list', false),
 				'LIST-RECORDS' 		=> (string) self::text('ttl_records', false),
@@ -1698,6 +1706,7 @@ final class Manager {
 				'TXT-COL-ACTIVE' 	=> (string) self::text('active', false),
 				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
 				'TXT-COL-TRANSL' 	=> (string) self::text('translations', false),
+				'TXT-COL-COUNTER' 	=> (string) self::text('counter', false),
 				'FMT-LIST' 			=> '# / # @'
 			]
 		);
@@ -1746,6 +1755,28 @@ final class Manager {
 	} //END FUNCTION
 	//==================================================================
 
+
+	//==================================================================
+	public static function ViewDisplayResetCounter($y_redir_url='') {
+		//--
+		$wr = \SmartModDataModel\PageBuilder\PgPageBuilderBackend::resetCounterOnAllRecords();
+		if($wr[1] > 0) {
+			$status = 'OK';
+			$message = 'Hit Counter was reset on all records';
+		} else {
+			$status = 'ERROR';
+			$message = 'There was an error trying to reset the Hit Counter on all records';
+		} //end if else
+		//--
+		return (string) \SmartComponents:: js_ajax_replyto_html_form(
+			(string) $status,
+			'Reset Hit Counter on All Records',
+			(string) $message,
+			(string) $y_redir_url
+		);
+		//--
+	} //END FUNCTION
+	//==================================================================
 
 } //END CLASS
 

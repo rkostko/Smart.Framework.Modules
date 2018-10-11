@@ -1,5 +1,5 @@
 
--- START :: PostgreSQL Table: web / page_builder r.180926 #####
+-- START :: PostgreSQL Table: web / page_builder r.181011 #####
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -36,8 +36,8 @@ CREATE TABLE web.page_builder (
     code text DEFAULT ''::text NOT NULL,
     layout character varying(75) DEFAULT ''::character varying NOT NULL,
     checksum character varying(40) DEFAULT ''::character varying NOT NULL,
-    counter bigint DEFAULT 0 NOT NULL,
     translations smallint DEFAULT 1 NOT NULL,
+    counter bigint DEFAULT 0 NOT NULL,
     admin character varying(25) DEFAULT ''::character varying NOT NULL,
     published bigint DEFAULT 0 NOT NULL,
     modified character varying(23) DEFAULT ''::character varying NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE web.page_builder (
     CONSTRAINT page_builder__chk__published CHECK ((published >= 0))
 );
 
-COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.09.26';
+COMMENT ON TABLE web.page_builder IS 'Web - Page Builder v.2018.10.11';
 COMMENT ON COLUMN web.page_builder.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_builder.ref IS 'Reference Parent IDs as Json-Array [], Optional';
 COMMENT ON COLUMN web.page_builder.ctrl IS 'Parent Controller ID, Optional';
@@ -63,8 +63,8 @@ COMMENT ON COLUMN web.page_builder.data IS 'Render Active Runtime';
 COMMENT ON COLUMN web.page_builder.code IS 'Render Code';
 COMMENT ON COLUMN web.page_builder.layout IS 'Page Design Layout, Pages Only';
 COMMENT ON COLUMN web.page_builder.checksum IS 'Checksum (MD5)';
-COMMENT ON COLUMN web.page_builder.counter IS 'Hit Counter';
 COMMENT ON COLUMN web.page_builder.translations IS 'Allow Translations (1 = yes ; 0 = no)';
+COMMENT ON COLUMN web.page_builder.counter IS 'Hit Counter';
 COMMENT ON COLUMN web.page_builder.admin IS 'Author';
 COMMENT ON COLUMN web.page_builder.published IS 'Time of Publising: timestamp';
 COMMENT ON COLUMN web.page_builder.modified IS 'Last Modification: yyyy-mm-dd';
@@ -79,6 +79,7 @@ CREATE INDEX page_builder__idx__special ON web.page_builder USING btree (special
 CREATE INDEX page_builder__idx__mode ON web.page_builder USING btree (mode);
 CREATE INDEX page_builder__idx__layout ON web.page_builder USING btree (layout);
 CREATE INDEX page_builder__idx__translations ON web.page_builder USING btree (translations);
+CREATE INDEX page_builder__idx__counter ON web.page_builder USING btree (counter);
 CREATE INDEX page_builder__idx__admin ON web.page_builder USING btree (admin);
 CREATE INDEX page_builder__idx__modified ON web.page_builder USING btree (modified);
 
@@ -97,7 +98,7 @@ CREATE TABLE web.page_translations (
 
 ALTER TABLE ONLY web.page_translations ADD CONSTRAINT page_translations_pkey PRIMARY KEY (id, lang);
 
-COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.09.26';
+COMMENT ON TABLE web.page_translations IS 'Web - Page (Builder) Translations v.2018.10.11';
 COMMENT ON COLUMN web.page_translations.id IS 'Unique ID for the Record: Page or Segment (segments must begin with: #)';
 COMMENT ON COLUMN web.page_translations.lang IS 'Language ID: de, fr, ...';
 COMMENT ON COLUMN web.page_translations.code IS 'Render Code';

@@ -2,7 +2,7 @@
 // Controller: PageBuilder/Manage
 // Route: ?/page/page-builder.manage
 // Author: unix-world.org
-// r.181005
+// r.181011
 
 //----------------------------------------------------- PREVENT S EXECUTION
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application
@@ -199,6 +199,14 @@ final class SmartAppAdminController extends SmartAbstractAppController {
 				$this->PageViewSetVar(
 					'main',
 					\SmartModExtLib\PageBuilder\Manager::ViewFormDelete($id, $delete)
+				);
+				break;
+			case 'reset-counter':
+				$back = $this->RequestVarGet('back', '', 'string');
+				$this->PageViewSetCfg('rawpage', true);
+				$this->PageViewSetVar(
+					'main',
+					\SmartModExtLib\PageBuilder\Manager::ViewDisplayResetCounter($back)
 				);
 				break;
 			default:
