@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderFrontend {
 
 	// ::
-	// v.181011
+	// v.181012
 
 
 	public static function checkIfPageOrSegmentExist($y_id) {
@@ -58,7 +58,7 @@ final class PgPageBuilderFrontend {
 		} //end if
 		//--
 		$arr = (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "name", "mode", "auth", "layout", "data", "code" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0',
+			'SELECT "id", "name", "mode", "auth", "layout", "data", "code", "translations" FROM "web"."page_builder" WHERE (("id" = $1) AND ("active" = 1)) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -74,10 +74,12 @@ final class PgPageBuilderFrontend {
 		//--
 		$y_lang = (string) trim((string)$y_lang);
 		if((string)$y_lang != '') {
-			$tarr = (array) self::getTranslation($y_id, $y_lang);
-			if(((string)$tarr['id'] == (string)$arr['id']) AND ((string)trim((string)$tarr['code']) != '')) {
-				$arr['code'] = (string) $tarr['code'];
-				$arr['@lang'] = (string) $tarr['lang'];
+			if((string)$arr['translations'] == '1') {
+				$tarr = (array) self::getTranslation($y_id, $y_lang);
+				if(((string)$tarr['id'] == (string)$arr['id']) AND ((string)trim((string)$tarr['code']) != '')) {
+					$arr['code'] = (string) $tarr['code'];
+					$arr['@lang'] = (string) $tarr['lang'];
+				} //end if
 			} //end if
 		} //end if
 		//--
@@ -94,7 +96,7 @@ final class PgPageBuilderFrontend {
 		} //end if
 		//--
 		$arr = (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "name", "mode", 0 AS "auth", \'\' AS "layout", "data", "code" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
+			'SELECT "id", "name", "mode", 0 AS "auth", \'\' AS "layout", "data", "code", "translations" FROM "web"."page_builder" WHERE ("id" = $1) LIMIT 1 OFFSET 0',
 			[
 				(string) $y_id
 			]
@@ -110,10 +112,12 @@ final class PgPageBuilderFrontend {
 		//--
 		$y_lang = (string) trim((string)$y_lang);
 		if((string)$y_lang != '') {
-			$tarr = (array) self::getTranslation($y_id, $y_lang);
-			if(((string)$tarr['id'] == (string)$arr['id']) AND ((string)trim((string)$tarr['code']) != '')) {
-				$arr['code'] = (string) $tarr['code'];
-				$arr['@lang'] = (string) $tarr['lang'];
+			if((string)$arr['translations'] == '1') {
+				$tarr = (array) self::getTranslation($y_id, $y_lang);
+				if(((string)$tarr['id'] == (string)$arr['id']) AND ((string)trim((string)$tarr['code']) != '')) {
+					$arr['code'] = (string) $tarr['code'];
+					$arr['@lang'] = (string) $tarr['lang'];
+				} //end if
 			} //end if
 		} //end if
 		//--

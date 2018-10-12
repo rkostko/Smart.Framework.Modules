@@ -1,19 +1,4 @@
-<!-- Pagebuilder/Manage @ View Record / Info :: v.181011 -->
-<style>
-ul#lang-list {
-	display: inline;
-	list-style: none;
-}
-ul#lang-list li {
-	display: inline;
-}
-ul#lang-list li:after {
-	content: ", ";
-}
-ul#lang-list li:last-child:after {
-	content: "";
-}
-</style>
+<!-- Pagebuilder/Manage @ View Record / Info :: v.181012 -->
 <table width="100%" border="0">
 	<tr>
 		<td>
@@ -39,7 +24,6 @@ ul#lang-list li:last-child:after {
 			[####FIELD-ADMIN####]
 		</td>
 	</tr>
-	[%%%%IF:SHOW-TRANSLATIONS:==1;%%%%]
 	<tr>
 		<td colspan="2">
 			<hr>
@@ -47,23 +31,11 @@ ul#lang-list li:last-child:after {
 	</tr>
 	<tr>
 		<td>
-			<b>[####TEXT-TRANSLATIONS####]:</b>
+			<b>[####TEXT-COUNTER####]:</b>
 		</td>
 		<td>
-			[%%%%IF:IS-TRANSLATABLE:!=1;%%%%]
-			[%%%%IF:ARR-TRANSLATIONS:@+0;%%%%]
-			<img src="[####MODULE-PATH|html####]libs/views/manager/img/syntax-unknown.svg" alt="WARNING: Not Translatable" title="WARNING: Not Translatable">
-			[%%%%ELSE:ARR-TRANSLATIONS%%%%]
-			-
-			[%%%%/IF:ARR-TRANSLATIONS%%%%]
-			[%%%%ELSE:IS-TRANSLATABLE%%%%]
-			([####COUNT-TRANSLATIONS|int####])
-			[%%%%/IF:IS-TRANSLATABLE%%%%]
-			<ul id="lang-list">[%%%%LOOP:ARR-TRANSLATIONS%%%%]
-			<li>[####ARR-TRANSLATIONS._-VAL-_|html####]</li>
-			[%%%%/LOOP:ARR-TRANSLATIONS%%%%]</ul>
+			[####FIELD-COUNTER####]
 		</td>
 	</tr>
-	[%%%%/IF:SHOW-TRANSLATIONS%%%%]
 </table>
 <!-- #END -->

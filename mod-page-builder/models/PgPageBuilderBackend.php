@@ -21,7 +21,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class PgPageBuilderBackend {
 
 	// ::
-	// v.181011
+	// v.181012
 
 
 	public static function getRecordsUniqueControllers() {
@@ -165,7 +165,7 @@ final class PgPageBuilderBackend {
 	public static function getRecordInfById($y_id) {
 		//--
 		return (array) \SmartPgsqlDb::read_asdata(
-			'SELECT "id", "ref", "special", "mode", "published", "admin", "modified", "checksum", "translations" FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
+			'SELECT "id", "ref", "special", "mode", "published", "admin", "modified", "checksum", "counter" FROM "web"."page_builder" WHERE ("id" = '.\SmartPgsqlDb::escape_literal((string)$y_id).') LIMIT 1 OFFSET 0'
 		);
 		//--
 	} //END FUNCTION

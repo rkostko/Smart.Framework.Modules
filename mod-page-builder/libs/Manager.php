@@ -47,7 +47,7 @@ $administrative_privileges['pagebuilder_manager'] 	= 'WebPages // Management Ops
  * @access 		private
  * @internal
  *
- * @version 	v.181011
+ * @version 	v.181012
  * @package 	PageBuilder
  *
  */
@@ -155,9 +155,15 @@ final class Manager {
 		$text['auth'] 				= 'Auth';
 		$text['translatable'] 		= 'Translatable';
 		$text['translations'] 		= 'Translations';
+		$text['warn_translations'] 	= 'WARNING: Not Translatable but some Translations are present';
 		$text['counter'] 			= 'Hits Counter';
 		$text['pw_code'] 			= 'Code Preview';
 		$text['pw_data'] 			= 'Data Preview';
+		//--
+		$text['hint_0'] 			= 'Select a filtering criteria from below';
+		$text['hint_1'] 			= 'Hints: `[]` for Empty ; `![]` for Non-Empty ; `expr` for containing expression';
+		$text['hint_2'] 			= 'Hints: `ro` for records having this language code Translation ; `!ro` for records NOT having this language code Translation ; `!` for NON-Translatable records ; `"` for Translatable records';
+		$text['hint_3'] 			= 'Fill the filtering expression';
 		//--
 
 		//--
@@ -394,6 +400,24 @@ final class Manager {
 			$codetype = '';
 		} //end if
 		//--
+		$arr_raw_langs = (array) \SmartTextTranslations::getListOfLanguages();
+		$transl_arr = array();
+		$show_translations = false;
+		if(\Smart::array_size($arr_raw_langs) > 1) {
+			$show_translations = true;
+			$transl_arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsTranslationsById($y_id);
+		} //end if
+		if(\Smart::array_size($transl_arr) > 0) {
+			for($i=0; $i<count($transl_arr); $i++) {
+				$transl_arr[$i] = (string) \SmartComponents::html_select_list_single('', (string)$transl_arr[$i], 'list', (array)$arr_raw_langs);
+			} //end if
+		} //end if
+		if((string)$query['mode'] == 'settings') {
+			$show_translations = false;
+		} //end if
+		//--
+		$transl_cnt = (int) \Smart::array_size($transl_arr);
+		//--
 		$the_template = self::$ModulePath.'libs/views/manager/view-record-frm-props.mtpl.htm';
 		//--
 		$out = \SmartMarkersTemplating::render_file_template(
@@ -416,6 +440,16 @@ final class Manager {
 				'FIELD-AUTH'				=> (string) $fld_auth,
 				'TEXT-TRANS'				=> (string) self::text('translatable'),
 				'FIELD-TRANS'				=> (string) $fld_trans,
+
+				'MODULE-PATH' 			=> (string) self::$ModulePath,
+				'TEXT-TRANSLATIONS' 	=> (string) self::text('translations'),
+				'SHOW-TRANSLATIONS' 	=> (int)    $show_translations,
+				'COUNT-TRANSLATIONS' 	=> (int)    $transl_cnt,
+				'ARR-TRANSLATIONS' 		=> (array)  $transl_arr,
+				'IS-TRANSLATABLE' 		=> (int)    $query['translations'],
+				'WARN-TRANSLATABLE' 	=> (string) self::text('warn_translations'),
+
+
 				'TEXT-LAYOUT'				=> (string) self::text('layout'),
 				'FIELD-LAYOUT'				=> (string) $fld_layout,
 				'MODE-PAGETYPE' 			=> (string) $query['mode']
@@ -744,24 +778,6 @@ final class Manager {
 		//--
 		$the_template = self::$ModulePath.'libs/views/manager/view-record-info.mtpl.htm';
 		//--
-		$arr_raw_langs = (array) \SmartTextTranslations::getListOfLanguages();
-		$transl_arr = array();
-		$show_translations = false;
-		if(\Smart::array_size($arr_raw_langs) > 1) {
-			$show_translations = true;
-			$transl_arr = (array) \SmartModDataModel\PageBuilder\PgPageBuilderBackend::getRecordsTranslationsById($y_id);
-		} //end if
-		if(\Smart::array_size($transl_arr) > 0) {
-			for($i=0; $i<count($transl_arr); $i++) {
-				$transl_arr[$i] = (string) \SmartComponents::html_select_list_single('', (string)$transl_arr[$i], 'list', (array)$arr_raw_langs);
-			} //end if
-		} //end if
-		if((string)$query['mode'] == 'settings') {
-			$show_translations = false;
-		} //end if
-		//--
-		$transl_cnt = (int) \Smart::array_size($transl_arr);
-		//--
 		return (string) \SmartMarkersTemplating::render_file_template(
 			(string) $the_template,
 			[
@@ -771,12 +787,8 @@ final class Manager {
 				'FIELD-ADMIN' 			=> (string) \Smart::escape_html($query['admin']),
 				'TEXT-PUBLISHED'		=> (string) self::text('published'),
 				'FIELD-PUBLISHED' 		=> (string) \Smart::escape_html(date('Y-m-d H:i:s', $query['published'])),
-				'TEXT-TRANSLATIONS' 	=> (string) self::text('translations'),
-				'SHOW-TRANSLATIONS' 	=> (int)    $show_translations,
-				'COUNT-TRANSLATIONS' 	=> (int)    $transl_cnt,
-				'ARR-TRANSLATIONS' 		=> (array)  $transl_arr,
-				'IS-TRANSLATABLE' 		=> (int)    $query['translations'],
-				'MODULE-PATH' 			=> (string) self::$ModulePath
+				'TEXT-COUNTER'			=> (string) self::text('counter'),
+				'FIELD-COUNTER' 		=> (string) \Smart::escape_html($query['counter'])
 			]
 		);
 		//--
@@ -1650,6 +1662,10 @@ final class Manager {
 				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
 				'TXT-COL-TRANSL' 	=> (string) self::text('translations', false),
 				'TXT-COL-COUNTER' 	=> (string) self::text('counter', false),
+				'HINT-0' 			=> (string) self::text('hint_0', false),
+				'HINT-1' 			=> (string) self::text('hint_1', false),
+				'HINT-2' 			=> (string) self::text('hint_2', false),
+				'HINT-3' 			=> (string) self::text('hint_3', false),
 				'FMT-LIST' 			=> (int)    \Smart::array_size($filter).' / '.\Smart::array_size($total)
 			]
 		);
@@ -1707,6 +1723,10 @@ final class Manager {
 				'TXT-COL-AUTH' 		=> (string) self::text('auth', false),
 				'TXT-COL-TRANSL' 	=> (string) self::text('translations', false),
 				'TXT-COL-COUNTER' 	=> (string) self::text('counter', false),
+				'HINT-0' 			=> (string) self::text('hint_0', false),
+				'HINT-1' 			=> (string) self::text('hint_1', false),
+				'HINT-2' 			=> (string) self::text('hint_2', false),
+				'HINT-3' 			=> (string) self::text('hint_3', false),
 				'FMT-LIST' 			=> '# / # @'
 			]
 		);
