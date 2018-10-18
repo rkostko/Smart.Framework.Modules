@@ -19,7 +19,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
 // DEPENDS-EXT: PHP Solr / PECL (v.2.0 or later)
 //======================================================
 // Tested and Stable on Solr versions:
-// 3.x / 4.x / 5.x
+// 3.x / 4.x / 5.x / 6.x / 7.x
 //======================================================
 // # Sample Configuration #
 /*
@@ -78,7 +78,7 @@ $configs['solr']['slowtime']	= 0.4500;									// 0.0500 .. 0.7500 slow query ti
  *
  * @access 		PUBLIC
  * @depends 	extensions: PHP SOLR Client (v.2.0 or later) ; classes: Smart, SmartComponents
- * @version 	v.180423
+ * @version 	v.181018
  * @package 	Database:Solr
  *
  */
@@ -186,7 +186,7 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
 	//--
 	$this->description = (string) $y_description;
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		if((float)$y_debug_exch_slowtime > 0) {
 			$this->slow_time = (float) $y_debug_exch_slowtime;
@@ -230,7 +230,7 @@ public function __construct($mode='json', $host='', $port='', $ssl='', $db='', $
  */
 public function __destruct() {
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 			'type' => 'open-close',
@@ -313,7 +313,7 @@ public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settin
 	//--
 	$connect = $this->solr_connect();
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|total-queries', 1, '+');
 		//--
@@ -454,7 +454,7 @@ public function findQuery($y_query, $y_options=array('mode' => 'phrase', 'settin
 	$data = $response->getResponse();
 	//print_r($data);
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		$time_end = (float) (microtime(true) - (float)$time_start);
 		//--
@@ -539,7 +539,7 @@ public function addDocument($arrdoc, $use_autocommit=0) {
 	//--
 	$connect = $this->solr_connect();
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|total-queries', 1, '+');
 		//--
@@ -590,7 +590,7 @@ public function addDocument($arrdoc, $use_autocommit=0) {
 	$response = $updateResponse->getResponse(); // get answer message
 	//print_r($response);
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		$time_end = (float) (microtime(true) - (float)$time_start);
 		//--
@@ -644,7 +644,7 @@ public function deleteDocument($id) {
 	//--
 	$connect = $this->solr_connect();
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'solr|total-queries', 1, '+');
 		//--
@@ -672,7 +672,7 @@ public function deleteDocument($id) {
 	$response = $updateResponse->getResponse(); // get answer message
 	//print_r($response);
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		$time_end = (float) (microtime(true) - (float)$time_start);
 		//--
@@ -750,7 +750,7 @@ private function solr_connect() {
 		//--
 		$this->connid = (string) $this->protocol.$this->host.':'.$this->port.'@'.$this->db.'('.$this->mode.')'.' # '.$this->user;
 		//--
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(SmartFrameworkRuntime::ifDebug()) {
 			//--
 			SmartFrameworkRegistry::setDebugMsg('db', 'solr|log', [
 				'type' => 'open-close',
@@ -803,7 +803,7 @@ if($this->fatal_err === false) {
 //--
 $def_warn = 'Execution Halted !';
 $y_warning = (string) trim((string)$y_warning);
-if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+if(SmartFrameworkRuntime::ifDebug()) {
 	$width = 750;
 	$the_area = (string) $y_area;
 	if((string)$y_warning == '') {

@@ -27,7 +27,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  * @internal
  *
  * @depends 	extensions: classes: Twig
- * @version 	v.171005
+ * @version 	v.181018
  * @package 	Templating:Engines
  *
  */
@@ -57,7 +57,7 @@ final class SmartTwigEnvironment extends \Twig_Environment {
 
 	public function smartDebugGetLoadedTemplates($mode='set') {
 		//--
-		if((string)SMART_FRAMEWORK_DEBUG_MODE != 'yes') {
+		if(!\SmartFrameworkRuntime::ifDebug()) {
 			return array();
 		} //end if
 		//--

@@ -22,7 +22,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class DbalPdo {
 
 	// ->
-	// v.180424
+	// v.181018
 
 	private $zend_db_version = 'Zend/Db 2.9.3 ; Zend/Stdlib 3.1.1';
 
@@ -88,7 +88,7 @@ final class DbalPdo {
 		//--
 		$this->platform = $this->connection->getPlatform();
 		//--
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(\SmartFrameworkRuntime::ifDebug()) {
 			$this->profiler = new \Zend\Db\Adapter\Profiler\Profiler();
 			$this->connection->setProfiler($this->profiler);
 		} //end if
@@ -277,7 +277,7 @@ final class DbalPdo {
 	 */
 	public function __destruct() {
 		//--
-		if((string)SMART_FRAMEWORK_DEBUG_MODE != 'yes') {
+		if(!\SmartFrameworkRuntime::ifDebug()) {
 			return;
 		} //end if
 		if(!$this->profiler) {
@@ -355,7 +355,7 @@ final class DbalPdo {
 		//--
 		$def_warn = 'Execution Halted !';
 		$y_warning = (string) trim((string)$y_warning);
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(\SmartFrameworkRuntime::ifDebug()) {
 			$width = 750;
 			$the_area = (string) $y_area;
 			if((string)$y_warning == '') {

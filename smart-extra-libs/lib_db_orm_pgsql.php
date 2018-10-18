@@ -35,7 +35,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  * @hints		needs to be extended and a constructor to be defined to init this ORM as: $this->initConnection('pgsql-orm');
  *
  * @depends 	extensions: PHP PostgreSQL ; classes: Smart, SmartUnicode, SmartUtils, SmartPgsqlExtDb
- * @version 	v.170329
+ * @version 	v.181018
  * @package 	Database:PostgreSQL
  *
  */
@@ -51,7 +51,7 @@ abstract class SmartAbstractPgsqlOrmDb {
 	/*
 	{
 		//--
-		$this->initConnection('pgsql-orm'); // set connection using settings from configs section: pgsql-orm
+		$this->initConnection('pgsql-custom'); // set connection using settings from configs section: pgsql-custom
 		//--
 	} //END FUNCTION
 	*/
@@ -59,7 +59,7 @@ abstract class SmartAbstractPgsqlOrmDb {
 
 	final public function __destruct() {
 		//--
-		// not used
+		// must not be used
 		//--
 	} //END FUNCTION
 

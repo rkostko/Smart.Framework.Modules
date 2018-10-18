@@ -111,7 +111,7 @@ final class SmartLangIdClient {
 		} //end if
 		//--
 		$http_client = new SmartHttpClient();
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(SmartFrameworkRuntime::ifDebug()) {
 			$http_client->debug = 1;
 		} //end if
 		//--

@@ -38,7 +38,7 @@ if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 
  *
  * @access 		PUBLIC
  * @depends 	classes: Twig, \SmartModExtLib\TplTwig\Templating
- * @version 	v.171005
+ * @version 	v.181018
  * @package 	Templating:Engines
  *
  */

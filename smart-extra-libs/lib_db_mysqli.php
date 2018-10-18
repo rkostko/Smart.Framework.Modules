@@ -90,7 +90,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.181011
+ * @version 	v.181018
  * @package 	Database:MySQL
  *
  */
@@ -170,7 +170,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 	//--
 
 	//-- debug settings
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		$y_debug_sql_slowtime = (float) $y_debug_sql_slowtime;
 		if($y_debug_sql_slowtime <= 0) {
@@ -189,7 +189,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 	//--
 
 	//-- debug inits
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|slow-time', number_format(self::$slow_time, 7, '.', ''), '=');
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'metainfo',
@@ -230,7 +230,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 		return;
 	} //end if
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'open-close',
 			'data' => 'Connected to MariaDB / MySQLDB Server: '.$the_conn_key,
@@ -247,7 +247,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 			self::error(self::get_connection_id($connection), 'Encoding-Charset', 'Failed to set Encoding on MariaDB / MySQLDB Server', 'Error='.@mysqli_error($connection), 'Set=utf8');
 			return;
 		} //end if else
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(SmartFrameworkRuntime::ifDebug()) {
 			SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 				'type' => 'set',
 				'data' => 'SET Character Set to: utf8',
@@ -261,7 +261,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 			self::error(self::get_connection_id($connection), 'Encoding-Collation', 'Failed to set Collation on MariaDB / MySQLDB Server', 'Error='.@mysqli_error($connection), 'Set=utf8_bin');
 			return;
 		} //end if else
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(SmartFrameworkRuntime::ifDebug()) {
 			SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 				'type' => 'set',
 				'data' => 'SET Connection Collation to: utf8_bin',
@@ -288,7 +288,7 @@ public static function server_connect($yhost, $yport, $ydb, $yuser, $ypass, $yti
 				self::error(self::get_connection_id($connection), 'Set-Session-Transaction-Level', 'Failed to Set Session Transaction Level as '.$transact, 'Error='.@mysqli_error($connection), 'DB='.$ydb);
 				return;
 			} //end if else
-			if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+			if(SmartFrameworkRuntime::ifDebug()) {
 				SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 					'type' => 'set',
 					'data' => 'SET Session Transaction Isolation Level to: '.$transact,
@@ -417,7 +417,7 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_start = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_start = microtime(true);
 	} //end if
 	//--
@@ -451,7 +451,7 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_end = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_end = (float) (microtime(true) - (float)$time_start);
 	} //end if
 	//--
@@ -465,7 +465,7 @@ public static function count_data($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
 		//--
@@ -535,7 +535,7 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 
 	//--
 	$time_start = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_start = microtime(true);
 	} //end if
 	//--
@@ -569,7 +569,7 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 
 	//--
 	$time_end = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_end = (float) (microtime(true) - (float)$time_start);
 	} //end if
 	//--
@@ -584,7 +584,7 @@ public static function read_data($queryval, $params_or_title='', $y_connection='
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
 		//--
@@ -668,7 +668,7 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_start = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_start = microtime(true);
 	} //end if
 	//--
@@ -702,7 +702,7 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_end = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_end = (float) (microtime(true) - (float)$time_start);
 	} //end if
 	//--
@@ -717,7 +717,7 @@ public static function read_adata($queryval, $params_or_title='', $y_connection=
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
 		//--
@@ -820,7 +820,7 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 
 	//--
 	$time_start = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_start = microtime(true);
 	} //end if
 	//--
@@ -854,7 +854,7 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 
 	//--
 	$time_end = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_end = (float) (microtime(true) - (float)$time_start);
 	} //end if
 	//--
@@ -869,7 +869,7 @@ public static function read_asdata($queryval, $params_or_title='', $y_connection
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
 		//--
@@ -967,7 +967,7 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_start = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_start = microtime(true);
 	} //end if
 	//--
@@ -1004,13 +1004,13 @@ public static function write_data($queryval, $params_or_title='', $y_connection=
 
 	//--
 	$time_end = 0;
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		$time_end = (float) (microtime(true) - (float)$time_start);
 	} //end if
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		//--
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|total-queries', 1, '+');
 		//--
@@ -1442,7 +1442,7 @@ public static function check_server_version($y_connection='DEFAULT') {
 	//--
 
 	//--
-	if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+	if(SmartFrameworkRuntime::ifDebug()) {
 		SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 			'type' => 'set',
 			'data' => 'Detect MariaDB / MySQLDB Server Version: '.$mysql_num_version,
@@ -1538,7 +1538,7 @@ private static function check_connection($y_connection, $y_description) {
 				//--
 				define('SMART_FRAMEWORK_DB_LINK_MySQL', (string)$the_conn_key);
 				//--
-				if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+				if(SmartFrameworkRuntime::ifDebug()) {
 					SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 						'type' => 'open-close',
 						'data' => 'Re-Using Connection to MariaDB / MySQLDB Server as DEFAULT: '.$the_conn_key,
@@ -1652,7 +1652,7 @@ $err_log = $y_area."\n".'*** Error-Message: '.$y_error_message."\n".'*** Params 
 //--
 $def_warn = 'Execution Halted !';
 $y_warning = (string) trim((string)$y_warning);
-if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+if(SmartFrameworkRuntime::ifDebug()) {
 	$width = 750;
 	$the_area = (string) $y_area;
 	if((string)$y_warning == '') {
@@ -1741,7 +1741,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.180423
+ * @version 	v.181018
  * @package 	Database:MySQL
  *
  */
@@ -1770,7 +1770,7 @@ public function __construct($y_configs_arr) {
 		//-- try to reuse the connection :: only check if array key exists, not if it is a valid resource ; this should be as so to avoid mismatching connection mixings (if by example will re-use the connection of another server, and connection is broken in the middle of a transaction, it will fail ugly ;) and out of any control !
 		$this->connection = &SmartFrameworkRegistry::$Connections['mysqli'][(string)$the_conn_key];
 		//--
-		if((string)SMART_FRAMEWORK_DEBUG_MODE == 'yes') {
+		if(SmartFrameworkRuntime::ifDebug()) {
 			SmartFrameworkRegistry::setDebugMsg('db', 'mysqli|log', [
 				'type' => 'open-close',
 				'data' => 'Re-Using Connection to MariaDB / MySQLDB Server: '.$the_conn_key,

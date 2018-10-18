@@ -1,6 +1,6 @@
 <?php
 // [@[#[!SF.DEV-ONLY!]#]@]
-// Controller: Twig Templating Debug
+// Controller: Twig Templating Debug r.181018
 // Route: ?/page/tpl-twig.debug (?page=tpl-twig.debug)
 // Author: unix-world.org
 // v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
@@ -25,7 +25,7 @@ class SmartAppIndexController extends SmartAbstractAppController {
 	public function Run() {
 
 		//-- dissalow if debug is not enabled
-		if((string)SMART_FRAMEWORK_DEBUG_MODE != 'yes') {
+		if(!$this->IfDebug()) {
 			$this->PageViewSetErrorStatus(404, 'NO Twig-TPL-DEBUG Service has been activated on this server ...');
 			return;
 		} //end if

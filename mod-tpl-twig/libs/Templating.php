@@ -43,7 +43,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
  *
  * @access 		PUBLIC
  * @depends 	extensions: classes: \SmartModExtLib\TplTwig\SmartTwigEnvironment, Twig
- * @version 	v.180225
+ * @version 	v.181018
  * @package 	Templating:Engines
  *
  */
@@ -74,7 +74,7 @@ final class Templating {
 		//--
 		$the_twig_cache_dir = (string) $this->twig->smartSetupCacheDir();
 		//--
-		if(SMART_FRAMEWORK_DEBUG_MODE === 'yes') {
+		if(\SmartFrameworkRuntime::ifDebug()) {
 			//--
 			$this->twig->addExtension(new \Twig_Extension_Debug());
 			$this->twig->enableDebug(); // advanced debugging
@@ -93,7 +93,7 @@ final class Templating {
 
 	public function render($file, $arr_vars=array(), $onlydebug=false) {
 		//--
-		if(SMART_FRAMEWORK_DEBUG_MODE !== 'yes') {
+		if(!\SmartFrameworkRuntime::ifDebug()) {
 			$onlydebug = false;
 		} //end if
 		//--
@@ -128,7 +128,7 @@ final class Templating {
 			return;
 		} //end if
 		//--
-		if(SMART_FRAMEWORK_DEBUG_MODE === 'yes') {
+		if(\SmartFrameworkRuntime::ifDebug()) {
 			$bench = microtime(true);
 			$tpl = (object) $this->twig->load((string)$file);
 			$out = (string) $tpl->render((array)$arr_vars);
@@ -158,7 +158,7 @@ final class Templating {
 	 */
 	public function debug($tpl) {
 		//--
-		if(SMART_FRAMEWORK_DEBUG_MODE !== 'yes') {
+		if(!\SmartFrameworkRuntime::ifDebug()) {
 			return '';
 		} //end if
 		//--
