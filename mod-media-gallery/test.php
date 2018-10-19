@@ -3,7 +3,7 @@
 // Controller: Media Gallery Test Sample
 // Route: ?/page/media-gallery.test (?page=media-gallery.test)
 // Author: unix-world.org
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
+// v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
 //----------------------------------------------------- PREVENT EXECUTION BEFORE RUNTIME READY
 if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the first line of the application

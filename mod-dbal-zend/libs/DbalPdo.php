@@ -1,7 +1,7 @@
 <?php
 // Zend Dbal for Smart.Framework
 // Module Library
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
+// v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 
@@ -22,7 +22,7 @@ if(!defined('SMART_FRAMEWORK_RUNTIME_READY')) { // this must be defined in the f
 final class DbalPdo {
 
 	// ->
-	// v.181018
+	// v.181019
 
 	private $zend_db_version = 'Zend/Db 2.9.3 ; Zend/Stdlib 3.1.1';
 

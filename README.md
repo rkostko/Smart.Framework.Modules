@@ -17,6 +17,7 @@ License: BSD
 ## Extra Libs:
 	* MySQLi: connector for MySQL: 5.0, 5.1, 5.5, 5.6, 5.7 / MariaDB: 5.x, 10.x / Percona Server: 5.1 / 5.5 / 5.6 / 5.7
 	* Solr: connector for Apache Solr 3.x / 4.x / 5.x / 6.x / 7.x
+	* Zend DBAL: PDO based connector for: PgSQL, SQLite and MySQL
 	* CURL based HTTP Client Lib with proxy support
 	* Lang Detect: NGrams Language Detection
 	* LangID.py client wrapper (a language detection utility)

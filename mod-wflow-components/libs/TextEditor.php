@@ -1,7 +1,7 @@
 <?php
 // Class: \SmartModExtLib\WflowComponents\TextEditor
 // (c) 2006-2016 unix-world.org - all rights reserved
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
+// v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
 namespace SmartModExtLib\WflowComponents;
 

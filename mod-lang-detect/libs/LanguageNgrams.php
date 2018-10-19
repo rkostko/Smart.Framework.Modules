@@ -2,7 +2,7 @@
 // Class: \SmartModExtLib\LangDetect\LanguageNgrams
 // Ngrams Language Detection :: for Smart.Framework
 // Module Library
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
+// v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
 // this class integrates with the default Smart.Framework modules autoloader so does not need anything else to be setup
 

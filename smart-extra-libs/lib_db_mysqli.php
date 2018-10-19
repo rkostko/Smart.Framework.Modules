@@ -1,7 +1,7 @@
 <?php
 // [LIB - SmartFramework / ExtraLibs / MySQLi Database Client]
 // (c) 2006-2018 unix-world.org - all rights reserved
-// v.3.7.5 r.2018.03.09 / smart.framework.v.3.7
+// v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
 //----------------------------------------------------- PREVENT SEPARATE EXECUTION WITH VERSION CHECK
 if((!defined('SMART_FRAMEWORK_VERSION')) || ((string)SMART_FRAMEWORK_VERSION != 'smart.framework.v.3.7')) {
@@ -90,7 +90,7 @@ $configs['mysqli']['transact']		= 'REPEATABLE READ';						// Default Transaction
  * @usage  		static object: Class::method() - This class provides only STATIC methods
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.181018
+ * @version 	v.181019
  * @package 	Database:MySQL
  *
  */
@@ -1741,7 +1741,7 @@ die(''); // just in case
  * @hints		This class have no catcheable Exception because the ONLY errors will raise are when the server returns an ERROR regarding a malformed SQL Statement, which is not acceptable to be just Exception, so will raise a fatal error !
  *
  * @depends 	extensions: PHP MySQLi ; classes: Smart, SmartUnicode, SmartUtils, SmartComponents
- * @version 	v.181018
+ * @version 	v.181019
  * @package 	Database:MySQL
  *
  */
