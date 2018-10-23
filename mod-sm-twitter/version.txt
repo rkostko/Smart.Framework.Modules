@@ -1,5 +1,5 @@
 
-# Smart.Framework.Modules / (SocialMedia) SmTwitter 2.6.0.JS / 3.1.0.PHP #
+# Smart.Framework.Modules / (SocialMedia) SmTwitter r.181023 #
 
 // v.3.7.7 r.2018.10.19 / smart.framework.v.3.7
 
